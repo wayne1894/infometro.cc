@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<title>infometro.cc</title>
+
+<link rel="stylesheet/less" type="text/css" href="css/semantic.min.css" />
+<!--<link rel="stylesheet" type="text/css" href="css/infometro.css">-->
+<link rel="stylesheet" type="text/css" href="css/perfect-scrollbar.min.css">
+<link rel="stylesheet/less" type="text/css" href="css/infometro.less" />
+
+
+<script src="js/jquery.min.js"></script>
+<script src="js/semantic.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/less.js/2.7.1/less.min.js"></script>
+<script src="js/velocity.min.js"></script>
+<script src="js/main.js"></script>
+
+</head>
+<body>
+<div id="main">
+  <div id="left">
+ 		<div id="line_parent">
+			<div id="logo"><img src="images/icon_128.fw.png" alt=""></div>
+			<div class="line_text">所有支線：</div>
+			<div id="left_line">
+				<ul>
+					<li>
+						<svg class="tool" fill="#FF6907">
+							<!--#include file="images/tool.svg.asp" -->
+						</svg>
+						<i style="background-color:#FF6907"></i>
+						<span>淡水線</span>
+					</li>
+					<li>
+						<svg class="tool" fill="#0C00B3">
+							<!--#include file="images/tool.svg.asp" -->
+						</svg>
+						<i style="background-color:#0C00B3"></i>
+						<span>短文字的的</span>
+					</li>
+					<li>
+						<svg class="tool" fill="#30CB68">
+							<!--#include file="images/tool.svg.asp" -->
+						</svg>
+						<i style="background-color:#30CB68"></i>
+						<span>新店線</span>
+					</li>
+				</ul>
+			</div>
+			<a href="javascript:void(0)" id="new_line" onclick="edit_metro()">新增支線</a>
+    </div>
+    <div id="edit_parent">
+<!--     http://semantic-ui.com/elements/icon.html-->
+      <a class="left_icon" href="javascript:void(0)"><i class="setting icon"></i></a>
+<!--      <a class="left_icon" href="javascript:void(0)"><i class="help circle icon"></i></a>-->
+<!--      sign out-->
+      <a class="left_icon" href="javascript:void(0)"><i class="power icon"></i></a>
+      
+    </div>
+  </div>
+  <div id="center">
+    <div id="top">
+      <div id="triangle_left"></div>
+      <div id="top_tag_parent">
+        <ul id="top_tag">
+          <li><i></i><span>我的收藏</span></li>
+          <li><i></i><span>我的星座</span></li>
+          <li><i></i><span>我的興趣</span></li>
+          <li><i></i><span>我的音樂</span></li>
+          <li><i></i><span>我的收藏</span></li>
+          <li><i></i><span>我的星座</span></li>
+          <li><i></i><span>我的興趣</span></li>
+          <li><i></i><span>我的音樂</span></li>
+          <li><i></i><span>我的經歷</span></li>
+          <li><i style="background-color:#30CB68;"></i><span>我的學歷</span></li>
+          <li><i></i><span>我的收藏</span></li>
+          <li><i></i><span>我的星座</span></li>
+          <li><i></i><span>我的興趣</span></li>
+          <li><i></i><span>我的收藏</span></li>
+          <li><i></i><span>我的星座</span></li>
+          <li><i></i><span>我的興趣</span></li>
+          <li><i></i><span>我的興趣</span></li>
+          <li><i></i><span>我的收藏</span></li>
+          <li><i></i><span>我的星座</span></li>
+          <li><i></i><span>我的興趣</span></li>
+        </ul>
+      </div>
+      <div id="triangle_right"></div>
+    </div>
+    <div id="board1" class="board">
+      <div id="board_line_parent">
+				<div id="board_line"><i style="background-color:#30CB68"></i><div>淡水線</div></div>
+				<div id="board_edit"><i class="male icon"></i></div>
+      </div>
+      <div id="board_tag_name">
+      	<div id="tag_name">
+      		<i style="background-color:#30CB68;"></i>
+      		<div id="tag_name_info">
+      			<div>社會學</div>
+      			<div>資訊共25筆</div>
+        		<div>建立時間：<span>2015/03/29</span></div>
+      		</div>
+      	</div>
+      </div>
+    <div id="board3" class="board">
+      <div id="board3_header"><i class="heart orange icon"></i><span class="text">最愛連結</span>
+      </div>
+      <div id="board_favorites">
+      	<div></div>
+      	<div></div>
+      	<div></div>
+      	<div></div>
+      	<div></div>
+      	<div></div>
+      	<div></div>
+      	<div></div>
+      	<div></div>
+      	<div></div>
+      </div>
+      <div id="board_search">
+      	<div id="input_search">
+      		<input type="text" placeholder="Search">
+      		<i class="search icon"></i>
+      	</div>
+      </div>
+      <div id="board_copyright"></div>
+    </div>
+    </div>
+    <div id="board2" class="board">
+			<div id="board_enter_parent">
+					<div id="board_img"><img src="images/img1.jpg"></div>
+					<div id="board_enter">
+						<textarea id="board_textarea" name="textarea1" placeholder="輸入資訊"></textarea>
+					</div>
+			</div>
+      <div id="board_send_parent">
+      	<div id="board_tag_select">
+					<select class="ui normal fluid search dropdown mini" multiple="">
+						<option value="">分類地鐵</option>
+						<option value="AL1">Alabama</option>
+						<option value="AK2" selected>Alaska</option>
+						<option value="AZ3" selected>Arizona</option>
+						<option value="AR4" selected>Arkansas</option>
+						<option value="AK5">Alaska</option>
+						<option value="AZ6">Arizona</option>
+						<option value="AR7">Arkansas</option>
+						<option value="AK8">Alaska</option>
+						<option value="AZ9">Arizona</option>
+						<option value="AR10">Arkansas</option>
+						<option value="AK11">A</option>
+						<option value="AZ12">A</option>
+						<option value="AR13">Arks</option>
+					</select>
+      	</div>
+        <button id="board_send" class="ui mini orange button" type="submit">送出</button>
+      </div>
+      <div id="board_info">
+      	
+						<div class="ui vertical segment clear">
+							<img class="ui medium left floated image transition " src="images/square-image.png">
+							<p>看見我的靈魂裡那洗拭不去的黑色污點</p>
+							<span class="left">
+								<i class="like icon"></i>
+								<i class="trash icon"></i>
+							</span>
+						</div>
+												<div class="ui vertical segment clear">
+							<img class="ui medium left floated image transition " src="images/square-image.png">
+							<p>看見我的靈魂裡那洗拭不去的黑色污點</p>
+							<span class="left">
+								<i class="like icon"></i>
+								<i class="trash icon"></i>
+							</span>
+						</div>
+												<div class="ui vertical segment clear">
+							<img class="ui medium left floated image transition " src="images/square-image.png">
+							<p>看見我的靈魂裡那洗拭不去的黑色污點</p>
+							<span class="left">
+								<i class="like icon"></i>
+								<i class="trash icon"></i>
+							</span>
+						</div>
+												<div class="ui vertical segment clear">
+							<img class="ui medium left floated image transition " src="images/square-image.png">
+							<p>看見我的靈魂裡那洗拭不去的黑色污點</p>
+							<span class="left">
+								<i class="like icon"></i>
+								<i class="trash icon"></i>
+							</span>
+						</div>
+        						<div class="ui vertical segment clear">
+							<img class="ui medium left floated image transition " src="images/square-image.png">
+							<p>看見我的靈魂裡那洗拭不去的黑色污點</p>
+							<span class="left">
+								<i class="like icon"></i>
+								<i class="trash icon"></i>
+							</span>
+						</div>
+						
+      	
+      </div>
+    </div>
+</div>
+  <div id="bottom">
+   <div id="blueprint">
+     <div class="blueprint_list">
+       <div>我的地鐵1</div>
+       <div>我的地鐵2</div>
+       <a href="">新增地鐵</a>
+     </div>
+   </div>
+   <div id="copyright">2017資訊地鐵站 版權所有 </div>
+  </div>
+<div id="right">
+	
+</div>
+
+
+
+<script>
+
+	$(function(){
+     // open_right();
+      
+		$(window).resize(function(){
+            var window_width=$(window).width();
+			$("#top").css("width",$("#center").width());
+			
+			var _width=window_width-($("#center").width()+$("#left").width());
+            //_width=_width-20;
+			$("#right").css("width",_width);
+            
+          if($("#main").width()<1262){
+                $("#board3").addClass("board3_left")
+            }else{
+               $("#board3").removeClass("board3_left")
+            }
+		});
+		setTimeout(function(){
+			$(window).resize();
+		},50)
+	$("#board_textarea").keyup(function(e) {
+	$(this).height(70);
+    $(this).height(this.scrollHeight + parseFloat($(this).css("borderTopWidth")) + parseFloat($(this).css("borderBottomWidth")));
+});	
+	$('#board_tag_select .ui.normal.dropdown').dropdown({
+		onChange: function(value, text, $selectedItem) {
+			//console.log($selectedItem)
+    }
+	});
+		
+	})
+	
+	$("#triangle_right").click(function(){
+		$("#top_tag").css("left",(parseInt($("#top_tag").css("left"))-80));
+	})
+	$("#triangle_left").click(function(){
+		var _x=parseInt($("#top_tag").css("left"))+80;
+		if(_x>23)_x=23;
+		$("#top_tag").css("left",_x)
+	})
+	function edit_metro(){
+      open_right();
+    }
+    function open_right(){
+      $("#main").addClass("open_right");
+      $(window).resize();
+    }
+    function close_right(){
+      $("#main").removeClass("open_right");
+      $(window).resize();
+    }
+
+</script>
+
+</body>
+</html>
