@@ -156,11 +156,17 @@ button:focus,input:focus,select:focus,textarea:focus{
 		margin-left: @left_width;
 		border: 1px solid #CDCDCD;
 		padding-top: @top_height - 2;
+        position: relative;
 		#top{
 			@li_width: 90px;
 			height: @top_height;
 			top: 0;
 			background-color:#DEDEDE;
+            background: -webkit-gradient(linear, 0 0, 0 bottom, from(#DEDEDE), to(#F1F1F2));
+            background: -webkit-linear-gradient(#DEDEDE, #F1F1F2);
+            background: -moz-linear-gradient(#DEDEDE, #F1F1F2);
+            background: -ms-linear-gradient(#DEDEDE, #F1F1F2);
+            background: -o-linear-gradient(#DEDEDE, #F1F1F2);
 			background: linear-gradient(#DEDEDE, #F1F1F2);
 			border-bottom: 1px solid #CDCDCD;
 			position: fixed;
@@ -254,6 +260,7 @@ button:focus,input:focus,select:focus,textarea:focus{
 			width: 280px;
 			position: fixed;
 			left: @left_width+28px;
+//            margin-top: 4px;
 			#board_line_parent{
 				height: 88px;
 				width: 100%;
@@ -326,6 +333,7 @@ button:focus,input:focus,select:focus,textarea:focus{
 			margin-bottom: @bottom_height + 20;
 			left: 310px;
 			position: relative;
+//            margin-top: 4px;
 			#board_enter_parent{
 				border-bottom: 1px solid #CDCDCD ;
 				padding-top: 18px;
@@ -410,6 +418,7 @@ button:focus,input:focus,select:focus,textarea:focus{
             top: @top_height;
 			position: fixed;
 			left: 972px;
+//            margin-top: 3px;
 			#board3_header{
 				font-size: 15px;
 				font-weight: bold;
@@ -491,7 +500,17 @@ button:focus,input:focus,select:focus,textarea:focus{
 			border-top: 7px solid #FF6900;
 			background-color: #fff;
 		}
-
+        .right_line_2{
+          position:absolute;
+          width:4px;
+          height:100%;
+          right: -4px;
+          background-image:url(../images/left_line.png);
+//          right: -3px;
+//          background-image:url(../images/right_line.png);
+          top: -1px;
+          z-index:4;
+        }
 		.clearfix();
 	}
     #bottom{
@@ -548,11 +567,12 @@ button:focus,input:focus,select:focus,textarea:focus{
 	height: 100%;
     max-width:245px; 
     border-left: 1px solid #DEDFDF;
+  .backgroup_1();
   .right_header_line{
-
     border-top: 7px solid #FF6900; 
   }
   .right_tool{
+    background-color: #CCCCCC;
     .r_button{
       float: left;
       width: 35px;
@@ -578,16 +598,37 @@ button:focus,input:focus,select:focus,textarea:focus{
       &#首頁{
         background-position:0px 0px;
       }
-      &#清單{
-        background-position:-72px 0px;
-      }
       &#搜尋{
         background-position:-36px 0px;
       }
+      &#資訊{
+        background-position:-72px 0px;
+      }
+      &#問號{
+        background-position:-108px 0px;
+      }
+      &#愛心{
+        background-position:-144px 0px;
+      }
+
     }
     .clearfix()
   }
+  .right_main{
+    position: relative;
+    height: 100%;
+  }
+  .right_line{
+	position:absolute;
+	width:4px;
+	height:100%;
+    left: -3px;
+	background-image:url(../images/right_line_2.png);
+	top: 0px;
+	z-index:4;
+  }
 }
+
 .clearfix(){
 	&:before,
 	&:after {
@@ -598,6 +639,48 @@ button:focus,input:focus,select:focus,textarea:focus{
 		clear: both;
 	}
 }
+
+.backgroup_1(){
+  background-color:#DEDEDE;
+  background: -webkit-gradient(linear, 0 0, 0 bottom, from(#DEDEDE), to(#F3F4F4));
+  background: -webkit-linear-gradient(#DEDEDE, #F3F4F4);
+  background: -moz-linear-gradient(#DEDEDE, #F3F4F4);
+  background: -ms-linear-gradient(#DEDEDE, #F3F4F4);
+  background: -o-linear-gradient(#DEDEDE, #F3F4F4);
+  background: linear-gradient(#DEDEDE, #F3F4F4);
+  -pie-background: linear-gradient(#DEDEDE, #F3F4F4);
+}
+.backgroup_2(){
+  background-color:#DEDEDE;
+  background: -webkit-gradient(linear, 0 0, 0 bottom, from(#F3F4F4), to(#DEDEDE));
+  background: -webkit-linear-gradient(#F3F4F4, #DEDEDE);
+  background: -moz-linear-gradient(#F3F4F4, #DEDEDE);
+  background: -ms-linear-gradient(#F3F4F4, #DEDEDE);
+  background: -o-linear-gradient(#F3F4F4, #DEDEDE);
+  background: linear-gradient(#F3F4F4, #DEDEDE);
+  -pie-background: linear-gradient(#F3F4F4, #DEDEDE);
+}
+
+.left_line{
+    position:absolute;
+    width:4px;
+    height:100%;
+    left:0px;
+    background-image:url(../images/left_line.png);
+    top: 0px;
+    z-index:4;
+}
+.top_line{
+  position :absolute;
+  height:2px;
+  width:130%;
+  margin-left: -30%;
+  background-image:url(../images/top_line_2.png);
+  left: 0px;
+  top: 0px;
+  z-index:2;
+}
+
 
 //覆寫
 .ui.button{
