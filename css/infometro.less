@@ -22,13 +22,10 @@ button:focus,input:focus,select:focus,textarea:focus{
 }
 #main{
 	height: 100%;
-    width: 99%;
+    width: 80%;
     max-width: 1440px;
 	min-width: 990px;
 //    overflow-y: scroll;
-  &.open_right{
-    width: 60%;
-  }
   
 	#left{
 		width: @left_width;
@@ -523,7 +520,7 @@ button:focus,input:focus,select:focus,textarea:focus{
       font-size: 13px;
       font-weight: bold;
       text-shadow:0px 0px 1px #999999;
-      z-index: 5;
+      z-index: 220;
       a{
         color: #4183c4;
         text-decoration: none;
@@ -565,8 +562,10 @@ button:focus,input:focus,select:focus,textarea:focus{
 	top: 0;
 	right: 0;
 	height: 100%;
-    max-width:245px; 
+//    max-width: 245px;
+    width: 270px;
     border-left: 1px solid #DEDFDF;
+    z-index: 210;
   .backgroup_1();
   .right_header_line{
     border-top: 7px solid #FF6900; 
