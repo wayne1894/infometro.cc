@@ -16,11 +16,31 @@
 <script src="js/vue.js"></script>
 <script src="js/main.js"></script>
 
+
 </head>
 <body>
 
-<script>
+<h2>email登入</h2>
 
+<input id="a1" type="text">
+<input id="a2" type="text">
+<button id="emailLogin">Email Login</button>
+<button id="emailLogout">Email Login</button>
+
+<h2>Facebook登入</h2>
+<button id="fbLoginBtn">FB Login</button>
+<button id="fbLogoutBtn">FB Login</button>
+<script>
+	$(function(){
+		$("#emailLogin").on("click",function(){
+			登入($("#a1").val(),$("#a2").val())
+		})
+		$("#emailLogout").on("click",function(){
+			登出();
+		})
+	})
 </script>
+<script src="https://www.gstatic.com/firebasejs/3.6.8/firebase.js"></script>
+<script src="js/firebase_init.js"></script>
 </body>
 </html>
