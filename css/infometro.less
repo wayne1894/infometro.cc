@@ -21,9 +21,12 @@ button:focus,input:focus,select:focus,textarea:focus{
 	outline:0;
 }
 #main{
+  visibility: hidden;
+  position: relative;
+  left: -3000px;
 	height: 100%;
     width: 80%;
-    max-width: 1440px;
+    max-width: 1500px;
 	min-width: 1000px;
     //overflow-y: scroll;
 	#left{
@@ -479,7 +482,7 @@ button:focus,input:focus,select:focus,textarea:focus{
                border-top: 1px dashed #cdcdcd;
                border-bottom: 0;
                position: relative;
-               left: -1px;
+               left: -1px!important;
                width: 280px;
                top: 0;
               #board_favorites{
