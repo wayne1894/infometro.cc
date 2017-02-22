@@ -26,7 +26,6 @@ button:focus,input:focus,select:focus,textarea:focus{
     max-width: 1440px;
 	min-width: 1000px;
     //overflow-y: scroll;
-  
 	#left{
 		width: @left_width;
 		font-size: 12px;
@@ -253,11 +252,15 @@ button:focus,input:focus,select:focus,textarea:focus{
 				}
 			}
 		}
+        #board1,#board2,#board3{
+          border: 1px solid #CDCDCD;
+		  border-top: 7px solid #FF6900;
+		  background-color: #fff;
+        }
 		#board1{
 			width: 280px;
 			position: fixed;
 			left: @left_width+28px;
-//            margin-top: 4px;
 			#board_line_parent{
 				height: 88px;
 				width: 100%;
@@ -329,8 +332,8 @@ button:focus,input:focus,select:focus,textarea:focus{
 			margin: 0 22px;
 			margin-bottom: @bottom_height + 20;
 			left: 310px;
+            float: left;
 			position: relative;
-//            margin-top: 4px;
 			#board_enter_parent{
 				border-bottom: 1px solid #CDCDCD ;
 				padding-top: 18px;
@@ -405,7 +408,6 @@ button:focus,input:focus,select:focus,textarea:focus{
 			.trash.icon:hover{
 				color:inherit;
 			}
-			
 			.clear{
 				.clearfix();
 			}
@@ -415,7 +417,6 @@ button:focus,input:focus,select:focus,textarea:focus{
             top: @top_height;
 			position: fixed;
 			left: 972px;
-//            margin-top: 3px;
 			#board3_header{
 				font-size: 15px;
 				font-weight: bold;
@@ -491,12 +492,6 @@ button:focus,input:focus,select:focus,textarea:focus{
               }
             }
 		}
-		.board{
-			float: left;
-			border: 1px solid #CDCDCD;
-			border-top: 7px solid #FF6900;
-			background-color: #fff;
-		}
         .right_line_2{
           position:absolute;
           width:4px;
@@ -562,7 +557,7 @@ button:focus,input:focus,select:focus,textarea:focus{
 	top: 0;
 	right: 0;
 	height: 100%;
-//    max-width: 245px;
+    //max-width: 245px;
     width: 270px;
     border-left: 1px solid #DEDFDF;
     z-index: 210;
@@ -627,6 +622,17 @@ button:focus,input:focus,select:focus,textarea:focus{
 	z-index:4;
   }
 }
+@media screen and (max-width:1400px) {
+  #main{
+    width: 95%;
+  }
+  #right{
+    top :auto;
+    bottom: 0px;
+    height: 400px;
+  }
+}
+
 
 .clearfix(){
 	&:before,

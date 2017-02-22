@@ -91,7 +91,7 @@
       </div>
       <div id="triangle_right"></div>
     </div>
-    <div id="board1" class="board">
+    <div id="board1">
         <div id="board_line_parent">
                   <div id="board_line"><i style="background-color:#30CB68"></i><div>淡水線</div></div>
                   <div id="board_edit"><i class="male icon"></i></div>
@@ -106,7 +106,7 @@
               </div>
           </div>
         </div>
-      <div id="board3" class="board">
+      <div id="board3">
         <div id="board3_header"><i class="heart orange icon"></i><span class="text">最愛連結</span>
         </div>
         <div id="board_favorites">
@@ -120,8 +120,8 @@
         </div>
         <div id="board_copyright"></div>
       </div>
-      </div>
-    <div id="board2" class="board">
+    </div>
+    <div id="board2">
         <div id="board_enter_parent">
           <div id="board_img"><img src="images/img1.jpg"></div>
           <div id="board_enter">
@@ -190,7 +190,11 @@
         <div id="問號" class="r_b t2"></div>
       </div>
     </div>
-    <div class="right_main"></div>
+    <div class="right_main">
+      <div v-for="n in 50">
+        <br><br><br>
+      </div>
+    </div>
     <div class="right_line"></div>
   </div>
 </div>
@@ -210,13 +214,15 @@ $("#top").css("width",$("#center").width());
         $("#top").css("width",$("#center").width());
         if($("#main").width()<1260){
           $("#board3").addClass("board3_left");
+         
         }else{
           $("#board3").removeClass("board3_left");
+          
         }
       });
       setTimeout(function(){
         $(window).resize();
-      },50)
+      },50);
 	$("#board_textarea").keyup(function(e) {
 	$(this).height(70);
     $(this).height(this.scrollHeight + parseFloat($(this).css("borderTopWidth")) + parseFloat($(this).css("borderBottomWidth")));
