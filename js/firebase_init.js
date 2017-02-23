@@ -133,7 +133,10 @@ var provider = new firebase.auth.FacebookAuthProvider();
 
 provider.setCustomParameters({
   'display': 'popup'
+	//page
 });
+//https://phpwolf.blogspot.tw/2017/01/firebase-facebook.html   FB教學
+
 
 //使用Popup註冊FB方式//FB網址請用英文http://localhost/　
 var fbLoginBtn = document.getElementById("fbLoginBtn");
