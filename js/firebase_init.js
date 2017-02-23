@@ -1,4 +1,16 @@
-  // Initialize Firebase 初始化
+// Firebase 管理使用者資訊
+//https://firebase.google.com/docs/auth/web/manage-users
+//http://sj82516-blog.logdown.com/posts/1050619
+//https://firebase.google.com/docs/auth/web/manage-users  管理使用者帳戶
+
+//更新照片
+//設定email
+//重新驗証用戶 (參考：http://sj82516-blog.logdown.com/posts/1050619)
+//...更多請參考網址
+
+
+
+// Initialize Firebase 初始化
   var config = {
     apiKey: "AIzaSyBipX4R5DxXqF3QaJHu6FjBGuqoAlohsXw",
     authDomain: "infometro-97014.firebaseapp.com",
@@ -36,10 +48,6 @@
     })
   }
   
-  // Firebase 管理使用者資訊
-  //https://firebase.google.com/docs/auth/web/manage-users
-  //http://sj82516-blog.logdown.com/posts/1050619
-  
   function 取得使用者登入狀態(){
     log(firebase.auth().currentUser);
   }
@@ -57,9 +65,7 @@
                        // this value to authenticate with your backend server, if
                        // you have one. Use User.getToken() instead.
     }
-    
-    log(uid)
-    //log(emailVerified)
+
   }
   
   function get_provider_specific(){
@@ -86,24 +92,12 @@
     });
   }
   
-  //更新照片
-  //設定email
-  //重新驗証用戶 (參考：http://sj82516-blog.logdown.com/posts/1050619)
-  //...更多請參考網址
-  
-  
-  // Firebase Realtime Databe
-  // 7IJBbfGenZOdVlZjq3nnk1El04T2  我的uid
-  
-  
-  
-  
-  //監聽狀態改變
-//  var userLogin;
+  //[全域]監聽狀態改變
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
       userLogin = user;
       console.log("User is logined", user)
+			$("#user").html(user.email)
     } else {
       userLogin = null;
       console.log("User is not logined yet.");
@@ -134,9 +128,6 @@
   }
 
 
-
-
-
 //firebase to fb login
 var provider = new firebase.auth.FacebookAuthProvider();
 
@@ -144,7 +135,7 @@ provider.setCustomParameters({
   'display': 'popup'
 });
 
-//使用Popup註冊FB方式
+//使用Popup註冊FB方式//FB網址請用英文http://localhost/　
 var fbLoginBtn = document.getElementById("fbLoginBtn");
 fbLoginBtn.addEventListener("click",function(){
   firebase.auth().signInWithPopup(provider).then(function(result) {
@@ -206,4 +197,8 @@ function promptUserForPassword(){
 
 function goToApp(){
   alert("d")
+}
+
+function log(a){
+	console.log(a)
 }

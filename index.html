@@ -13,31 +13,39 @@
 <script src="js/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.js"></script>
 <script src="js/less.min.js"></script>
-<script src="js/velocity.min.js"></script>
 <script src="js/vue.js"></script>
 <script src="js/main.js"></script>
 
 </head>
 <body>
 
-<h2>email登入</h2>
+<div id="user" style="color:red;"></div>
 
+<h2>email註冊</h2>
+<input id="b1" type="text">
+<input id="b2" type="password">
+<button id="emailadd">Email 註冊</button>
+
+
+<h2>email登入</h2>
 <input id="a1" type="text">
-<input id="a2" type="text">
+<input id="a2" type="password">
 <button id="emailLogin">Email Login</button>
-<button id="emailLogout">Email Login</button>
+<button id="emailLogout" onclick="登出()">Email Logout</button>
 
 <h2>Facebook登入</h2>
 <button id="fbLoginBtn">FB Login</button>
-<button id="fbLogoutBtn">FB Login</button>
+<button id="fbLogoutBtn">FB Logout</button>
 <script>
 	$(function(){
+		$("#emailadd").on("click",function(){
+			註冊($("#b1").val(),$("#b2").val())
+		})
+		
 		$("#emailLogin").on("click",function(){
 			登入($("#a1").val(),$("#a2").val())
 		})
-		$("#emailLogout").on("click",function(){
-			登出();
-		})
+
 	})
 </script>
 <script src="https://www.gstatic.com/firebasejs/3.6.8/firebase.js"></script>
