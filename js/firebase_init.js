@@ -11,11 +11,11 @@
 
 // Initialize Firebase 初始化
   var config = {
-    apiKey: "AIzaSyBipX4R5DxXqF3QaJHu6FjBGuqoAlohsXw",
-    authDomain: "infometro-97014.firebaseapp.com",
-    databaseURL: "https://infometro-97014.firebaseio.com",
-    storageBucket: "infometro-97014.appspot.com",
-    messagingSenderId: "37652553574"
+    apiKey: "AIzaSyAalJEx21SpnVU5q5lW0eTSVPTz18s2Hy8",
+    authDomain: "infometro-cc.firebaseapp.com",
+    databaseURL: "https://infometro-cc.firebaseio.com",
+    storageBucket: "infometro-cc.appspot.com",
+    messagingSenderId: "358423331162"
   };
   firebase.initializeApp(config);
   var database = firebase.database();
@@ -130,7 +130,10 @@ function update_Profile(){
 
 
 
-//firebase CRUD 操作  
+//firebase CRUD 操作 
+
+//http://sj82516-blog.logdown.com/posts/1061094
+//https://howtofirebase.com/firebase-data-structures-pagination-96c16ffdb5ca#.2aiv4i4pd   分頁
   function createData(uid, name, email, imageUrl) {
     firebase.database().ref('users/' + uid).set({
       username: name,
