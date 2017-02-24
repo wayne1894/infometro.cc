@@ -18,7 +18,7 @@
 
 </head>
 <body>
-<p>201702241045</p>
+<p>201702241527</p>
 <div id="user" style="color:red;"></div>
 
 <h2>email註冊</h2>
@@ -31,11 +31,26 @@
 <input id="a1" type="text">
 <input id="a2" type="password">
 <button id="emailLogin">Email Login</button>
-<button id="emailLogout" onclick="登出()">Email Logout</button>
 
 <h2>Facebook登入</h2>
 <button id="fbLoginBtn" onclick="fb_login_redirect()">FB Login</button>
-<button id="fbLogoutBtn">FB Logout</button>
+
+<h2>寄認證信</h2>
+<button onclick="寄認證信()">寄認證信</button>
+
+<h2>登出</h2>
+<button onclick="登出()">登出</button>
+<br>
+<br>
+<hr>
+
+<h2>更改密碼</h2>
+<input id="c1" type="password">
+<button>更改密碼</button>
+
+<h2>刪除帳號</h2>
+<button>刪除帳號</button>
+
 <script>
 	$(function(){
 		$("#emailadd").on("click",function(){
