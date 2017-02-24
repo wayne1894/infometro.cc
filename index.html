@@ -18,7 +18,7 @@
 
 </head>
 <body>
-
+<p>201702241045</p>
 <div id="user" style="color:red;"></div>
 
 <h2>email註冊</h2>
@@ -34,7 +34,7 @@
 <button id="emailLogout" onclick="登出()">Email Logout</button>
 
 <h2>Facebook登入</h2>
-<button id="fbLoginBtn">FB Login</button>
+<button id="fbLoginBtn" onclick="fb_login_redirect()">FB Login</button>
 <button id="fbLogoutBtn">FB Logout</button>
 <script>
 	$(function(){
@@ -48,7 +48,7 @@
 
 	})
 </script>
-<script src="https://www.gstatic.com/firebasejs/3.6.8/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.6.10/firebase.js"></script>
 <script src="js/firebase_init.js"></script>
 </body>
 </html>
