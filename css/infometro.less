@@ -24,7 +24,8 @@ button:focus,input:focus,select:focus,textarea:focus{
   visibility: hidden;
   position: relative;
   left: -3000px;
-	height: 100%;
+  height: 100%;
+  height: calc(~"100% - 42px");
     width: 80%;
     max-width: 1500px;
 	min-width: 1000px;
@@ -513,7 +514,8 @@ button:focus,input:focus,select:focus,textarea:focus{
       width: 100%;
       position: fixed;
       height: @bottom_height;
-      line-height: 35px;
+      line-height: @bottom_height;
+      padding-top: 3px;
       bottom: 0;
       font-size: 13px;
       font-weight: bold;
@@ -530,23 +532,28 @@ button:focus,input:focus,select:focus,textarea:focus{
       #blueprint{
         float: left;
         padding-left: 15px;
-      }
-      .blueprint_list{
-        >div{
-          display: inline-block;
-          margin-right: 3px;
+       .blueprint_list{
+         float: left;
+          >div{
+            display: inline-block;
+            margin-right: 3px;
+          }
         }
-        >a{
-         margin-left: 15px; 
+       .blueprint_new{
+          float: left;
+          margin-left: 15px; 
         }
+       .clearfix();
       }
+      
       #copyright{
         float: right;
         padding-right: 20px;
       }
       &:before{
         content: "";
-        position: relative;
+        position: absolute;
+        top: 0;
         display: block;
         width: 100%;
         height: 8px;
@@ -556,10 +563,13 @@ button:focus,input:focus,select:focus,textarea:focus{
     }
 }
 #right{
+    display: none;
 	position: fixed;
 	top: 0;
 	right: 0;
 	height: 100%;
+    height: calc(~"100% - 42px");
+    padding-bottom: 10px;
     //max-width: 245px;
     width: 270px;
     border-left: 1px solid #DEDFDF;
@@ -569,6 +579,7 @@ button:focus,input:focus,select:focus,textarea:focus{
     border-top: 7px solid #FF6900; 
   }
   .right_tool{
+    display: none;
     background-color: #CCCCCC;
     .r_button{
       float: left;
@@ -633,6 +644,7 @@ button:focus,input:focus,select:focus,textarea:focus{
     top :auto;
     bottom: 0px;
     height: 400px;
+    bottom: 42px;
   }
 }
 

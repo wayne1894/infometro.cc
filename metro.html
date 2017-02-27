@@ -5,18 +5,20 @@
 <title>infometro.cc</title>
 
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.css" />
-<link rel="stylesheet" type="text/css" href="css/perfect-scrollbar.min.css">
-<!--<link rel="stylesheet" type="text/css" href="css/infometro.css">-->
+<link rel="stylesheet" href="css/perfect-scrollbar.min.css" type="text/css" />
 <link rel="stylesheet/less" type="text/css" href="css/infometro.less" />
 
 <script src="js/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.js"></script>
+<script src="js/perfect-scrollbar.jquery.min.js"></script>
 <script src="js/less.min.js"></script>
 <script src="js/vue.js"></script>
-<script src="js/main.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.6.10/firebase.js"></script>
+<script src="js/public.js"></script>
+<script src="js/firebase_init.js"></script>
 
 </head>
-<body >
+<body>
 <div id="main">
   <div id="left">
     <div id="line_parent">
@@ -161,11 +163,10 @@
   </div>
   <div id="bottom">
      <div id="blueprint">
-       <div class="blueprint_list">
-         <div>我的地鐵1</div>
-         <div>我的地鐵2</div>
-         <a href="">新增地鐵</a>
+       <div v-for="(item, index) in blueprint" class="blueprint_list">
+         <div>{{item.name}}</div>
        </div>
+       <a class="blueprint_new">新增地鐵</a>
      </div>
      <div id="copyright">2017資訊地鐵站 版權所有 </div>
   </div>
@@ -190,54 +191,37 @@
     </div>
     <div class="right_main">
       <div v-for="n in 50">
-        <br><br><br>
+        <br><br>{{n}}<br>
       </div>
     </div>
     <div class="right_line"></div>
   </div>
 </div>
 <script>
-  var vm = new Vue({
-    el: '#main',
+  var vm={}
+  vm.bottom = new Vue({
+    el: '#bottom',
     data: {
-      message: 'Hello Vue!'
+      blueprint: {}
     }
   })
-   var b1_left=parseInt($("#board1").css("left"));
-   var b2_left=parseInt($("#board2").css("left"));
-   var b3_left=parseInt($("#board3").css("left"));
-  $(window).resize(function(){
-    var window_width=$(window).width();
-    $("#top").css("width",$("#center").width());
-    if($("#main").width()<1260){
-      $("#board3").addClass("board3_left");
-      var _move=($("#center").width()-860)/2;
-      $("#board1").css("left",b1_left+_move);
-      $("#board2").css("left",b2_left+_move);
-    }else{
-      $("#board3").removeClass("board3_left");
-      var _move=($("#center").width()-1175)/2;
-      if(_move<0)_move=0;
-      $("#board1").css("left",b1_left+_move);
-      $("#board2").css("left",b2_left+_move);
-      $("#board3").css("left",b3_left+_move);
+  vm.left= new Vue({
+    el: '#left',
+    data: {
+      line: {}
     }
-  }).resize();
-  $("#main").css("visibility","visible").css("left",0);
+  })
+  vm.top= new Vue({
+    el: '#top',
+    data: {
+      metro: {}
+    }
+  })
+  
+  function _is_login(){
+    初始化資料(vm.bottom);
+  }
 
-	$(function(){
-	$("#board_textarea").keyup(function(e) {
-	$(this).height(70);
-    $(this).height(this.scrollHeight + parseFloat($(this).css("borderTopWidth")) + parseFloat($(this).css("borderBottomWidth")));
-});	
-	$('#board_tag_select .ui.normal.dropdown').dropdown({
-		onChange: function(value, text, $selectedItem) {
-			//console.log($selectedItem)
-    }
-	});
-		
-	})
-	
 	$("#triangle_right").click(function(){
 		$("#top_tag").css("left",(parseInt($("#top_tag").css("left"))-80));
 	})
@@ -247,5 +231,6 @@
 		$("#top_tag").css("left",_x)
 	})
 </script>
+<script src="js/main.js"></script>
 </body>
 </html>

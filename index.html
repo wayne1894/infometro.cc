@@ -4,66 +4,70 @@
 <meta charset="utf-8">
 <title>infometro.cc</title>
 
-
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.css" />
-<link rel="stylesheet" type="text/css" href="css/perfect-scrollbar.min.css">
-<!--<link rel="stylesheet" type="text/css" href="css/infometro.css">-->
+<link rel="stylesheet" href="css/perfect-scrollbar.min.css" type="text/css" />
 <link rel="stylesheet/less" type="text/css" href="css/infometro.less" />
 
 <script src="js/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.js"></script>
+<script src="js/perfect-scrollbar.jquery.min.js"></script>
 <script src="js/less.min.js"></script>
 <script src="js/vue.js"></script>
-<script src="js/main.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.6.10/firebase.js"></script>
+<script src="js/public.js"></script>
+<script src="js/firebase_init.js"></script>
 
 </head>
 <body>
 <p>201702241527</p>
-<div id="user" style="color:red;"></div>
+<div id="user" style="color:red;">
+  {{user.uid}}
+</div>
 
 <h2>email註冊</h2>
-<input id="b1" type="text">
-<input id="b2" type="password">
+<input id="registered1" type="text">
+<input id="registered2" type="password">
 <button id="emailadd">Email 註冊</button>
 
 
 <h2>email登入</h2>
-<input id="a1" type="text">
-<input id="a2" type="password">
+<input id="login1" type="text">
+<input id="login2" type="password">
 <button id="emailLogin">Email Login</button>
 
 <h2>Facebook登入</h2>
-<button id="fbLoginBtn" onclick="fb_login_redirect()">FB Login</button>
-
-<h2>寄認證信</h2>
-<button onclick="寄認證信()">寄認證信</button>
+<button id="fbLoginBtn" onclick="fb_登入(location_fn)">FB Login</button>
 
 <h2>登出</h2>
 <button onclick="登出()">登出</button>
-<br>
-<br>
-<hr>
 
-<h2>重設密碼</h2>
-<input id="c1" type="password">
-<button>重設密碼</button>
-
-<h2>刪除帳號</h2>
-<button>刪除帳號</button>
 
 <script>
+  var vm={}
+  vm.show_login = new Vue({
+    el: '#user',
+    data:{
+       user: {}
+    }
+  })
+  function _is_login(user){
+    vm.show_login.user=user;
+  }
+  
+  function location_fn(){
+    location.href = "metro.html";
+  }
+  
 	$(function(){
 		$("#emailadd").on("click",function(){
-			註冊($("#b1").val(),$("#b2").val())
+			註冊($("#registered1").val(),$("#registered2").val(),location_fn)
 		})
-		
 		$("#emailLogin").on("click",function(){
-			登入($("#a1").val(),$("#a2").val())
+			email_登入($("#login1").val(),$("#login2").val(),location_fn)
 		})
 
 	})
 </script>
-<script src="https://www.gstatic.com/firebasejs/3.6.10/firebase.js"></script>
-<script src="js/firebase_init.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>

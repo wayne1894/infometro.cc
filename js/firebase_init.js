@@ -7,7 +7,9 @@
 
 //重新驗証用戶 (參考：http://sj82516-blog.logdown.com/posts/1050619)
 
-
+//firebase CRUD 操作 
+//http://sj82516-blog.logdown.com/posts/1061094
+//https://howtofirebase.com/firebase-data-structures-pagination-96c16ffdb5ca#.2aiv4i4pd   分頁
 
 // Initialize Firebase 初始化
   var config = {
@@ -18,18 +20,35 @@
     messagingSenderId: "358423331162"
   };
   firebase.initializeApp(config);
-  var database = firebase.database();
+  var D = firebase.database();
+  var user
 
-  function 註冊(email, password){
+  //[全域]監聽狀態改變
+  firebase.auth().onAuthStateChanged(function(data) {
+    if (data) {
+      print("User is logined")
+      user=data;
+      if(typeof _is_login==="function")_is_login(data);
+    } else {
+      print("User is not logined yet.");
+    }
+    user=data;
+  });
+
+  function 註冊(email, password,fn){
     //如果註冊新帳戶，也會自動登入
-    firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+  firebase.auth().createUserWithEmailAndPassword(email, password).then(function(){
+    if(typeof fn ==="function")fn();
+  }).catch(function(error) {
       var errorCode = error.code;
       var errorMsg = error.message;
       print(errorMsg);
     })
   }
-  function 登入(email,password){
-    firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+  function email_登入(email,password,fn){
+    firebase.auth().signInWithEmailAndPassword(email, password).then(function(){
+      if(typeof fn ==="function")fn();
+    }).catch(function(error) {
     var errorCode = error.code;
     var errorMsg = error.message;
     print(errorMsg+"___");
@@ -42,6 +61,7 @@
       print("User sign out error!");
     })
   }
+  
   function 取得使用者資料(){//頂層
     var user = firebase.auth().currentUser;
     if (user != null) {
@@ -51,6 +71,7 @@
       print("Email 驗證: " + user.emailVerified);
       print("uid: " + user.uid);
     }
+    return user
   }
   function 取得使用者登入資料(){
     var user = firebase.auth().currentUser; //使用者登入狀態
@@ -72,28 +93,16 @@
       print("error")
     });
   }
-  
-  //[全域]監聽狀態改變
-  firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-      userLogin = user;
-      print("User is logined", user)
-			$("#user").html(user.email)
-    } else {
-      userLogin = null;
-      print("User is not logined yet.");
-    }
-  });
-
 
 //firebase to fb login
 var provider = new firebase.auth.FacebookAuthProvider();
 
-function fb_login_redirect(){
+function fb_登入(fn){
 	//signInWithPopup signInWithRedirect
 	firebase.auth().signInWithPopup(provider).then(function(result) {
 		var token = result.credential.accessToken;
 		var user = result.user;
+      if(typeof fn ==="function")fn();
 	}).catch(function(error) {
 		var errorCode = error.code;
 		var errorMessage = error.message;
@@ -128,35 +137,81 @@ function update_Profile(){
 	});
 }
 
-
-
-//firebase CRUD 操作 
-
-//http://sj82516-blog.logdown.com/posts/1061094
-//https://howtofirebase.com/firebase-data-structures-pagination-96c16ffdb5ca#.2aiv4i4pd   分頁
-  function createData(uid, name, email, imageUrl) {
-    firebase.database().ref('users/' + uid).set({
-      username: name,
-      email: email,
-      profile_picture : imageUrl
+function writeUserData() {//寫入預設資料
+  D.ref('users/' + user.uid).push({
+      name : "我的第鐵1",
+      sort : 1,
+      checked : true,
+      line : data_template()
     });
-  }
+}
+
+function updateData(){
+  var updates = {};
+  updates["name"] = "v";
+  D.ref('users/' + user.uid).child(0).update(updates);
+}
+
+function data_template(){
+ return [
+   {
+     name: "淡水線",
+     sort: 2,
+     metro: [
+        {
+         _key : D.ref('users/' + user.uid).push().key ,
+         name: "台北車站"
+        }, {
+         _key : D.ref('users/' + user.uid).push().key ,
+         name: "關渡站"
+        }
+      ]
+    }, {
+     name: "板南線",
+     sort: 5,
+     metro: [
+       {
+         _key : D.ref('users/' + user.uid).push().key ,
+         name: "府中站"
+        }, {
+         _key : D.ref('users/' + user.uid).push().key ,
+         name: "亞東醫院站"
+        }
+      ]
+   }]
+}
   
-  function removeData(uid, name, email, imageUrl) {
-    firebase.database().ref('users/' + uid).remove();
-  }
-  var uid="7IJBbfGenZOdVlZjq3nnk1El04T2"
-  function postSmtBtn(){
-    var postRef = firebase.database().ref('/posts/' + uid);
-    postRef.push().set({
-      uid: uid,
-      title: "g1",
-      content: "g2",
-      age: "g3"
-    })
-  }
+function removeData(uid, name, email, imageUrl) {
+  //D.ref('users/' + uid +"/blueprint").child().remove();
+}
 
+  var blueprint_data ={};
+  var line_data ={};
+  var metro_data = {};
+function 初始化資料(vm,vm_data){
 
-function print(a){
-	console.log(a)
+  D.ref('users/' + user.uid).once('value').then(function(data) {
+    print(data.length)
+    data.forEach(function(childData) {
+      var Key = childData.key; //取得他的KEY
+      
+      if(childData.val().checked){//新增line
+        line_data=childData.val().line
+      }
+      blueprint_data[Key]= childData.val();
+    });
+
+  });
+}
+function insert_info(metro_key){
+  D.ref('info/' + user.uid + "/"+ metro_key).push(
+    {
+      msg : "看見我的靈魂裡那洗拭不去的黑色污點",
+      img : "test",
+      lick : true
+    }
+  )
+}
+function get_info_list(metro_key){
+  D.ref('info/' + user.uid + "/"+ metro_key).once('value')
 }
