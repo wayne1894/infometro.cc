@@ -147,20 +147,12 @@ button:focus,input:focus,select:focus,textarea:focus{
 			}
 		}
 	}
-    #center_wrap{
-        min-height: 100%;
-    }
-	#center{
-		background-color: #F7F7F7;
-		min-height: 100%;
-		margin-left: @left_width;
-		border: 1px solid #CDCDCD;
-		padding-top: @top_height - 2;
-        position: relative;
-		#top{
+    #top{
 			@li_width: 90px;
 			height: @top_height;
 			top: 0;
+            width: 100%;
+            left: @left_width+1;
 			background-color:#DEDEDE;
             background: -webkit-gradient(linear, 0 0, 0 bottom, from(#DEDEDE), to(#F1F1F2));
             background: -webkit-linear-gradient(#DEDEDE, #F1F1F2);
@@ -256,6 +248,17 @@ button:focus,input:focus,select:focus,textarea:focus{
 				}
 			}
 		}
+    #center_wrap{
+        min-height: 100%;
+    }
+	#center{
+		background-color: #F7F7F7;
+		min-height: 100%;
+		margin-left: @left_width;
+		border: 1px solid #CDCDCD;
+		padding-top: @top_height - 2;
+        position: relative;
+		
         #board1,#board2,#board3{
           border: 1px solid #CDCDCD;
 		  border-top: 7px solid #FF6900;
@@ -365,6 +368,7 @@ button:focus,input:focus,select:focus,textarea:focus{
 				border-bottom: 1px solid #CDCDCD ;
 				padding: 0;
 				position: relative;
+                height: 42px;
 				#board_tag_select{
 					width: 484px;
 					padding: 5px 0;
@@ -713,32 +717,4 @@ button:focus,input:focus,select:focus,textarea:focus{
 .dropdown.icon{
 	display: none;
 }
-.ui.selection.dropdown{
-	padding-top: 0;
-	padding-bottom: 0;
-	min-height: 2.5em;
-	border-radius: 0;
-	border:none;
-	//border-right: 1px solid #CDCDCD;
-}
-.ui.multiple.search.dropdown>.text{
-	margin: 0;
-	margin-top: 6px;
-  margin-left: 5px;
-}
-.ui.selection.dropdown .menu>.item{
-	padding: .71428571rem 1.9rem!important;
-}
-.ui.selection.active.dropdown, .ui.selection.active.dropdown .menu{
-	 border-color: #C3C3C4;
-	&:hover{
-		border-color: #C3C3C4;
-	}
-}
 
-.vex.vex-theme-plain .vex-dialog-button.vex-dialog-button-primary{
-	background: #FF6900!important;
-}
-#board_tag_select .default{
-	font-size:1.1em;
-}

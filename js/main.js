@@ -25,10 +25,5 @@
     $(this).height(70);
     $(this).height(this.scrollHeight + parseFloat($(this).css("borderTopWidth")) + parseFloat($(this).css("borderBottomWidth")));
 });	
-    $('#board_tag_select .ui.normal.dropdown').dropdown({
-        onChange: function(value, text, $selectedItem) {
-            //console.log($selectedItem)
-    }
-    });
     $("#right .right_main").perfectScrollbar();
   })

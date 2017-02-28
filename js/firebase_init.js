@@ -139,9 +139,8 @@ function update_Profile(){
 
 function writeUserData() {//寫入預設資料
   D.ref('users/' + user.uid).push({
-      name : "我的第鐵1",
+      name : "我的地鐵1",
       sort : 1,
-      checked : true,
       line : data_template()
     });
 }
@@ -182,31 +181,24 @@ function data_template(){
 }
   
 function removeData(uid, name, email, imageUrl) {
-  //D.ref('users/' + uid +"/blueprint").child().remove();
+  //D.ref('users/' + user.uid +"/blueprint").child().remove();
 }
 
-  var blueprint_data ={};
-  var line_data ={};
-  var metro_data = {};
-function 初始化資料(vm,vm_data){
-
-  D.ref('users/' + user.uid).once('value').then(function(data) {
-    print(data.length)
+function blueprint_init(){
+  var _init=[];
+  D.ref('users/' + user.uid).once("value").then(function(data){
     data.forEach(function(childData) {
-      var Key = childData.key; //取得他的KEY
-      
-      if(childData.val().checked){//新增line
-        line_data=childData.val().line
-      }
-      blueprint_data[Key]= childData.val();
-    });
-
-  });
+      _init.push(childData.val());
+      _init[_init.length-1].key=childData.key;
+    })
+    vm.blueprint=_init;
+    //vm.blueprint_selct
+  })
 }
 function insert_info(metro_key){
   D.ref('info/' + user.uid + "/"+ metro_key).push(
     {
-      msg : "看見我的靈魂裡那洗拭不去的黑色污點",
+      msg : "44看見我的靈魂裡那洗拭不去的黑色污點",
       img : "test",
       lick : true
     }
