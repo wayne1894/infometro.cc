@@ -137,11 +137,12 @@ function update_Profile(){
 	});
 }
 
-function writeUserData() {//寫入預設資料
-  D.ref('users/' + user.uid).push({
-      name : "我的地鐵1",
+function 新增藍圖(name,data_fn){
+  if(data_fn==undefined)data_fn=data_template
+    D.ref('users/' + user.uid).push({
+      name : name,
       sort : 1,
-      line : data_template()
+      line : data_fn()
     });
 }
 
@@ -180,10 +181,6 @@ function data_template(){
    }]
 }
   
-function removeData(uid, name, email, imageUrl) {
-  //D.ref('users/' + user.uid +"/blueprint").child().remove();
-}
-
 function blueprint_init(){
   var _init=[];
   D.ref('users/' + user.uid).once("value").then(function(data){
@@ -191,8 +188,8 @@ function blueprint_init(){
       _init.push(childData.val());
       _init[_init.length-1].key=childData.key;
     })
+
     vm.blueprint=_init;
-    //vm.blueprint_selct
   })
 }
 function insert_info(metro_key){
