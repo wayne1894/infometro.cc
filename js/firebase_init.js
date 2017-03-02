@@ -137,13 +137,19 @@ function update_Profile(){
 	});
 }
 
-function 新增藍圖(name,data_fn){
-  if(data_fn==undefined)data_fn=data_template
+function 新增藍圖(name){
+
+//		var data_fn=line_json("橘線","#ff6600");
+//		data_fn.metro.push(metro_json("總站"));
+//		data_fn.metro.push(metro_json("第二站"));
+//		data_fn.metro.push(metro_json("第三站"));
+//		
+
     D.ref('users/' + user.uid).push({
-      name : name,
-      sort : 1,
-      line : data_fn()
-    });
+			name: name,
+			sort : 1 ,
+			line : line_template()
+		})
 }
 
 function updateData(){
@@ -152,11 +158,11 @@ function updateData(){
   D.ref('users/' + user.uid).child(0).update(updates);
 }
 
-function data_template(){
+function line_template(){
  return [
    {
-     name: "淡水線",
-     sort: 2,
+     name: "淡水線11",
+     sort: 1,
      metro: [
         {
          _key : D.ref('users/' + user.uid).push().key ,
@@ -167,8 +173,20 @@ function data_template(){
         }
       ]
     }, {
-     name: "板南線",
-     sort: 5,
+     name: "板南線22",
+     sort: 2,
+     metro: [
+       {
+         _key : D.ref('users/' + user.uid).push().key ,
+         name: "府中站"
+        }, {
+         _key : D.ref('users/' + user.uid).push().key ,
+         name: "亞東醫院站"
+        }
+      ]
+   }, {
+     name: "其他線33",
+     sort: 3,
      metro: [
        {
          _key : D.ref('users/' + user.uid).push().key ,
@@ -179,6 +197,28 @@ function data_template(){
         }
       ]
    }]
+}
+function blueprint_json(name){
+	return {
+		name : name,
+    sort : 1,
+		line : []
+	}
+}
+function line_json(name,color){
+	return {
+		name: name,
+		sort : 1 ,
+		color : color ,
+		metro : []
+	}
+}
+function metro_json(name){
+	return {
+		_key : D.ref('users/' + user.uid).push().key,
+		sort : 1 ,
+		name : name
+	}
 }
   
 function blueprint_init(){
