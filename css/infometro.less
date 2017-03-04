@@ -108,19 +108,10 @@ button:focus,input:focus,select:focus,textarea:focus{
 		}
 		#new_line{
 			margin-top: 10px;
-			display: inline-block;
-			position: relative;
 			margin-left: @left_pl;
 		}
-		#new_line:hover::after{
-			content: "";
-			position: absolute;
-			bottom: 1px;
-			left: 0px;
-			border-bottom: 1px solid #4183c4;
-			display: inline-block;
-			width: 100%;
-		}
+
+        
 		#edit_parent{	
 			position: fixed;
 			bottom: @bottom_height;
@@ -525,26 +516,14 @@ button:focus,input:focus,select:focus,textarea:focus{
       font-weight: bold;
       text-shadow:0px 0px 1px #999999;
       z-index: 220;
-      a{
-        color: #4183c4;
-        text-decoration: none;
-      }
-      a:hover{
-		content: "";
-		border-bottom: 1px solid #4183c4;
-      }
+
       #blueprint{
         float: left;
         padding-left: 15px;
        .blueprint_list{
-         float: left;
-          >div{
-            display: inline-block;
-            margin-right: 3px;
-          }
+          display: inline-block;
         }
-       .blueprint_new{
-          float: left;
+        #blueprint_new{
           margin-left: 15px; 
         }
        .clearfix();
@@ -567,7 +546,6 @@ button:focus,input:focus,select:focus,textarea:focus{
     }
 }
 #right{
-    display: none;
 	position: fixed;
 	top: 0;
 	right: 0;
@@ -583,7 +561,6 @@ button:focus,input:focus,select:focus,textarea:focus{
     border-top: 7px solid #FF6900; 
   }
   .right_tool{
-    display: none;
     background-color: #CCCCCC;
     .r_button{
       float: left;
@@ -704,7 +681,21 @@ button:focus,input:focus,select:focus,textarea:focus{
   top: 0px;
   z-index:2;
 }
-
+.blue_a{
+  position: relative;
+}
+.blue_a:hover{
+  color: #4183c4;
+  &::after{
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 0px;
+    border-bottom: 1px solid #4183c4;
+    display: inline-block;
+    width: 100%;
+  }
+}
 
 //覆寫
 .ui.button{
