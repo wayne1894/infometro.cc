@@ -121,7 +121,7 @@
   <div id="bottom">
     <div id="blueprint">
       <div v-for="(item, index) in blueprint" class="blueprint_list">
-        <div> <span @click="change_bluprint(index)">{{item.name}}</span> <span @click="delete_blueprint(item)">刪除</span></div>
+        <div> <span @click="change_index_bluprint(index)">{{item.name}}</span> <span @click="delete_blueprint(item)">刪除</span></div>
       </div>
       <a class="blueprint_new" @click="new_blueprint()" href="javascript:void(0)">新增地鐵</a>
     </div>
@@ -185,17 +185,17 @@
         vm.$bindAsObject('info', D.ref("info/"+user.uid+"/"+this.key_metro));
       }
     },methods: {
-      new_blueprint : function(){
+      new_blueprint : function(){//新增藍圖
         var result = window.prompt("請輸入藍圖名稱", "");
         if(result){
           新增藍圖(result);
         }
       },
-      delete_blueprint : function (item){
+      delete_blueprint : function (item){//刪除藍圖
         D.ref('users/' + user.uid+"/"+item.key).remove();
       },
-      change_bluprint : function(index){
-        this.index_blueprint=index
+      change_index_bluprint : function(index){
+        this.index_blueprint=index;
       },new_line : function(){
         var result = window.prompt("請輸入支線名稱", "");
         if(result){
