@@ -66,8 +66,8 @@
   <div id="center">
     <div id="board1">
         <div id="board_line_parent">
-                  <div id="board_line"><i style="background-color:#30CB68"></i><div>淡水線</div></div>
-                  <div id="board_edit"><i class="male icon"></i></div>
+          <div id="board_line"><i style="background-color:#30CB68"></i><div>淡水線</div></div>
+          <div id="board_edit"><i class="male icon"></i></div>
         </div>
         <div id="board_tag_name">
           <div id="tag_name">
@@ -108,12 +108,12 @@
       </div>
       <div id="board_info">
         <div v-for="(item, index) in info" class="ui vertical segment clear">
-            <img class="ui medium left floated image transition " src="images/square-image.png">
-            <p>看見我的靈魂裡那洗拭不去的黑色污點</p>
-            <span class="left">
-                <i class="like icon"></i>
-                <i class="trash icon"></i>
-            </span>
+          <img class="ui medium left floated image transition " src="images/square-image.png">
+          <p>看見我的靈魂裡那洗拭不去的黑色污點</p>
+          <span class="left">
+            <i class="like icon"></i>
+            <i class="trash icon"></i>
+          </span>
         </div>
       </div>
     </div>
@@ -155,7 +155,6 @@
   </div>
 </div>
 <script>
-  
   var vm = new Vue({
     el: '#main',
     data: {
@@ -189,7 +188,7 @@
       new_blueprint : function(){
         var result = window.prompt("請輸入藍圖名稱", "");
         if(result){
-          新增藍圖(result)
+          新增藍圖(result);
         }
       },
       delete_blueprint : function (item){
