@@ -136,20 +136,13 @@ function update_Profile(){
 		
 	});
 }
-
 function 新增藍圖(name){
-
-//		var data_fn=line_json("橘線","#ff6600");
-//		data_fn.metro.push(metro_json("總站"));
-//		data_fn.metro.push(metro_json("第二站"));
-//		data_fn.metro.push(metro_json("第三站"));
-//		
-
-    D.ref('users/' + user.uid).push({
-			name: name,
-			sort : 1 ,
-			line : line_template()
-		})
+  var newRef=D.ref('users/' + user.uid).push();
+  newRef.set({
+    name: name,
+    sort : 1 ,
+    line : line_template()
+  });
 }
 
 function updateData(){
@@ -199,26 +192,26 @@ function line_template(){
    }]
 }
 function blueprint_json(name){
-	return {
-		name : name,
+  return {
+    name : name,
     sort : 1,
-		line : []
-	}
+    line : []
+  }
 }
 function line_json(name,color){
-	return {
-		name: name,
-		sort : 1 ,
-		color : color ,
-		metro : []
-	}
+  return {
+    name: name,
+    sort : 1 ,
+    color : color ,
+    metro : []
+  }
 }
 function metro_json(name){
-	return {
-		_key : D.ref('users/' + user.uid).push().key,
-		sort : 1 ,
-		name : name
-	}
+  return {
+    _key : D.ref('users/' + user.uid).push().key,
+    sort : 1 ,
+    name : name
+  }
 }
   
 function blueprint_init(){

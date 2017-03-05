@@ -524,7 +524,10 @@ button:focus,input:focus,select:focus,textarea:focus{
           display: inline-block;
         }
         #blueprint_new{
-          margin-left: 15px; 
+          margin-left: 10px; 
+        }
+        .default_a{
+          margin-right: 5px;
         }
        .clearfix();
       }
@@ -681,10 +684,13 @@ button:focus,input:focus,select:focus,textarea:focus{
   top: 0px;
   z-index:2;
 }
-.blue_a{
+.default_a{
   position: relative;
 }
-.blue_a:hover{
+.default_a.black{
+  color: black;
+}
+.default_a:hover{
   color: #4183c4;
   &::after{
     content: "";
@@ -694,8 +700,15 @@ button:focus,input:focus,select:focus,textarea:focus{
     border-bottom: 1px solid #4183c4;
     display: inline-block;
     width: 100%;
+  } 
+}
+.default_a.black:hover{
+  color: black;
+  &::after{
+    border-bottom: 1px solid black;
   }
 }
+
 
 //覆寫
 .ui.button{

@@ -1,6 +1,20 @@
 {
-	"devDependencies":{
-		"gulp" : "latest",
-		"gulp-less" : "latest"
-	}
+  "name": "infometro.cc",
+  "version": "1.0.0",
+  "description": "資訊地鐵站",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wayne1894/infometro.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "http://infometro.cc",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-less": "^3.3.0"
+  }
 }

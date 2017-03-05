@@ -41,7 +41,7 @@
           </li>
         </ul>
       </div>
-      <a href="javascript:void(0)" id="new_line" class="blue_a" onclick="edit_metro()">新增支線</a>
+      <a href="javascript:void(0)" id="new_line" class="default_a" onclick="edit_metro()">新增支線</a>
     </div>
     <div id="edit_parent">
 <!--  http://semantic-ui.com/elements/icon.html-->
@@ -120,9 +120,14 @@
   <div id="bottom">
     <div id="blueprint">
       <div v-for="(item, index) in blueprint" class="blueprint_list">
-        <div> <span @click="change_index_bluprint(index)">{{item.name}}</span> <span @click="delete_blueprint(item)">刪除</span></div>
+        <div>
+          <a class="default_a black" @click="change_index_bluprint(index)" href="#"> {{item.name}}</a>
+           <!-- 
+            <span @click="delete_blueprint(item)">刪除</span>
+            -->
+        </div>
       </div>
-      <a id="blueprint_new" class="blue_a" @click="new_blueprint()" href="javascript:void(0)">新增地鐵</a>
+      <a id="blueprint_new" class="default_a" @click="new_blueprint()" href="javascript:void(0)">新增地鐵</a>
     </div>
     <div id="copyright">2017資訊地鐵站 版權所有 </div>
   </div>
@@ -185,6 +190,9 @@
       }
     },methods: {
       new_blueprint : function(){//新增藍圖
+        
+        //前端檢查現在藍圖名稱，並加上未命名
+        
         新增藍圖("未命名");
       },
       delete_blueprint : function (item){//刪除藍圖
