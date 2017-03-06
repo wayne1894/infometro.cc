@@ -9,6 +9,7 @@
 <link rel="stylesheet" type="text/css" href="css/infometro.css" />
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.16/js/perfect-scrollbar.jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.3/vue.js"></script>
@@ -126,7 +127,7 @@
             -->
         </div>
       </div>
-      <a id="blueprint_new" class="default_a" @click="new_blueprint()" href="javascript:void(0)">新增地鐵</a>
+      <a id="blueprint_new" class="default_a" @click="new_blueprint()">新增地鐵</a>
     </div>
     <div id="copyright">2017資訊地鐵站 版權所有 </div>
   </div>
@@ -211,7 +212,12 @@
   })
 
   function _is_login(){
-    blueprint_init();
+   //blueprint_init();
+    vm.blueprint=test_json();
+  }
+  function test_json(){
+   //http://www.jsoneditoronline.org/
+   return [{"line":[{"color":"#ff6900","metro":[{"_key":"-KeY15jjQjXluUIRRJSc","name":"台北車站"},{"_key":"-KeY15jkYC4caxLdspWo","name":"關渡站"}],"name":"淡水線a1","sort":1},{"color":"#ff6900","metro":[{"_key":"-KeY15jkYC4caxLdspWp","name":"府中站"},{"_key":"-KeY15jkYC4caxLdspWq","name":"亞東醫院站"}],"name":"板南線a2","sort":2},{"color":"#ff6900","metro":[{"_key":"-KeY15jkYC4caxLdspWr","name":"府中站"},{"_key":"-KeY15jkYC4caxLdspWs","name":"亞東醫院站"}],"name":"其他線a3","sort":3}],"name":"未命名","sort":1,"key":"-KeY15jjQjXluUIRRJSb"},{"line":[{"color":"#ff6900","metro":[{"_key":"-KeYwacCNUTtXWIY8GKF","name":"台北車站"},{"_key":"-KeYwacCNUTtXWIY8GKG","name":"關渡站"}],"name":"淡水線a1","sort":1},{"color":"#ff6900","metro":[{"_key":"-KeYwacCNUTtXWIY8GKH","name":"府中站"},{"_key":"-KeYwacCNUTtXWIY8GKI","name":"亞東醫院站"}],"name":"板南線a2","sort":2},{"color":"#ff6900","metro":[{"_key":"-KeYwacCNUTtXWIY8GKJ","name":"府中站"},{"_key":"-KeYwacCNUTtXWIY8GKK","name":"亞東醫院站"}],"name":"其他線a3","sort":3}],"name":"未命名","sort":1,"key":"-KeYwacCNUTtXWIY8GKE"},{"line":[{"color":"#ff6900","metro":[{"_key":"-KeYwh_izITAvVo1M5nh","name":"台北車站"},{"_key":"-KeYwh_izITAvVo1M5ni","name":"關渡站"}],"name":"淡水線a1","sort":1},{"color":"#ff6900","metro":[{"_key":"-KeYwh_izITAvVo1M5nj","name":"府中站"},{"_key":"-KeYwh_izITAvVo1M5nk","name":"亞東醫院站"}],"name":"板南線a2","sort":2},{"color":"#ff6900","metro":[{"_key":"-KeYwh_izITAvVo1M5nl","name":"府中站"},{"_key":"-KeYwh_izITAvVo1M5nm","name":"亞東醫院站"}],"name":"其他線a3","sort":3}],"name":"未命名","sort":1,"key":"-KeYwh_hYOLmZYO3mSrh"}]
   }
   $("#triangle_right").click(function(){
     $("#top_tag").css("left",(parseInt($("#top_tag").css("left"))-80));

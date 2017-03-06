@@ -216,7 +216,7 @@ function metro_json(name){
     name : name
   }
 }
-  
+
 function blueprint_init(){
   var _init=[];
   D.ref('users/' + user.uid).once("value").then(function(data){
@@ -224,7 +224,6 @@ function blueprint_init(){
       _init.push(childData.val());
       _init[_init.length-1].key=childData.key;
     })
-
     vm.blueprint=_init;
   })
 }

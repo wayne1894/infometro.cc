@@ -10,7 +10,6 @@
   "author": "",
   "homepage": "http://infometro.cc",
   "devDependencies": {
-    "del": "^2.2.2",
     "gulp": "^3.9.1",
     "gulp-file-include": "^1.0.0",
     "gulp-less": "^3.3.0",
