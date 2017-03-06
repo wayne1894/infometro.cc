@@ -154,7 +154,8 @@ function updateData(){
 function line_template(){
  return [
    {
-     name: "淡水線11",
+     name: "淡水線a1",
+		 color : "#ff6900",
      sort: 1,
      metro: [
         {
@@ -166,7 +167,8 @@ function line_template(){
         }
       ]
     }, {
-     name: "板南線22",
+     name: "板南線a2",
+		 color : "#ff6900",
      sort: 2,
      metro: [
        {
@@ -178,7 +180,8 @@ function line_template(){
         }
       ]
    }, {
-     name: "其他線33",
+     name: "其他線a3",
+		 color : "#ff6900",
      sort: 3,
      metro: [
        {

@@ -1,3 +1,1 @@
-function print(a){
-	console.log(a)
-}
+function print(n){console.log(n)}
