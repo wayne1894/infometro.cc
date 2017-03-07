@@ -523,14 +523,21 @@ button:focus,input:focus,select:focus,textarea:focus{
       #blueprint{
         float: left;
         padding-left: 15px;
-       .blueprint_list{
+        #blueprint_drag{
           display: inline-block;
+          .blueprint_list{
+            display: inline-block;
+          }
         }
         #blueprint_new{
           margin-left: 10px; 
         }
-        .default_a{
+        .blueprint_a{
           margin-right: 5px;
+          color: black;
+          &.check{
+            border-bottom: 1px solid black;
+          }
         }
        .clearfix();
       }
@@ -634,8 +641,6 @@ button:focus,input:focus,select:focus,textarea:focus{
     bottom: 42px;
   }
 }
-
-
 .clearfix(){
 	&:before,
 	&:after {
@@ -690,9 +695,6 @@ button:focus,input:focus,select:focus,textarea:focus{
 .default_a{
   position: relative;
 }
-.default_a.black{
-  color: black;
-}
 .default_a:hover{
   color: #4183c4;
   &::after{
@@ -705,13 +707,6 @@ button:focus,input:focus,select:focus,textarea:focus{
     width: 100%;
   } 
 }
-.default_a.black:hover{
-  color: black;
-  &::after{
-    border-bottom: 1px solid black;
-  }
-}
-
 
 //覆寫
 .ui.button{

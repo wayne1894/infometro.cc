@@ -140,8 +140,11 @@ function 新增藍圖(name){
   var newRef=D.ref('users/' + user.uid).push();
   newRef.set({
     name: name,
-    sort : 1 ,
     line : line_template()
+  }).then(function(a){
+    setTimeout(function(){
+      vm.index_blueprint = vm.blueprint.length -1 ;
+    },5)
   });
 }
 
@@ -156,7 +159,6 @@ function line_template(){
    {
      name: "淡水線a1",
 		 color : "#ff6900",
-     sort: 1,
      metro: [
         {
          _key : D.ref('users/' + user.uid).push().key ,
@@ -169,7 +171,6 @@ function line_template(){
     }, {
      name: "板南線a2",
 		 color : "#ff6900",
-     sort: 2,
      metro: [
        {
          _key : D.ref('users/' + user.uid).push().key ,
@@ -182,7 +183,6 @@ function line_template(){
    }, {
      name: "其他線a3",
 		 color : "#ff6900",
-     sort: 3,
      metro: [
        {
          _key : D.ref('users/' + user.uid).push().key ,
@@ -192,19 +192,17 @@ function line_template(){
          name: "亞東醫院站"
         }
       ]
-   }]
+  }]
 }
 function blueprint_json(name){
   return {
     name : name,
-    sort : 1,
     line : []
   }
 }
 function line_json(name,color){
   return {
     name: name,
-    sort : 1 ,
     color : color ,
     metro : []
   }
@@ -212,19 +210,22 @@ function line_json(name,color){
 function metro_json(name){
   return {
     _key : D.ref('users/' + user.uid).push().key,
-    sort : 1 ,
     name : name
   }
 }
 
 function blueprint_init(){
-  var _init=[];
-  D.ref('users/' + user.uid).once("value").then(function(data){
+  D.ref('users/' + user.uid).on("value",function(data){
+    var _init=[];
     data.forEach(function(childData) {
       _init.push(childData.val());
       _init[_init.length-1].key=childData.key;
-    })
+    });
+    if(vm.index_blueprint>_init.length-1){
+      vm.index_blueprint=_init.length-1;
+    }
     vm.blueprint=_init;
+    //print(JSON.stringify(_init));
   })
 }
 function insert_info(metro_key){

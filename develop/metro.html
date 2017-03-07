@@ -98,12 +98,12 @@
   </div>
   <div id="bottom">
     <div id="blueprint">
-      <div v-for="(item, index) in blueprint" class="blueprint_list">
-        <div>
-          <a class="default_a black" @click="change_index_bluprint(index)" href="#"> {{item.name}}</a>
-           <!-- 
-            <span @click="delete_blueprint(item)">刪除</span>
-            -->
+      <div id="blueprint_drag">
+        <div v-for="(item, index) in blueprint" class="blueprint_list">
+            <a class="blueprint_a" :class="check_bluprint(index)" @click="change_index_bluprint(index)"> {{item.name}}</a>
+             <!-- 
+              <span @click="delete_blueprint(item)">刪除</span>
+              -->
         </div>
       </div>
       <a id="blueprint_new" class="default_a" @click="new_blueprint()">新增地鐵</a>
@@ -153,8 +153,8 @@
       }
     },computed: {
      line : function(){//載入line
-      if(this.blueprint.length==0)return false;
-      return this.blueprint[this.index_blueprint].line;
+       if(this.blueprint.length==0)return false;
+       return this.blueprint[this.index_blueprint].line;
      },
      metro : function(){//載入metro
        if(this.blueprint.length==0)return false; //藍圖如果不存在離開
@@ -169,9 +169,6 @@
       }
     },methods: {
       new_blueprint : function(){//新增藍圖
-        
-        //前端檢查現在藍圖名稱，並加上未命名
-        
         新增藍圖("未命名");
       },
       delete_blueprint : function (item){//刪除藍圖
@@ -186,29 +183,21 @@
         }
       },delete_line : function(){
         
-      },get_blueprint_name : function (){//得到新增的藍圖名稱
-        var j=0
-        for(var i=0;i<vm.blueprint.length;i++){
-          if(vm.blueprint[i].name.indexOf("未命名")>-1){
-            j=j+1
-          }
-        }
-        if(j==0){
-          return "未命名"
-        }else{
-          return "未命名"+"("+(j+1)+")";
+      },check_bluprint : function(index){
+        if(this.index_blueprint==index){
+          return "check";
         }
       }
     }
   })
 
   function _is_login(){
-   //blueprint_init();
-    vm.blueprint=test_json();
+   blueprint_init("init");
+   //vm.blueprint=test_json();
   }
   function test_json(){
    //http://www.jsoneditoronline.org/
-   return [{"line":[{"color":"#ff6900","metro":[{"_key":"-KeY15jjQjXluUIRRJSc","name":"台北車站"},{"_key":"-KeY15jkYC4caxLdspWo","name":"關渡站"}],"name":"淡水線a1","sort":1},{"color":"#ff6900","metro":[{"_key":"-KeY15jkYC4caxLdspWp","name":"府中站"},{"_key":"-KeY15jkYC4caxLdspWq","name":"亞東醫院站"}],"name":"板南線a2","sort":2},{"color":"#ff6900","metro":[{"_key":"-KeY15jkYC4caxLdspWr","name":"府中站"},{"_key":"-KeY15jkYC4caxLdspWs","name":"亞東醫院站"}],"name":"其他線a3","sort":3}],"name":"未命名","sort":1,"key":"-KeY15jjQjXluUIRRJSb"},{"line":[{"color":"#ff6900","metro":[{"_key":"-KeYwacCNUTtXWIY8GKF","name":"台北車站"},{"_key":"-KeYwacCNUTtXWIY8GKG","name":"關渡站"}],"name":"淡水線a1","sort":1},{"color":"#ff6900","metro":[{"_key":"-KeYwacCNUTtXWIY8GKH","name":"府中站"},{"_key":"-KeYwacCNUTtXWIY8GKI","name":"亞東醫院站"}],"name":"板南線a2","sort":2},{"color":"#ff6900","metro":[{"_key":"-KeYwacCNUTtXWIY8GKJ","name":"府中站"},{"_key":"-KeYwacCNUTtXWIY8GKK","name":"亞東醫院站"}],"name":"其他線a3","sort":3}],"name":"未命名","sort":1,"key":"-KeYwacCNUTtXWIY8GKE"},{"line":[{"color":"#ff6900","metro":[{"_key":"-KeYwh_izITAvVo1M5nh","name":"台北車站"},{"_key":"-KeYwh_izITAvVo1M5ni","name":"關渡站"}],"name":"淡水線a1","sort":1},{"color":"#ff6900","metro":[{"_key":"-KeYwh_izITAvVo1M5nj","name":"府中站"},{"_key":"-KeYwh_izITAvVo1M5nk","name":"亞東醫院站"}],"name":"板南線a2","sort":2},{"color":"#ff6900","metro":[{"_key":"-KeYwh_izITAvVo1M5nl","name":"府中站"},{"_key":"-KeYwh_izITAvVo1M5nm","name":"亞東醫院站"}],"name":"其他線a3","sort":3}],"name":"未命名","sort":1,"key":"-KeYwh_hYOLmZYO3mSrh"}]
+   return [{"line":[{"color":"#ff6900","metro":[{"_key":"-KeY15jjQjXluUIRRJSc","name":"台北車站"},{"_key":"-KeY15jkYC4caxLdspWo","name":"關渡站"}],"name":"淡水線a1","sort":1},{"color":"#ff6900","metro":[{"_key":"-KeY15jkYC4caxLdspWp","name":"府中站"},{"_key":"-KeY15jkYC4caxLdspWq","name":"亞東醫院站"}],"name":"板南線a2","sort":2},{"color":"#ff6900","metro":[{"_key":"-KeY15jkYC4caxLdspWr","name":"府中站"},{"_key":"-KeY15jkYC4caxLdspWs","name":"亞東醫院站"}],"name":"其他線a3","sort":3}],"name":"未命名","sort":1,"key":"-KeY15jjQjXluUIRRJSb"},{"line":[{"color":"#ff6900","metro":[{"_key":"-KeYwacCNUTtXWIY8GKF","name":"台北車站"},{"_key":"-KeYwacCNUTtXWIY8GKG","name":"關渡站"}],"name":"淡水線a1","sort":1},{"color":"#ff6900","metro":[{"_key":"-KeYwacCNUTtXWIY8GKH","name":"府中站"},{"_key":"-KeYwacCNUTtXWIY8GKI","name":"亞東醫院站"}],"name":"板南線a2","sort":2},{"color":"#ff6900","metro":[{"_key":"-KeYwacCNUTtXWIY8GKJ","name":"府中站"},{"_key":"-KeYwacCNUTtXWIY8GKK","name":"亞東醫院站"}],"name":"其他線a3","sort":3}],"name":"未命名(2)","sort":1,"key":"-KeYwacCNUTtXWIY8GKE"},{"line":[{"color":"#ff6900","metro":[{"_key":"-KeYwh_izITAvVo1M5nh","name":"台北車站"},{"_key":"-KeYwh_izITAvVo1M5ni","name":"關渡站"}],"name":"淡水線a1","sort":1},{"color":"#ff6900","metro":[{"_key":"-KeYwh_izITAvVo1M5nj","name":"府中站"},{"_key":"-KeYwh_izITAvVo1M5nk","name":"亞東醫院站"}],"name":"板南線a2","sort":2},{"color":"#ff6900","metro":[{"_key":"-KeYwh_izITAvVo1M5nl","name":"府中站"},{"_key":"-KeYwh_izITAvVo1M5nm","name":"亞東醫院站"}],"name":"其他線a3","sort":3}],"name":"未命名(3)","sort":1,"key":"-KeYwh_hYOLmZYO3mSrh"}]
   }
   $("#triangle_right").click(function(){
     $("#top_tag").css("left",(parseInt($("#top_tag").css("left"))-80));
@@ -218,6 +207,13 @@
     if(_x>23)_x=23;
     $("#top_tag").css("left",_x);
   })
+  
+  $(function(){
+    var el = document.getElementById("blueprint_drag");
+    var sortable = Sortable.create(el);
+  })
+  
+  
 </script>
 <script src="js/main.js"></script>
 </body>
