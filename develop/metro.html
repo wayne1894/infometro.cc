@@ -12,7 +12,9 @@
       <div id="left_line">
         <ul>
           <li v-for="(item, index) in line">
-            @@include('include/tool.html',{"color": "#40659b"})
+            <svg class="tool" fill="#40659b">
+              @@include('include/tool.html')
+            </svg>
             <i style="background-color:#FF6907"></i>
             <span>{{item.name}}</span>
           </li>
@@ -184,6 +186,18 @@
         }
       },delete_line : function(){
         
+      },get_blueprint_name : function (){//得到新增的藍圖名稱
+        var j=0
+        for(var i=0;i<vm.blueprint.length;i++){
+          if(vm.blueprint[i].name.indexOf("未命名")>-1){
+            j=j+1
+          }
+        }
+        if(j==0){
+          return "未命名"
+        }else{
+          return "未命名"+"("+(j+1)+")";
+        }
       }
     }
   })
