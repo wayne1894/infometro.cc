@@ -147,13 +147,12 @@ function 新增藍圖(name){
     },5)
   });
 }
-
-function updateData(){
-  var updates = {};
-  updates["name"] = "v";
-  D.ref('users/' + user.uid).child(0).update(updates);
+function 刪除藍圖(key){
+	 D.ref('users/' + user.uid+"/"+key).remove();
 }
-
+function 更新藍圖(key,data){
+	D.ref('users/' + user.uid +"/"+key).update(data);
+}
 function line_template(){
  return [
    {
@@ -213,7 +212,6 @@ function metro_json(name){
     name : name
   }
 }
-
 function blueprint_init(){
   D.ref('users/' + user.uid).on("value",function(data){
     var _init=[];
