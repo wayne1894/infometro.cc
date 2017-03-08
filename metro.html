@@ -27,32 +27,20 @@
       <div id="logo"><img src="images/icon_128.fw.png" alt=""></div>
       <div class="line_text">所有支線：</div>
       <div id="left_line">
-        <ul>
-          <li v-for="(item, index) in line">
-<!--
-            <svg class="tool" fill="#40659b">
-              <g>
-  <path class="st0" d="M4.7,0.8c-0.8-0.8-2-1-3-0.5l1.8,1.8L2.1,3.4L0.3,1.6c-0.5,1-0.3,2.2,0.5,3c1.1,1.1,2.8,1,3.9-0.1
-      C5.7,3.6,5.7,1.8,4.7,0.8z"/>
-  <path class="st0" d="M8.8,7.4C8.4,7.8,8,8.2,7.6,8.6C5.7,7.1,4.2,5.4,2.7,3.9c0.4-0.4,0.8-0.8,1.2-1.1C5.4,4.3,6.9,5.9,8.8,7.4z"
-      />
-  <ellipse transform="matrix(0.7071 -0.7071 0.7071 0.7071 -3.3248 7.9671)" class="st0" cx="8" cy="8" rx="1.2" ry="1.3"/>
-</g>
-            </svg>
--->
-
-            <i style="background-color:#FF6907" @click="delete_line(index)"></i>
-            <span>{{item.name}}</span>
+        <ul id="line_drag">
+          <li v-for="(item, index) in line" :class="check_line(index)">
+            <div class="tool" @click="delete_line(index)">
+              <i class="trash outline icon"></i>
+            </div>
+            <i class="line_i" style="background-color:#FF6907" ></i>
+            <a class="line_a" @click="change_line(index)">{{item.name}}</a>
           </li>
         </ul>
       </div>
       <a href="javascript:void(0)" id="new_line" class="default_a" @click="new_line()">新增支線</a>
     </div>
     <div id="edit_parent">
-<!--  http://semantic-ui.com/elements/icon.html-->
       <a class="left_icon" href="javascript:void(0)"><i class="setting icon"></i></a>
-<!--  <a class="left_icon" href="javascript:void(0)"><i class="help circle icon"></i></a>-->
-<!--  sign out-->
       <a class="left_icon" href="javascript:void(0)"><i class="power icon"></i></a>
     </div>
   </div>
@@ -126,11 +114,15 @@
     <div id="blueprint">
       <div id="blueprint_drag">
         <div v-for="(item, index) in blueprint" class="blueprint_list">
-            <a class="blueprint_a" :class="check_bluprint(index)" @click="change_index_bluprint(index)"> {{item.name}}</a>
-              
-              <span @click="delete_blueprint(item)">刪除</span>
-             
+            <a class="blueprint_a" :class="check_bluprint(index)" @click="change_bluprint(index)"> {{item.name}}
+            </a>
+            
+            
+
+            
+            
         </div>
+        
       </div>
       <a id="blueprint_new" class="default_a" @click="new_blueprint()">新增地鐵</a>
     </div>
@@ -197,25 +189,31 @@
       new_blueprint : function(){//新增藍圖
         新增藍圖("未命名");
       },delete_blueprint : function (item){//刪除藍圖
-				刪除藍圖(item.key);
-      },change_index_bluprint : function(index){
+		刪除藍圖(item.key);
+      },change_bluprint : function(index){
         this.index_blueprint=index;
-      },get_blueprint : function(){
-				return this.blueprint[this.index_blueprint];
-			},new_line : function(){
-				var _j=line_json("未命名","#B3B3B3");
-				_j.metro.push(metro_json("總站"));
-				var data=this.get_blueprint();
-				data.line.push(_j);
-				更新藍圖(data.key,data);
-      },delete_line : function(index){
-				var data=this.get_blueprint();
-				data.line.splice(index,1);
-				更新藍圖(data.key,data);
       },check_bluprint : function(index){
         if(this.index_blueprint==index){
           return "check";
         }
+      },change_line : function(index){
+        this.index_line=index;
+      },get_blueprint : function(){
+		return this.blueprint[this.index_blueprint];
+      },check_line : function(index){
+        if(this.index_line==index){
+          return "check";
+        }
+      },new_line : function(){
+        var _j=line_json("未命名","#B3B3B3");
+        _j.metro.push(metro_json("總站"));
+        var data=this.get_blueprint();
+        data.line.push(_j);
+        更新藍圖(data.key,data);
+      },delete_line : function(index){
+        var data=this.get_blueprint();
+        data.line.splice(index,1);
+        更新藍圖(data.key,data);
       }
     }
   })
@@ -240,7 +238,8 @@
   $(function(){
     var el = document.getElementById("blueprint_drag");
     var sortable =new Sortable(el);
-		
+    var e2 = document.getElementById("line_drag");
+    var sortable =new Sortable(e2);
   })
   
   

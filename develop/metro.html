@@ -10,26 +10,20 @@
       <div id="logo"><img src="images/icon_128.fw.png" alt=""></div>
       <div class="line_text">所有支線：</div>
       <div id="left_line">
-        <ul>
-          <li v-for="(item, index) in line">
-<!--
-            <svg class="tool" fill="#40659b">
-              @@include('include/tool.html')
-            </svg>
--->
-
-            <i style="background-color:#FF6907" @click="delete_line(index)"></i>
-            <span>{{item.name}}</span>
+        <ul id="line_drag">
+          <li v-for="(item, index) in line" :class="check_line(index)">
+            <div class="tool" @click="delete_line(index)">
+              <i class="trash outline icon"></i>
+            </div>
+            <i class="line_i" style="background-color:#FF6907" ></i>
+            <a class="line_a" @click="change_line(index)">{{item.name}}</a>
           </li>
         </ul>
       </div>
       <a href="javascript:void(0)" id="new_line" class="default_a" @click="new_line()">新增支線</a>
     </div>
     <div id="edit_parent">
-<!--  http://semantic-ui.com/elements/icon.html-->
       <a class="left_icon" href="javascript:void(0)"><i class="setting icon"></i></a>
-<!--  <a class="left_icon" href="javascript:void(0)"><i class="help circle icon"></i></a>-->
-<!--  sign out-->
       <a class="left_icon" href="javascript:void(0)"><i class="power icon"></i></a>
     </div>
   </div>
@@ -103,11 +97,15 @@
     <div id="blueprint">
       <div id="blueprint_drag">
         <div v-for="(item, index) in blueprint" class="blueprint_list">
-            <a class="blueprint_a" :class="check_bluprint(index)" @click="change_index_bluprint(index)"> {{item.name}}</a>
-              
-              <span @click="delete_blueprint(item)">刪除</span>
-             
+            <a class="blueprint_a" :class="check_bluprint(index)" @click="change_bluprint(index)"> {{item.name}}
+            </a>
+            
+            
+
+            
+            
         </div>
+        
       </div>
       <a id="blueprint_new" class="default_a" @click="new_blueprint()">新增地鐵</a>
     </div>
@@ -174,25 +172,31 @@
       new_blueprint : function(){//新增藍圖
         新增藍圖("未命名");
       },delete_blueprint : function (item){//刪除藍圖
-				刪除藍圖(item.key);
-      },change_index_bluprint : function(index){
+		刪除藍圖(item.key);
+      },change_bluprint : function(index){
         this.index_blueprint=index;
-      },get_blueprint : function(){
-				return this.blueprint[this.index_blueprint];
-			},new_line : function(){
-				var _j=line_json("未命名","#B3B3B3");
-				_j.metro.push(metro_json("總站"));
-				var data=this.get_blueprint();
-				data.line.push(_j);
-				更新藍圖(data.key,data);
-      },delete_line : function(index){
-				var data=this.get_blueprint();
-				data.line.splice(index,1);
-				更新藍圖(data.key,data);
       },check_bluprint : function(index){
         if(this.index_blueprint==index){
           return "check";
         }
+      },change_line : function(index){
+        this.index_line=index;
+      },get_blueprint : function(){
+		return this.blueprint[this.index_blueprint];
+      },check_line : function(index){
+        if(this.index_line==index){
+          return "check";
+        }
+      },new_line : function(){
+        var _j=line_json("未命名","#B3B3B3");
+        _j.metro.push(metro_json("總站"));
+        var data=this.get_blueprint();
+        data.line.push(_j);
+        更新藍圖(data.key,data);
+      },delete_line : function(index){
+        var data=this.get_blueprint();
+        data.line.splice(index,1);
+        更新藍圖(data.key,data);
       }
     }
   })
@@ -217,7 +221,8 @@
   $(function(){
     var el = document.getElementById("blueprint_drag");
     var sortable =new Sortable(el);
-		
+    var e2 = document.getElementById("line_drag");
+    var sortable =new Sortable(e2);
   })
   
   
