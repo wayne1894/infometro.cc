@@ -20,7 +20,7 @@
           </li>
         </ul>
       </div>
-      <a href="javascript:void(0)" id="new_line" class="default_a" @click="new_line()">新增支線</a>
+  		<a id="new_line" class="default_a" @click="new_line()">新增支線</a>
     </div>
     <div id="edit_parent">
       <a class="left_icon" href="javascript:void(0)"><i class="setting icon"></i></a>
@@ -96,18 +96,30 @@
   <div id="bottom">
     <div id="blueprint">
       <div id="blueprint_drag">
-        <div v-for="(item, index) in blueprint" class="blueprint_list">
-            <a class="blueprint_a" :class="check_bluprint(index)" @click="change_bluprint(index)"> {{item.name}}
-            </a>
-            
-            
-
-            
-            
+        <div v-for="(item, index) in blueprint" class="blueprint_list ui dropdown">
+					<a class="blueprint_a" :class="check_bluprint(index)" @click="change_bluprint(index)"> {{item.name}}
+					<i class="dropdown icon"></i>
+					</a> 
         </div>
-        
       </div>
-      <a id="blueprint_new" class="default_a" @click="new_blueprint()">新增地鐵</a>
+<!--      <a id="blueprint_new" class="default_a" @click="new_blueprint()">新增地鐵</a>-->
+
+<div id="blueprint_new" class="ui icon button" data-tooltip="新增一個地鐵計畫" data-inverted="" @click="new_blueprint()">
+  <i class="add icon"></i>
+</div>
+<!--
+<div class="ui inline dropdown">
+  <div class="text">Hide</div>
+  <i class="dropdown icon"></i>
+  <div class="menu">
+    <div class="item">Edit</div>
+    <div class="item">Remove</div>
+    <div class="item">Hide</div>
+  </div>
+</div>
+-->
+
+
     </div>
     <div id="copyright">2017資訊地鐵站 版權所有 </div>
   </div>
@@ -227,6 +239,7 @@
   
   
 </script>
+
 <script src="js/main.js"></script>
 </body>
 </html>
