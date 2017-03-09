@@ -26,4 +26,12 @@
     $(this).height(this.scrollHeight + parseFloat($(this).css("borderTopWidth")) + parseFloat($(this).css("borderBottomWidth")));
 });	
     $("#right .right_main").perfectScrollbar();
+    
+    //https://jackrugile.com/jrumble/
+    $("#logo img").jrumble().hover(function(){
+	  $(this).trigger('startRumble');
+    }, function(){
+      $(this).trigger('stopRumble');
+    });
+    
   })

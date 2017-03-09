@@ -97,9 +97,9 @@
     <div id="blueprint">
       <div id="blueprint_drag">
         <div v-for="(item, index) in blueprint" class="blueprint_list ui dropdown">
-					<a class="blueprint_a" :class="check_bluprint(index)" @click="change_bluprint(index)"> {{item.name}}
-					<i class="dropdown icon"></i>
-					</a> 
+          <a class="blueprint_a" :class="check_bluprint(index)" @click="change_bluprint(index)"> {{item.name}}
+          </a>
+          <i class="dropdown icon"></i>
         </div>
       </div>
 <!--      <a id="blueprint_new" class="default_a" @click="new_blueprint()">新增地鐵</a>-->
@@ -118,8 +118,6 @@
   </div>
 </div>
 -->
-
-
     </div>
     <div id="copyright">2017資訊地鐵站 版權所有 </div>
   </div>
@@ -209,6 +207,12 @@
         var data=this.get_blueprint();
         data.line.splice(index,1);
         更新藍圖(data.key,data);
+      },new_metro : function (order){
+        if(order==undefined)order=0;
+        var _m=metro_json("未命名");
+        var data=this.get_blueprint();
+        data.line[this.index_line].metro.splice(order,0,_m)
+        更新藍圖(data.key,data);
       }
     }
   })
@@ -236,8 +240,6 @@
     var e2 = document.getElementById("line_drag");
     var sortable =new Sortable(e2);
   })
-  
-  
 </script>
 
 <script src="js/main.js"></script>
