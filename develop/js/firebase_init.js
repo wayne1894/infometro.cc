@@ -212,7 +212,7 @@ function metro_json(name){
     name : name
   }
 }
-function blueprint_init(){
+function blueprint_init(fn){
   D.ref('users/' + user.uid).on("value",function(data){
     var _init=[];
     data.forEach(function(childData) {
@@ -223,6 +223,9 @@ function blueprint_init(){
       vm.index_blueprint=_init.length-1;
     }
     vm.blueprint=_init;
+    if(typeof fn=="function"){
+      setTimeout(fn,5);
+    }
     //print(JSON.stringify(_init));
   })
 }

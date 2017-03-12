@@ -96,10 +96,16 @@
   <div id="bottom">
     <div id="blueprint">
       <div id="blueprint_drag">
-        <div v-for="(item, index) in blueprint" class="blueprint_list ui dropdown">
+        <div v-for="(item, index) in blueprint" class="blueprint_list ui top left pointing dropdown" >
           <a class="blueprint_a" :class="check_bluprint(index)" @click="change_bluprint(index)"> {{item.name}}
           </a>
+
+<!--  <input type="text" v-model="item.name">-->
           <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" @click="change_bluprint(index)"><i class="edit icon"></i>修改名稱</div>
+            <div class="item" @click="delete_blueprint(item)"><i class="delete icon"></i>移除</div>
+          </div>
         </div>
       </div>
 <!--      <a id="blueprint_new" class="default_a" @click="new_blueprint()">新增地鐵</a>-->
@@ -107,17 +113,6 @@
 <div id="blueprint_new" class="ui icon button" data-tooltip="新增一個地鐵計畫" data-inverted="" @click="new_blueprint()">
   <i class="add icon"></i>
 </div>
-<!--
-<div class="ui inline dropdown">
-  <div class="text">Hide</div>
-  <i class="dropdown icon"></i>
-  <div class="menu">
-    <div class="item">Edit</div>
-    <div class="item">Remove</div>
-    <div class="item">Hide</div>
-  </div>
-</div>
--->
     </div>
     <div id="copyright">2017資訊地鐵站 版權所有 </div>
   </div>
@@ -217,8 +212,17 @@
     }
   })
 
-  function _is_login(){
-    blueprint_init();
+  function _is_login(){//程式入口
+
+    blueprint_init(function(){
+      $(".blueprint_list").dropdown("destroy").dropdown({
+         on : 'customClick'
+       }).unbind("click").click(function(event){
+        if(event.target.nodeName=="I"){
+          $(this).trigger("customClick");
+        }
+      })
+    });
     //vm.blueprint=test_json();
   }
   function test_json(){
@@ -238,7 +242,7 @@
     var el = document.getElementById("blueprint_drag");
     var sortable =new Sortable(el);
     var e2 = document.getElementById("line_drag");
-    var sortable =new Sortable(e2);
+    var sortable =new Sortable(e2);    
   })
 </script>
 
