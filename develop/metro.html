@@ -16,7 +16,8 @@
               <i class="trash outline icon"></i>
             </div>
             <i class="line_i" style="background-color:#FF6907" ></i>
-            <a class="line_a" @click="change_line(index)">{{item.name}}</a>
+            <a  class="line_a" @click="change_line(index)">{{item.name}}</a>
+            <input style="display:none;" type="text" v-model="item.name">
           </li>
         </ul>
       </div>
@@ -97,22 +98,20 @@
     <div id="blueprint">
       <div id="blueprint_drag">
         <div v-for="(item, index) in blueprint" class="blueprint_list ui top left pointing dropdown" >
-          <a class="blueprint_a" :class="check_bluprint(index)" @click="change_bluprint(index)"> {{item.name}}
+          <a class="blueprint_a" :class="check_blueprint(index)"> {{item.name}}
           </a>
-
-<!--  <input type="text" v-model="item.name">-->
+          <input type="text" v-model="item.name">
           <i class="dropdown icon"></i>
           <div class="menu">
-            <div class="item" @click="change_bluprint(index)"><i class="edit icon"></i>修改名稱</div>
+            <div class="item" @click="change_blueprint_name(index)"><i class="edit icon"></i>修改名稱</div>
             <div class="item" @click="delete_blueprint(item)"><i class="delete icon"></i>移除</div>
+            <div v-show="!check_blueprint(index)" class="item" @click="change_blueprint(index)"><i class="exchange icon"></i>切換</div>
           </div>
         </div>
       </div>
-<!--      <a id="blueprint_new" class="default_a" @click="new_blueprint()">新增地鐵</a>-->
-
-<div id="blueprint_new" class="ui icon button" data-tooltip="新增一個地鐵計畫" data-inverted="" @click="new_blueprint()">
-  <i class="add icon"></i>
-</div>
+      <div id="blueprint_new" class="ui icon button" data-tooltip="新增一個地鐵計畫" data-inverted="" @click="new_blueprint()">
+        <i class="add icon"></i>
+      </div>
     </div>
     <div id="copyright">2017資訊地鐵站 版權所有 </div>
   </div>
@@ -178,9 +177,15 @@
         新增藍圖("未命名");
       },delete_blueprint : function (item){//刪除藍圖
 		刪除藍圖(item.key);
-      },change_bluprint : function(index){
+      },change_blueprint : function(index){
         this.index_blueprint=index;
-      },check_bluprint : function(index){
+      },change_blueprint_name : function(index){
+      var _a=$(event.target).closest(".blueprint_list")   
+        _a.find(".blueprint_a").hide();
+        _a.find("i").hide();
+        _a.find("input").show();
+        sortable1.option("disabled", true);
+      },check_blueprint : function(index){
         if(this.index_blueprint==index){
           return "check";
         }
@@ -213,22 +218,18 @@
   })
 
   function _is_login(){//程式入口
-
     blueprint_init(function(){
       $(".blueprint_list").dropdown("destroy").dropdown({
          on : 'customClick'
        }).unbind("click").click(function(event){
-        if(event.target.nodeName=="I"){
-          $(this).trigger("customClick");
+        if(event.target.nodeName=="INPUT"){
+          return
         }
+        $(this).trigger("customClick");
       })
     });
-    //vm.blueprint=test_json();
   }
-  function test_json(){
-   //http://www.jsoneditoronline.org/
-   return [{"line":[{"color":"#ff6900","metro":[{"_key":"-Kecw0F8wnkU-qZDCvUL","name":"台北車站"},{"_key":"-Kecw0F8wnkU-qZDCvUM","name":"關渡站"}],"name":"淡水線a1"},{"color":"#ff6900","metro":[{"_key":"-Kecw0F8wnkU-qZDCvUN","name":"府中站"},{"_key":"-Kecw0F8wnkU-qZDCvUO","name":"亞東醫院站"}],"name":"板南線a2"},{"color":"#ff6900","metro":[{"_key":"-Kecw0F8wnkU-qZDCvUP","name":"府中站"},{"_key":"-Kecw0F8wnkU-qZDCvUQ","name":"亞東醫院站"}],"name":"其他線a3"}],"name":"未命名1","key":"-Kecw0F8wnkU-qZDCvUK"},{"line":[{"color":"#ff6900","metro":[{"_key":"-KecwHBoZs6JkDajg5bf","name":"台北車站"},{"_key":"-KecwHBpeekh39dPnbFR","name":"關渡站"}],"name":"淡水線a1"},{"color":"#ff6900","metro":[{"_key":"-KecwHBpeekh39dPnbFS","name":"府中站"},{"_key":"-KecwHBpeekh39dPnbFT","name":"亞東醫院站"}],"name":"板南線a2"},{"color":"#ff6900","metro":[{"_key":"-KecwHBpeekh39dPnbFU","name":"府中站"},{"_key":"-KecwHBpeekh39dPnbFV","name":"亞東醫院站"}],"name":"其他線a3"}],"name":"未命名2","key":"-KecwHBoZs6JkDajg5be"},{"line":[{"color":"#ff6900","metro":[{"_key":"-Kedc98g-4n_ACHfkPRk","name":"台北車站"},{"_key":"-Kedc98g-4n_ACHfkPRl","name":"關渡站"}],"name":"淡水線a1"},{"color":"#ff6900","metro":[{"_key":"-Kedc98g-4n_ACHfkPRm","name":"府中站"},{"_key":"-Kedc98g-4n_ACHfkPRn","name":"亞東醫院站"}],"name":"板南線a2"},{"color":"#ff6900","metro":[{"_key":"-Kedc98g-4n_ACHfkPRo","name":"府中站"},{"_key":"-Kedc98g-4n_ACHfkPRp","name":"亞東醫院站"}],"name":"其他線a3"}],"name":"未命名3","key":"-Kedc98SCgfqGrt6oMXi"},{"line":[{"color":"#ff6900","metro":[{"_key":"-Kedc9RvmUC2AIodF4ZA","name":"台北車站"},{"_key":"-Kedc9RvmUC2AIodF4ZB","name":"關渡站"}],"name":"淡水線a1"},{"color":"#ff6900","metro":[{"_key":"-Kedc9RvmUC2AIodF4ZC","name":"府中站"},{"_key":"-Kedc9RvmUC2AIodF4ZD","name":"亞東醫院站"}],"name":"板南線a2"},{"color":"#ff6900","metro":[{"_key":"-Kedc9RvmUC2AIodF4ZE","name":"府中站"},{"_key":"-Kedc9RvmUC2AIodF4ZF","name":"亞東醫院站"}],"name":"其他線a3"}],"name":"未命名4","key":"-Kedc9RvmUC2AIodF4Z9"},{"line":[{"color":"#ff6900","metro":[{"_key":"-KeffKvXIRPgku2OOb8U","name":"台北車站"},{"_key":"-KeffKvXIRPgku2OOb8V","name":"關渡站"}],"name":"淡水線a1"},{"color":"#ff6900","metro":[{"_key":"-KeffKvXIRPgku2OOb8W","name":"府中站"},{"_key":"-KeffKvXIRPgku2OOb8X","name":"亞東醫院站"}],"name":"板南線a2"},{"color":"#ff6900","metro":[{"_key":"-KeffKvYvXfuS3e-t23W","name":"府中站"},{"_key":"-KeffKvYvXfuS3e-t23X","name":"亞東醫院站"}],"name":"其他線a3"}],"name":"未命名5","key":"-KeffKvXIRPgku2OOb8T"}]
-  }
+
   $("#triangle_right").click(function(){
     $("#top_tag").css("left",(parseInt($("#top_tag").css("left"))-80));
   })
@@ -237,13 +238,8 @@
     if(_x>23)_x=23;
     $("#top_tag").css("left",_x);
   })
-  
-  $(function(){
-    var el = document.getElementById("blueprint_drag");
-    var sortable =new Sortable(el);
-    var e2 = document.getElementById("line_drag");
-    var sortable =new Sortable(e2);    
-  })
+    var sortable1 =new Sortable($("#blueprint_drag")[0]);
+    var sortable2 =new Sortable($("#line_drag")[0]);    
 </script>
 
 <script src="js/main.js"></script>

@@ -35,7 +35,7 @@ button:focus,input:focus,select:focus,textarea:focus{
     //overflow-y: scroll;
 	#left{
 		width: @left_width;
-		font-size: 12px;
+		font-size: 13px;
 		height: 100%;
 		float: left;
 		position: relative;
@@ -56,6 +56,7 @@ button:focus,input:focus,select:focus,textarea:focus{
 			margin-top: 10px;
 			margin-bottom: 7px;
 			font-weight: bold;
+            font-size: 14px;
 			color: black;
 			padding-left: @left_pl;
 		}
@@ -540,9 +541,14 @@ button:focus,input:focus,select:focus,textarea:focus{
             border-bottom: 1px solid black;
           }
         }
-        i.dropdown{
+        i.dropdown,input{
           margin-left: 0px;
           margin-right: 10px;
+        }
+        input{
+          display: none;
+          width: 98px;
+          .public_input();
         }
        .clearfix();
       }
@@ -676,6 +682,20 @@ button:focus,input:focus,select:focus,textarea:focus{
   background: -o-linear-gradient(#F3F4F4, #DEDEDE);
   background: linear-gradient(#F3F4F4, #DEDEDE);
   -pie-background: linear-gradient(#F3F4F4, #DEDEDE);
+}
+.public_input(){
+  padding: 2px;
+  font-weight: normal;
+  color: rgb(85, 85, 85);
+  box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px inset;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(204, 204, 204);
+  border-image: initial;
+  transition: border 0.2s linear, box-shadow 0.2s linear;
+  &:focus{
+    border-color: rgb(255, 105, 0);
+  }
 }
 
 .left_line{
