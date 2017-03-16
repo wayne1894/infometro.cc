@@ -9,7 +9,7 @@ http://infometro.cc/metro.html  (主頁)
   <br>
   1、安裝node.js、npm
   <br>
-  2、把infometro clone到你有版控環境的電腦
+  2、把infometro clone到你有版控環境的電腦(版控可以使用sourcetree 圖形管理介面)
   <br>
   3、開啟終端機，cd 到infometro 根目錄，輸入 npm install，進行package.json套件安裝(這裡會安裝gulp.js)
   <br>
