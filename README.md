@@ -16,5 +16,5 @@ http://infometro.cc/metro.html  (主頁)
   4、cd到 develop ，輸入 gulp，會自動跳出網頁(監聽1313 port)，日後你修改develop裡檔案的內容，網頁會自動重整
   <br>
   
-## 第一版本尚未完成的開發功能
+## 第一版本要開發的功能
   
