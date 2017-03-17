@@ -1,4 +1,4 @@
-# infometro.cc
+# infometro.cc 資訊地鐵站
 http://infometro.cc (登入頁)<br>
 http://infometro.cc/metro.html  (主頁)
 
