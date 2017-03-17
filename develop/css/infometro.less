@@ -524,13 +524,7 @@ button:focus,input:focus,select:focus,textarea:focus{
         padding-left: 15px;
         #blueprint_drag{
           display: inline-block;
-          .blueprint_list{
-            display: inline-block;
-          }
-          .menu{
-            bottom: 68%;
-          }
-        }
+				}
         #blueprint_new{
           margin-left: 1px;
           padding: 6px;
@@ -541,15 +535,30 @@ button:focus,input:focus,select:focus,textarea:focus{
             border-bottom: 1px solid black;
           }
         }
-        i.dropdown,input{
+        .blueprint_i,.blueprint_input{
           margin-left: 0px;
           margin-right: 10px;
         }
-        input{
+        .blueprint_input{
           display: none;
           width: 98px;
           .public_input();
         }
+				.blueprint_list{
+					display: inline-block;
+					&.edit{
+						.blueprint_a,.blueprint_i{
+							display: none;
+						}
+						.blueprint_input{
+							display: block;
+						}
+					}
+					.menu{
+						bottom: 68%;
+					}
+				}
+				
        .clearfix();
       }
       
