@@ -28,7 +28,12 @@
     $("#right .right_main").perfectScrollbar();
     
     //https://jackrugile.com/jrumble/
-    $("#logo img").jrumble().hover(function(){
+    $("#logo img").jrumble({
+      x: 2,
+      y: 2,
+      opacity: true,
+	  opacityMin: .5
+    }).hover(function(){
 	  $(this).trigger('startRumble');
     }, function(){
       $(this).trigger('stopRumble');

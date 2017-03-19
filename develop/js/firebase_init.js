@@ -215,18 +215,22 @@ function metro_json(name){
 function blueprint_init(fn){
   D.ref('users/' + user.uid).on("value",function(data){
     var _init=[];
+    var index_check=0;
+    var i=0;
     data.forEach(function(childData) {
+      i=i+1;
       _init.push(childData.val());
       _init[_init.length-1].key=childData.key;
+      if(_init[_init.length-1].check){
+        index_check=i;
+      }
     });
-    if(vm.index_blueprint>_init.length-1){
-      vm.index_blueprint=_init.length-1;
-    }
+    vm.index_blueprint = index_check;
     vm.blueprint=_init;
+    vm.blueprint[index_check].check=true;
     if(typeof fn=="function"){
       setTimeout(fn,5);
     }
-    //print(JSON.stringify(_init));
   })
 }
 function insert_info(metro_key){

@@ -12,7 +12,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.16/js/perfect-scrollbar.jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.3/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.3/vue.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vuefire/1.3.1/vuefire.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/Sortable/1.5.1/Sortable.min.js"></script>
 
@@ -34,7 +34,7 @@
               <i class="trash outline icon"></i>
             </div>
             <i class="line_i" style="background-color:#FF6907" ></i>
-            <a class="line_a" @click="change_line(index)">{{item.name}}</a>
+            <a class="line_a" @click="exchange_line(index)">{{item.name}}</a>
             <input style="display:none;" type="text" v-model="item.name">
           </li>
         </ul>
@@ -51,7 +51,7 @@
     <div id="top_tag_parent">
       <ul id="top_tag">
         <li v-for="(item, index) in metro">
-          <i style="background-color:none"></i><span>{{item.name}}</span>
+          <i @click="exchange_metro(index)" :style="check_metro(index)"></i><span>{{item.name}}</span>
         </li>
       </ul>
     </div>
@@ -121,9 +121,9 @@
           <input class="blueprint_input" type="text" v-model="item.name">
           <i class="blueprint_i dropdown icon"></i>
           <div class="menu">
-            <div class="item" @click="change_blueprint_name(index)"><i class="edit icon"></i>修改名稱</div>
+            <div class="item" @click="exchange_blueprint_name(index)"><i class="edit icon"></i>重新命名</div>
             <div class="item" @click="delete_blueprint(item)"><i class="delete icon"></i>移除</div>
-            <div v-show="!check_blueprint(index)" class="item" @click="change_blueprint(index)"><i class="exchange icon"></i>切換</div>
+            <div v-show="!check_blueprint(index)" class="item" @click="exchange_blueprint(index)"><i class="exchange icon"></i>切換</div>
           </div>
         </div>
       </div>
@@ -165,8 +165,9 @@
     el: '#main',
     data: {
       blueprint : [],
-      index_blueprint : 0,
-      index_line : 0,
+      index_blueprint: 0,
+      index_line: 0,
+      index_metro: 0,
       key_metro : ""
     },firebase: function(){
       var _user = user ? user.uid : "" ;
@@ -176,56 +177,92 @@
       }
     },computed: {
      line : function(){//載入line
-       if(this.blueprint.length==0)return false;
-       return this.blueprint[this.index_blueprint].line;
+       if(this.blueprint.length==0)return false; //藍圖如果不存在離開
+       return this.get_blueprint().line;
      },
      metro : function(){//載入metro
        if(this.blueprint.length==0)return false; //藍圖如果不存在離開
-       var _line=this.blueprint[this.index_blueprint].line
-       if(_line.length==0)return false; //線如果不存在離開
-       this.key_metro = _line[this.index_line].metro[0]._key; //載入時直接選取一個站點(可以是該線路的總站)
-       return _line[this.index_line].metro;
+       return this.get_line().metro;
      }
     },watch: {
       key_metro : function (){//載入新的info
         vm.$bindAsObject('info', D.ref("info/"+user.uid+"/"+this.key_metro));
+        this.key_metro = _line[this.index_line].metro[0]._key; //載入時直接選取一個站點(可以是該線路的總站)
+      },index_blueprint : function(){
+        for(var i=0;i<this.blueprint.length;i++){
+          this.blueprint[i].check=undefined;
+        }
+        this.blueprint[this.index_blueprint].check=true
+      },index_line : function(){
+        var _line=this.get_blueprint().line;
+        for(var i=0;i<_line.length;i++){
+          _line[i].check=undefined;
+        }
+        _line[this.index_line].check=true;
+      },index_metro : function(){
+        var _metro=this.get_line().metro;
+        for(var i=0;i<_metro.length;i++){
+          _metro[i].check=undefined;
+        }
+        _metro[this.index_metro].check=true;
       }
     },methods: {
       new_blueprint : function(){//新增藍圖
         新增藍圖("未命名");
       },delete_blueprint : function (item){//刪除藍圖
 		刪除藍圖(item.key);
-      },change_blueprint : function(index){
+      },exchange_blueprint : function(index){ 
         this.index_blueprint=index;
-      },change_blueprint_name : function(index){
+        var index_check=0;
+        var _line=this.blueprint[index].line
+        for(var i=0;i <_line.length;i++){
+          if(_line[i].check){
+            index_check=i;
+            break;
+          }
+        }
+        vm.index_line=index_check;
+      },exchange_blueprint_name : function(index){
       	var $blueprint_list=$(event.target).closest(".blueprint_list");
-				$blueprint_list.addClass("edit");
+        $blueprint_list.addClass("edit");
         sortable1.option("disabled", true);
-				var _name=this.blueprint[index].name;
-			
-			//下班繼續
-				$blueprint_list.find(".blueprint_input").focus().on("keyup.blueprint_input",function(event){
-					if(event.which==13){
-						$(this).off("keyup.blueprint_input");
-						$blueprint_list.removeClass("edit");
-						sortable1.option("disabled", false);
-					}else if(event.which==27){
-						$(this).off("keyup.blueprint_input");
-						$blueprint_list.removeClass("edit");
-						vm.blueprint[index].name=_name;
-						sortable1.option("disabled", false);
-					}
-				})
-	
-				
+        var _name=this.blueprint[index].name;
+        $blueprint_list_input=$blueprint_list.find(".blueprint_input");
+        $blueprint_list_input.select().on("keyup.blueprint_input",function(event){
+          if(event.which==13){
+            edit_set();
+            var data=vm.get_blueprint(index);
+            更新藍圖(data.key,data);
+          }else if(event.which==27){
+            edit_set();
+            vm.blueprint[index].name=_name;
+          }
+        })
+        setTimeout(function(){
+          $(document).on("click.blueprint_input",function(event){
+            if(event.target.className.indexOf("blueprint_input")==-1){
+              edit_set();
+              vm.blueprint[index].name=_name;
+            };
+          })
+        },5);
+        function edit_set(){
+          $blueprint_list.removeClass("edit");
+          sortable1.option("disabled", false);
+          $blueprint_list_input.off("keyup.blueprint_input");
+          $(document).off("click.blueprint_input");
+        }		
       },check_blueprint : function(index){
         if(this.index_blueprint==index){
           return "check";
         }
-      },change_line : function(index){
+      },exchange_line : function(index){
         this.index_line=index;
-      },get_blueprint : function(){
-		return this.blueprint[this.index_blueprint];
+      },get_blueprint : function(index){
+        if(index!=undefined)return this.blueprint[index];
+        return this.blueprint[this.index_blueprint];
+      },get_line : function(){
+        return this.get_blueprint().line[this.index_line];
       },check_line : function(index){
         if(this.index_line==index){
           return "check";
@@ -246,6 +283,13 @@
         var data=this.get_blueprint();
         data.line[this.index_line].metro.splice(order,0,_m)
         更新藍圖(data.key,data);
+      },check_metro : function(index){
+        if(this.index_metro==index){
+          var _color=this.get_line().color;
+          return "background-color: "+_color;
+        }
+      },exchange_metro : function(index){
+        this.index_metro=index;
       }
     }
   })
@@ -254,7 +298,7 @@
     blueprint_init(function(){
       $(".blueprint_list").dropdown("destroy").dropdown({
          on : 'customClick'
-       }).unbind("click").click(function(event){
+       }).off("click.custom").on("click.custom",function(event){
         if(event.target.nodeName=="INPUT"){
           return
         }
