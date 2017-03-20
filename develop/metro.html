@@ -15,13 +15,13 @@
             <div class="tool" @click="delete_line(index)">
               <i class="trash outline icon"></i>
             </div>
-            <i class="line_i" style="background-color:#FF6907" ></i>
+            <i class="line_i" v-bind:style="{backgroundColor:item.color}" ></i>
             <a class="line_a" @click="exchange_line(index)">{{item.name}}</a>
             <input style="display:none;" type="text" v-model="item.name">
           </li>
         </ul>
       </div>
-  		<a id="new_line" class="default_a" @click="new_line()">新增支線</a>
+      <a id="new_line" class="default_a" @click="new_line()">新增支線</a>
     </div>
     <div id="edit_parent">
       <a class="left_icon" href="javascript:void(0)"><i class="setting icon"></i></a>
@@ -270,15 +270,23 @@
         vm.index_line=index;
         vm.update_metro_index(vm.index[vm.index_blueprint][index]);
       },get_line : function(){
-        return this.get_blueprint().line[this.index_line];
+        var _blueprint=this.get_blueprint();
+        if(_blueprint.line){
+          return _blueprint.line[this.index_line];
+        }else{
+          return []; //沒有資料先用這個以防出錯
+        }
       },check_line : function(index){
          if(this.index_line==index){
           return "check";
         }
       },new_line : function(){
-        var _j=line_json("未命名","#B3B3B3");
-        _j.metro.push(metro_json("總站"));
+        vm.action="new_line";
         var data=this.get_blueprint();
+        if(!data.line)data.line=[];//如果沒有line就新增一個空陣列
+        var get_color= vm.get_default_color( data.line.length+1);
+        var _j=line_json("未命名",get_color);
+        _j.metro.push(metro_json("總站"));
         data.line.push(_j);
         vm.index[vm.index_blueprint].push([]);
         更新藍圖(data.key,data);
@@ -294,12 +302,40 @@
         data.line[this.index_line].metro.splice(order,0,_m)
         更新藍圖(data.key,data);
       },check_metro : function(key){
-        if(this.key_metro==key){
+        if(vm.key_metro==key){
           var _color=this.get_line().color;
           return "background-color: "+_color;
         }
       },exchange_metro : function(key){
         this.key_metro=key;
+      },get_default_color : function(k){
+        if(k==1){
+          return "#f2711c";
+        }else if(k==2){
+          return "#db2828";
+        }else if(k==3){
+          return "#fbbd08";
+        }else if(k==4){
+          return "#b5cc18";
+        }else if(k==5){
+          return "#21ba45";
+        }else if(k==6){
+          return "#00b5ad";
+        }else if(k==7){
+          return "#2185d0";
+        }else if(k==8){
+          return "#5829bb";
+        }else if(k==9){
+          return "#a333c8";
+        }else if(k==10){
+          return "#e03997";
+        }else if(k==12){
+          return "#a5673f";
+        }else if(k==13){
+          return "#767676";
+        }else{
+          return "#000000";
+        }
       }
     }
   })

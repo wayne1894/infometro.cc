@@ -210,8 +210,10 @@ function blueprint_init(fn){
     var index_array=[];
     for(var i=0;i<_init.length;i++){
       index_array.push([]);
-      for(var j=0;j<_init[i].line.length;j++){
-        index_array[i].push([]);
+      if(_init[i].line){
+        for(var j=0;j<_init[i].line.length;j++){
+          index_array[i].push([]);
+        }
       }
     }
 
@@ -227,7 +229,10 @@ function blueprint_init(fn){
       }
     }
     vm.exchange_blueprint(_index,true);
-    vm.action=""
+    if(vm.action=="new_line"){
+      vm.exchange_line(vm.index[_index].length-1);
+    }
+    vm.action="";
     if(typeof fn=="function"){
       setTimeout(fn,5);
     }
