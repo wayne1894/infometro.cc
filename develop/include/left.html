@@ -1,0 +1,21 @@
+    <div id="line_parent">
+      <div id="logo"><img src="images/icon_128.fw.png" alt=""></div>
+      <div class="line_text">所有支線：</div>
+      <div id="left_line">
+        <ul id="line_drag">
+          <li v-for="(item, index) in line" :class="check_line(index)">
+            <div class="tool" @click="delete_line(index)">
+              <i class="trash outline icon"></i>
+            </div>
+            <i class="line_i" v-bind:style="{backgroundColor:item.color}" ></i>
+            <a class="line_a" @click="exchange_line(index)">{{item.name}}</a>
+            <input style="display:none;" type="text" v-model="item.name">
+          </li>
+        </ul>
+      </div>
+      <a id="new_line" class="default_a" @click="new_line()">新增支線</a>
+    </div>
+    <div id="edit_parent">
+      <a class="left_icon" href="javascript:void(0)"><i class="setting icon"></i></a>
+      <a class="left_icon" href="javascript:void(0)"><i class="power icon"></i></a>
+    </div>

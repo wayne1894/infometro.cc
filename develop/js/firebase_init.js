@@ -136,9 +136,7 @@ function update_Profile(){
 		
 	});
 }
-function 更新藍圖(key,data){
-	D.ref('users/' + user.uid +"/"+key).update(data);
-}
+
 function line_template(){
  return [
    {

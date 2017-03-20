@@ -1,0 +1,23 @@
+<div id="triangle_left"></div>
+  <div id="top_tag_parent">
+    <ul id="top_tag">
+      <li v-for="(item, index) in metro">
+        <i @click="exchange_metro(item._key)" :style="check_metro(item._key)"></i><span>{{item.name}}</span>
+      </li>
+    </ul>
+  </div>
+<div id="triangle_right"></div>
+
+
+<script>
+  $(function(){
+    $("#triangle_right").click(function(){
+      $("#top_tag").css("left",(parseInt($("#top_tag").css("left"))-80));
+    })
+    $("#triangle_left").click(function(){
+      var _x=parseInt($("#top_tag").css("left"))+80;
+      if(_x>23)_x=23;
+      $("#top_tag").css("left",_x);
+    })
+  })
+</script>

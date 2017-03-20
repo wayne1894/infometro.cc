@@ -18,16 +18,24 @@
       $("#board3").css("left",b3_left+_move);
     }
   }).resize();
+
   $("#main").css("visibility","visible").css("left",0);
+  //拖亦程式[全域]
+  var sortable1 =new Sortable($("#blueprint_drag")[0]);
+  var sortable2 =new Sortable($("#line_drag")[0]);
+
 
   $(function(){
+    //鍵盤按下去
     $("#board_textarea").keyup(function(e) {
-    $(this).height(70);
-    $(this).height(this.scrollHeight + parseFloat($(this).css("borderTopWidth")) + parseFloat($(this).css("borderBottomWidth")));
-});	
+      $(this).height(70);
+      $(this).height(this.scrollHeight + parseFloat($(this).css("borderTopWidth")) + parseFloat($(this).css("borderBottomWidth")));
+    });	
+    
+    //perfectScrollbar
     $("#right .right_main").perfectScrollbar();
     
-    //https://jackrugile.com/jrumble/
+    //晃動 https://jackrugile.com/jrumble/
     $("#logo img").jrumble({
       x: 2,
       y: 2,
@@ -37,6 +45,5 @@
 	  $(this).trigger('startRumble');
     }, function(){
       $(this).trigger('stopRumble');
-    });
-    
+    });    
   })
