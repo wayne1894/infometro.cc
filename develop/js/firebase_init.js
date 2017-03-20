@@ -136,20 +136,6 @@ function update_Profile(){
 		
 	});
 }
-function 新增藍圖(name){
-  var newRef=D.ref('users/' + user.uid).push();
-  newRef.set({
-    name: name,
-    line : line_template()
-  }).then(function(a){
-    setTimeout(function(){
-      vm.index_blueprint = vm.blueprint.length -1 ;
-    },5)
-  });
-}
-function 刪除藍圖(key){
-	 D.ref('users/' + user.uid+"/"+key).remove();
-}
 function 更新藍圖(key,data){
 	D.ref('users/' + user.uid +"/"+key).update(data);
 }
@@ -215,19 +201,33 @@ function metro_json(name){
 function blueprint_init(fn){
   D.ref('users/' + user.uid).on("value",function(data){
     var _init=[];
-    var index_check=0;
-    var i=0;
     data.forEach(function(childData) {
-      i=i+1;
       _init.push(childData.val());
       _init[_init.length-1].key=childData.key;
-      if(_init[_init.length-1].check){
-        index_check=i;
-      }
     });
-    vm.index_blueprint = index_check;
-    vm.blueprint=_init;
-    vm.blueprint[index_check].check=true;
+    vm.blueprint=_init ;
+
+    var index_array=[];
+    for(var i=0;i<_init.length;i++){
+      index_array.push([]);
+      for(var j=0;j<_init[i].line.length;j++){
+        index_array[i].push([]);
+      }
+    }
+
+    $.extend(index_array,vm.index);
+    vm.index=index_array;
+
+    var _index=0;//預設0
+    if(vm.action=="new_blueprint"){//判斷動作
+      _index=vm.index.length-1;
+    }else{//檢查check
+      for(var i=0;i<vm.index.length;i++){
+        if(vm.index[i].check)_index=i;
+      }
+    }
+    vm.exchange_blueprint(_index,true);
+    vm.action=""
     if(typeof fn=="function"){
       setTimeout(fn,5);
     }

@@ -33,7 +33,7 @@
     <div id="top_tag_parent">
       <ul id="top_tag">
         <li v-for="(item, index) in metro">
-          <i @click="exchange_metro(index)" :style="check_metro(index)"></i><span>{{item.name}}</span>
+          <i @click="exchange_metro(item._key)" :style="check_metro(item._key)"></i><span>{{item.name}}</span>
         </li>
       </ul>
     </div>
@@ -97,15 +97,15 @@
   <div id="bottom">
     <div id="blueprint">
       <div id="blueprint_drag">
-        <div v-for="(item, index) in blueprint" class="blueprint_list ui top left pointing dropdown" >
+        <div v-for="(item, index) in blueprint" class="blueprint_list ui top left pointing dropdown" @dblclick="re_blueprint_name(index)" @click="exchange_blueprint(index)">
           <a class="blueprint_a" :class="check_blueprint(index)"> {{item.name}}
           </a>
           <input class="blueprint_input" type="text" v-model="item.name">
           <i class="blueprint_i dropdown icon"></i>
           <div class="menu">
-            <div class="item" @click="exchange_blueprint_name(index)"><i class="edit icon"></i>重新命名</div>
-            <div class="item" @click="delete_blueprint(item)"><i class="delete icon"></i>移除</div>
-            <div v-show="!check_blueprint(index)" class="item" @click="exchange_blueprint(index)"><i class="exchange icon"></i>切換</div>
+            <div class="item" @click="re_blueprint_name(index)"><i class="edit icon"></i>重新命名</div>
+            <div class="item" @click="delete_blueprint(item.key,index)"><i class="delete icon"></i>移除</div>
+            <div v-show="!check_blueprint(index)" class="item" @click="exchange_blueprint(index,true)"><i class="exchange icon"></i>切換</div>
           </div>
         </div>
       </div>
@@ -147,10 +147,11 @@
     el: '#main',
     data: {
       blueprint : [],
+      index : [],
       index_blueprint: 0,
-      index_line: 0,
-      index_metro: 0,
-      key_metro : ""
+      index_line: 0 ,
+      key_metro : "",
+      action : ""
     },firebase: function(){
       var _user = user ? user.uid : "" ;
       var _key_metro = this.key_metro.length ? this.key_metro : "N";//用N的用意是避免載入所有結點
@@ -167,44 +168,71 @@
        return this.get_line().metro;
      }
     },watch: {
-      key_metro : function (){//載入新的info
-        vm.$bindAsObject('info', D.ref("info/"+user.uid+"/"+this.key_metro));
-        this.key_metro = _line[this.index_line].metro[0]._key; //載入時直接選取一個站點(可以是該線路的總站)
-      },index_blueprint : function(){
-        for(var i=0;i<this.blueprint.length;i++){
-          this.blueprint[i].check=undefined;
+      index_blueprint : function(){
+        for(var i=0;i<this.index.length;i++){
+          this.index[i].check=undefined;
         }
-        this.blueprint[this.index_blueprint].check=true
+        this.index[this.index_blueprint].check=true;
       },index_line : function(){
-        var _line=this.get_blueprint().line;
-        for(var i=0;i<_line.length;i++){
-          _line[i].check=undefined;
+        var index_array=vm.index[vm.index_blueprint]
+        for(var i=0;i<index_array.length;i++){
+          index_array[i].check=undefined;
         }
-        _line[this.index_line].check=true;
-      },index_metro : function(){
-        var _metro=this.get_line().metro;
-        for(var i=0;i<_metro.length;i++){
-          _metro[i].check=undefined;
-        }
-        _metro[this.index_metro].check=true;
+        index_array[this.index_line].check=true;
+      },key_metro : function(){
+        vm.$bindAsObject('info', D.ref("info/"+user.uid+"/"+this.key_metro));
+        var _index= this.index[this.index_blueprint][this.index_line];
+        _index._key=this.key_metro;
       }
     },methods: {
-      new_blueprint : function(){//新增藍圖
-        新增藍圖("未命名");
-      },delete_blueprint : function (item){//刪除藍圖
-		刪除藍圖(item.key);
-      },exchange_blueprint : function(index){ 
-        this.index_blueprint=index;
-        var index_check=0;
-        var _line=this.blueprint[index].line
-        for(var i=0;i <_line.length;i++){
-          if(_line[i].check){
-            index_check=i;
+      update_line_index : function(index_array){
+        var _index=0;
+        for(var i=0;i<index_array.length;i++){
+          if(index_array[i].check){
+            _index=i;
             break;
           }
         }
-        vm.index_line=index_check;
-      },exchange_blueprint_name : function(index){
+        this.index_line=_index;
+      },update_metro_index : function(index_array){
+        var _metro=this.get_line().metro;
+        if(index_array._key){//代表有選到的結點
+          for(var i=0;i<_metro.length;i++){
+            if(_metro[i]._key==index_array._key){
+              vm.key_metro=_metro[i]._key
+              break;
+            }
+          }
+        }else{//使用預設
+          vm.key_metro=_metro[0]._key;
+        }
+      },new_blueprint : function(){//新增藍圖
+        vm.action="new_blueprint"
+        var newRef=D.ref('users/' + user.uid).push();
+        newRef.set({
+          name: "未命名",
+          line : line_template()
+        })
+      },delete_blueprint : function (key,index){//刪除藍圖
+        vm.index.splice(index,1);
+        D.ref('users/' + user.uid+"/"+key).remove();
+      },exchange_blueprint : function(index,target){
+        if(event && event.target){
+          if(event.target.className!=undefined){
+            if(event.target.className.indexOf("blueprint_a")>-1 || event.target.className.indexOf("blueprint_i")>-1){
+              target=true;
+            }
+          }
+        }
+        if(target){
+          vm.index_blueprint=index;
+          vm.update_line_index(vm.index[index]);
+          vm.update_metro_index(vm.index[index][vm.index_line]);
+        }
+      },get_blueprint : function(index){
+        if(index!=undefined)return this.blueprint[index];
+        return this.blueprint[this.index_blueprint];
+      },re_blueprint_name : function(index){
       	var $blueprint_list=$(event.target).closest(".blueprint_list");
         $blueprint_list.addClass("edit");
         sortable1.option("disabled", true);
@@ -233,20 +261,18 @@
           sortable1.option("disabled", false);
           $blueprint_list_input.off("keyup.blueprint_input");
           $(document).off("click.blueprint_input");
-        }		
+        }
       },check_blueprint : function(index){
         if(this.index_blueprint==index){
           return "check";
         }
       },exchange_line : function(index){
-        this.index_line=index;
-      },get_blueprint : function(index){
-        if(index!=undefined)return this.blueprint[index];
-        return this.blueprint[this.index_blueprint];
+        vm.index_line=index;
+        vm.update_metro_index(vm.index[vm.index_blueprint][index]);
       },get_line : function(){
         return this.get_blueprint().line[this.index_line];
       },check_line : function(index){
-        if(this.index_line==index){
+         if(this.index_line==index){
           return "check";
         }
       },new_line : function(){
@@ -254,10 +280,12 @@
         _j.metro.push(metro_json("總站"));
         var data=this.get_blueprint();
         data.line.push(_j);
+        vm.index[vm.index_blueprint].push([]);
         更新藍圖(data.key,data);
       },delete_line : function(index){
         var data=this.get_blueprint();
         data.line.splice(index,1);
+        vm.index[vm.index_blueprint].splice(index,1);
         更新藍圖(data.key,data);
       },new_metro : function (order){
         if(order==undefined)order=0;
@@ -265,13 +293,13 @@
         var data=this.get_blueprint();
         data.line[this.index_line].metro.splice(order,0,_m)
         更新藍圖(data.key,data);
-      },check_metro : function(index){
-        if(this.index_metro==index){
+      },check_metro : function(key){
+        if(this.key_metro==key){
           var _color=this.get_line().color;
           return "background-color: "+_color;
         }
-      },exchange_metro : function(index){
-        this.index_metro=index;
+      },exchange_metro : function(key){
+        this.key_metro=key;
       }
     }
   })
@@ -280,7 +308,9 @@
     blueprint_init(function(){
       $(".blueprint_list").dropdown("destroy").dropdown({
          on : 'customClick'
-       }).off("click.custom").on("click.custom",function(event){
+       });
+      $(".blueprint_list").off("contextmenu.custom").on("contextmenu.custom",function(event){
+        event.preventDefault();
         if(event.target.nodeName=="INPUT"){
           return
         }
@@ -298,7 +328,7 @@
     $("#top_tag").css("left",_x);
   })
     var sortable1 =new Sortable($("#blueprint_drag")[0]);
-    var sortable2 =new Sortable($("#line_drag")[0]);    
+    var sortable2 =new Sortable($("#line_drag")[0]);
 </script>
 
 <script src="js/main.js"></script>
