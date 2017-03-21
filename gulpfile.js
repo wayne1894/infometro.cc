@@ -21,7 +21,7 @@ gulp.task('less', function () {
   .pipe(gulpPlumber())
   .pipe(less())
   .pipe(cssmin())
-  .pipe(gulp.dest('css'));
+  .pipe(gulp.dest('src/build/css'));
 });
 
 
@@ -44,7 +44,7 @@ gulp.task('script', function () {
 	gulp.src('develop/js/*.js')
 	.pipe(gulpPlumber())
 	.pipe(gulpUglify()) 
-	.pipe(gulp.dest('js'));
+	.pipe(gulp.dest('src/build/js'));
 });
 
 

@@ -6,7 +6,7 @@
 
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.16/css/perfect-scrollbar.min.css" type="text/css" />
-<link rel="stylesheet" type="text/css" href="css/infometro.css" />
+<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css" />
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
@@ -17,34 +17,34 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/Sortable/1.5.1/Sortable.min.js"></script>
 
 <script src="https://www.gstatic.com/firebasejs/3.6.10/firebase.js"></script>
-<script src="public/jquery.jrumble.1.3.min.js"></script>
-<script src="js/public.js"></script>
-<script src="js/firebase_init.js"></script>
+<script src="src/static/js/jquery.jrumble.1.3.min.js"></script>
+<script src="src/build/js/public.js"></script>
+<script src="src/build/js/firebase_init.js"></script>
 </head>
 <body>
 <div id="main">
   <div id="left">
-        <div id="line_parent">
-      <div id="logo"><img src="images/icon_128.fw.png" alt=""></div>
-      <div class="line_text">所有支線：</div>
-      <div id="left_line">
-        <ul id="line_drag">
-          <li v-for="(item, index) in line" :class="check_line(index)">
-            <div class="tool" @click="delete_line(index)">
-              <i class="trash outline icon"></i>
-            </div>
-            <i class="line_i" v-bind:style="{backgroundColor:item.color}" ></i>
-            <a class="line_a" @click="exchange_line(index)">{{item.name}}</a>
-            <input style="display:none;" type="text" v-model="item.name">
-          </li>
-        </ul>
-      </div>
-      <a id="new_line" class="default_a" @click="new_line()">新增支線</a>
-    </div>
-    <div id="edit_parent">
-      <a class="left_icon" href="javascript:void(0)"><i class="setting icon"></i></a>
-      <a class="left_icon" href="javascript:void(0)"><i class="power icon"></i></a>
-    </div>
+    <div id="line_parent">
+	<div id="logo"><img src="src/static/images/icon_128.fw.png" alt=""></div>
+	<div class="line_text">所有支線：</div>
+	<div id="left_line">
+		<ul id="line_drag">
+			<li v-for="(item, index) in line" :class="check_line(index)">
+				<div class="tool" @click="delete_line(index)">
+					<i class="trash outline icon"></i>
+				</div>
+				<i class="line_i" v-bind:style="{backgroundColor:item.color}" ></i>
+				<a class="line_a" @click="exchange_line(index)">{{item.name}}</a>
+				<input style="display:none;" type="text" v-model="item.name">
+			</li>
+		</ul>
+	</div>
+	<a id="new_line" class="default_a" @click="new_line()">新增支線</a>
+</div>
+<div id="edit_parent">
+	<a class="left_icon" href="javascript:void(0)"><i class="setting icon"></i></a>
+	<a class="left_icon" href="javascript:void(0)"><i class="power icon"></i></a>
+</div>
   </div>
   <div id="top">
     <div id="triangle_left"></div>
@@ -106,7 +106,7 @@
 </div>
 <div id="board2">
   <div id="board_enter_parent">
-    <div id="board_img"><img src="images/img1.jpg"></div>
+    <div id="board_img"><img src="src/static/images/img1.jpg"></div>
     <div id="board_enter">
       <textarea id="board_textarea" name="textarea1" placeholder="輸入資訊"></textarea>
     </div>
@@ -118,7 +118,7 @@
   </div>
   <div id="board_info">
     <div v-for="(item, index) in info" class="ui vertical segment clear">
-      <img class="ui medium left floated image transition " src="images/square-image.png">
+      <img class="ui medium left floated image transition " src="src/static/images/square-image.png">
       <p>看見我的靈魂裡那洗拭不去的黑色污點</p>
       <span class="left">
         <i class="like icon"></i>
@@ -174,9 +174,6 @@
   </div>
 </div>
 <div class="right_line"></div>
-
-
-
   </div>
 </div>
 <script>
@@ -396,6 +393,6 @@ function _is_login(){//程式進入點
 }
 </script>
 
-<script src="js/main.js"></script>
+<script src="src/build/js/main.js"></script>
 </body>
 </html>
