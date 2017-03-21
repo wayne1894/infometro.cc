@@ -3,7 +3,7 @@ http://infometro.cc (登入頁)<br>
 http://infometro.cc/metro.html  (主頁)
 
 ## 開發環境建置
-開發要在 develop資料夾下開發，透過node.js gulp程式 將檔案build到上層 <br>(這個架構多人開發上層可能會有衝突)
+開發要在 develop資料夾下開發，透過node.js gulp程式 將檔案build到上層 <br>
 <br>
   以下列出開發所需安裝的東西：
   <br>
