@@ -4,6 +4,9 @@ http://infometro.cc/metro.html  (主頁)
 
 ## 開發環境建置
 開發要在 develop資料夾下開發，透過node.js gulp程式 將檔案build到上層 <br>
+多人開發，除了上版人，其他人只版控 develop 和 src/static 的內容(請設定git ignore)，
+<br>
+因為其他內容是由gulp即時build出來的，由上版人統一管理。
 <br>
   以下列出開發所需安裝的東西：
   <br>
