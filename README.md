@@ -8,6 +8,7 @@ http://infometro.cc/metro.html  (主頁)
 <br>
 因為其他內容是由gulp即時build出來的，由上版人統一管理。
 <br>
+<br>
   以下列出開發所需安裝的東西：
   <br>
   1、安裝node.js、npm
@@ -20,4 +21,7 @@ http://infometro.cc/metro.html  (主頁)
   <br>
   
 ## 第一版本要開發的功能
-  
+  <br>
+  1、infometro 網站主要功能
+  <br>
+  2、google chrome 書籤的部份
