@@ -196,7 +196,7 @@ textarea:focus {
         z-index: 5;
         cursor: pointer;
       }
-      span {
+      .top_name {
         position: absolute;
         top: -20px;
         width: @li_width ;
@@ -204,15 +204,23 @@ textarea:focus {
         text-align: center;
         margin-left: -@li_width/2+9px;
       }
-      &:not(:last-child)::after {
-        content: "";
+      
+      .top_join{
         width: @li_width;
         height: 7px;
-        display: block;
+        display: inline-block;
         background-color: #B3B3B3;
         position: absolute;
         top: 5px;
         left: 5px;
+        text-align: center;
+        &.first{
+          left:-70px;
+          background-color: transparent;
+        }
+      }
+      &:last-child .top_join{
+        background-color: transparent;
       }
     }
     #triangle_left {

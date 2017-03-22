@@ -178,10 +178,9 @@ var vm = new Vue({
       vm.index[vm.index_blueprint].splice(index,1);
       this.更新藍圖(data.key,data);
     },new_metro : function (order){
-      if(order==undefined)order=0;
       var _metro=metro_json("未命名");
-      var data=this.get_line();
-      data.metro.splice(order,0,_metro);
+      var data=this.get_blueprint();
+      data.line[vm.index_line].metro.splice(order,0,_metro);
       this.更新藍圖(data.key,data);
     },check_metro : function(key){
       if(vm.key_metro==key){

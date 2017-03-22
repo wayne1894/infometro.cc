@@ -20,10 +20,10 @@
   }).resize();
 
   $("#main").css("visibility","visible").css("left",0);
-  //拖亦程式[全域]
+  //拖亦程式https://github.com/RubaXa/Sortable
+
   var sortable1 =new Sortable($("#blueprint_drag")[0]);
   var sortable2 =new Sortable($("#line_drag")[0]);
-
 
   $(function(){
     //鍵盤按下去

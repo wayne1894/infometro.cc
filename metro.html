@@ -51,7 +51,10 @@
   <div id="top_tag_parent">
     <ul id="top_tag">
       <li v-for="(item, index) in metro">
-        <i @click="exchange_metro(item._key)" :style="check_metro(item._key)"></i><span>{{item.name}}</span>
+        <span class="top_join first" v-if="index==0"><span @click="new_metro(index)">加號</span></span>
+        <i @click="exchange_metro(item._key)" :style="check_metro(item._key)"></i>
+        <span class="top_name">{{item.name}}</span>
+        <span class="top_join"><span @click="new_metro(index+1)">加號</span></span>
       </li>
     </ul>
   </div>
@@ -68,6 +71,8 @@
       if(_x>23)_x=23;
       $("#top_tag").css("left",_x);
     })
+
+    
   })
 </script>
 
@@ -334,10 +339,9 @@ var vm = new Vue({
       vm.index[vm.index_blueprint].splice(index,1);
       this.更新藍圖(data.key,data);
     },new_metro : function (order){
-      if(order==undefined)order=0;
       var _metro=metro_json("未命名");
-      var data=this.get_line();
-      data.metro.splice(order,0,_metro);
+      var data=this.get_blueprint();
+      data.line[vm.index_line].metro.splice(order,0,_metro);
       this.更新藍圖(data.key,data);
     },check_metro : function(key){
       if(vm.key_metro==key){
