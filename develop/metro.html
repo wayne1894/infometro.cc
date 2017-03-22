@@ -65,7 +65,7 @@ var vm = new Vue({
     }
   },methods: {
     更新藍圖 :function (key,data){
-	D.ref('users/' + user.uid +"/"+key).update(data);
+			D.ref('users/' + user.uid +"/"+key).update(data);
     },
     update_line_index : function(index_array){
       var _index=0;
