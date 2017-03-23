@@ -29,7 +29,7 @@
 	<div class="line_text">所有支線：</div>
 	<div id="left_line">
 		<ul id="line_drag">
-			<li v-for="(item, index) in line" :class="check_line(index)">
+			<li ondragover="allowDrop2(event)" @drop="drop2(index)" v-for="(item, index) in line" :class="check_line(index)">
 				<div class="tool" @click="delete_line(index)">
 					<i class="trash outline icon"></i>
 				</div>
@@ -42,9 +42,18 @@
 	<a id="new_line" class="default_a" @click="new_line()">新增支線</a>
 </div>
 <div id="edit_parent">
-	<a class="left_icon" href="javascript:void(0)"><i class="setting icon"></i></a>
+	<a class="left_iAcon" href="javascript:void(0)"><i class="setting icon"></i></a>
 	<a class="left_icon" href="javascript:void(0)"><i class="power icon"></i></a>
 </div>
+  <script>
+	function allowDrop2(ev) {
+		 ev.preventDefault();
+	}
+	function drop2(index){
+		print(index)
+		
+	}
+	</script>
   </div>
   <div id="top">
     <div id="triangle_left"></div>
@@ -80,7 +89,7 @@
   <div id="center">
     <div id="board1">
   <div id="board_line_parent">
-    <div id="board_line"><i style="background-color:#30CB68"></i>
+    <div id="board_line" ondragover="allowDrop(event)" ondrop="drop(event)"><i style="background-color:#30CB68"></i>
       <div>淡水線</div>
     </div>
     <div id="board_edit"><i class="male icon"></i></div>
@@ -95,6 +104,17 @@
       </div>
     </div>
   </div>
+  <script>
+function allowDrop(ev) {
+	print("ggg")
+   ev.preventDefault();
+}
+	function drop(ev){
+		print("放掉了")
+		ev.preventDefault();
+		
+	}
+	</script>
   <div id="board3">
     <div id="board3_header"><i class="heart orange icon"></i><span class="text">最愛連結</span>
     </div>

@@ -3,7 +3,7 @@
 	<div class="line_text">所有支線：</div>
 	<div id="left_line">
 		<ul id="line_drag">
-			<li v-for="(item, index) in line" :class="check_line(index)">
+			<li ondragover="allowDrop2(event)" @drop="drop2(index)" v-for="(item, index) in line" :class="check_line(index)">
 				<div class="tool" @click="delete_line(index)">
 					<i class="trash outline icon"></i>
 				</div>
@@ -16,6 +16,15 @@
 	<a id="new_line" class="default_a" @click="new_line()">新增支線</a>
 </div>
 <div id="edit_parent">
-	<a class="left_icon" href="javascript:void(0)"><i class="setting icon"></i></a>
+	<a class="left_iAcon" href="javascript:void(0)"><i class="setting icon"></i></a>
 	<a class="left_icon" href="javascript:void(0)"><i class="power icon"></i></a>
 </div>
+  <script>
+	function allowDrop2(ev) {
+		 ev.preventDefault();
+	}
+	function drop2(index){
+		print(index)
+		
+	}
+	</script>
