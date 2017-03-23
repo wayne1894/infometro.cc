@@ -1,7 +1,7 @@
 <div id="triangle_left"></div>
   <div id="top_tag_parent">
     <ul id="top_tag">
-      <li v-for="(item, index) in metro">
+      <li v-for="(item, index) in metro" :data-key="item._key">
         <span class="top_join first" v-if="index==0"><span @click="new_metro(index)">加號</span></span>
         <i @click="exchange_metro(item._key)" :style="check_metro(item._key)"></i>
         <span class="top_name">{{item.name}}</span>

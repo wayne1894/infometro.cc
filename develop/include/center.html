@@ -1,9 +1,9 @@
 <div id="board1">
   <div id="board_line_parent">
-    <div id="board_line" ondragover="allowDrop(event)" ondrop="drop(event)"><i style="background-color:#30CB68"></i>
+    <div id="board_line"><i style="background-color:#30CB68"></i>
       <div>淡水線</div>
     </div>
-    <div id="board_edit"><i class="male icon"></i></div>
+    <div id="board_edit" ondragover="allowDrop(event)" ondrop="drop(event)"><i class="male icon"></i></div>
   </div>
   <div id="board_tag_name">
     <div id="tag_name">
@@ -16,14 +16,9 @@
     </div>
   </div>
   <script>
-function allowDrop(ev) {
-	print("ggg")
-   ev.preventDefault();
-}
 	function drop(ev){
-		print("放掉了")
-		ev.preventDefault();
-		
+	  var metro_key = ev.dataTransfer.getData("metro_key");
+      print(metro_key)
 	}
 	</script>
   <div id="board3">

@@ -29,7 +29,7 @@
 	<div class="line_text">所有支線：</div>
 	<div id="left_line">
 		<ul id="line_drag">
-			<li ondragover="allowDrop2(event)" @drop="drop2(index)" v-for="(item, index) in line" :class="check_line(index)">
+			<li ondragover="allowDrop(event)" @drop="drop2(index)" v-for="(item, index) in line" :class="check_line(index)">
 				<div class="tool" @click="delete_line(index)">
 					<i class="trash outline icon"></i>
 				</div>
@@ -59,7 +59,7 @@
     <div id="triangle_left"></div>
   <div id="top_tag_parent">
     <ul id="top_tag">
-      <li v-for="(item, index) in metro">
+      <li v-for="(item, index) in metro" :data-key="item._key">
         <span class="top_join first" v-if="index==0"><span @click="new_metro(index)">加號</span></span>
         <i @click="exchange_metro(item._key)" :style="check_metro(item._key)"></i>
         <span class="top_name">{{item.name}}</span>
@@ -89,10 +89,10 @@
   <div id="center">
     <div id="board1">
   <div id="board_line_parent">
-    <div id="board_line" ondragover="allowDrop(event)" ondrop="drop(event)"><i style="background-color:#30CB68"></i>
+    <div id="board_line"><i style="background-color:#30CB68"></i>
       <div>淡水線</div>
     </div>
-    <div id="board_edit"><i class="male icon"></i></div>
+    <div id="board_edit" ondragover="allowDrop(event)" ondrop="drop(event)"><i class="male icon"></i></div>
   </div>
   <div id="board_tag_name">
     <div id="tag_name">
@@ -105,14 +105,9 @@
     </div>
   </div>
   <script>
-function allowDrop(ev) {
-	print("ggg")
-   ev.preventDefault();
-}
 	function drop(ev){
-		print("放掉了")
-		ev.preventDefault();
-		
+	  var metro_key = ev.dataTransfer.getData("metro_key");
+      print(metro_key)
 	}
 	</script>
   <div id="board3">
@@ -415,6 +410,10 @@ function _is_login(){//程式進入點
       $(this).trigger("customClick");
     })
   });
+}
+  
+function allowDrop(event) {
+   event.preventDefault();
 }
 </script>
 

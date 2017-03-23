@@ -3,7 +3,7 @@
 	<div class="line_text">所有支線：</div>
 	<div id="left_line">
 		<ul id="line_drag">
-			<li ondragover="allowDrop2(event)" @drop="drop2(index)" v-for="(item, index) in line" :class="check_line(index)">
+			<li ondragover="allowDrop(event)" @drop="drop2(index)" v-for="(item, index) in line" :class="check_line(index)">
 				<div class="tool" @click="delete_line(index)">
 					<i class="trash outline icon"></i>
 				</div>
