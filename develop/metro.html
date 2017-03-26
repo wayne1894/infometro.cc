@@ -53,7 +53,7 @@ var vm = new Vue({
       }
       this.index[this.index_blueprint].check=true;
     },index_line : function(){
-      var index_array=vm.index[vm.index_blueprint]
+      var index_array=vm.get_index_blueprint();
       for(var i=0;i<index_array.length;i++){
         index_array[i].check=undefined;
       }
@@ -65,7 +65,7 @@ var vm = new Vue({
     }
   },methods: {
     更新藍圖 :function (key,data){
-			D.ref('users/' + user.uid +"/"+key).update(data);
+       D.ref('users/' + user.uid +"/"+key).update(data);
     },
     update_line_index : function(index_array){
       var _index=0;
@@ -114,35 +114,50 @@ var vm = new Vue({
     },get_blueprint : function(index){
       if(index!=undefined)return this.blueprint[index];
       return this.blueprint[this.index_blueprint];
-    },re_blueprint_name : function(index){
-      var $blueprint_list=$(event.target).closest(".blueprint_list");
-      $blueprint_list.addClass("edit");
-      sortable1.option("disabled", true);
-      var _name=this.blueprint[index].name;
-      $blueprint_list_input=$blueprint_list.find(".blueprint_input");
-      $blueprint_list_input.select().on("keyup.blueprint_input",function(event){
+    },get_index_blueprint : function(){
+      return vm.index[vm.index_blueprint];
+    },re_name : function(index,_level){
+      $("html").addClass("re_name");
+      var $level_list=$(event.target).closest("."+_level+"_list");
+      $level_list.addClass("edit");
+      sortable[_level].option("disabled", true);
+      var _name=get_level().name;
+      var $level_list_input=$level_list.find("."+_level+"_input");
+      $level_list_input.select().on("keyup."+_level+"_input",function(event){
         if(event.which==13){
           edit_set();
-          var data=vm.get_blueprint(index);
-          this.更新藍圖(data.key,data);
+          var data=vm.get_blueprint();
+          vm.更新藍圖(data.key,data);
         }else if(event.which==27){
           edit_set();
-          vm.blueprint[index].name=_name;
+          get_level().name=_name;
         }
       })
       setTimeout(function(){
-        $(document).on("click.blueprint_input",function(event){
-          if(event.target.className.indexOf("blueprint_input")==-1){
+        $(document).on("click."+_level+"_input",function(event){
+          if(event.target.className.indexOf(""+_level+"_input")==-1){
             edit_set();
-            vm.blueprint[index].name=_name;
+            get_level().name=_name;
           };
         })
       },5);
+      function get_level(){
+        if(_level=="blueprint"){
+          return vm.blueprint[index];
+        }else if(_level=="line"){
+          return vm.get_blueprint().line[index];
+        }else if(_level=="metro"){
+          return vm.get_line().metro[index];
+        }
+      }
       function edit_set(){
-        $blueprint_list.removeClass("edit");
-        sortable1.option("disabled", false);
-        $blueprint_list_input.off("keyup.blueprint_input");
-        $(document).off("click.blueprint_input");
+       $(document).one("click",function(){
+         $("html").removeClass("re_name");
+       })
+        $level_list.removeClass("edit");
+        sortable[_level].option("disabled", false);
+        $level_list_input.off("keyup."+_level+"_input");
+        $(document).off("click."+_level+"_input");
       }
     },check_blueprint : function(index){
       if(this.index_blueprint==index){
@@ -150,7 +165,7 @@ var vm = new Vue({
       }
     },exchange_line : function(index){
       vm.index_line=index;
-      vm.update_metro_index(vm.index[vm.index_blueprint][index]);
+      vm.update_metro_index(vm.get_index_blueprint()[index]);
     },get_line : function(){
       var _blueprint=this.get_blueprint();
       if(_blueprint.line){
@@ -158,6 +173,8 @@ var vm = new Vue({
       }else{
         return []; //沒有資料先用這個以防出錯
       }
+    },get_index_line : function(){
+      return vm.index[vm.index_blueprint][vm.index_line];
     },check_line : function(index){
        if(this.index_line==index){
         return "check";
@@ -170,16 +187,16 @@ var vm = new Vue({
       var _j=line_json("未命名",get_color);
       _j.metro.push(metro_json("總站"));
       data.line.push(_j);
-      vm.index[vm.index_blueprint].push([]);
+      vm.get_index_blueprint().push([]);
       this.更新藍圖(data.key,data);
     },delete_line : function(index){
       var data=this.get_blueprint();
       data.line.splice(index,1);
-      vm.index[vm.index_blueprint].splice(index,1);
+      vm.get_index_blueprint().splice(index,1);
       this.更新藍圖(data.key,data);
     },new_metro : function (order){
       var _metro=metro_json("未命名");
-      var data=this.get_blueprint();
+      var data=JSON.parse(JSON.stringify(this.get_blueprint()));//將傳址改為傳值
       data.line[vm.index_line].metro.splice(order,0,_metro);
       this.更新藍圖(data.key,data);
     },check_metro : function(key){
@@ -189,6 +206,21 @@ var vm = new Vue({
       }
     },exchange_metro : function(key){
       this.key_metro=key;
+    
+    },delete_metro : function(index){
+      var data=JSON.parse(JSON.stringify(this.get_blueprint()));//將傳址改為傳值
+      var old_metro_key=data.line[this.index_line].metro[index]._key;
+      data.line[this.index_line].metro.splice(index,1);
+      if(this.key_metro==old_metro_key){//代表刪到選取的站
+        if(data.line[this.index_line].metro.length==0)return
+        var _index=index-1;
+        if(_index<0)_index=0;
+        var new_metro_key=data.line[this.index_line].metro[_index]._key;
+        this.key_metro=new_metro_key;
+        vm.get_index_line().metro=new_metro_key;
+      }
+      this.更新藍圖(data.key,data);
+
     },get_default_color : function(k){
       if(k==1){
         return "#f2711c";
@@ -235,10 +267,7 @@ function _is_login(){//程式進入點
     })
   });
 }
-  
-function allowDrop(event) {
-   event.preventDefault();
-}
+// $(document).bind('selectstart',function(){return false;})
 </script>
 
 <script src="src/build/js/main.js"></script>

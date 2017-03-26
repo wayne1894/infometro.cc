@@ -19,6 +19,11 @@ html,
 body {
   height: 100%;
 }
+html.re_name{
+  #gdx-bubble-host{
+    display: none;//取消google字典的預設行為
+  }
+}
 
 body {
   font-family: Microsoft JhengHei;
@@ -30,7 +35,6 @@ select:focus,
 textarea:focus {
   outline: 0;
 }
-
 #main {
   visibility: hidden;
   position: relative;
@@ -70,7 +74,15 @@ textarea:focus {
     }
     #left_line {
       margin-bottom: 10px;
-      li {
+      .line_input {
+        display: none;
+        .public_input();
+        width: 60px;
+        position: absolute;
+        z-index: 10;
+        margin-left: 26px;
+      }
+      li.line_list {
         position: relative;
         height: 20px;
         color: black;
@@ -117,6 +129,14 @@ textarea:focus {
           left: 2px;
           border-radius: 1px;
           top: 0px;
+        }
+        &.edit {
+          .line_a{
+            display: none;
+          }
+          .line_input {
+            display: block;
+          }
         }
       }
     }
@@ -179,48 +199,65 @@ textarea:focus {
 //      width: @li_width*22;
       left: 23px;
     }
-    #top_tag li {
-      display: inline-block;
-      position: relative;
-      color: #B3B3B3;
-      width: @li_width;
-      font-size: 12px;
-      i {
-        content: "";
-        width: 18px;
-        height: 18px;
-        display: block;
-        background-color: #B3B3B3;
-        border-radius: 99em;
+    #top_tag {
+      .metro_input {
+        display: none;
+        .public_input();
+        top: -23px;
+        margin-left: -12px;
         position: absolute;
-        z-index: 5;
-        cursor: pointer;
+        width: 50px;
       }
-      .top_name {
-        position: absolute;
-        top: -20px;
-        width: @li_width ;
-        display: block;
-        text-align: center;
-        margin-left: -@li_width/2+9px;
-      }
-      
-      .top_join{
-        width: @li_width;
-        height: 7px;
+      li.metro_list {
         display: inline-block;
-        background-color: #B3B3B3;
-        position: absolute;
-        top: 5px;
-        left: 5px;
-        text-align: center;
-        &.first{
-          left:-70px;
+        position: relative;
+        color: #B3B3B3;
+        width: @li_width;
+        font-size: 12px;
+        i {
+          content: "";
+          width: 18px;
+          height: 18px;
+          display: block;
+          background-color: #B3B3B3;
+          border-radius: 99em;
+          position: absolute;
+          z-index: 5;
+          cursor: pointer;
+        }
+        .top_name {
+          position: absolute;
+          top: -20px;
+          width: @li_width ;
+          display: block;
+          text-align: center;
+          margin-left: -@li_width/2+9px;
+        }
+        .top_join{
+          width: @li_width;
+          height: 7px;
+          display: inline-block;
+          background-color: #B3B3B3;
+          position: absolute;
+          top: 5px;
+          left: 5px;
+          text-align: center;
+          &.first{
+            left:-70px;
+            background-color: transparent;
+          }
+        }
+        &:last-child .top_join{
           background-color: transparent;
         }
-      }
-      &:last-child .top_join{
-        background-color: transparent;
+        &.edit {
+          .top_name{
+            display: none;
+          }
+          .metro_input {
+            display: block;
+          }
+        }
       }
     }
     #triangle_left {

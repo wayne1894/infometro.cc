@@ -15,12 +15,6 @@
       </div>
     </div>
   </div>
-  <script>
-	function drop(ev){
-	  var metro_key = ev.dataTransfer.getData("metro_key");
-      print(metro_key)
-	}
-	</script>
   <div id="board3">
     <div id="board3_header"><i class="heart orange icon"></i><span class="text">最愛連結</span>
     </div>
@@ -59,3 +53,14 @@
     </div>
   </div>
 </div>
+
+
+<script>
+  function drop(ev){
+    var index = ev.dataTransfer.getData("index");
+    vm.delete_metro(index);
+  }  
+  function allowDrop(event) {
+    event.preventDefault();
+  }
+</script>

@@ -21,12 +21,12 @@
 
   $("#main").css("visibility","visible").css("left",0);
   //拖亦程式https://github.com/RubaXa/Sortable
-
-  var sortable1 =new Sortable(id("blueprint_drag"));
-  var sortable2 =new Sortable(id("line_drag"));
-  var sortable3 =new Sortable(id("top_tag"),{
+  var sortable =[];
+  sortable["blueprint"] = new Sortable(id("blueprint_drag"));
+  sortable["line"] = new Sortable(id("line_drag"));
+  sortable["metro"] = new Sortable(id("top_tag"),{
     setData: function (dataTransfer,dragEl) {
-	  dataTransfer.setData('metro_key',$(dragEl).data("key")); 
+	  dataTransfer.setData('index',$(dragEl).data("index")); //設定要傳送的資料
 	},
   });
 

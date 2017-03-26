@@ -2,16 +2,18 @@
 	<div id="logo"><img src="src/static/images/icon_128.fw.png" alt=""></div>
 	<div class="line_text">所有支線：</div>
 	<div id="left_line">
-		<ul id="line_drag">
-			<li ondragover="allowDrop(event)" @drop="drop2(index)" v-for="(item, index) in line" :class="check_line(index)">
-				<div class="tool" @click="delete_line(index)">
-					<i class="trash outline icon"></i>
-				</div>
-				<i class="line_i" v-bind:style="{backgroundColor:item.color}" ></i>
-				<a class="line_a" @click="exchange_line(index)">{{item.name}}</a>
-				<input style="display:none;" type="text" v-model="item.name">
-			</li>
-		</ul>
+      <ul id="line_drag">
+        <li @drop="drop2(index)" v-for="(item, index) in line" :class="check_line(index)" class="line_list">
+            <div class="tool" @click="delete_line(index)">
+                <i class="trash outline icon"></i>
+            </div>
+            <input type="color" v-model="item.color" >
+            <input class="line_i" type="button">
+            
+            <input class="line_input" type="text" v-model="item.name">
+            <a class="line_a" @dblclick="re_name(index,'line')" @click="exchange_line(index)">{{item.name}}</a>
+        </li>
+      </ul>
 	</div>
 	<a id="new_line" class="default_a" @click="new_line()">新增支線</a>
 </div>
