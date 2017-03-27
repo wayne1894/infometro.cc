@@ -65,6 +65,10 @@ var vm = new Vue({
     }
   },methods: {
     更新藍圖 :function (key,data){
+      if(key==undefined || data==undefined){
+        data=vm.get_blueprint();
+        key=data.key;
+      }
        D.ref('users/' + user.uid +"/"+key).update(data);
     },
     update_line_index : function(index_array){
@@ -126,8 +130,7 @@ var vm = new Vue({
       $level_list_input.select().on("keyup."+_level+"_input",function(event){
         if(event.which==13){
           edit_set();
-          var data=vm.get_blueprint();
-          vm.更新藍圖(data.key,data);
+          vm.更新藍圖();
         }else if(event.which==27){
           edit_set();
           get_level().name=_name;
@@ -249,6 +252,12 @@ var vm = new Vue({
       }else{
         return "#000000";
       }
+    }
+    ,open_color : function(color){
+      var $line_color=$(event.target).parent().find(".line_color")
+      $line_color.focus();
+      $line_color.value = color;
+      $line_color.click();
     }
   }
 })
