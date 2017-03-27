@@ -26,7 +26,9 @@
 <h2>登出</h2>
 <button onclick="登出()">登出</button>
 
-
+<div id="app">
+	<photoshop-picker v-model="colors" @change-color="onChange"></photoshop-picker>
+</div>
 <script>
   var vm={}
   vm.show_login = new Vue({
@@ -52,7 +54,50 @@
 		})
 
 	})
+	
+	
+	
+	
+var defaultProps = {
+  hex: '#194d33',
+  hsl: {
+    h: 150,
+    s: 0.5,
+    l: 0.2,
+    a: 1
+  },
+  hsv: {
+    h: 150,
+    s: 0.66,
+    v: 0.30,
+    a: 1
+  },
+  rgba: {
+    r: 25,
+    g: 77,
+    b: 51,
+    a: 1
+  },
+  a: 1
+}
+var Photoshop = VueColor.Photoshop
+vm.color = new Vue({
+  el: '#app',
+  components: {
+    'photoshop-picker': photoshop
+  },
+  data: {
+    colors: defaultProps
+  },
+	methods:{
+		onChange (val) {
+			this.colors = val
+		}
+	}
+})
+
 </script>
-<script src="src/build/js/main.js"></script>
+<!--<script src="src/build/js/main.js"></script>-->
+
 </body>
 </html>
