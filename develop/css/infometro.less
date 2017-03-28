@@ -95,6 +95,15 @@ textarea:focus {
           top: 7px;
           position: absolute;
           z-index: 5;
+          box-shadow: 0 0 0 1px rgba(0,0,0,.3) inset,0 .1em .1em -.05em rgba(0,0,0,.5);
+          &::before{
+            content: '';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            bottom: -10px;
+            left: -10px;
+          }
         }
         .line_a {
           margin-left: 26px;

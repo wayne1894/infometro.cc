@@ -40,6 +40,7 @@ var vm = new Vue({
   },computed: {
    line : function(){//載入line
      if(this.blueprint.length==0)return false; //藍圖如果不存在離開
+     
      return this.get_blueprint().line;
    },
    metro : function(){//載入metro
@@ -252,16 +253,9 @@ var vm = new Vue({
       }else{
         return "#000000";
       }
-    }
-    ,open_color : function(color){
-      $(event.target).colpick({
-				color:'40659b',
-				layout:'hex',
-				flat:true,
-				onSubmit:function(e){
-
-				}
-			});
+    },open_color : function(index,color){
+      color=color.split("#")[1];
+      print(index)
     }
   }
 })

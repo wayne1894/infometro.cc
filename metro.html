@@ -34,12 +34,13 @@
 	<div class="line_text">所有支線：</div>
 	<div id="left_line">
       <ul id="line_drag">
-        <li @drop="drop2(index)" v-for="(item, index) in line" :class="check_line(index)" class="line_list">
-            <div class="tool" @click="delete_line(index)">
-                <i class="trash outline icon"></i>
-            </div>
-            <i class="line_i" @click="open_color(item.color)" :style="{backgroundColor:item.color}" ></i>
-            <a class="line_a" @dblclick="re_name(index,'line')" @click="exchange_line(index)">{{item.name}}</a>
+        <li @drop="drop2(index)" v-for="(item, index) in line" :class="check_line(index)"  class="line_list">
+          <div class="tool" @click="delete_line(index)">
+            <i class="trash outline icon"></i>
+          </div>
+          <input class="line_input" type="text" v-model="item.name">
+          <i class="line_i" @click="open_color(index,item.color)" :style="{backgroundColor:item.color}" ></i>
+          <a class="line_a" @dblclick="re_name(index,'line')" @click="exchange_line(index)">{{item.name}}</a>
         </li>
       </ul>
 	</div>
@@ -49,6 +50,8 @@
 	<a class="left_iAcon" href="javascript:void(0)"><i class="setting icon"></i></a>
 	<a class="left_icon" href="javascript:void(0)"><i class="power icon"></i></a>
 </div>
+ 
+
   <script>
 	function allowDrop2(ev) {
 		 ev.preventDefault();
@@ -57,6 +60,15 @@
 		print(index)
 		
 	}
+$(function(){
+  $(document.body).append("<div id='left_color' style='position: absolute;left:0;top:0'></div>");
+  $('#left_color').colpick({
+    layout:'hex',
+    onSubmit:function(e){
+
+    }
+  }).colpickHide();
+})
 	</script>
   </div>
   <div id="top">
@@ -224,6 +236,7 @@ var vm = new Vue({
   },computed: {
    line : function(){//載入line
      if(this.blueprint.length==0)return false; //藍圖如果不存在離開
+     
      return this.get_blueprint().line;
    },
    metro : function(){//載入metro
@@ -436,16 +449,9 @@ var vm = new Vue({
       }else{
         return "#000000";
       }
-    }
-    ,open_color : function(color){
-      $(event.target).colpick({
-				color:'40659b',
-				layout:'hex',
-				flat:true,
-				onSubmit:function(e){
-
-				}
-			});
+    },open_color : function(index,color){
+      color=color.split("#")[1];
+      print(index)
     }
   }
 })
