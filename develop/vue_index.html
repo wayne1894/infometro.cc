@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<title>vue組件應用範例</title>
+
+<!--
+https://vuejs.org/v2/guide/list.html
+https://cn.vuejs.org/v2/guide/components.html
+-->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.3/vue.min.js"></script>
+<script src="src/static/js/vue-color.min.js"></script>
+
+</head>
+<body>
+
+<div id="example">
+	 <!-- @remove2 為事件 -->
+		<my-component v-for="(todo, index) in todos" @remove2="test(index)" :num="index" :title="todo" message = "hello2!"> </my-component>
+</div>
+
+<script type="text/x-template" id="hello-world-template">
+  <div>
+		{{num}}{{title}}這是訊息{{message}}
+		<button @click="$emit('remove2')">X</button>
+		<div>test</div>
+	</div>
+
+</script>
+
+<script>
+
+// 創建根實例
+new Vue({
+  el : '#example',
+	data: {
+    todos: [
+      'Do the dishes',
+      'Take out the trash',
+      'Mow the lawn'
+    ]
+  },
+	methods: {
+		test : function(index){
+			alert("移除了 "+index);
+			this.todos.splice(index, 1);
+		}
+	},
+	components: {//組件
+		'my-component' : {
+			props: [ 'message','title','num'],//props傳遞屬性
+			template : "#hello-world-template"
+		}
+	}
+})
+</script>
+
+
+</body>
+</html>
