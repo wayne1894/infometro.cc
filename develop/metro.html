@@ -254,7 +254,14 @@ var vm = new Vue({
       }
     }
     ,open_color : function(color){
-      
+      $(event.target).colpick({
+				color:'40659b',
+				layout:'hex',
+				flat:true,
+				onSubmit:function(e){
+
+				}
+			});
     }
   }
 })

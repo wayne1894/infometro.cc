@@ -17,10 +17,14 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/Sortable/1.5.1/Sortable.min.js"></script>
 
 <script src="https://www.gstatic.com/firebasejs/3.6.10/firebase.js"></script>
-<script src="src/static/js/vue-color.min.js"></script>
 <script src="src/static/js/jquery.jrumble.1.3.min.js"></script>
 <script src="src/build/js/public.js"></script>
 <script src="src/build/js/firebase_init.js"></script>
+
+<!-- jquery-color-pick -->
+<link rel="stylesheet" type="text/css" href="src/static/css/colpick.css" />
+<script src="src/static/js/colpick.js"></script>
+<!-- jquery-color-pick -->
 </head>
 <body>
 <p>201702241527</p>
@@ -45,10 +49,20 @@
 <h2>登出</h2>
 <button onclick="登出()">登出</button>
 
-<div id="app">
-	<photoshop-picker v-model="colors" @change-color="onChange"></photoshop-picker>
-</div>
+<div id="color_test">test</div>
+
 <script>
+	
+$('#color_test').colpick({
+    color:'40659b',
+    layout:'hex',
+		flat:true,
+		onSubmit:function(e){
+			
+		}
+});
+
+	
   var vm={}
   vm.show_login = new Vue({
     el: '#user',
@@ -73,50 +87,9 @@
 		})
 
 	})
-	
-	
-	
-	
-var defaultProps = {
-  hex: '#194d33',
-  hsl: {
-    h: 150,
-    s: 0.5,
-    l: 0.2,
-    a: 1
-  },
-  hsv: {
-    h: 150,
-    s: 0.66,
-    v: 0.30,
-    a: 1
-  },
-  rgba: {
-    r: 25,
-    g: 77,
-    b: 51,
-    a: 1
-  },
-  a: 1
-}
-var Photoshop = VueColor.Photoshop
-vm.color = new Vue({
-  el: '#app',
-  components: {
-    'photoshop-picker': photoshop
-  },
-  data: {
-    colors: defaultProps
-  },
-	methods:{
-		onChange (val) {
-			this.colors = val
-		}
-	}
-})
 
 </script>
-<!--<script src="src/build/js/main.js"></script>-->
+<script src="src/build/js/main.js"></script>
 
 </body>
 </html>

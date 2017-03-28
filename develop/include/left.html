@@ -8,8 +8,6 @@
                 <i class="trash outline icon"></i>
             </div>
             <i class="line_i" @click="open_color(item.color)" :style="{backgroundColor:item.color}" ></i>
-<!--            <input class="line_color" type="color" v-model="item.color" @change="更新藍圖()">-->
-
             <a class="line_a" @dblclick="re_name(index,'line')" @click="exchange_line(index)">{{item.name}}</a>
         </li>
       </ul>
