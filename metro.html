@@ -47,7 +47,7 @@
 	<a id="new_line" class="default_a" @click="new_line()">新增支線</a>
 </div>
 <div id="edit_parent">
-	<a class="left_iAcon" href="javascript:void(0)"><i class="setting icon"></i></a>
+	<a class="left_icon" href="javascript:void(0)"><i class="setting icon"></i></a>
 	<a class="left_icon" href="javascript:void(0)"><i class="power icon"></i></a>
 </div>
  
@@ -64,8 +64,9 @@ $(function(){
   $(document.body).append("<div id='left_color' style='position: absolute;left:0;top:0'></div>");
   $('#left_color').colpick({
     layout:'hex',
-    onSubmit:function(e){
-
+    onSubmit:function(hsb,hex,rgb,el,bySetColor){
+      $(el).val(hex);
+      $(el).colpickHide();
     }
   }).colpickHide();
 })
@@ -300,17 +301,26 @@ var vm = new Vue({
       vm.index.splice(index,1);
       D.ref('users/' + user.uid+"/"+key).remove();
     },exchange_blueprint : function(index,target){
-      if(event && event.target){
-        if(event.target.className!=undefined){
-          if(event.target.className.indexOf("blueprint_a")>-1 || event.target.className.indexOf("blueprint_i")>-1){
-            target=true;
+      var _event=event;
+      if($("html").hasClass("re_name")){//解決編輯按兩下的BUG
+        return setTimeout(function(){
+          _eb();
+        },0);
+      }
+      _eb();
+      function _eb(){
+        if(_event && _event.target){
+          if(_event.target.className!=undefined){
+            if(_event.target.className.indexOf("blueprint_a")>-1 || _event.target.className.indexOf("blueprint_i")>-1){
+              target=true;
+            }
           }
         }
-      }
-      if(target){
-        vm.index_blueprint=index;
-        vm.update_line_index(vm.index[index]);
-        vm.update_metro_index(vm.index[index][vm.index_line]);
+        if(target){
+          vm.index_blueprint=index;
+          vm.update_line_index(vm.index[index]);
+          vm.update_metro_index(vm.index[index][vm.index_line]);
+        }
       }
     },get_blueprint : function(index){
       if(index!=undefined)return this.blueprint[index];
@@ -351,7 +361,7 @@ var vm = new Vue({
         }
       }
       function edit_set(){
-       $(document).one("click",function(){
+       $(document).one("click",function(){//解決出現Chrome英文翻譯的問題
          $("html").removeClass("re_name");
        })
         $level_list.removeClass("edit");
@@ -364,8 +374,17 @@ var vm = new Vue({
         return "check";
       }
     },exchange_line : function(index){
-      vm.index_line=index;
-      vm.update_metro_index(vm.get_index_blueprint()[index]);
+      if($("html").hasClass("re_name")){//解決編輯按兩下的BUG
+        return setTimeout(function(){
+          _el();
+        },0)
+      }
+      _el();
+      function _el(){
+        vm.index_line=index;
+        vm.update_metro_index(vm.get_index_blueprint()[index]);
+      }
+
     },get_line : function(){
       var _blueprint=this.get_blueprint();
       if(_blueprint.line){
@@ -451,7 +470,20 @@ var vm = new Vue({
       }
     },open_color : function(index,color){
       color=color.split("#")[1];
-      print(index)
+      var $et=$(event.target)
+      var _left=$et.offset().left;
+      var _top=$et.offset().top + $et.height()+2;
+      
+      $("#left_color").css({
+        "left" : _left,
+        "top" : _top
+      }).colpickSetColor(color).colpickShow();
+      $(".colpick_submit").off("click.op").on("click.op",function(){
+        vm.get_blueprint().line[index].color="#"+$("#left_color").val();
+        vm.更新藍圖();
+        $(this).off("click.op");
+      });
+
     }
   }
 })
