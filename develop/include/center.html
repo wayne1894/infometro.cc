@@ -1,7 +1,7 @@
 <div id="board1">
   <div id="board_line_parent">
     <div id="board_line"><i style="background-color:#30CB68"></i>
-      <div>淡水線</div>
+      <div>{{ line_name }}</div>
     </div>
     <div id="board_edit" ondragover="allowDrop(event)" ondrop="drop(event)"><i class="male icon"></i></div>
   </div>
@@ -9,7 +9,7 @@
     <div id="tag_name">
       <i style="background-color:#30CB68;"></i>
       <div id="tag_name_info">
-        <div>社會學</div>
+        <div>{{ metro_name }}</div>
         <div>資訊共25筆</div>
         <div>建立時間：<span>2015/03/29</span></div>
       </div>
@@ -40,15 +40,15 @@
   <div id="board_send_parent">
     <div id="board_tag_select">
     </div>
-    <button id="board_send" class="ui mini orange button" type="submit">送出</button>
+    <button @click="new_info()" id="board_send" class="ui mini orange button" type="submit">送出</button>
   </div>
   <div id="board_info">
     <div v-for="(item, index) in info" class="ui vertical segment clear">
       <img class="ui medium left floated image transition " src="src/static/images/square-image.png">
-      <p>看見我的靈魂裡那洗拭不去的黑色污點</p>
+      <p>{{item.message}}</p>
       <span class="left">
         <i class="like icon"></i>
-        <i class="trash icon"></i>
+        <i @click="delete_info(item['.key'])" class="trash icon"></i>
       </span>
     </div>
   </div>

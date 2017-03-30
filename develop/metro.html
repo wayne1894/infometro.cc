@@ -29,22 +29,28 @@ var vm = new Vue({
     index : [],
     index_blueprint: 0,
     index_line: 0 ,
+    index_metro : 0 ,
     key_metro : "",
-    action : ""
-  },firebase: function(){
-    var _user = user ? user.uid : "" ;
-    var _key_metro = this.key_metro.length ? this.key_metro : "N";//用N的用意是避免載入所有結點
-    return {
-      info: D.ref("info/"+_user+"/"+_key_metro)
-    }
+    action : "",
+    info : []
+  },firebase: {
+    
   },computed: {
    line : function(){//載入line
      if(this.blueprint.length==0)return false; //藍圖如果不存在離開
      return this.get_blueprint().line;
    },
+   line_name : function(){
+     if(this.blueprint.length==0)return ""; //藍圖如果不存在離開
+     return this.get_line().name;
+   },
    metro : function(){//載入metro
      if(this.blueprint.length==0)return false; //藍圖如果不存在離開
      return this.get_line().metro;
+   },
+   metro_name : function(){
+     if(this.blueprint.length==0)return ""; //藍圖如果不存在離開
+     return vm.get_line().metro[vm.index_metro].name;
    }
   },watch: {
     index_blueprint : function(){
@@ -59,7 +65,7 @@ var vm = new Vue({
       }
       index_array[this.index_line].check=true;
     },key_metro : function(){
-      vm.$bindAsObject('info', D.ref("info/"+user.uid+"/"+this.key_metro));
+      vm.$bindAsArray('info',D.ref("info/"+user.uid+"/"+vm.key_metro));
       var _index= this.index[this.index_blueprint][this.index_line];
       _index._key=this.key_metro;
     }
@@ -220,9 +226,10 @@ var vm = new Vue({
       var data=JSON.parse(JSON.stringify(this.get_blueprint()));//將傳址改為傳值
       data.line[vm.index_line].metro.splice(order,0,_metro);
       this.更新藍圖(data.key,data);
-    },check_metro : function(key){
+    },check_metro : function(key,index){
       if(vm.key_metro==key){
         var _color=this.get_line().color;
+        vm.index_metro=index;
         return "background-color: "+_color;
       }
     },exchange_metro : function(key){
@@ -283,7 +290,20 @@ var vm = new Vue({
         vm.更新藍圖();
         $(this).off("click.op");
       });
-
+    },new_info : function(){
+      var _data ={
+         message : $("#board_textarea").val() ,
+         favorite : false 
+//          screenshot : "" ,
+//          title : "home" ,
+//          href : "" ,
+//          add_date :"" ,
+//          icon : "https://www.google.com/s2/favicons?domain_url=http://www.eztravel.com.tw"
+      }
+      $("#board_textarea").val("");
+      D.ref('info/' + user.uid + "/"+ vm.key_metro).push(_data);
+    },delete_info : function(key){
+      D.ref('info/' + user.uid + "/"+ vm.key_metro).child(key).remove();
     }
   }
 })

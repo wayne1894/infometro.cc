@@ -236,19 +236,7 @@ function blueprint_init(fn){
     }
   })
 }
-function insert_info(metro_key){
-  D.ref('info/' + user.uid + "/"+ metro_key).push(
-    {
-      message : "44看見我的靈魂裡那洗拭不去的黑色污點" ,
-			favorite : true ,
-			screenshot : "" ,
-			title : "home" ,
-			href : "" ,
-			add_date :"" ,
-      icon : "https://www.google.com/s2/favicons?domain_url=http://www.eztravel.com.tw"
-    }
-  )
-}
+
 //http://sj82516-blog.logdown.com/posts/1064788/teaching-firebase-page-four-rest-and-storage
 function get_info_list(metro_key){
   D.ref('info/' + user.uid + "/"+ metro_key).once('value')

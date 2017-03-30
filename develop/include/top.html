@@ -3,7 +3,7 @@
     <ul id="top_tag">
       <li v-for="(item, index) in metro" :data-index="index" class="metro_list">
         <span class="top_join first" v-if="index==0"><span @click="new_metro(index)">加號</span></span>
-        <i @click="exchange_metro(item._key)" :style="check_metro(item._key)"></i>
+        <i @click="exchange_metro(item._key)" :style="check_metro(item._key,index)"></i>
         <span class="top_name" @dblclick="re_name(index,'metro')">{{item.name}}</span>
         <input class="metro_input" type="text" v-model="item.name">
         <span class="top_join"><span @click="new_metro(index+1)">加號</span></span>
