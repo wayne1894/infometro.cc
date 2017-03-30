@@ -237,7 +237,6 @@ var vm = new Vue({
   },computed: {
    line : function(){//載入line
      if(this.blueprint.length==0)return false; //藍圖如果不存在離開
-     
      return this.get_blueprint().line;
    },
    metro : function(){//載入metro
@@ -425,7 +424,6 @@ var vm = new Vue({
       }
     },exchange_metro : function(key){
       this.key_metro=key;
-    
     },delete_metro : function(index){
       var data=JSON.parse(JSON.stringify(this.get_blueprint()));//將傳址改為傳值
       var old_metro_key=data.line[this.index_line].metro[index]._key;
@@ -439,7 +437,6 @@ var vm = new Vue({
         vm.get_index_line().metro=new_metro_key;
       }
       this.更新藍圖(data.key,data);
-
     },get_default_color : function(k){
       if(k==1){
         return "#f2711c";
@@ -470,7 +467,7 @@ var vm = new Vue({
       }
     },open_color : function(index,color){
       color=color.split("#")[1];
-      var $et=$(event.target)
+      var $et=$(event.target);
       var _left=$et.offset().left;
       var _top=$et.offset().top + $et.height()+2;
       
