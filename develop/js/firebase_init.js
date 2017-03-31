@@ -13,6 +13,8 @@
 
 //http://sj82516-blog.logdown.com/posts/1064788/teaching-firebase-page-four-rest-and-storage  firebase 檔案
 
+//https://firebase.google.com/docs/database/web/offline-capabilities#server-timestamps  firebase 離線功能
+
 // Initialize Firebase 初始化
   var config = {
     apiKey: "AIzaSyAalJEx21SpnVU5q5lW0eTSVPTz18s2Hy8",
@@ -22,7 +24,7 @@
     messagingSenderId: "358423331162"
   };
   firebase.initializeApp(config);
-  var D = firebase.database();
+  var DB = firebase.database();
   var user
 
   //[全域]監聽狀態改變
@@ -153,12 +155,13 @@ function line_json(name,color){
 }
 function metro_json(name){
   return {
-    _key : D.ref('users/' + user.uid).push().key,
-    name : name
+    _key : DB.ref('users/' + user.uid).push().key,
+    name : name ,
+		create: firebase.database.ServerValue.TIMESTAMP
   }
 }
 function blueprint_init(fn){
-  D.ref('users/' + user.uid).on("value",function(data){
+  DB.ref('users/' + user.uid).on("value",function(data){
     var _init=[];
     data.forEach(function(childData) {
       _init.push(childData.val());
