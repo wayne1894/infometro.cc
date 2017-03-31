@@ -11,6 +11,8 @@
 //http://sj82516-blog.logdown.com/posts/1061094
 //https://howtofirebase.com/firebase-data-structures-pagination-96c16ffdb5ca#.2aiv4i4pd   分頁
 
+//http://sj82516-blog.logdown.com/posts/1064788/teaching-firebase-page-four-rest-and-storage  firebase 檔案
+
 // Initialize Firebase 初始化
   var config = {
     apiKey: "AIzaSyAalJEx21SpnVU5q5lW0eTSVPTz18s2Hy8",
@@ -136,47 +138,6 @@ function update_Profile(){
 		
 	});
 }
-
-function line_template(){
- return [
-   {
-     name: "淡水線a1",
-		 color : "#ff6900",
-     metro: [
-        {
-         _key : D.ref('users/' + user.uid).push().key ,
-         name: "台北車站"
-        }, {
-         _key : D.ref('users/' + user.uid).push().key ,
-         name: "關渡站"
-        }
-      ]
-    }, {
-     name: "板南線a2",
-		 color : "#ff6900",
-     metro: [
-       {
-         _key : D.ref('users/' + user.uid).push().key ,
-         name: "府中站"
-        }, {
-         _key : D.ref('users/' + user.uid).push().key ,
-         name: "亞東醫院站"
-        }
-      ]
-   }, {
-     name: "其他線a3",
-		 color : "#ff6900",
-     metro: [
-       {
-         _key : D.ref('users/' + user.uid).push().key ,
-         name: "府中站"
-        }, {
-         _key : D.ref('users/' + user.uid).push().key ,
-         name: "亞東醫院站"
-        }
-      ]
-  }]
-}
 function blueprint_json(name){
   return {
     name : name,
@@ -237,7 +198,4 @@ function blueprint_init(fn){
   })
 }
 
-//http://sj82516-blog.logdown.com/posts/1064788/teaching-firebase-page-four-rest-and-storage
-function get_info_list(metro_key){
-  D.ref('info/' + user.uid + "/"+ metro_key).once('value')
-}
+

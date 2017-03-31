@@ -273,8 +273,17 @@ var vm = new Vue({
         key=data.key;
       }
        D.ref('users/' + user.uid +"/"+key).update(data);
-    },
-    update_line_index : function(index_array){
+    },get_blueprint : function(index){ //得到當前藍圖
+      if(index!=undefined)return this.blueprint[index];
+      return this.blueprint[this.index_blueprint];
+    },get_index_blueprint : function(){ //得到當前藍圖索引資料
+      return vm.index[vm.index_blueprint];
+    },get_line : function(){//得到當前支線
+      var _blueprint=this.get_blueprint();
+      return _blueprint.line[this.index_line];
+    },get_index_line : function(){ //得到當前支線索引資料
+      return vm.index[vm.index_blueprint][vm.index_line];
+    },update_line_index : function(index_array){
       var _index=0;
       for(var i=0;i<index_array.length;i++){
         if(index_array[i].check){
@@ -296,16 +305,19 @@ var vm = new Vue({
         vm.key_metro=_metro[0]._key;
       }
     },new_blueprint : function(){//新增藍圖
-      vm.action="new_blueprint"
+      vm.action="new_blueprint";
       var newRef=D.ref('users/' + user.uid).push();
-      newRef.set({
-        name: "未命名",
-        line : line_template()
+			var newLine=[];
+			newLine.push(line_json("橘線","#FF6900"));//新增第一條線
+			newLine[newLine.length-1].metro.push(metro_json("總站"));//第一條線下面的站
+      newRef.set({//將他存到藍圖
+        name: "我的地鐵計畫",
+        line : newLine
       })
     },delete_blueprint : function (key,index){//刪除藍圖
       vm.index.splice(index,1);
       D.ref('users/' + user.uid+"/"+key).remove();
-    },exchange_blueprint : function(index,target){
+    },exchange_blueprint : function(index,target){//切換藍圖
       var _event=event;
       if($("html").hasClass("re_name")){//解決編輯按兩下的BUG
         return setTimeout(function(){
@@ -327,12 +339,76 @@ var vm = new Vue({
           vm.update_metro_index(vm.index[index][vm.index_line]);
         }
       }
-    },get_blueprint : function(index){
-      if(index!=undefined)return this.blueprint[index];
-      return this.blueprint[this.index_blueprint];
-    },get_index_blueprint : function(){
-      return vm.index[vm.index_blueprint];
-    },re_name : function(index,_level){
+    },check_blueprint : function(index){
+      if(this.index_blueprint==index){
+        return "check";
+      }
+    },exchange_line : function(index){
+      if($("html").hasClass("re_name")){//解決編輯按兩下的BUG
+        return setTimeout(function(){
+          _el();
+        },0)
+      }
+      _el();
+      function _el(){
+        vm.index_line=index;
+        vm.update_metro_index(vm.get_index_blueprint()[index]);
+      }
+    },check_line : function(index){
+       if(this.index_line==index){
+        return "check";
+      }
+    },new_line : function(){
+      vm.action="new_line";
+      var data=this.get_blueprint();
+      if(!data.line)data.line=[];//如果沒有line就新增一個空陣列
+      var get_color= vm.get_default_color(data.line.length);
+      var _j=line_json("未命名",get_color);
+      _j.metro.push(metro_json("總站"));
+      data.line.push(_j);
+      vm.get_index_blueprint().push([]);
+      this.更新藍圖(data.key,data);
+    },delete_line : function(index){
+      var data=this.get_blueprint();
+      data.line.splice(index,1);
+      vm.get_index_blueprint().splice(index,1);
+      this.更新藍圖(data.key,data);
+    },new_metro : function (order){
+      var _metro=metro_json("未命名");
+      var data=JSON.parse(JSON.stringify(this.get_blueprint()));//將傳址改為傳值
+      data.line[vm.index_line].metro.splice(order,0,_metro);
+      this.更新藍圖(data.key,data);
+    },check_metro : function(key,index){
+      if(vm.key_metro==key){
+        var _color=this.get_line().color;
+        vm.index_metro=index;
+        return "background-color: "+_color;
+      }
+    },exchange_metro : function(key){
+      this.key_metro=key;
+    },delete_metro : function(index){
+      var data=JSON.parse(JSON.stringify(this.get_blueprint()));//將傳址改為傳值
+      var old_metro_key=data.line[this.index_line].metro[index]._key;
+      data.line[this.index_line].metro.splice(index,1);
+      if(this.key_metro==old_metro_key){//代表刪到選取的站
+        if(data.line[this.index_line].metro.length==0)return
+        var _index=index-1;
+        if(_index<0)_index=0;
+        var new_metro_key=data.line[this.index_line].metro[_index]._key;
+        this.key_metro=new_metro_key;
+        vm.get_index_line().metro=new_metro_key;
+      }
+      this.更新藍圖(data.key,data);
+    },new_info : function(){ //新增資訊
+      var _data ={
+         message : $("#board_textarea").val() ,
+         favorite : false
+      }
+      $("#board_textarea").val("");
+      D.ref('info/' + user.uid + "/"+ vm.key_metro).push(_data);
+    },delete_info : function(key){ //刪除資訊
+      D.ref('info/' + user.uid + "/"+ vm.key_metro).child(key).remove();
+    },re_name : function(index,_level){//重新命名(共用)
       $("html").addClass("re_name");
       var $level_list=$(event.target).closest("."+_level+"_list");
       $level_list.addClass("edit");
@@ -374,110 +450,15 @@ var vm = new Vue({
         $level_list_input.off("keyup."+_level+"_input");
         $(document).off("click."+_level+"_input");
       }
-    },check_blueprint : function(index){
-      if(this.index_blueprint==index){
-        return "check";
-      }
-    },exchange_line : function(index){
-      if($("html").hasClass("re_name")){//解決編輯按兩下的BUG
-        return setTimeout(function(){
-          _el();
-        },0)
-      }
-      _el();
-      function _el(){
-        vm.index_line=index;
-        vm.update_metro_index(vm.get_index_blueprint()[index]);
-      }
-
-    },get_line : function(){
-      var _blueprint=this.get_blueprint();
-      if(_blueprint.line){
-        return _blueprint.line[this.index_line];
-      }else{
-        return []; //沒有資料先用這個以防出錯
-      }
-    },get_index_line : function(){
-      return vm.index[vm.index_blueprint][vm.index_line];
-    },check_line : function(index){
-       if(this.index_line==index){
-        return "check";
-      }
-    },new_line : function(){
-      vm.action="new_line";
-      var data=this.get_blueprint();
-      if(!data.line)data.line=[];//如果沒有line就新增一個空陣列
-      var get_color= vm.get_default_color( data.line.length+1);
-      var _j=line_json("未命名",get_color);
-      _j.metro.push(metro_json("總站"));
-      data.line.push(_j);
-      vm.get_index_blueprint().push([]);
-      this.更新藍圖(data.key,data);
-    },delete_line : function(index){
-      var data=this.get_blueprint();
-      data.line.splice(index,1);
-      vm.get_index_blueprint().splice(index,1);
-      this.更新藍圖(data.key,data);
-    },new_metro : function (order){
-      var _metro=metro_json("未命名");
-      var data=JSON.parse(JSON.stringify(this.get_blueprint()));//將傳址改為傳值
-      data.line[vm.index_line].metro.splice(order,0,_metro);
-      this.更新藍圖(data.key,data);
-    },check_metro : function(key,index){
-      if(vm.key_metro==key){
-        var _color=this.get_line().color;
-        vm.index_metro=index;
-        return "background-color: "+_color;
-      }
-    },exchange_metro : function(key){
-      this.key_metro=key;
-    },delete_metro : function(index){
-      var data=JSON.parse(JSON.stringify(this.get_blueprint()));//將傳址改為傳值
-      var old_metro_key=data.line[this.index_line].metro[index]._key;
-      data.line[this.index_line].metro.splice(index,1);
-      if(this.key_metro==old_metro_key){//代表刪到選取的站
-        if(data.line[this.index_line].metro.length==0)return
-        var _index=index-1;
-        if(_index<0)_index=0;
-        var new_metro_key=data.line[this.index_line].metro[_index]._key;
-        this.key_metro=new_metro_key;
-        vm.get_index_line().metro=new_metro_key;
-      }
-      this.更新藍圖(data.key,data);
     },get_default_color : function(k){
-      if(k==1){
-        return "#f2711c";
-      }else if(k==2){
-        return "#db2828";
-      }else if(k==3){
-        return "#fbbd08";
-      }else if(k==4){
-        return "#b5cc18";
-      }else if(k==5){
-        return "#21ba45";
-      }else if(k==6){
-        return "#00b5ad";
-      }else if(k==7){
-        return "#2185d0";
-      }else if(k==8){
-        return "#5829bb";
-      }else if(k==9){
-        return "#a333c8";
-      }else if(k==10){
-        return "#e03997";
-      }else if(k==12){
-        return "#a5673f";
-      }else if(k==13){
-        return "#767676";
-      }else{
-        return "#000000";
-      }
-    },open_color : function(index,color){
+			var c=["#f2711c","#db2828","#fbbd08","#b5cc18","#21ba45","#00b5ad","#2185d0","#5829bb","#a333c8","#e03997","#a5673f","#767676"][k];
+			if(!c)return "#000000";
+			return c;
+    },open_color : function(index,color){//打開色票選擇器(line)
       color=color.split("#")[1];
       var $et=$(event.target);
       var _left=$et.offset().left;
       var _top=$et.offset().top + $et.height()+2;
-      
       $("#left_color").css({
         "left" : _left,
         "top" : _top
@@ -487,20 +468,6 @@ var vm = new Vue({
         vm.更新藍圖();
         $(this).off("click.op");
       });
-    },new_info : function(){
-      var _data ={
-         message : $("#board_textarea").val() ,
-         favorite : false 
-//          screenshot : "" ,
-//          title : "home" ,
-//          href : "" ,
-//          add_date :"" ,
-//          icon : "https://www.google.com/s2/favicons?domain_url=http://www.eztravel.com.tw"
-      }
-      $("#board_textarea").val("");
-      D.ref('info/' + user.uid + "/"+ vm.key_metro).push(_data);
-    },delete_info : function(key){
-      D.ref('info/' + user.uid + "/"+ vm.key_metro).child(key).remove();
     }
   }
 })
