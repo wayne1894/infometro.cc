@@ -1,27 +1,55 @@
-<div id="triangle_left"></div>
+<div class="triangle left"></div>
   <div id="top_tag_parent">
     <ul id="top_tag">
       <li v-for="(item, index) in metro" :data-index="index" class="metro_list">
-        <span class="top_join first" v-if="index==0"><span @click="new_metro(index)">加號</span></span>
+        <span class="top_join first" v-if="index==0"><span class="add" @click="new_metro(index)"><img src="src/static/images/+.png"></span></span>
         <i @click="exchange_metro(item._key)" :style="check_metro(item._key,index)"></i>
         <span class="top_name" @dblclick="re_name(index,'metro')">{{item.name}}</span>
         <input class="metro_input" type="text" v-model="item.name">
-        <span class="top_join"><span @click="new_metro(index+1)">加號</span></span>
+        <span class="top_join"><span class="add" @click="new_metro(index+1)"><img src="src/static/images/+.png"></span></span>
       </li>
     </ul>
   </div>
-<div id="triangle_right"></div>
+<div class="triangle right"></div>
 
 
 <script>
-  $(function(){
-    $("#triangle_right").click(function(){
-      $("#top_tag").css("left",(parseInt($("#top_tag").css("left"))-80));
-    })
-    $("#triangle_left").click(function(){
-      var _x=parseInt($("#top_tag").css("left"))+80;
-      if(_x>23)_x=23;
-      $("#top_tag").css("left",_x);
-    })
-  })
+
+  function move_top_center(){
+    set_top_active();
+    top_tag_scroll();
+  }
+  function set_top_active(){
+    $("#top_tag li").eq($("#top_tag").data("check_index")).siblings().removeClass("active").end().addClass("active");
+  }
+  function top_tag_scroll(){
+    var scroll_val=0;
+    var container = $("#top_tag"),
+        slide = !container.find(">li.active").length ? 0 : container.find(">li.active").index(),
+        direct = $(this).hasClass("right") ? 1 : -1,
+        target = slide + direct < 0 ? [] : container.find(">li").eq(slide + direct);
+    if (target.length){
+        scroll_val=$("#top_tag").scrollLeft();
+        target.addClass("active").velocity("stop", true).velocity("scroll", {
+            axis: "x",
+            duration: 150,
+            offset : -42,
+            easing: "ease",
+            container: container,
+            complete: function () {
+              if(direct){
+                if($("#top_tag").scrollLeft()==scroll_val){
+                  target.removeClass("active").prev().addClass("active");
+                }
+              }
+			}
+    }).siblings().removeClass("active");
+    }
+  }
+  
+$(function(){
+  //http://velocityjs.org/#scroll
+  $(".triangle").click(top_tag_scroll);
+})  
+
 </script>

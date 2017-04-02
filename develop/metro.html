@@ -33,6 +33,10 @@ var vm = new Vue({
     key_metro : "",
     action : "",
     info : []
+  },updated : function(){
+    setTimeout(function(){
+      $(window).resize();
+    },0);
   },firebase: {
     
   },computed: {
@@ -52,15 +56,15 @@ var vm = new Vue({
      if(this.blueprint.length==0)return ""; //藍圖如果不存在離開
      return vm.get_line().metro[vm.index_metro].name;
    },
-	 metro_create : function(){
-		 if(this.blueprint.length==0)return ""; //藍圖如果不存在離開
-			var timestamp= vm.get_line().metro[vm.index_metro].create;
-		 if(timestamp==undefined) return "";
-			var date = new Date(timestamp * 1000);
-			var formattedDate = ('0' + date.getDate()).slice(-2) + '/' + ('0' + (date.getMonth() + 1)).slice(-2) + '/' + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
-			return formattedDate;
-		 //可以使用 Moment.js(未來有時間需求時)
-	 }
+   metro_create : function(){
+       if(this.blueprint.length==0)return ""; //藍圖如果不存在離開
+        var timestamp= vm.get_line().metro[vm.index_metro].create;
+       if(timestamp==undefined) return "";
+          var date = new Date(timestamp * 1000);
+          var formattedDate = ('0' + date.getDate()).slice(-2) + '/' + ('0' + (date.getMonth() + 1)).slice(-2) + '/' + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
+          return formattedDate;
+       //可以使用 Moment.js(未來有時間需求時)
+   }
   },watch: {
     index_blueprint : function(){
       for(var i=0;i<this.index.length;i++){
@@ -150,6 +154,7 @@ var vm = new Vue({
           vm.update_line_index(vm.index[index]);
           vm.update_metro_index(vm.index[index][vm.index_line]);
         }
+       setTimeout(move_top_center,0);
       }
     },check_blueprint : function(index){
       if(this.index_blueprint==index){
@@ -165,6 +170,8 @@ var vm = new Vue({
       function _el(){
         vm.index_line=index;
         vm.update_metro_index(vm.get_index_blueprint()[index]);
+        setTimeout(move_top_center,0);
+        
       }
     },check_line : function(index){
        if(this.index_line==index){
@@ -194,6 +201,7 @@ var vm = new Vue({
       if(vm.key_metro==key){
         var _color=this.get_line().color;
         vm.index_metro=index;
+        $("#top_tag").data("check_index",index);
         return "background-color: "+_color;
       }
     },exchange_metro : function(key){
@@ -215,7 +223,7 @@ var vm = new Vue({
       var _data ={
         message : $("#board_textarea").val() ,
         favorite : false ,
-				create : firebase.database.ServerValue.TIMESTAMP
+		create : firebase.database.ServerValue.TIMESTAMP
       }
       $("#board_textarea").val("");
       DB.ref('info/' + user.uid + "/"+ vm.key_metro).push(_data);
