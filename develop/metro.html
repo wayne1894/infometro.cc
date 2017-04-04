@@ -37,33 +37,43 @@ var vm = new Vue({
     setTimeout(function(){
       $(window).resize();
     },0);
+    $("#board_info .ui.active").show();
   },firebase: {
     
   },computed: {
    line : function(){//載入line
-     if(this.blueprint.length==0)return false; //藍圖如果不存在離開
+     if(this.blueprint.length==0)return false;
      return this.get_blueprint().line;
    },
    line_name : function(){
-     if(this.blueprint.length==0)return ""; //藍圖如果不存在離開
+     if(this.blueprint.length==0)return "";
      return this.get_line().name;
    },
    metro : function(){//載入metro
-     if(this.blueprint.length==0)return false; //藍圖如果不存在離開
+     if(this.blueprint.length==0)return false;
      return this.get_line().metro;
    },
    metro_name : function(){
-     if(this.blueprint.length==0)return ""; //藍圖如果不存在離開
-     return vm.get_line().metro[vm.index_metro].name;
+     if(this.blueprint.length==0)return "";
+     return this.get_metro().name;
    },
    metro_create : function(){
-       if(this.blueprint.length==0)return ""; //藍圖如果不存在離開
-        var timestamp= vm.get_line().metro[vm.index_metro].create;
-       if(timestamp==undefined) return "";
-          var date = new Date(timestamp * 1000);
-          var formattedDate = ('0' + date.getDate()).slice(-2) + '/' + ('0' + (date.getMonth() + 1)).slice(-2) + '/' + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
-          return formattedDate;
-       //可以使用 Moment.js(未來有時間需求時)
+     if(this.blueprint.length==0)return "";
+     var timestamp= this.get_metro().create;
+     if(timestamp==undefined) return "";
+     //http://momentjs.com/
+     return moment(timestamp).format("lll");
+   },
+   metro_color : function(){
+     if(this.blueprint.length==0)return "";
+     return this.get_line().color;
+   },
+   info_count : function(){
+     if(this.blueprint.length==0)return "";
+     return this.info.length;
+   },
+   info_favorites : function(){
+     
    }
   },watch: {
     index_blueprint : function(){
@@ -78,9 +88,18 @@ var vm = new Vue({
       }
       index_array[this.index_line].check=true;
     },key_metro : function(){
-      vm.$bindAsArray('info',DB.ref("info/"+user.uid+"/"+vm.key_metro));
+//     $("#board_info .loader").show();
+//      print("d1")
+//   
+      vm.$bindAsArray('info',DB.ref("info/"+user.uid+"/"+vm.key_metro))
       var _index= this.index[this.index_blueprint][this.index_line];
       _index._key=this.key_metro;
+//      setTimeout(function(){
+//        print("d2");
+//        $("#board_info .loader").hide();
+//      },0)
+     
+
     }
   },methods: {
     更新藍圖 :function (key,data){
@@ -171,7 +190,6 @@ var vm = new Vue({
         vm.index_line=index;
         vm.update_metro_index(vm.get_index_blueprint()[index]);
         setTimeout(move_top_center,0);
-        
       }
     },check_line : function(index){
        if(this.index_line==index){
@@ -219,6 +237,9 @@ var vm = new Vue({
         vm.get_index_line().metro=new_metro_key;
       }
       this.更新藍圖(data.key,data);
+    },get_metro : function(){
+      var _line=this.get_line();
+      return _line.metro[this.index_metro];
     },new_info : function(){ //新增資訊
       var _data ={
         message : $("#board_textarea").val() ,
@@ -226,9 +247,11 @@ var vm = new Vue({
 		create : firebase.database.ServerValue.TIMESTAMP
       }
       $("#board_textarea").val("");
-      DB.ref('info/' + user.uid + "/"+ vm.key_metro).push(_data);
+     DB.ref('info/' + user.uid + "/"+ vm.key_metro).push(_data);
     },delete_info : function(key){ //刪除資訊
       DB.ref('info/' + user.uid + "/"+ vm.key_metro).child(key).remove();
+    },favorite_info : function(item){
+      DB.ref('info/' + user.uid + "/"+ vm.key_metro).child(item[".key"]).update({favorite : !item.favorite})
     },re_name : function(index,_level){//重新命名(共用)
       $("html").addClass("re_name");
       var $level_list=$(event.target).closest("."+_level+"_list");
@@ -272,9 +295,9 @@ var vm = new Vue({
         $(document).off("click."+_level+"_input");
       }
     },get_default_color : function(k){
-			var c=["#f2711c","#db2828","#fbbd08","#b5cc18","#21ba45","#00b5ad","#2185d0","#5829bb","#a333c8","#e03997","#a5673f","#767676"][k];
-			if(!c)return "#000000";
-			return c;
+        var c=["#f2711c","#db2828","#fbbd08","#b5cc18","#21ba45","#00b5ad","#2185d0","#5829bb","#a333c8","#e03997","#a5673f","#767676"][k];
+        if(!c)return "#000000";
+        return c;
     },open_color : function(index,color){//打開色票選擇器(line)
       color=color.split("#")[1];
       var $et=$(event.target);

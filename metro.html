@@ -21,8 +21,11 @@
 <script src="src/build/js/public.js"></script>
 <script src="src/build/js/firebase_init.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.5.0/velocity.min.js
-"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.5.0/velocity.min.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/locale/zh-tw.js"></script>
 
 <!-- jquery-color-pick -->
 <link rel="stylesheet" type="text/css" href="src/static/css/colpick.css" />
@@ -136,17 +139,17 @@ $(function(){
   <div id="center">
     <div id="board1">
   <div id="board_line_parent">
-    <div id="board_line"><i style="background-color:#30CB68"></i>
-      <div>{{ line_name }}</div>
+    <div id="board_line"><i :style="{backgroundColor:metro_color}"></i>
+      <div class="board_name">{{ line_name }}</div>
     </div>
     <div id="board_edit" ondragover="allowDrop(event)" ondrop="drop(event)"><i class="male icon"></i></div>
   </div>
   <div id="board_tag_name">
     <div id="tag_name">
-      <i style="background-color:#30CB68;"></i>
+      <i :style="{backgroundColor:metro_color}"></i>
       <div id="tag_name_info">
         <div>{{ metro_name }}</div>
-        <div>資訊共25筆</div>
+        <div>資訊共 {{info_count}} 筆</div>
         <div>建立時間：<span>{{metro_create}}</span></div>
       </div>
     </div>
@@ -174,16 +177,30 @@ $(function(){
     </div>
   </div>
   <div id="board_send_parent">
-    <div id="board_tag_select">
+    <div class="ui icon menu">
+<!--
+      <a class="item active">
+        <i class="gamepad icon"></i>
+      </a>
+      <a class="item">
+        <i class="video camera icon"></i>
+      </a>
+      <a class="item">
+        <i class="video play icon"></i>
+      </a>
+-->
+      <div class="right item">
+        <div id="board_send" @click="new_info()" class="ui mini orange button">送出</div>
+      </div>
     </div>
-    <button @click="new_info()" id="board_send" class="ui mini orange button" type="submit">送出</button>
   </div>
-  <div id="board_info">
+  <div id="board_info" >
+<!--    <div class="ui active centered inline loader" style="margin-top:35px;margin-bottom:35px;"></div>-->
     <div v-for="(item, index) in info" class="ui vertical segment clear">
       <img class="ui medium left floated image transition " src="src/static/images/square-image.png">
-      <p>{{item.message}}</p>
-      <span class="left">
-        <i class="like icon"></i>
+      <p class="content">{{item.message}}</p>
+      <span class="right_icon">
+        <i @click="favorite_info(item)" :class="{active : item.favorite }" class="like icon"></i>
         <i @click="delete_info(item['.key'])" class="trash icon"></i>
       </span>
     </div>
@@ -265,33 +282,43 @@ var vm = new Vue({
     setTimeout(function(){
       $(window).resize();
     },0);
+    $("#board_info .ui.active").show();
   },firebase: {
     
   },computed: {
    line : function(){//載入line
-     if(this.blueprint.length==0)return false; //藍圖如果不存在離開
+     if(this.blueprint.length==0)return false;
      return this.get_blueprint().line;
    },
    line_name : function(){
-     if(this.blueprint.length==0)return ""; //藍圖如果不存在離開
+     if(this.blueprint.length==0)return "";
      return this.get_line().name;
    },
    metro : function(){//載入metro
-     if(this.blueprint.length==0)return false; //藍圖如果不存在離開
+     if(this.blueprint.length==0)return false;
      return this.get_line().metro;
    },
    metro_name : function(){
-     if(this.blueprint.length==0)return ""; //藍圖如果不存在離開
-     return vm.get_line().metro[vm.index_metro].name;
+     if(this.blueprint.length==0)return "";
+     return this.get_metro().name;
    },
    metro_create : function(){
-       if(this.blueprint.length==0)return ""; //藍圖如果不存在離開
-        var timestamp= vm.get_line().metro[vm.index_metro].create;
-       if(timestamp==undefined) return "";
-          var date = new Date(timestamp * 1000);
-          var formattedDate = ('0' + date.getDate()).slice(-2) + '/' + ('0' + (date.getMonth() + 1)).slice(-2) + '/' + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
-          return formattedDate;
-       //可以使用 Moment.js(未來有時間需求時)
+     if(this.blueprint.length==0)return "";
+     var timestamp= this.get_metro().create;
+     if(timestamp==undefined) return "";
+     //http://momentjs.com/
+     return moment(timestamp).format("lll");
+   },
+   metro_color : function(){
+     if(this.blueprint.length==0)return "";
+     return this.get_line().color;
+   },
+   info_count : function(){
+     if(this.blueprint.length==0)return "";
+     return this.info.length;
+   },
+   info_favorites : function(){
+     
    }
   },watch: {
     index_blueprint : function(){
@@ -306,9 +333,18 @@ var vm = new Vue({
       }
       index_array[this.index_line].check=true;
     },key_metro : function(){
-      vm.$bindAsArray('info',DB.ref("info/"+user.uid+"/"+vm.key_metro));
+//     $("#board_info .loader").show();
+//      print("d1")
+//   
+      vm.$bindAsArray('info',DB.ref("info/"+user.uid+"/"+vm.key_metro))
       var _index= this.index[this.index_blueprint][this.index_line];
       _index._key=this.key_metro;
+//      setTimeout(function(){
+//        print("d2");
+//        $("#board_info .loader").hide();
+//      },0)
+     
+
     }
   },methods: {
     更新藍圖 :function (key,data){
@@ -399,7 +435,6 @@ var vm = new Vue({
         vm.index_line=index;
         vm.update_metro_index(vm.get_index_blueprint()[index]);
         setTimeout(move_top_center,0);
-        
       }
     },check_line : function(index){
        if(this.index_line==index){
@@ -447,6 +482,9 @@ var vm = new Vue({
         vm.get_index_line().metro=new_metro_key;
       }
       this.更新藍圖(data.key,data);
+    },get_metro : function(){
+      var _line=this.get_line();
+      return _line.metro[this.index_metro];
     },new_info : function(){ //新增資訊
       var _data ={
         message : $("#board_textarea").val() ,
@@ -454,9 +492,11 @@ var vm = new Vue({
 		create : firebase.database.ServerValue.TIMESTAMP
       }
       $("#board_textarea").val("");
-      DB.ref('info/' + user.uid + "/"+ vm.key_metro).push(_data);
+     DB.ref('info/' + user.uid + "/"+ vm.key_metro).push(_data);
     },delete_info : function(key){ //刪除資訊
       DB.ref('info/' + user.uid + "/"+ vm.key_metro).child(key).remove();
+    },favorite_info : function(item){
+      DB.ref('info/' + user.uid + "/"+ vm.key_metro).child(item[".key"]).update({favorite : !item.favorite})
     },re_name : function(index,_level){//重新命名(共用)
       $("html").addClass("re_name");
       var $level_list=$(event.target).closest("."+_level+"_list");
@@ -500,9 +540,9 @@ var vm = new Vue({
         $(document).off("click."+_level+"_input");
       }
     },get_default_color : function(k){
-			var c=["#f2711c","#db2828","#fbbd08","#b5cc18","#21ba45","#00b5ad","#2185d0","#5829bb","#a333c8","#e03997","#a5673f","#767676"][k];
-			if(!c)return "#000000";
-			return c;
+        var c=["#f2711c","#db2828","#fbbd08","#b5cc18","#21ba45","#00b5ad","#2185d0","#5829bb","#a333c8","#e03997","#a5673f","#767676"][k];
+        if(!c)return "#000000";
+        return c;
     },open_color : function(index,color){//打開色票選擇器(line)
       color=color.split("#")[1];
       var $et=$(event.target);

@@ -400,14 +400,22 @@ textarea:focus {
       position: fixed;
       left: @left_width+28px;
       #board_line_parent {
-        height: 88px;
+        position: relative;
+        min-height : 88px;
         width: 100%;
         border-bottom: 1px solid #CDCDCD;
+        &::before{
+          content: "";
+          border-left: 1px solid #CDCDCD;
+          height: 100%;
+          position: absolute;
+          top: 0;
+          left: 164px;
+        }
       }
       #board_line {
         width: 165px;
         height: 100%;
-        border-right: 1px solid #CDCDCD;
         position: relative;
         padding-top: 23px;
         padding-left: 22px;
@@ -416,11 +424,14 @@ textarea:focus {
           height: 7px;
           display: block;
         }
-        div {
+        .board_name {
           font-size: 23px;
           font-weight: bold;
           text-align: left;
-          margin-top: 12px;
+          margin-top: 9px;
+          line-height: 25px;
+          margin-bottom: 9px;
+          padding-right: 10px;
         }
       }
       #board_edit {
@@ -429,10 +440,12 @@ textarea:focus {
         top: 0;
         width: 114px;
         text-align: center;
-        padding-top: 34px;
-        height: 87px;
+        height: 100%;
         i {
           font-size: 3.7em;
+          top: 50%;
+          margin-top: -25px;
+          position: relative;
         }
       }
       #board_tag_name {
@@ -497,24 +510,29 @@ textarea:focus {
         }
       }
       #board_send_parent {
-        border-bottom: 1px solid #CDCDCD;
         padding: 0;
         position: relative;
         height: 42px;
-        #board_tag_select {
-          width: 484px;
-          padding: 5px 0;
-          display: inline-block;
+        border-bottom: 1px solid #CDCDCD;
+        a.item{
+          border-radius : 0;
+        }
+        .ui.icon.menu{
+          border: none;
+          box-shadow : none;
+          border-radius:　0;
+          height: 100%;
+        }
+        .right.item{
+          padding: 0.6em 1em;
         }
         #board_send {
-          vertical-align: top;
-          position: absolute;
-          right: 5px;
-          top: 5px;
-          z-index: 100;
+          padding: 0.6em 1em;
+          font-size: .8rem;
         }
       }
       #board_info {
+         border-bottom: 1px solid #CDCDCD;
         .info {
           padding: 10px;
           border-bottom: 1px solid #CDCDCD;
@@ -524,30 +542,31 @@ textarea:focus {
         >.ui {
           padding-left: 15px;
           padding-right: 5px;
-        }
-        border-bottom: 1px solid #CDCDCD;
+          }
+          .image {
+            width: 100px;
+          }
+          p.content {
+            width: 311px;
+            float: left;
+            padding-right: 10px;
+          }
+          .icon {
+            color: #B3B3B3;
+            cursor: pointer;
+          }
+          .like.icon:hover,.like.icon.active {
+            color: #f2711c;
+          }
+          .trash {
+            font-size: 1.1em;
+          }
+          .trash.icon:hover {
+            color: inherit;
+          }
+        
       }
       border-bottom: none;
-      .image {
-        width: 100px;
-      }
-      p {
-        width: 308px;
-        float: left;
-      }
-      .icon {
-        color: #B3B3B3;
-        cursor: pointer;
-      }
-      .like.icon:hover {
-        color: #f2711c;
-      }
-      .trash {
-        font-size: 1.1em;
-      }
-      .trash.icon:hover {
-        color: inherit;
-      }
       .clear {
         .clearfix();
       }

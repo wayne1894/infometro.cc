@@ -1,16 +1,16 @@
 <div id="board1">
   <div id="board_line_parent">
-    <div id="board_line"><i style="background-color:#30CB68"></i>
-      <div>{{ line_name }}</div>
+    <div id="board_line"><i :style="{backgroundColor:metro_color}"></i>
+      <div class="board_name">{{ line_name }}</div>
     </div>
     <div id="board_edit" ondragover="allowDrop(event)" ondrop="drop(event)"><i class="male icon"></i></div>
   </div>
   <div id="board_tag_name">
     <div id="tag_name">
-      <i style="background-color:#30CB68;"></i>
+      <i :style="{backgroundColor:metro_color}"></i>
       <div id="tag_name_info">
         <div>{{ metro_name }}</div>
-        <div>資訊共25筆</div>
+        <div>資訊共 {{info_count}} 筆</div>
         <div>建立時間：<span>{{metro_create}}</span></div>
       </div>
     </div>
@@ -38,16 +38,30 @@
     </div>
   </div>
   <div id="board_send_parent">
-    <div id="board_tag_select">
+    <div class="ui icon menu">
+<!--
+      <a class="item active">
+        <i class="gamepad icon"></i>
+      </a>
+      <a class="item">
+        <i class="video camera icon"></i>
+      </a>
+      <a class="item">
+        <i class="video play icon"></i>
+      </a>
+-->
+      <div class="right item">
+        <div id="board_send" @click="new_info()" class="ui mini orange button">送出</div>
+      </div>
     </div>
-    <button @click="new_info()" id="board_send" class="ui mini orange button" type="submit">送出</button>
   </div>
-  <div id="board_info">
+  <div id="board_info" >
+<!--    <div class="ui active centered inline loader" style="margin-top:35px;margin-bottom:35px;"></div>-->
     <div v-for="(item, index) in info" class="ui vertical segment clear">
       <img class="ui medium left floated image transition " src="src/static/images/square-image.png">
-      <p>{{item.message}}</p>
-      <span class="left">
-        <i class="like icon"></i>
+      <p class="content">{{item.message}}</p>
+      <span class="right_icon">
+        <i @click="favorite_info(item)" :class="{active : item.favorite }" class="like icon"></i>
         <i @click="delete_info(item['.key'])" class="trash icon"></i>
       </span>
     </div>
