@@ -236,7 +236,7 @@ textarea:focus {
         width: @li_width;
         font-size: 12px;
         margin-top: 27px;
-        i {
+        .top_metro {
           content: "";
           width: 18px;
           height: 18px;
@@ -246,6 +246,14 @@ textarea:focus {
           position: absolute;
           z-index: 5;
           cursor: pointer;
+          &::before{
+            content: '';
+            position: absolute;
+            top: 0px;
+            right:-13px;
+            bottom: -13px;
+            left: -13px;
+          }
         }
         .top_name {
           position: absolute;
@@ -297,10 +305,6 @@ textarea:focus {
           top: 5px;
           left: 14px;
           text-align: center;
-          &.first{
-            left:-70px;
-            background-color: transparent;
-          }
           &::before{
             content: '';
             position: absolute;
@@ -319,6 +323,7 @@ textarea:focus {
           width: 40px;
           .top_join{
             width: 30px;
+            z-index: 10;
             left: 17px;
             background-color: transparent;
             .add{
@@ -328,7 +333,8 @@ textarea:focus {
         }
         .top_join.first{
           width: 30px;
-          left: -30px;
+          z-index: 10;
+          left: -30px;           background-color: transparent;
           .add{
             left: 0px;
           }

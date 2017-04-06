@@ -84,7 +84,7 @@ $(function(){
     <ul id="top_tag">
       <li v-for="(item, index) in metro" :data-index="index" class="metro_list">
         <span class="top_join first" v-if="index==0"><span class="add" @click="new_metro(index)"><img src="src/static/images/+.png"></span></span>
-        <i @click="exchange_metro(item._key)" :style="check_metro(item._key,index)"></i>
+        <i class="top_metro" @click="exchange_metro(item._key)" :style="check_metro(item._key,index)"></i>
         <span class="top_name" @dblclick="re_name(index,'metro')">{{item.name}}</span>
         <input class="metro_input" type="text" v-model="item.name">
         <span class="top_join"><span class="add" @click="new_metro(index+1)"><img src="src/static/images/+.png"></span></span>
@@ -96,12 +96,17 @@ $(function(){
 
 <script>
 
-  function move_top_center(){
-    set_top_active();
-    top_tag_scroll();
-  }
-  function set_top_active(){
-    $("#top_tag li").eq($("#top_tag").data("check_index")).siblings().removeClass("active").end().addClass("active");
+  function move_center(){
+    var total_width=0;
+    var tog_width=$("#top_tag").width();
+    $("#top_tag li").each(function(){
+      total_width=total_width+$(this).width();
+    })
+    if(tog_width > total_width){
+      $("#top_tag").css("left",((tog_width-total_width)/2) +"px");
+    }else{
+      $("#top_tag").css("left",0);
+    }
   }
   function top_tag_scroll(){
     var scroll_val=0;
@@ -418,7 +423,7 @@ var vm = new Vue({
           vm.update_line_index(vm.index[index]);
           vm.update_metro_index(vm.index[index][vm.index_line]);
         }
-       setTimeout(move_top_center,0);
+       setTimeout(move_center,0);
       }
     },check_blueprint : function(index){
       if(this.index_blueprint==index){
@@ -434,7 +439,7 @@ var vm = new Vue({
       function _el(){
         vm.index_line=index;
         vm.update_metro_index(vm.get_index_blueprint()[index]);
-        setTimeout(move_top_center,0);
+        setTimeout(move_center,0);
       }
     },check_line : function(index){
        if(this.index_line==index){
@@ -464,7 +469,6 @@ var vm = new Vue({
       if(vm.key_metro==key){
         var _color=this.get_line().color;
         vm.index_metro=index;
-        $("#top_tag").data("check_index",index);
         return "background-color: "+_color;
       }
     },exchange_metro : function(key){
