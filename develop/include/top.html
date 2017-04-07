@@ -3,7 +3,7 @@
     <ul id="top_tag">
       <li v-for="(item, index) in metro" :data-index="index" class="metro_list">
         <span class="top_join first" v-if="index==0"><span class="add" @click="new_metro(index)"><img src="src/static/images/+.png"></span></span>
-        <i @click="exchange_metro(item._key)" :style="check_metro(item._key,index)"></i>
+        <i class="top_metro" @click="exchange_metro(item._key)" :style="check_metro(item._key,index)"></i>
         <span class="top_name" @dblclick="re_name(index,'metro')">{{item.name}}</span>
         <input class="metro_input" type="text" v-model="item.name">
         <span class="top_join"><span class="add" @click="new_metro(index+1)"><img src="src/static/images/+.png"></span></span>
@@ -15,12 +15,17 @@
 
 <script>
 
-  function move_top_center(){
-    set_top_active();
-    top_tag_scroll();
-  }
-  function set_top_active(){
-    $("#top_tag li").eq($("#top_tag").data("check_index")).siblings().removeClass("active").end().addClass("active");
+  function move_center(){
+    var total_width=0;
+    var tog_width=$("#top_tag").width();
+    $("#top_tag li").each(function(){
+      total_width=total_width+$(this).width();
+    })
+    if(tog_width > total_width){
+      $("#top_tag").css("left",((tog_width-total_width)/2) +"px");
+    }else{
+      $("#top_tag").css("left",0);
+    }
   }
   function top_tag_scroll(){
     var scroll_val=0;
