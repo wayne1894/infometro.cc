@@ -57,7 +57,7 @@
   </div>
   <div id="board_info" >
 <!--    <div class="ui active centered inline loader" style="margin-top:35px;margin-bottom:35px;"></div>-->
-    <div v-for="(item, index) in info" class="ui vertical segment clear">
+    <div v-for="(item, index) in info_reverse" class="ui vertical segment clear">
       <img class="ui medium left floated image transition " src="src/static/images/square-image.png">
       <p class="content">{{item.message}}</p>
       <span class="right_icon">

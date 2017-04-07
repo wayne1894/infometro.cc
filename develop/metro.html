@@ -74,7 +74,10 @@ var vm = new Vue({
    },
    info_favorites : function(){
      
-   }
+   },
+	 info_reverse : function(){
+		 return this.info.reverse();
+	 }
   },watch: {
     index_blueprint : function(){
       for(var i=0;i<this.index.length;i++){
@@ -91,7 +94,7 @@ var vm = new Vue({
 //     $("#board_info .loader").show();
 //      print("d1")
 //   
-      vm.$bindAsArray('info',DB.ref("info/"+user.uid+"/"+vm.key_metro))
+      vm.$bindAsArray('info',DB.ref("info/"+user.uid+"/"+vm.key_metro).orderByChild("favorite"));
       var _index= this.index[this.index_blueprint][this.index_line];
       _index._key=this.key_metro;
 //      setTimeout(function(){
