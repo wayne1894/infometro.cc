@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+@@include('include/head.html')
+</head>
+<body>
+<p>201702241527</p>
+<div id="user" style="color:red;">
+  {{user.uid}}
+</div>
+
+<h2>email註冊</h2>
+<input id="registered1" type="text">
+<input id="registered2" type="password">
+<button id="emailadd">Email 註冊</button>
+
+
+<h2>email登入</h2>
+<input id="login1" type="text">
+<input id="login2" type="password">
+<button id="emailLogin">Email Login</button>
+
+<h2>Facebook登入</h2>
+<button id="fbLoginBtn" onclick="fb_登入(location_fn)">FB Login</button>
+
+<h2>登出</h2>
+<button onclick="登出()">登出</button>
+
+<div id="color_test"></div>
+
+<script>
+	
+$('#color_test').colpick({
+    color:'40659b',
+    layout:'hex',
+    flat : true,
+    onSubmit:function(e){
+
+    }
+});
+
+	
+  var vm={}
+  vm.show_login = new Vue({
+    el: '#user',
+    data:{
+       user: {}
+    }
+  })
+  function _is_login(user){
+    vm.show_login.user=user;
+  }
+  
+  function location_fn(){
+    location.href = "metro.html";
+  }
+  
+	$(function(){
+		$("#emailadd").on("click",function(){
+			註冊($("#registered1").val(),$("#registered2").val(),location_fn)
+		})
+		$("#emailLogin").on("click",function(){
+			email_登入($("#login1").val(),$("#login2").val(),location_fn)
+		})
+
+	})
+
+</script>
+<script src="src/build/js/main.js"></script>
+
+</body>
+</html>
