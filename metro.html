@@ -149,6 +149,11 @@ $(function(){
     </div>
     <div id="board_edit" ondragover="allowDrop(event)" ondrop="drop(event)"><i class="male icon"></i></div>
   </div>
+<!--
+  <div id="board_txt">
+    文字介紹
+  </div>
+-->
   <div id="board_tag_name">
     <div id="tag_name">
       <i :style="{backgroundColor:metro_color}"></i>
@@ -201,7 +206,7 @@ $(function(){
   </div>
   <div id="board_info" >
 <!--    <div class="ui active centered inline loader" style="margin-top:35px;margin-bottom:35px;"></div>-->
-    <div v-for="(item, index) in info" class="ui vertical segment clear">
+    <div v-for="(item, index) in info_reverse" class="ui vertical segment clear">
       <img class="ui medium left floated image transition " src="src/static/images/square-image.png">
       <p class="content">{{item.message}}</p>
       <span class="right_icon">
@@ -324,7 +329,10 @@ var vm = new Vue({
    },
    info_favorites : function(){
      
-   }
+   },
+	 info_reverse : function(){
+		 return this.info.reverse();
+	 }
   },watch: {
     index_blueprint : function(){
       for(var i=0;i<this.index.length;i++){
@@ -341,7 +349,7 @@ var vm = new Vue({
 //     $("#board_info .loader").show();
 //      print("d1")
 //   
-      vm.$bindAsArray('info',DB.ref("info/"+user.uid+"/"+vm.key_metro))
+      vm.$bindAsArray('info',DB.ref("info/"+user.uid+"/"+vm.key_metro).orderByChild("favorite"));
       var _index= this.index[this.index_blueprint][this.index_line];
       _index._key=this.key_metro;
 //      setTimeout(function(){
@@ -580,6 +588,13 @@ function _is_login(){//程式進入點
   });
 }
 // $(document).bind('selectstart',function(){return false;})
+  
+  
+$(function(){
+  $.get("http://54.250.245.226/infometro.asp?url=http://facebook.com",function(html){
+    console.log(html)
+  })
+})  
 </script>
 
 <script src="src/build/js/main.js"></script>

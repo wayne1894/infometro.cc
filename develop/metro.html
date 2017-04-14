@@ -333,6 +333,13 @@ function _is_login(){//程式進入點
   });
 }
 // $(document).bind('selectstart',function(){return false;})
+  
+  
+$(function(){
+  $.get("http://54.250.245.226/infometro.asp?url=http://facebook.com",function(html){
+    console.log(html)
+  })
+})  
 </script>
 
 <script src="src/build/js/main.js"></script>
