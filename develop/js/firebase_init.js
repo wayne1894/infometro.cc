@@ -15,6 +15,8 @@
 
 //https://firebase.google.com/docs/database/web/offline-capabilities#server-timestamps  firebase 離線功能
 
+//https://firebase.google.com/docs/reference/security/database/    rules進階
+
 // Initialize Firebase 初始化
   var config = {
     apiKey: "AIzaSyAalJEx21SpnVU5q5lW0eTSVPTz18s2Hy8",
@@ -148,6 +150,7 @@ function blueprint_json(name){
 }
 function line_json(name,color){
   return {
+    _key : DB.ref('blueprint/' + user.uid).push().key,
     name: name,
     color : color ,
     metro : []
@@ -155,13 +158,13 @@ function line_json(name,color){
 }
 function metro_json(name){
   return {
-    _key : DB.ref('users/' + user.uid).push().key,
+    _key : DB.ref('blueprint/' + user.uid).push().key,
     name : name ,
 		create: firebase.database.ServerValue.TIMESTAMP
   }
 }
 function blueprint_init(fn){
-  DB.ref('users/' + user.uid).on("value",function(data){
+  DB.ref('blueprint/' + user.uid).on("value",function(data){
     var _init=[];
     data.forEach(function(childData) {
       _init.push(childData.val());

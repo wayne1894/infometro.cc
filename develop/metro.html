@@ -75,9 +75,9 @@ var vm = new Vue({
    info_favorites : function(){
      
    },
-	 info_reverse : function(){
-		 return this.info.reverse();
-	 }
+   info_reverse : function(){
+       return this.info.reverse();
+   }
   },watch: {
     index_blueprint : function(){
       for(var i=0;i<this.index.length;i++){
@@ -92,17 +92,14 @@ var vm = new Vue({
       index_array[this.index_line].check=true;
     },key_metro : function(){
 //     $("#board_info .loader").show();
-//      print("d1")
-//   
-      vm.$bindAsArray('info',DB.ref("info/"+user.uid+"/"+vm.key_metro).orderByChild("favorite"));
+      vm.$bindAsArray('info',DB.ref("info/"+vm.get_line_key()+"/metro/"+vm.key_metro));
+      //.orderByChild("favorite")
       var _index= this.index[this.index_blueprint][this.index_line];
       _index._key=this.key_metro;
 //      setTimeout(function(){
 //        print("d2");
 //        $("#board_info .loader").hide();
 //      },0)
-     
-
     }
   },methods: {
     更新藍圖 :function (key,data){
@@ -110,7 +107,7 @@ var vm = new Vue({
         data=vm.get_blueprint();
         key=data.key;
       }
-       DB.ref('users/' + user.uid +"/"+key).update(data);
+       DB.ref('blueprint/' + user.uid +"/"+key).update(data);
     },get_blueprint : function(index){ //得到當前藍圖
       if(index!=undefined)return this.blueprint[index];
       return this.blueprint[this.index_blueprint];
@@ -144,7 +141,7 @@ var vm = new Vue({
       }
     },new_blueprint : function(){//新增藍圖
       vm.action="new_blueprint";
-      var newRef=DB.ref('users/' + user.uid).push();
+      var newRef=DB.ref('blueprint/' + user.uid).push();
 			var newLine=[];
 			newLine.push(line_json("橘線","#FF6900"));//新增第一條線
 			newLine[newLine.length-1].metro.push(metro_json("總站"));//第一條線下面的站
@@ -154,7 +151,7 @@ var vm = new Vue({
       })
     },delete_blueprint : function (key,index){//刪除藍圖
       vm.index.splice(index,1);
-      DB.ref('users/' + user.uid+"/"+key).remove();
+      DB.ref('blueprint/' + user.uid+"/"+key).remove();
     },exchange_blueprint : function(index,target){//切換藍圖
       var _event=event;
       if($("html").hasClass("re_name")){//解決編輯按兩下的BUG
@@ -208,11 +205,17 @@ var vm = new Vue({
       data.line.push(_j);
       vm.get_index_blueprint().push([]);
       this.更新藍圖(data.key,data);
+      DB.ref('info/' + vm.get_line_key()).set({
+        owner: user.uid
+      }); //把專屬的info line先建起來
+      
     },delete_line : function(index){
       var data=this.get_blueprint();
       data.line.splice(index,1);
       vm.get_index_blueprint().splice(index,1);
       this.更新藍圖(data.key,data);
+    },get_line_key :function(){
+      return vm.get_line()._key;
     },new_metro : function (order){
       var _metro=metro_json("未命名");
       var data=JSON.parse(JSON.stringify(this.get_blueprint()));//將傳址改為傳值
@@ -249,11 +252,11 @@ var vm = new Vue({
 		create : firebase.database.ServerValue.TIMESTAMP
       }
       $("#board_textarea").val("");
-     DB.ref('info/' + user.uid + "/"+ vm.key_metro).push(_data);
+     DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).push(_data);
     },delete_info : function(key){ //刪除資訊
-      DB.ref('info/' + user.uid + "/"+ vm.key_metro).child(key).remove();
+      DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).child(key).remove();
     },favorite_info : function(item){
-      DB.ref('info/' + user.uid + "/"+ vm.key_metro).child(item[".key"]).update({favorite : !item.favorite})
+      DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).child(item[".key"]).update({favorite : !item.favorite})
     },re_name : function(index,_level){//重新命名(共用)
       $("html").addClass("re_name");
       var $level_list=$(event.target).closest("."+_level+"_list");
@@ -336,9 +339,9 @@ function _is_login(){//程式進入點
   
   
 $(function(){
-  $.get("http://54.250.245.226/infometro.asp?url=http://facebook.com",function(html){
-    console.log(html)
-  })
+//  $.get("http://54.250.245.226/infometro.asp?url=http://facebook.com",function(html){
+//    console.log(html)
+//  })
 })  
 </script>
 
