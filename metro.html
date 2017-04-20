@@ -31,6 +31,15 @@
 <link rel="stylesheet" type="text/css" href="src/static/css/colpick.css" />
 <script src="src/static/js/colpick.js"></script>
 <!-- jquery-color-pick -->
+
+
+<script>
+if (location.protocol != 'https:'){
+	if(window.location.hostname!="localhost" && window.location.hostname!="127.0.0.1" ){
+			location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+	}
+}
+</script>
 </head>
 <body>
 <div id="main">
@@ -459,9 +468,7 @@ var vm = new Vue({
       data.line.push(_j);
       vm.get_index_blueprint().push([]);
       this.更新藍圖(data.key,data);
-      DB.ref('info/' + vm.get_line_key()).set({
-        owner: user.uid
-      }); //把專屬的info line先建起來
+      DB.ref('info/' + vm.get_line_key()+"/owner").set(user.uid); //把專屬的info line先建起來
       
     },delete_line : function(index){
       var data=this.get_blueprint();
