@@ -34,6 +34,7 @@
     if (data) {
       print("User is logined")
       user=data;
+      //print(data)
       if(typeof _is_login==="function")_is_login(data);
     } else {
       print("User is not logined yet.");
@@ -44,6 +45,8 @@
   function 註冊(email, password,fn){
     //如果註冊新帳戶，也會自動登入
   firebase.auth().createUserWithEmailAndPassword(email, password).then(function(){
+    //建立使用者
+    
     if(typeof fn ==="function")fn();
   }).catch(function(error) {
       var errorCode = error.code;
@@ -68,29 +71,29 @@
     })
   }
   
-  function 取得使用者資料(){//頂層
-    var user = firebase.auth().currentUser;
-    if (user != null) {
-      print("使用者名稱: " +user.displayName);
-      print("使用者email: " +user.email);
-      print("使用者照片: " + user.photoURL);
-      print("Email 驗證: " + user.emailVerified);
-      print("uid: " + user.uid);
-    }
-    return user
-  }
-  function 取得使用者登入資料(){
-    var user = firebase.auth().currentUser; //使用者登入狀態
-    if (user != null) {
-      user.providerData.forEach(function (profile) {
-        print(" Sign-in provider: "+profile.providerId);
-        print("  Provider-specific UID: "+profile.uid);
-        print("  Name: "+profile.displayName);
-        print("  Email: "+profile.email);
-        print("  Photo URL: "+profile.photoURL);
-      });
-    }
-  }
+//  function 取得使用者資料(){//頂層
+//    var user = firebase.auth().currentUser;
+//    if (user != null) {
+//      print("使用者名稱: " +user.displayName);
+//      print("使用者email: " +user.email);
+//      print("使用者照片: " + user.photoURL);
+//      print("Email 驗證: " + user.emailVerified);
+//      print("uid: " + user.uid);
+//    }
+//    return user
+//  }
+//  function 取得使用者登入資料(){
+//    var user = firebase.auth().currentUser; //使用者登入狀態
+//    if (user != null) {
+//      user.providerData.forEach(function (profile) {
+//        print(" Sign-in provider: "+profile.providerId);
+//        print("  Provider-specific UID: "+profile.uid);
+//        print("  Name: "+profile.displayName);
+//        print("  Email: "+profile.email);
+//        print("  Photo URL: "+profile.photoURL);
+//      });
+//    }
+//  }
   function 寄認證信(){
     var user = firebase.auth().currentUser;
     user.sendEmailVerification().then(function() {
@@ -102,12 +105,19 @@
 
 //firebase to fb login
 var provider = new firebase.auth.FacebookAuthProvider();
-
 function fb_登入(fn){
 	//signInWithPopup signInWithRedirect
 	firebase.auth().signInWithPopup(provider).then(function(result) {
 		var token = result.credential.accessToken;
 		var user = result.user;
+
+      初始化使用者資訊({
+        name : user.displayName,
+        email : user.email,
+        url_name: "",
+        photo : user.photoURL
+      })
+
       if(typeof fn ==="function")fn();
 	}).catch(function(error) {
 		var errorCode = error.code;
@@ -130,27 +140,44 @@ function fb_登入(fn){
 }
 
 //更改基本資料
-function update_Profile(){
-	var user = firebase.auth().currentUser;
-	user.updateProfile({
-		displayName: "wayne",
-		photoURL: "https://example.com/jane-q-user/profile.jpg"
-	}).then(function() {
-		print(user.displayName);
-		print(user.photoURL);
-	}, function(error) {
-		
-	});
+//function update_Profile(){
+//	var user = firebase.auth().currentUser;
+//	user.updateProfile({
+//		displayName: "wayne",
+//		photoURL: "https://example.com/jane-q-user/profile.jpg"
+//	}).then(function() {
+//		print(user.displayName);
+//		print(user.photoURL);
+//	}, function(error) {
+//		
+//	});
+//}
+function 初始化使用者資訊(user_data){
+  DB.ref('users/' + user.uid).set(
+    user_data
+  )
+//    {
+//      name : "",//顯示名稱
+//      email : "",
+//      url_name: "", //上方的網址
+//      photo : "" //顯示照片
+//    }
 }
+
 function blueprint_json(name){
   return {
     name : name,
     line : []
   }
 }
+function set_line_info(_line_key){
+  DB.ref('info/' + _line_key +"/root").set(user.uid);
+}
 function line_json(name,color){
+  var _line_key=DB.ref('blueprint/' + user.uid).push().key;
+  set_line_info(_line_key);
   return {
-    _key : DB.ref('blueprint/' + user.uid).push().key,
+    _key : _line_key,
     name: name,
     color : color ,
     metro : []

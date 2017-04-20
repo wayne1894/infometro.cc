@@ -149,6 +149,11 @@ var vm = new Vue({
         line : newLine
       })
     },delete_blueprint : function (key,index){//刪除藍圖
+      var _line=vm.blueprint[index].line;
+      for(var i=0;i<_line.length;i++){
+        DB.ref("info/" + _line[i]._key + "/metro").remove();
+        DB.ref("info/" + _line[i]._key + "/root").remove();
+      }
       vm.index.splice(index,1);
       DB.ref('blueprint/' + user.uid+"/"+key).remove();
     },exchange_blueprint : function(index,target){//切換藍圖
@@ -204,13 +209,14 @@ var vm = new Vue({
       data.line.push(_j);
       vm.get_index_blueprint().push([]);
       this.更新藍圖(data.key,data);
-      DB.ref('info/' + vm.get_line_key()+"/owner").set(user.uid); //把專屬的info line先建起來
-      
     },delete_line : function(index){
       var data=this.get_blueprint();
+      var key=data.line[index]._key;
       data.line.splice(index,1);
       vm.get_index_blueprint().splice(index,1);
       this.更新藍圖(data.key,data);
+      DB.ref("info/" + key + "/metro").remove();
+      DB.ref("info/" + key + "/root").remove();
     },get_line_key :function(){
       return vm.get_line()._key;
     },new_metro : function (order){
@@ -239,6 +245,7 @@ var vm = new Vue({
         vm.get_index_line().metro=new_metro_key;
       }
       this.更新藍圖(data.key,data);
+      DB.ref("info/" + data.line[this.index_line]._key + "/metro").child(old_metro_key).remove();
     },get_metro : function(){
       var _line=this.get_line();
       return _line.metro[this.index_metro];
