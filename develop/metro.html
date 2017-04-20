@@ -92,8 +92,7 @@ var vm = new Vue({
       index_array[this.index_line].check=true;
     },key_metro : function(){
 //     $("#board_info .loader").show();
-      vm.$bindAsArray('info',DB.ref("info/"+vm.get_line_key()+"/metro/"+vm.key_metro));
-      //.orderByChild("favorite")
+      vm.$bindAsArray('info',DB.ref("info/"+vm.get_line_key()+"/metro/"+vm.key_metro).orderByChild("create"));
       var _index= this.index[this.index_blueprint][this.index_line];
       _index._key=this.key_metro;
 //      setTimeout(function(){
@@ -249,7 +248,7 @@ var vm = new Vue({
       var _data ={
         message : $("#board_textarea").val() ,
         favorite : false ,
-		create : firebase.database.ServerValue.TIMESTAMP
+		create : 0 - Date.now()
       }
       $("#board_textarea").val("");
      DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).push(_data);

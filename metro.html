@@ -206,7 +206,7 @@ $(function(){
   </div>
   <div id="board_info" >
 <!--    <div class="ui active centered inline loader" style="margin-top:35px;margin-bottom:35px;"></div>-->
-    <div v-for="(item, index) in info_reverse" class="ui vertical segment clear">
+    <div v-for="(item, index) in info" class="ui vertical segment clear">
       <img class="ui medium left floated image transition " src="src/static/images/square-image.png">
       <p class="content">{{item.message}}</p>
       <span class="right_icon">
@@ -347,8 +347,7 @@ var vm = new Vue({
       index_array[this.index_line].check=true;
     },key_metro : function(){
 //     $("#board_info .loader").show();
-      vm.$bindAsArray('info',DB.ref("info/"+vm.get_line_key()+"/metro/"+vm.key_metro));
-      //.orderByChild("favorite")
+      vm.$bindAsArray('info',DB.ref("info/"+vm.get_line_key()+"/metro/"+vm.key_metro).orderByChild("create"));
       var _index= this.index[this.index_blueprint][this.index_line];
       _index._key=this.key_metro;
 //      setTimeout(function(){
@@ -504,7 +503,7 @@ var vm = new Vue({
       var _data ={
         message : $("#board_textarea").val() ,
         favorite : false ,
-		create : firebase.database.ServerValue.TIMESTAMP
+		create : 0 - Date.now()
       }
       $("#board_textarea").val("");
      DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).push(_data);
