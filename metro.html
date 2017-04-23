@@ -264,9 +264,15 @@ $(function(){
   <div class="r_button">
     <div id="首頁" class="r_b t2"></div>
   </div>
+<!--
   <div class="r_button active">
     <i class="facebook f icon"></i>
   </div>
+-->
+  <div class="r_button active">
+    <i class="youtube play icon"></i>
+  </div>
+
   <div class="r_button">
     <div id="資訊" class="r_b t2"></div>
   </div>
@@ -283,6 +289,16 @@ $(function(){
   </div>
 </div>
 <div class="right_line"></div>
+<script>
+  $(function(){
+    $(".right_tool").on("click",function(event){
+      if($(event.target).closest(".r_button").length==0){
+        $("#right").toggleClass("down");
+      }
+    })
+  })
+
+</script>
   </div>
 </div>
 <script>

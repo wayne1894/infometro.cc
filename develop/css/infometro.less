@@ -764,12 +764,15 @@ textarea:focus {
   }
   .right_tool {
     background-color: #CCCCCC;
+    cursor: pointer;
     .r_button {
       float: left;
       width: 35px;
       height: 35px;
       margin: 0;
       text-align: center;
+      background-color: #fff;
+      cursor: pointer;
       &.active {
         background-color: #FF6900;
       }
@@ -828,6 +831,13 @@ textarea:focus {
     bottom: 0px;
     height: 400px;
     bottom: 42px;
+    transition-property: height;
+    transition-duration:0.1s;
+    transition-timing-function : ease out;
+    transition-timing-function : cubic-bezier(.45,-0.21,.85,.05) ;
+  }
+  #right.down{
+    height: 42px;
   }
 }
 
