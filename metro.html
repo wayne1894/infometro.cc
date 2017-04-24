@@ -240,7 +240,7 @@ $(function(){
   <div id="bottom">
     <div id="blueprint">
   <div id="blueprint_drag">
-    <div v-for="(item, index) in blueprint" class="blueprint_list ui top left pointing dropdown" @dblclick="re_name(index,'blueprint')" @click="exchange_blueprint(index)">
+    <div v-for="(item, index) in blueprint" class="blueprint_list ui top left pointing dropdown"  @click="exchange_blueprint(index)" @dblclick="re_name(index,'blueprint')">
       <a class="blueprint_a" :class="check_blueprint(index)"> {{item.name}}
       </a>
       <input class="blueprint_input" type="text" v-model="item.name">
@@ -257,10 +257,12 @@ $(function(){
   </div>
 </div>
 <div id="copyright">2017資訊地鐵站 版權所有 </div>
+
   </div>
   <div id="right">
     <div class="right_header_line"></div>
 <div class="right_tool">
+  <div class="over"></div>
   <div class="r_button">
     <div id="首頁" class="r_b t2"></div>
   </div>
@@ -437,6 +439,7 @@ var vm = new Vue({
       vm.index.splice(index,1);
       DB.ref('blueprint/' + user.uid+"/"+key).remove();
     },exchange_blueprint : function(index,target){//切換藍圖
+      if($(event.target).hasClass("blueprint_i"))return;
       var _event=event;
       if($("html").hasClass("re_name")){//解決編輯按兩下的BUG
         return setTimeout(function(){
@@ -542,6 +545,7 @@ var vm = new Vue({
     },favorite_info : function(item){
       DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).child(item[".key"]).update({favorite : !item.favorite})
     },re_name : function(index,_level){//重新命名(共用)
+      if($(event.target).hasClass("blueprint_i"))return;
       $("html").addClass("re_name");
       var $level_list=$(event.target).closest("."+_level+"_list");
       $level_list.addClass("edit");
@@ -607,16 +611,19 @@ var vm = new Vue({
 
 function _is_login(){//程式進入點
   blueprint_init(function(){
+    //一定要等vue資料載完才能載入選單物件
     $(".blueprint_list").dropdown("destroy").dropdown({
        on : 'customClick'
      });
-    $(".blueprint_list").off("contextmenu.custom").on("contextmenu.custom",function(event){
-      event.preventDefault();
-      if(event.target.nodeName=="INPUT"){
-        return
-      }
+    $(".blueprint_list .blueprint_i").off("click.custom").on("click.custom",function(event){
       $(this).trigger("customClick");
     })
+    //按右鍵 //if($(event.target).hasClass("blueprint_i"))return;   -->要移掉
+    //    $(".blueprint_list").off("contextmenu.custom").on("contextmenu.custom",function(event){
+    //      event.preventDefault();
+    //      if(event.target.nodeName=="INPUT")return;
+    //      $(this).trigger("customClick");
+    //    })
   });
 }
 // $(document).bind('selectstart',function(){return false;})

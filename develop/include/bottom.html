@@ -1,6 +1,6 @@
 <div id="blueprint">
   <div id="blueprint_drag">
-    <div v-for="(item, index) in blueprint" class="blueprint_list ui top left pointing dropdown" @dblclick="re_name(index,'blueprint')" @click="exchange_blueprint(index)">
+    <div v-for="(item, index) in blueprint" class="blueprint_list ui top left pointing dropdown"  @click="exchange_blueprint(index)" @dblclick="re_name(index,'blueprint')">
       <a class="blueprint_a" :class="check_blueprint(index)"> {{item.name}}
       </a>
       <input class="blueprint_input" type="text" v-model="item.name">
