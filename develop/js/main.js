@@ -31,12 +31,6 @@
   });
 
   $(function(){
-    //鍵盤按下去
-    $("#board_textarea").keyup(function(e) {
-      $(this).height(70);
-      $(this).height(this.scrollHeight + parseFloat($(this).css("borderTopWidth")) + parseFloat($(this).css("borderBottomWidth")));
-    });
-    
     //perfectScrollbar
     $("#right .right_main").perfectScrollbar();
     
@@ -52,3 +46,40 @@
       $(this).trigger('stopRumble');
     });    
   })
+
+  function parse_url(url,fn){
+ 
+    $.get("http://54.250.245.226/infometro.asp?url="+url,function(html){
+          var iframe = document.createElement("iframe");
+          iframe.id="iframe";
+          iframe.style.display="none";
+          $(document.body).append(iframe);
+      var ifrm = document.getElementById('iframe');
+          ifrm = ifrm.contentWindow || ifrm.contentDocument.document || ifrm.contentDocument;
+          ifrm.document.open();
+          ifrm.document.write(html);
+          ifrm.document.close();
+           var url_info={}
+           var metas = $("#iframe")[0].contentWindow.document.getElementsByTagName('meta');
+           for (var i=0; i<metas.length; i++) { 
+               //console.log(metas[i])
+               if(metas[i].getAttribute("name")=="description"){
+                   url_info.description=metas[i].getAttribute("content");
+               }else if(metas[i].getAttribute("property")=="og:description"){
+                   url_info.fb_description=metas[i].getAttribute("content");
+               }else if(metas[i].getAttribute("property")=="og:image"){
+                   url_info.fb_image=url_info.fb_image +","+ metas[i].getAttribute("content");
+               }else if(metas[i].getAttribute("property")=="og:title"){
+                   url_info.fb_title=metas[i].getAttribute("content");
+               }else if(metas[i].getAttribute("property")=="og:url"){
+                   url_info.fb_url=metas[i].getAttribute("content");
+               }
+           }
+          //var $iframe_body=$(document.getElementById('iframe').contentWindow.document.body);
+          url_info.title=$(document.getElementById('iframe').contentWindow.document).find("title").html();
+          url_info.ico="https://www.google.com/s2/favicons?domain_url="+url;
+          $("#iframe").remove();
+          if(typeof fn ==="function")fn(url_info);
+          //console.log(url_info.fb_url);
+      })
+  }

@@ -64,7 +64,7 @@
 <!--    <div class="ui active centered inline loader" style="margin-top:35px;margin-bottom:35px;"></div>-->
     <div v-for="(item, index) in info" class="ui vertical segment clear">
       <img class="ui medium left floated image transition " src="src/static/images/square-image.png">
-      <p class="content">{{item.message}}</p>
+      <p class="content">{{message_filter(item.message,index)}}</p>
       <span class="right_icon">
         <i @click="favorite_info(item)" :class="{active : item.favorite }" class="like icon"></i>
         <i @click="delete_info(item['.key'])" class="trash icon"></i>
@@ -82,4 +82,51 @@
   function allowDrop(event) {
     event.preventDefault();
   }
+
+  $(function(){
+    //鍵盤按下去
+    $("#board_textarea").keydown(function(e){
+
+    })
+    $("#board_textarea").keyup(function(e) {
+      $(this).height(70);
+      $(this).height(this.scrollHeight + parseFloat($(this).css("borderTopWidth")) + parseFloat($(this).css("borderBottomWidth")));
+
+    });
+    
+    
+    $("#board_textarea").on('paste', function () {
+
+       //store references for lateer use
+        var domTextarea = this,
+            txt = domTextarea.value,
+            startPos = domTextarea.selectionStart,
+            endPos = domTextarea.selectionEnd,
+            scrollTop = domTextarea.scrollTop;
+
+        //clear textarea temporarily (user wont notice)
+        domTextarea.value = '';
+
+        setTimeout(function () {
+            //get pasted value
+            var pastedValue = domTextarea.value;
+
+            //do work on pastedValue here, if you need to change/validate it before applying the paste
+
+            //recreate textarea as it would be if we hadn't interupted the paste operation
+            domTextarea.value = txt.substring(0, startPos) + pastedValue + txt.substring(endPos, txt.length);
+            domTextarea.focus();
+            domTextarea.selectionStart = domTextarea.selectionEnd = startPos + pastedValue.length;
+            domTextarea.scrollTop = scrollTop;
+print(pastedValue)
+            //do work on pastedValue here if you simply need to parse its ccontents without modifying it
+
+
+        }, 0);
+
+    });
+    
+  })
+
+  
 </script>
