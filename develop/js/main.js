@@ -22,12 +22,30 @@
   $("#main").css("visibility","visible").css("left",0);
   //拖亦程式https://github.com/RubaXa/Sortable
   var sortable =[];
-  sortable["blueprint"] = new Sortable(id("blueprint_drag"));
-  sortable["line"] = new Sortable(id("line_drag"));
+//  sortable["blueprint"] = new Sortable(id("blueprint_drag"),{
+//    animation: 150,
+//    forceFallback: true,
+//    onEnd: function(){
+//      vm.swap_blueprint(evt.oldIndex,evt.newIndex)
+//    }
+//  });
+  sortable["line"] = new Sortable(id("line_drag"),{
+    animation: 150,
+    forceFallback: false,
+	onEnd: function (evt) {
+      vm.swap_list(evt.oldIndex,evt.newIndex)
+	}
+  });
   sortable["metro"] = new Sortable(id("top_tag"),{
+    animation: 50,
+    forceFallback: false,
     setData: function (dataTransfer,dragEl) {
-	  dataTransfer.setData('index',$(dragEl).data("index")); //設定要傳送的資料
-	},
+     dataTransfer.setData('index',$(dragEl).data("index")); //設定要傳送的資料
+	},onStart: function (evt) {
+	  //print(evt.oldIndex);
+	},onEnd: function(evt){
+      vm.swap_metro(evt.oldIndex,evt.newIndex)
+    }
   });
 
   $(function(){
@@ -44,7 +62,8 @@
 	  $(this).trigger('startRumble');
     }, function(){
       $(this).trigger('stopRumble');
-    });    
+    });
+    
   })
 
   function parse_url(url,fn){

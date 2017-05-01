@@ -1,7 +1,7 @@
 <div class="triangle left"></div>
   <div id="top_tag_parent">
     <ul id="top_tag">
-      <li v-for="(item, index) in metro" :data-index="index" class="metro_list">
+      <li v-for="(item, index) in metro" class="metro_list" :data-key="item._key" :data-index="index" :key="item._key">
         <span class="top_join first" v-if="index==0"><span class="add" @click="new_metro(index)"><img src="src/static/images/+.png"></span></span>
         <i class="top_metro" @click="exchange_metro(item._key)" :style="check_metro(item._key,index)"></i>
         <span class="top_name" @dblclick="re_name(index,'metro')">{{item.name}}</span>

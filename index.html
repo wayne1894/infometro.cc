@@ -36,7 +36,7 @@
 <script>
 if (location.protocol != 'https:'){
 	if(window.location.hostname!="localhost" && window.location.hostname!="127.0.0.1" ){
-			location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+      location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
 	}
 }
 </script>
@@ -44,7 +44,7 @@ if (location.protocol != 'https:'){
 <body>
 <p>201702241527</p>
 <div id="user" style="color:red;">
-  {{user.uid}}
+  {{user_uid}}
 </div>
 
 <h2>email註冊</h2>
@@ -86,7 +86,7 @@ if (location.protocol != 'https:'){
   
 	$(function(){
 		$("#emailadd").on("click",function(){
-			註冊($("#registered1").val(),$("#registered2").val(),location_fn)
+			email_註冊($("#registered1").val(),$("#registered2").val(),location_fn)
 		})
 		$("#emailLogin").on("click",function(){
 			email_登入($("#login1").val(),$("#login2").val(),location_fn)

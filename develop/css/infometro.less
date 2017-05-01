@@ -268,7 +268,7 @@ textarea:focus {
           text-overflow: ellipsis;
         }
         .add{
-          display: none;
+          display: inline-block;
           width: 15px;
           height: 15px;
           position: relative;
@@ -290,10 +290,13 @@ textarea:focus {
           -moz-box-shadow: 2px 1px 5px #cccccc;
           -webkit-box-shadow: 2px 1px 5px #cccccc;
           border-bottom: 1px solid #b2b2b2;
+          opacity: 0;
+          transition: all .5s ease;
           img{
             vertical-align: top;
             position: relative;
             top: 3px;
+            left: 1px;
           }
         }
         .top_join{
@@ -315,6 +318,7 @@ textarea:focus {
           }
           &:hover{
             .add{
+              opacity: 1;
               display: inline-block;
             }
           }
@@ -334,7 +338,8 @@ textarea:focus {
         .top_join.first{
           width: 30px;
           z-index: 10;
-          left: -30px;           background-color: transparent;
+          left: -30px;
+          background-color: transparent;
           .add{
             left: 0px;
           }
@@ -539,7 +544,7 @@ textarea:focus {
           padding: 0.6em 1em;
         }
         #board_send {
-          padding: 0.6em 1em;
+          padding: 0.6em 1.2em;
           font-size: .8rem;
         }
       }
@@ -736,10 +741,10 @@ textarea:focus {
         }
         .menu {
           bottom: 68%;
-          &::after{
-            left: 50%;
-            margin-left: -3px;
-          }
+//          &::after{
+//            left: 50%;
+//            margin-left: -3px;
+//          }
         }
       }
       .clearfix();

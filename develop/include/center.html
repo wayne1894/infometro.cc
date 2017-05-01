@@ -64,7 +64,7 @@
 <!--    <div class="ui active centered inline loader" style="margin-top:35px;margin-bottom:35px;"></div>-->
     <div v-for="(item, index) in info" class="ui vertical segment clear">
       <img class="ui medium left floated image transition " src="src/static/images/square-image.png">
-      <p class="content">{{message_filter(item.message,index)}}</p>
+      <p class="content" v-html="message_filter(item.message)"></p>
       <span class="right_icon">
         <i @click="favorite_info(item)" :class="{active : item.favorite }" class="like icon"></i>
         <i @click="delete_info(item['.key'])" class="trash icon"></i>
@@ -79,7 +79,7 @@
     var index = ev.dataTransfer.getData("index");
     vm.delete_metro(index);
   }  
-  function allowDrop(event) {
+  function allowDrop(event) { //拖曳的物件移到上面
     event.preventDefault();
   }
 
