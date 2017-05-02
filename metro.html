@@ -424,15 +424,15 @@ var vm = new Vue({
 			vm.$bindAsArray('info',_ref);
       var _index= this.index[this.index_blueprint][this.index_line];
       _index._key=this.key_metro;
-			this.index_update();
 //      setTimeout(function(){
 //        $("#board_info .loader").hide();
 //      },0)
     }
   },methods: {
-		index_update : function(){
-			DB.ref('users/' + user_uid +"/index").set(this.index)	
-		},
+    index_update : function(){
+      print("d")
+        DB.ref('users/' + user_uid +"/index").set(this.index);
+    },
     message_filter :function(message,index){
       message=message.replace(/\</g,"&lt;");
       message=message.replace(/\>/g,"&gt;");
@@ -717,15 +717,26 @@ var vm = new Vue({
 })
 
 function _is_login(){//程式進入點
-  blueprint_init(function(){
-		//一定要等vue資料載完才能載入選單物件
-    $(".blueprint_list").dropdown("destroy").dropdown({
-      on : 'customClick'
+  
+  DB.ref('users/' + user_uid).once('value',function(data) {
+		 if(data.val()){
+			 if(data.val().index){//初始化index
+				 vm.index=data.val().index;
+			 }
+		 }else{
+			//沒有會員資料 
+		 }
+	 }).then(function(){
+      blueprint_init(function(){
+            //一定要等vue資料載完才能載入選單物件
+        $(".blueprint_list").dropdown("destroy").dropdown({
+          on : 'customClick'
+        });
+        $(".blueprint_list .blueprint_i").off("click.custom").on("click.custom",function(event){
+          $(this).trigger("customClick");
+        })
+      });
     });
-    $(".blueprint_list .blueprint_i").off("click.custom").on("click.custom",function(event){
-      $(this).trigger("customClick");
-    })
-  });
 }
 </script>
 

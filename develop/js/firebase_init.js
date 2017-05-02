@@ -169,22 +169,21 @@ function blueprint_init(fn){
       _init.push(childData.val());
       _init[_init.length-1].key=childData.key;
     });
+    
     vm.blueprint=_init ;
-
     var index_array=[];
     for(var i=0;i<_init.length;i++){
       index_array.push([]);
       if(_init[i].line){
         for(var j=0;j<_init[i].line.length;j++){
           index_array[i].push([]);
-					index_array[i][index_array[i].length-1].check=true;
+          index_array[i][index_array[i].length-1].check=false;
         }
       }
     }
-
     $.extend(index_array,vm.index);
     vm.index=index_array;
-
+    vm.index_update();
     var _index=0;//預設0
     if(vm.action=="new_blueprint"){//判斷動作
       _index=vm.index.length-1;
@@ -208,16 +207,3 @@ function blueprint_init(fn){
   })
 
 }
-function load_users(){//載入位置資訊
-	DB.ref('users/' + user_uid).once('value',function(data) {
-		 if(data.val()){
-			 if(data.val().index){//初始化index
-				 vm.index=data.val().index
-			 }
-
-		 }else{
-			//沒有會員資料 
-		 }
-	 })
-}
-
