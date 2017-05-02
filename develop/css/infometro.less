@@ -116,8 +116,8 @@ textarea:focus {
           z-index: 5;
           color: black;
           padding-right: 8px;
-        height: 20px;
-        overflow: hidden;
+					height: 20px;
+					overflow: hidden;
 //          white-space: nowrap;
 //          overflow: hidden !important;
 //          text-overflow: ellipsis;
@@ -139,6 +139,9 @@ textarea:focus {
         &:hover .tool {
           display: block;
         }
+				&.sortable-chosen .tool{
+					display: none;
+				}
         &:hover::after,
         &.check::after {
           content: "";

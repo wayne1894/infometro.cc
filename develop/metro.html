@@ -81,27 +81,31 @@ var vm = new Vue({
   },watch: {
     index_blueprint : function(){
       for(var i=0;i<this.index.length;i++){
-        this.index[i].check=undefined;
+        this.index[i].check=false
       }
       this.index[this.index_blueprint].check=true;
     },index_line : function(){
       var index_array=vm.get_index_blueprint();
       for(var i=0;i<index_array.length;i++){
-        index_array[i].check=undefined;
+        index_array[i].check=false;
       }
       index_array[this.index_line].check=true;
-    },key_metro : function(){
+		},key_metro : function(){
 //     $("#board_info .loader").show();
 
-      vm.$bindAsArray('info',DB.ref("info/"+vm.get_line_key()+"/metro/"+vm.key_metro).orderByChild("create"));
+			var _ref=DB.ref("info/"+vm.get_line_key()+"/metro/"+vm.key_metro).orderByChild("create");
+			vm.$bindAsArray('info',_ref);
       var _index= this.index[this.index_blueprint][this.index_line];
       _index._key=this.key_metro;
+			this.index_update();
 //      setTimeout(function(){
-//        print("d2");
 //        $("#board_info .loader").hide();
 //      },0)
     }
   },methods: {
+		index_update : function(){
+			DB.ref('users/' + user_uid +"/index").set(this.index)	
+		},
     message_filter :function(message,index){
       message=message.replace(/\</g,"&lt;");
       message=message.replace(/\>/g,"&gt;");
@@ -277,7 +281,7 @@ var vm = new Vue({
       var _data ={
         message : $("#board_textarea").val() ,
         favorite : false ,
-		create : 0 - Date.now()
+				create : 0 - Date.now()
       }
       $("#board_textarea").val("");
      DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).push(_data);
@@ -387,30 +391,15 @@ var vm = new Vue({
 
 function _is_login(){//程式進入點
   blueprint_init(function(){
-    //一定要等vue資料載完才能載入選單物件
+		//一定要等vue資料載完才能載入選單物件
     $(".blueprint_list").dropdown("destroy").dropdown({
       on : 'customClick'
     });
     $(".blueprint_list .blueprint_i").off("click.custom").on("click.custom",function(event){
       $(this).trigger("customClick");
     })
-    //按右鍵 //if($(event.target).hasClass("blueprint_i"))return;   -->要移掉
-    //    $(".blueprint_list").off("contextmenu.custom").on("contextmenu.custom",function(event){
-    //      event.preventDefault();
-    //      if(event.target.nodeName=="INPUT")return;
-    //      $(this).trigger("customClick");
-    //    })
   });
-  
-
- DB.ref('users/' + user_uid).once('value',function(data) {
-   //data.val()
-
- })
- 
 }
-// $(document).bind('selectstart',function(){return false;})
-  
 </script>
 
 <script src="src/build/js/main.js"></script>

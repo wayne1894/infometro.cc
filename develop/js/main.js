@@ -32,9 +32,9 @@
   sortable["line"] = new Sortable(id("line_drag"),{
     animation: 150,
     forceFallback: false,
-	onEnd: function (evt) {
-      vm.swap_list(evt.oldIndex,evt.newIndex)
-	}
+		onEnd: function (evt) {
+				vm.swap_list(evt.oldIndex,evt.newIndex)
+		}
   });
   sortable["metro"] = new Sortable(id("top_tag"),{
     animation: 50,
@@ -102,3 +102,14 @@
           //console.log(url_info.fb_url);
       })
   }
+
+
+
+		// $(document).bind('selectstart',function(){return false;})
+	
+    //按右鍵 //if($(event.target).hasClass("blueprint_i"))return;   -->要移掉
+    //    $(".blueprint_list").off("contextmenu.custom").on("contextmenu.custom",function(event){
+    //      event.preventDefault();
+    //      if(event.target.nodeName=="INPUT")return;
+    //      $(this).trigger("customClick");
+    //    })

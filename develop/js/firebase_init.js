@@ -177,6 +177,7 @@ function blueprint_init(fn){
       if(_init[i].line){
         for(var j=0;j<_init[i].line.length;j++){
           index_array[i].push([]);
+					index_array[i][index_array[i].length-1].check=true;
         }
       }
     }
@@ -200,6 +201,23 @@ function blueprint_init(fn){
     if(typeof fn=="function"){
       setTimeout(fn,5);
     }
+    vm.blueprint=_init;
+		if(typeof fn=="function"){
+			setTimeout(fn,5);
+		}
   })
+
+}
+function load_users(){//載入位置資訊
+	DB.ref('users/' + user_uid).once('value',function(data) {
+		 if(data.val()){
+			 if(data.val().index){//初始化index
+				 vm.index=data.val().index
+			 }
+
+		 }else{
+			//沒有會員資料 
+		 }
+	 })
 }
 
