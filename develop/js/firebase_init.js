@@ -181,31 +181,33 @@ function blueprint_init(fn){
         }
       }
     }
-print(index_array)
     $.extend(index_array,vm.index);
-print(index_array)
     vm.index=index_array;
-       print(vm.index)
-    var _index=0;//預設0
-    if(vm.action=="new_blueprint"){//判斷動作
-      _index=vm.index.length-1;
-    }else{//檢查check
-      for(var i=0;i<vm.index.length;i++){
-        if(vm.index[i].check)_index=i;
-      }
-    }
-    vm.exchange_blueprint(_index,true);
-    if(vm.action=="new_line"){
+   
+		var _index=vm.index_blueprint;//預載入的藍圖
+
+		var _action=vm.action; //操作動作執行
+		if(_action=="new_blueprint"){//判斷動作
+      _index=vm.index.length-1;//移到最後一個
+			vm.exchange_blueprint(_index,true);//切換藍圖
+    }else if(_action=="new_line"){
+			vm.index_update();
       vm.exchange_line(vm.index[_index].length-1);
-    }
-    vm.action="";
+    }else if(_action=="delete_line"){
+			vm.index_update();
+		}else if(_action=="swap_list"){
+			vm.index_update();
+		}else if(_action=="delete_blueprint"){
+			vm.index_update();
+			vm.exchange_blueprint(_index,true);//切換藍圖
+		}else if(_action=="load"){
+			vm.exchange_blueprint(_index,true);//切換藍圖
+		}
+		
     if(typeof fn=="function"){
       setTimeout(fn,5);
     }
-    vm.blueprint=_init;
-		if(typeof fn=="function"){
-			setTimeout(fn,5);
-		}
+    vm.blueprint=_init;//載入資料
   })
 
 }
