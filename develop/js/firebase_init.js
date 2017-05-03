@@ -181,9 +181,11 @@ function blueprint_init(fn){
         }
       }
     }
+print(index_array)
     $.extend(index_array,vm.index);
+print(index_array)
     vm.index=index_array;
-    vm.index_update();
+       print(vm.index)
     var _index=0;//預設0
     if(vm.action=="new_blueprint"){//判斷動作
       _index=vm.index.length-1;

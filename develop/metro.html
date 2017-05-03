@@ -95,16 +95,17 @@ var vm = new Vue({
 
 			var _ref=DB.ref("info/"+vm.get_line_key()+"/metro/"+vm.key_metro).orderByChild("create");
 			vm.$bindAsArray('info',_ref);
-      var _index= this.index[this.index_blueprint][this.index_line];
-      _index._key=this.key_metro;
+            var _index= this.index[this.index_blueprint][this.index_line];
+            _index._key=this.key_metro;
+            vm.index_update();
 //      setTimeout(function(){
 //        $("#board_info .loader").hide();
 //      },0)
     }
   },methods: {
     index_update : function(){
-      print("d")
-        DB.ref('users/' + user_uid +"/index").set(this.index);
+      print(vm.index)
+      DB.ref('users/' + user_uid +"/index").set(vm.index);
     },
     message_filter :function(message,index){
       message=message.replace(/\</g,"&lt;");
@@ -114,12 +115,12 @@ var vm = new Vue({
       message=message.replace(/(?:\r\n|\r|\n)/g, '<br />');
       return message;
     },
-    更新藍圖 :function (key,data){
+    更新藍圖 :function (key,data,fn){
       if(key==undefined || data==undefined){
         data=vm.get_blueprint();
         key=data.key;
       }
-       DB.ref('blueprint/' + user_uid +"/"+key).update(data);
+       DB.ref('blueprint/' + user_uid +"/"+key).update(data).then(fn);
     },get_blueprint : function(index){ //得到當前藍圖
       if(index!=undefined)return this.blueprint[index];
       return this.blueprint[this.index_blueprint];
@@ -222,8 +223,9 @@ var vm = new Vue({
       var _j=line_json("未命名",get_color);
       _j.metro.push(metro_json("總站"));
       data.line.push(_j);
-      vm.get_index_blueprint().push([]);
-      this.更新藍圖(data.key,data);
+      this.更新藍圖(data.key,data,function(){
+        vm.index_update();
+      });
     },delete_line : function(index){
       var data=this.get_blueprint();
       var key=data.line[index]._key;

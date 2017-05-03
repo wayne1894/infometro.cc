@@ -296,7 +296,7 @@ textarea:focus {
             vertical-align: top;
             position: relative;
             top: 3px;
-            left: 1px;
+            left: 0px;
           }
         }
         .top_join{
@@ -321,6 +321,11 @@ textarea:focus {
               opacity: 1;
               display: inline-block;
             }
+          }
+        }
+        &:first-child,&:last-child{
+          .top_join .add img{
+            left: 1px;
           }
         }
         &:last-child{
