@@ -33,7 +33,7 @@
     animation: 150,
     forceFallback: false,
 		onEnd: function (evt) {
-				vm.swap_list(evt.oldIndex,evt.newIndex)
+			vm.swap_list(evt.oldIndex,evt.newIndex)
 		}
   });
   sortable["metro"] = new Sortable(id("top_tag"),{

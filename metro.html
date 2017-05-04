@@ -92,7 +92,7 @@ $(function(){
     <ul id="top_tag">
       <li v-for="(item, index) in metro" class="metro_list" :data-key="item._key" :data-index="index" :key="item._key">
         <span class="top_join first" v-if="index==0"><span class="add" @click="new_metro(index)"><img src="src/static/images/+.png"></span></span>
-        <i class="top_metro" @click="exchange_metro(item._key)" :style="check_metro(item._key,index)"></i>
+        <i class="top_metro" @click="exchange_metro(item._key)" :style="check_metro(item._key)"></i>
         <span class="top_name" @dblclick="re_name(index,'metro')">{{item.name}}</span>
         <input class="metro_input" type="text" v-model="item.name">
         <span class="top_join"><span class="add" @click="new_metro(index+1)"><img src="src/static/images/+.png"></span></span>
@@ -357,7 +357,6 @@ var vm = new Vue({
     index : [],
     index_blueprint: 0,
     index_line: -1 ,
-    index_metro : 0 ,
     key_metro : "",
     action : "load",
     info : []
@@ -414,16 +413,11 @@ var vm = new Vue({
       }
       index_array[this.index_line].check=true;
 		},key_metro : function(){
-//     $("#board_info .loader").show();
-
 			var _ref=DB.ref("info/"+vm.get_line_key()+"/metro/"+vm.key_metro).orderByChild("create");
 			vm.$bindAsArray('info',_ref);
 			var _index= this.index[this.index_blueprint][this.index_line];
 			_index.key_metro=this.key_metro;
 			vm.index_update();
-//      setTimeout(function(){
-//        $("#board_info .loader").hide();
-//      },0)
     }
   },methods: {
     index_update : function(){
@@ -442,7 +436,7 @@ var vm = new Vue({
         data=vm.get_blueprint();
         key=data.key;
       }
-       DB.ref('blueprint/' + user_uid +"/"+key).update(data).then(fn);
+      DB.ref('blueprint/' + user_uid +"/"+key).update(data).then(fn);
     },get_blueprint : function(index){ //得到當前藍圖
       if(index!=undefined)return this.blueprint[index];
       return this.blueprint[this.index_blueprint];
@@ -462,7 +456,7 @@ var vm = new Vue({
         }
       }
       this.index_line=_index;
-    },update_metro_index : function(index_array){
+    },update_metro_key : function(index_array){
       var _metro=this.get_line().metro;
       if(index_array.key_metro){//代表有選到的結點
         for(var i=0;i<_metro.length;i++){
@@ -519,7 +513,7 @@ var vm = new Vue({
         if(target){
           vm.index_blueprint=index;
           vm.update_line_index(vm.index[index]);
-          vm.update_metro_index(vm.index[index][vm.index_line]);
+          vm.update_metro_key(vm.index[index][vm.index_line]);
         }
        setTimeout(move_center,0);
       }
@@ -536,7 +530,7 @@ var vm = new Vue({
       _el();
       function _el(){
         vm.index_line=index;
-        vm.update_metro_index(vm.get_index_blueprint()[index]);
+        vm.update_metro_key(vm.get_index_blueprint()[index]);
         setTimeout(move_center,0);
       }
     },check_line : function(index){
@@ -569,10 +563,9 @@ var vm = new Vue({
       var data=JSON.parse(JSON.stringify(this.get_blueprint()));//將傳址改為傳值
       data.line[vm.index_line].metro.splice(order,0,_metro);
       this.更新藍圖(data.key,data);
-    },check_metro : function(key,index){
+    },check_metro : function(key){
       if(vm.key_metro==key){
         var _color=this.get_line().color;
-        vm.index_metro=index;
         return "background-color: "+_color;
       }
     },exchange_metro : function(key){
@@ -604,7 +597,16 @@ var vm = new Vue({
       DB.ref("info/" + data.line[this.index_line]._key + "/metro").child(old_metro_key).remove();
     },get_metro : function(){
       var _line=this.get_line();
-      return _line.metro[this.index_metro];
+			var _key_metro=vm.key_metro;
+			var _m=_line.metro;
+			var _index=0
+			for(var i=0;i<_line.metro.length;i++){
+				if(_line.metro[i]._key==_key_metro){
+					_index=i;
+					break;
+				}
+			}
+      return _line.metro[_index];
     },new_info : function(){ //新增資訊
       var _data ={
         message : $("#board_textarea").val() ,
@@ -679,14 +681,9 @@ var vm = new Vue({
         $(this).off("click.op");
       });
     },swap_list : function(oldIndex,newIndex){
+			if(oldIndex==newIndex)return;
 			vm.action="swap_list";
-      if(oldIndex==newIndex)return;
       var data=JSON.parse(JSON.stringify(this.get_blueprint()));//將傳址改為傳值
-      function get_key(key){
-        for(var i=0;i<data.line.length;i++){
-          if(data.line[i]._key==key)return i;
-        }
-      }
       var new_line=[];
       var new_index=[];
       $("#line_drag li").each(function(){
@@ -696,7 +693,13 @@ var vm = new Vue({
       })
       data.line=new_line;
       vm.index[vm.index_blueprint]=new_index;
+			vm.update_line_index(new_index);
       vm.更新藍圖(data.key,data);
+			function get_key(key){
+        for(var i=0;i<data.line.length;i++){
+          if(data.line[i]._key==key)return i;
+        }
+      }
     },swap_metro : function(oldIndex,newIndex){
       if(oldIndex==newIndex)return;
       var data=JSON.parse(JSON.stringify(this.get_blueprint()));//將傳址改為傳值
