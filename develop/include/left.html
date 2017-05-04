@@ -3,7 +3,7 @@
 	<div id="left_line">
 	<div class="line_text">主線：</div>
 	  <ul>
-	    <li v-for="(item, index) in line" v-if="item.master" :class="check_line(index)" class="line_list">
+	    <li v-for="(item, index) in line" v-if="item.master" :class="check_line(index)" class="line_list" @drop="drop_line(event,index)">
 	       <i class="line_i" :style="{backgroundColor:item.color}" ></i>
 	       <a class="line_a" @click="exchange_line(index)">{{item.name}}</a>
 	    </li>
@@ -23,14 +23,18 @@
 	<a id="new_line" class="default_a" @click="new_line()">新增支線</a>
 </div>
 <div id="edit_parent">
-	<a class="left_icon" href="javascript:void(0)"><i class="setting icon"></i></a>
-	<a class="left_icon" href="javascript:void(0)"><i class="power icon"></i></a>
+	<a class="left_icon" ><i class="setting icon"></i></a>
+	<a class="left_icon" onclick="登出()"><i class="power icon"></i></a>
 </div>
   <script>
   function drop_line(event,index){
     var metro_index = event.dataTransfer.getData("index");
-		if(metro_index=="")return;
-    var _metro=vm.move_metro(metro_index)[0];
+    
+	if(metro_index=="")return;
+    var _metro=vm.move_metro(metro_index);
+    
+    if(_metro==undefined)return
+    _metro=_metro[0];
     vm.get_blueprint().line[index].metro.push(_metro);
     vm.更新藍圖();
   }

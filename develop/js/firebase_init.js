@@ -65,6 +65,7 @@
   function 登出(){
     firebase.auth().signOut().then(function() {
       print("User sign out!");
+      window.location.href="/"
     }, function(error) {
       print("User sign out error!");
     })

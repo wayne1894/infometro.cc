@@ -31,7 +31,8 @@ var vm = new Vue({
     index_line: -1 ,
     key_metro : "",
     action : "load",
-    info : []
+    info : [],
+    users: []
   },updated : function(){
     setTimeout(function(){
       $(window).resize();
@@ -250,9 +251,9 @@ var vm = new Vue({
     },move_metro : function(index){
       var data=this.get_blueprint();
       var old_metro_key=data.line[this.index_line].metro[index]._key;
+      if(data.line[this.index_line].metro.length<=1)return
       var _metro=data.line[this.index_line].metro.splice(index,1);
       if(this.key_metro==old_metro_key){//代表刪到選取的站
-        if(data.line[this.index_line].metro.length==0)return
         var _index=index-1;
         if(_index<0)_index=0;
         var new_metro_key=data.line[this.index_line].metro[_index]._key;
@@ -262,9 +263,9 @@ var vm = new Vue({
     },delete_metro : function(index){//與move_metro雷同
       var data=JSON.parse(JSON.stringify(this.get_blueprint()));//將傳址改為傳值
       var old_metro_key=data.line[this.index_line].metro[index]._key;
+      if(data.line[this.index_line].metro.length<=1)return
       data.line[this.index_line].metro.splice(index,1);
       if(this.key_metro==old_metro_key){//代表刪到選取的站
-        if(data.line[this.index_line].metro.length==0)return
         var _index=index-1;
         if(_index<0)_index=0;
         var new_metro_key=data.line[this.index_line].metro[_index]._key;
@@ -301,7 +302,7 @@ var vm = new Vue({
       $("html").addClass("re_name");
       var $level_list=$(event.target).closest("."+_level+"_list");
       $level_list.addClass("edit");
-      sortable[_level].option("disabled", true);
+      if(sortable[_level])sortable[_level].option("disabled", true);
       var _name=get_level().name;
       var $level_list_input=$level_list.find("."+_level+"_input");
       $level_list_input.select().on("keyup."+_level+"_input",function(event){
@@ -335,7 +336,7 @@ var vm = new Vue({
          $("html").removeClass("re_name");
        })
         $level_list.removeClass("edit");
-        sortable[_level].option("disabled", false);
+        if(sortable[_level])sortable[_level].option("disabled", false);
         $level_list_input.off("keyup."+_level+"_input");
         $(document).off("click."+_level+"_input");
       }
@@ -401,7 +402,9 @@ function _is_login(){//程式進入點
   DB.ref('users/' + user_uid).once('value',function(data) {
 		 if(data.val()){
 			 if(data.val().index){//初始化index
-				 vm.index=data.val().index;
+		       vm.index=data.val().index;
+               delete data.val().index;
+               vm.users=data.val();
 			 }
 		 }else{
 			//沒有會員資料 

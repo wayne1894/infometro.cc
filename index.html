@@ -42,11 +42,29 @@ if (location.protocol != 'https:'){
 </script>
 </head>
 <body>
-<p>201702241527</p>
-<div id="user" style="color:red;">
-  {{user_uid}}
-</div>
+<style>
+  body{
+    text-align: center;
+  }
+  h1{
+    font-size: 50px
+  }
+  h2{
+    font-size: 35px;
+  }
+  h3{
+    font-size: 25px;
+  }
+  h4{
+    font-size: 15px;
+  }
+  hr{
+    margin: 40px 0;
+  }
+  
+</style>
 
+<!--
 <h2>email註冊</h2>
 <input id="registered1" type="text">
 <input id="registered2" type="password">
@@ -57,28 +75,42 @@ if (location.protocol != 'https:'){
 <input id="login1" type="text">
 <input id="login2" type="password">
 <button id="emailLogin">Email Login</button>
+-->
 
-<h2>Facebook登入</h2>
-<button id="fbLoginBtn" onclick="fb_登入(location_fn)">FB Login</button>
+<h1 style="margin-top:150px;margin-bottom:80px;color:#FF6900">infometro.cc 資訊地鐵站</h1>
 
+<h2>獻給那些對探索知識有終極渴望的創意人士</h2>
+
+<h3>快速的組織資訊結點對你很重要!</h3>
+
+<h3>從今天開始，改變你搜藏資訊的習慣</h3>
+
+<hr>
+
+
+<h4>infometro lightning ，infometro 需要資訊
+來提供電力，您可以安裝google chrome套件，
+隨時結取成千上萬個網頁，隨時整合到你的infometro
+裡。</h4>
+
+
+<hr>
+
+<h4>我們的始命：整合網路上的資源，快速做資訊整理、激發創意與思考
+達到資訊 易用、易記、分享的目的。</h4>
+<h4>贊助我們，成為infometro初期的贊助者，將獲得
+未來產品永久免費的福利。</h4>
+
+<button id="fbLoginBtn" onclick="fb_登入(location_fn)">Facebook登入</button>
+
+<!--
 <h2>登出</h2>
 <button onclick="登出()">登出</button>
+-->
 
-<div id="color_test"></div>
 
 <script>
 
-  var vm={}
-  vm.show_login = new Vue({
-    el: '#user',
-    data:{
-       user: {}
-    }
-  })
-  function _is_login(user){
-    vm.show_login.user=user;
-  }
-  
   function location_fn(){
     location.href = "metro.html";
     
