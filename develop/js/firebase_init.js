@@ -145,12 +145,14 @@ function blueprint_json(name){
 function set_line_info(_line_key){
   DB.ref('info/' + _line_key +"/root").set(user_uid);
 }
-function line_json(name,color){
+function line_json(name,color,master){
   var _line_key=DB.ref('blueprint/' + user_uid).push().key;
   set_line_info(_line_key);
+  if(!master)master=false
   return {
     _key : _line_key,
     name: name,
+    master: master,
     color : color ,
     metro : []
   }
@@ -184,29 +186,28 @@ function blueprint_init(fn){
     $.extend(index_array,vm.index);
     vm.index=index_array;
    
-		var _index=vm.index_blueprint;//預載入的藍圖
+		var _index = vm.index_blueprint; //預載入的藍圖
 
-		var _action=vm.action; //操作動作執行
-		if(_action=="new_blueprint"){//判斷動作
-      _index=vm.index.length-1;//移到最後一個
-			vm.exchange_blueprint(_index,true);//切換藍圖
-    }else if(_action=="new_line"){
-			vm.index_update();
-      vm.exchange_line(vm.index[_index].length-1);
-    }else if(_action=="delete_line"){
-			vm.index_update();
-		}else if(_action=="swap_list"){
-			vm.index_update();
-		}else if(_action=="delete_blueprint"){
-			vm.index_update();
-			vm.exchange_blueprint(_index,true);//切換藍圖
-		}else if(_action=="load"){
-			vm.exchange_blueprint(_index,true);//切換藍圖
+		var _action = vm.action; //操作動作執行
+		if (_action == "new_blueprint") { //判斷動作
+		  _index = vm.index.length - 1; //移到最後一個
+		  vm.exchange_blueprint(_index, true); //切換藍圖
+		} else if (_action == "new_line") {
+		  vm.index_update();
+		  vm.exchange_line(vm.index[_index].length - 1);
+		} else if (_action == "swap_list") {
+		  vm.index_update();
+		} else if (_action == "delete_blueprint") {
+		  vm.index_update();
+		  vm.exchange_blueprint(_index, true); //切換藍圖
+		} else if (_action == "load") {
+		  vm.exchange_blueprint(_index, true); //切換藍圖
 		}
 		
     if(typeof fn=="function"){
       setTimeout(fn,5);
     }
+    vm.action="";
     vm.blueprint=_init;//載入資料
   })
 
