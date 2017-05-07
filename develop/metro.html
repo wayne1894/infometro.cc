@@ -32,7 +32,8 @@ var vm = new Vue({
     key_metro : "",
     action : "load",
     info : [],
-    users: []
+    users: [],
+    mode : 0
   },updated : function(){
     setTimeout(function(){
       $(window).resize();
@@ -94,6 +95,40 @@ var vm = new Vue({
       vm.index_update();
     }
   },methods: {
+    mode_txt:function(){
+    
+      if(this.mode==0){ //一般模式
+         setTimeout(function(){sortable["metro"].option("disabled", true);},0)
+        return "變更操作模式"
+      }else if(this.mode==1){//修繕模式
+        setTimeout(function(){sortable["metro"].option("disabled", false);},0)
+        return "修繕模式"
+      }else if(this.mode==1.5){
+        return "修繕模式"
+      }else if(this.mode==2){//導覽模式
+       setTimeout(function(){sortable["metro"].option("disabled", false);},0)
+        return "導覽模式"
+      }
+    },
+    mode_click: function(){
+      var mode_num=this.mode;
+      mode_num=Math.floor(mode_num+1);
+      if(mode_num>2)mode_num=0;
+      this.mode=mode_num;
+    },
+    mode_class: function(){
+      if(this.mode==0){ //一般模式
+        //male,mouse pointer
+        return "male"
+      }else if(this.mode==1){//修繕模式
+        //wizard
+        return "configure"
+      }else if(this.mode==1.5){
+        return "trash"
+      }else if(this.mode==2){//導覽模式
+        return "help circle outline"
+      }
+    },
     index_update : function(){
       DB.ref('users/' + user_uid +"/index").set(vm.index);
     },
@@ -240,7 +275,7 @@ var vm = new Vue({
       var data=JSON.parse(JSON.stringify(this.get_blueprint()));//將傳址改為傳值
       data.line[vm.index_line].metro.splice(order,0,_metro);
       this.更新藍圖(data.key,data);
-      move_center();
+      setTimeout(move_center,0);
     },check_metro : function(key){
       if(vm.key_metro==key){
         var _color=this.get_line().color;

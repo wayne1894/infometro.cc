@@ -17,6 +17,7 @@
       $("#board2").css("left",b2_left+_move);
       $("#board3").css("left",b3_left+_move);
     }
+    move_center();
   }).resize();
 
   $("#main").css("visibility","visible").css("left",0);
@@ -42,12 +43,19 @@
     setData: function (dataTransfer,dragEl) {
      dataTransfer.setData('index',$(dragEl).data("index")); //設定要傳送的資料
 	},onStart: function (evt) {
-	  //print(evt.oldIndex);
+      if(evt.oldIndex==0){
+        $("#top_tag").addClass("first_drag");
+      }else if(evt.oldIndex==$("#top_tag li").length-2){
+        $("#top_tag").addClass("last_drag");
+      }
+      vm.mode=1.5;
 	},onEnd: function(evt){
-      vm.swap_metro(evt.oldIndex,evt.newIndex)
+      $("#top_tag").removeClass("first_drag").removeClass("last_drag");
+      
+      vm.swap_metro(evt.oldIndex,evt.newIndex);
+      vm.mode=1;
     }
   });
-
   $(function(){
     //perfectScrollbar
     $("#right .right_main").perfectScrollbar();

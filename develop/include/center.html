@@ -3,7 +3,7 @@
     <div id="board_line"><i :style="{backgroundColor:metro_color}"></i>
       <div class="board_name">{{ line_name }}</div>
     </div>
-    <div id="board_edit" ondragover="allowDrop(event)" ondrop="drop(event)"><i class="male icon"></i></div>
+    <div id="board_edit" @click="mode_click()" ondragover="allowDrop(event)" ondrop="drop(event)"><div class="border_area" :data-tooltip="mode_txt()" data-position="right center"><i :class="mode_class()" class=" icon"></i></div></div>
   </div>
 <!--
   <div id="board_txt">
@@ -74,6 +74,7 @@
 </div>
 
 <script>
+
   function drop(ev){
     var index = ev.dataTransfer.getData("index");
 		print(index);
