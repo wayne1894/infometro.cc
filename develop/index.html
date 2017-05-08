@@ -44,7 +44,7 @@
 <h2>從今天開始，改變您搜藏資訊的習慣</h2>
 <h3>infometro是一款利用地鐵支線特性組織資訊的網站，用來保存創意和想法。</h3>
 
-<button id="use">匿名試用</button>
+<button id="anonymous" onclick="anonymous_login(location_fn)">匿名試用</button>
 <button id="fbLoginBtn" onclick="fb_登入(location_fn)">用Facebook登入</button>
 
 <h2>快速的組織資訊對你很重要!</h2>
@@ -78,7 +78,6 @@
 
   function location_fn(){
     location.href = "/:-D";
-    
   }
   
 	$(function(){

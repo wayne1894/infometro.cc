@@ -27,13 +27,26 @@
   };
   firebase.initializeApp(config);
   var DB = firebase.database();
-  var user_uid
+  var user_uid;
 
   //[全域]監聽狀態改變
   firebase.auth().onAuthStateChanged(function(data) {
     if (data) {
       print("User is logined");
-      //print(data)
+
+			var isAnonymous = data.isAnonymous;
+			print(isAnonymous)
+			if(isAnonymous){
+
+				 DB.ref('users/' + data.uid).once('value',function(data) {
+					 if(!data.val()){
+						 初始化使用者資訊();
+						 location_fn();
+					 }
+				 })
+			}
+
+			
       user_uid=data.uid;
       if(typeof _is_login==="function")_is_login();
     } else {
@@ -103,7 +116,7 @@ function fb_登入(fn){
 	  var user = result.user;
        DB.ref('users/' + user.uid).once('value',function(data) {
          if(!data.val()){
-           初始化使用者資訊(fn)
+           初始化使用者資訊(fn);
          }else{
            fn();
          }
@@ -128,6 +141,17 @@ function fb_登入(fn){
 		}
 	});
 }
+
+function anonymous_login(fn){
+	firebase.auth().signInAnonymously().catch(function(error) {
+		// Handle Errors here.
+		var errorCode = error.code;
+		var errorMessage = error.message;
+		// ...
+	});
+}
+
+
 function 初始化使用者資訊(fn){
   var user = firebase.auth().currentUser;
   DB.ref('users/' + user.uid).set({
@@ -172,7 +196,10 @@ function blueprint_init(fn){
       _init.push(childData.val());
       _init[_init.length-1].key=childData.key;
     });
-    
+    if(_init.length==0){//第一次進來
+			vm.new_blueprint();
+			return ;
+		}
     vm.blueprint=_init ;
     var index_array=[];
     for(var i=0;i<_init.length;i++){

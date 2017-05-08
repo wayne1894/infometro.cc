@@ -40,6 +40,18 @@ if (location.protocol != 'https:'){
 	}
 }
 </script>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-98708498-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
 </head>
 <body>
 <div id="main">
@@ -50,8 +62,9 @@ if (location.protocol != 'https:'){
 	<div class="line_text">主線：</div>
 	  <ul>
 	    <li v-for="(item, index) in line" v-if="item.master" :class="check_line(index)" class="line_list" @drop="drop_line(event,index)">
-	       <i class="line_i" :style="{backgroundColor:item.color}" ></i>
-	       <a class="line_a" @click="exchange_line(index)">{{item.name}}</a>
+       	 <input class="line_input" type="text" v-model="item.name">
+	       <i class="line_i" :style="{backgroundColor:item.color}" @click="exchange_line(index)" ></i>
+	       <a class="line_a" @dblclick="re_name(index,'line')"  @click="exchange_line(index)">{{item.name}}</a>
 	    </li>
 	  </ul>
 	<div class="line_text">其他支線：</div>
@@ -61,7 +74,7 @@ if (location.protocol != 'https:'){
             <i class="trash outline icon"></i>
           </div>
           <input v-if="!item.master" class="line_input" type="text" v-model="item.name">
-          <i v-if="!item.master" class="line_i" @click="open_color(index,item.color)" :style="{backgroundColor:item.color}" ></i>
+          <i v-if="!item.master" class="line_i" @dblclick="open_color(index,item.color)" @click="exchange_line(index)" :style="{backgroundColor:item.color}" ></i>
           <a v-if="!item.master" class="line_a" @dblclick="re_name(index,'line')" @click="exchange_line(index)">{{item.name}}</a>
         </li>
       </ul>
@@ -171,11 +184,6 @@ $(function(){
     </div>
     <div id="board_edit" @click="mode_click()" ondragover="allowDrop(event)" ondrop="drop(event)"><div class="border_area" :data-tooltip="mode_txt()" data-position="right center"><i :class="mode_class()" class=" icon"></i></div></div>
   </div>
-<!--
-  <div id="board_txt">
-    文字介紹
-  </div>
--->
   <div id="board_tag_name">
     <div id="tag_name">
       <i :style="{backgroundColor:metro_color}"></i>
@@ -203,7 +211,7 @@ $(function(){
 </div>
 <div id="board2">
   <div id="board_enter_parent">
-    <div id="board_img"><img :src="users.photo"></div>
+    <div id="board_img"><img :src="user_photo(users.photo)"></div>
     <div id="board_enter">
       <textarea id="board_textarea" name="textarea1" placeholder="輸入資訊"></textarea>
     </div>
@@ -438,6 +446,11 @@ var vm = new Vue({
       vm.index_update();
     }
   },methods: {
+		user_photo: function(url){
+			//https://semantic-ui.com/views/card.html
+			if(!url)return "https://semantic-ui.com/images/avatar/large/jenny.jpg";
+			return url;
+		},
     mode_txt:function(){
     
       if(this.mode==0){ //一般模式
@@ -473,7 +486,7 @@ var vm = new Vue({
       }
     },
     index_update : function(){
-      DB.ref('users/' + user_uid +"/index").set(vm.index);
+      DB.ref('users_data/' + user_uid +"/index").set(vm.index);
     },
     message_filter :function(message,index){
       message=message.replace(/\</g,"&lt;");
@@ -777,17 +790,22 @@ var vm = new Vue({
 })
 
 function _is_login(){//程式進入點
-  DB.ref('users/' + user_uid).once('value',function(data) {
+	 DB.ref('users/' + user_uid).once('value',function(data) {//載入使用者基本資料
 		 if(data.val()){
-			 if(data.val().index){//初始化index
-		       vm.index=data.val().index;
-               delete data.val().index;
-               vm.users=data.val();
-			 }
+			 vm.users=data.val();
 		 }else{
+			 location.href = "/";
 			//沒有會員資料 
 		 }
-	 }).then(function(){
+	 });
+	DB.ref('users_data/' + user_uid).once('value',function(data) { //載入user_data
+		if(data.val()){
+		  if(data.val().index){//初始化index
+				 vm.index=data.val().index;
+				 delete data.val().index;
+		  }
+		}
+	}).then(function(){
 			//vm.index_blueprint=2 預設的藍圖索引
       blueprint_init(function(){
             //一定要等vue資料載完才能載入選單物件

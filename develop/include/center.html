@@ -5,11 +5,6 @@
     </div>
     <div id="board_edit" @click="mode_click()" ondragover="allowDrop(event)" ondrop="drop(event)"><div class="border_area" :data-tooltip="mode_txt()" data-position="right center"><i :class="mode_class()" class=" icon"></i></div></div>
   </div>
-<!--
-  <div id="board_txt">
-    文字介紹
-  </div>
--->
   <div id="board_tag_name">
     <div id="tag_name">
       <i :style="{backgroundColor:metro_color}"></i>
@@ -37,7 +32,7 @@
 </div>
 <div id="board2">
   <div id="board_enter_parent">
-    <div id="board_img"><img :src="users.photo"></div>
+    <div id="board_img"><img :src="user_photo(users.photo)"></div>
     <div id="board_enter">
       <textarea id="board_textarea" name="textarea1" placeholder="輸入資訊"></textarea>
     </div>

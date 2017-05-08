@@ -95,6 +95,11 @@ var vm = new Vue({
       vm.index_update();
     }
   },methods: {
+		user_photo: function(url){
+			//https://semantic-ui.com/views/card.html
+			if(!url)return "https://semantic-ui.com/images/avatar/large/jenny.jpg";
+			return url;
+		},
     mode_txt:function(){
     
       if(this.mode==0){ //一般模式
@@ -130,7 +135,7 @@ var vm = new Vue({
       }
     },
     index_update : function(){
-      DB.ref('users/' + user_uid +"/index").set(vm.index);
+      DB.ref('users_data/' + user_uid +"/index").set(vm.index);
     },
     message_filter :function(message,index){
       message=message.replace(/\</g,"&lt;");
@@ -434,17 +439,22 @@ var vm = new Vue({
 })
 
 function _is_login(){//程式進入點
-  DB.ref('users/' + user_uid).once('value',function(data) {
+	 DB.ref('users/' + user_uid).once('value',function(data) {//載入使用者基本資料
 		 if(data.val()){
-			 if(data.val().index){//初始化index
-		       vm.index=data.val().index;
-               delete data.val().index;
-               vm.users=data.val();
-			 }
+			 vm.users=data.val();
 		 }else{
+			 location.href = "/";
 			//沒有會員資料 
 		 }
-	 }).then(function(){
+	 });
+	DB.ref('users_data/' + user_uid).once('value',function(data) { //載入user_data
+		if(data.val()){
+		  if(data.val().index){//初始化index
+				 vm.index=data.val().index;
+				 delete data.val().index;
+		  }
+		}
+	}).then(function(){
 			//vm.index_blueprint=2 預設的藍圖索引
       blueprint_init(function(){
             //一定要等vue資料載完才能載入選單物件
