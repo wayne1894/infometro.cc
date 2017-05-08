@@ -9,7 +9,7 @@ gulp.task('webserver', function() {
       port:1313,
       livereload: true,
       directoryListing: false,
-      open: "metro.html",
+      open: "404.html"
     }));
 });
 
