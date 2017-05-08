@@ -103,11 +103,11 @@
                }
            }
           //var $iframe_body=$(document.getElementById('iframe').contentWindow.document.body);
-          url_info.title=$(document.getElementById('iframe').contentWindow.document).find("title").html();
+         url_info.title=$(document.getElementById('iframe').contentWindow.document).find("title").html();
           url_info.ico="https://www.google.com/s2/favicons?domain_url="+url;
           $("#iframe").remove();
           if(typeof fn ==="function")fn(url_info);
-          //console.log(url_info.fb_url);
+          console.log(url_info);
       })
   }
 

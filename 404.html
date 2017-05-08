@@ -185,10 +185,10 @@ $(function(){
     <div id="board_edit" @click="mode_click()" ondragover="allowDrop(event)" ondrop="drop(event)"><div class="border_area" :data-tooltip="mode_txt()" data-position="right center"><i :class="mode_class()" class=" icon"></i></div></div>
   </div>
   <div id="board_tag_name">
-    <div id="tag_name">
+    <div id="tag_name" v-if="metro_name">
       <i :style="{backgroundColor:metro_color}"></i>
       <div id="tag_name_info">
-        <div>{{ metro_name }}</div>
+        <div>{{ metro_name}}</div>
         <div>資訊共 {{info_count}} 筆</div>
         <div>建立時間：<span>{{metro_create}}</span></div>
       </div>
@@ -211,7 +211,7 @@ $(function(){
 </div>
 <div id="board2">
   <div id="board_enter_parent">
-    <div id="board_img"><img :src="user_photo(users.photo)"></div>
+    <div id="board_img"><img v-if="users.photo" :src="user_photo(users.photo)"></div>
     <div id="board_enter">
       <textarea id="board_textarea" name="textarea1" placeholder="輸入資訊"></textarea>
     </div>
@@ -251,10 +251,11 @@ $(function(){
 
   function drop(ev){
     var index = ev.dataTransfer.getData("index");
-		print(index);
+	print(index);
     vm.delete_metro(index);
   }  
   function allowDrop(event) { //拖曳的物件移到上面
+    print(1)
     event.preventDefault();
   }
 
@@ -293,7 +294,15 @@ $(function(){
             domTextarea.focus();
             domTextarea.selectionStart = domTextarea.selectionEnd = startPos + pastedValue.length;
             domTextarea.scrollTop = scrollTop;
-print(pastedValue)
+//print(pastedValue)
+          
+          if(pastedValue.indexOf("http")>-1 && pastedValue.indexOf("://")>-1){
+            parse_url(pastedValue,function(url_info){
+              print(url_info)
+            })
+          }
+          
+          
             //do work on pastedValue here if you simply need to parse its ccontents without modifying it
 
 
@@ -448,7 +457,7 @@ var vm = new Vue({
   },methods: {
 		user_photo: function(url){
 			//https://semantic-ui.com/views/card.html
-			if(!url)return "https://semantic-ui.com/images/avatar/large/jenny.jpg";
+			if(!url)return "https://semantic-ui.com/images/avatar/large/daniel.jpg";
 			return url;
 		},
     mode_txt:function(){
