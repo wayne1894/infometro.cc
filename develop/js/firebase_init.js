@@ -240,3 +240,33 @@ function blueprint_init(fn){
   })
 
 }
+
+function _is_login(){//程式進入點
+	 DB.ref('users/' + user_uid).once('value',function(data) {//載入使用者基本資料
+		 if(data.val()){
+			 vm.users=data.val();
+		 }else{
+			 location.href = "/";
+			//沒有會員資料 
+		 }
+	 });
+	DB.ref('users_data/' + user_uid).once('value',function(data) { //載入user_data
+		if(data.val()){
+		  if(data.val().index){//初始化index
+				 vm.index=data.val().index;
+				 delete data.val().index;
+		  }
+		}
+	}).then(function(){
+			//vm.index_blueprint=2 預設的藍圖索引
+      blueprint_init(function(){
+            //一定要等vue資料載完才能載入選單物件
+        $(".blueprint_list").dropdown("destroy").dropdown({
+          on : 'customClick'
+        });
+        $(".blueprint_list .blueprint_i").off("click.custom").on("click.custom",function(event){
+          $(this).trigger("customClick");
+        })
+      });
+    });
+}

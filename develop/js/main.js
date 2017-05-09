@@ -40,21 +40,25 @@
   sortable["metro"] = new Sortable(id("top_tag"),{
     animation: 50,
     forceFallback: false,
+		filter: ".add",
     setData: function (dataTransfer,dragEl) {
-     dataTransfer.setData('index',$(dragEl).data("index")); //設定要傳送的資料
+     
+			dataTransfer.setData('index',$(dragEl).data("index")); //設定要傳送的資料
 	},onStart: function (evt) {
-      if(evt.oldIndex==0){
-        $("#top_tag").addClass("first_drag");
-      }else if(evt.oldIndex==$("#top_tag li").length-2){
-        $("#top_tag").addClass("last_drag");
-      }
-      vm.mode=1.5;
+		var $top_tag=$("#top_tag");
+		$top_tag.find(".add").hide();
+		if(evt.oldIndex==0){
+			$top_tag.addClass("first_drag");
+		}else if(evt.oldIndex==$("#top_tag li").length-2){
+			$top_tag.addClass("last_drag");
+		}
+		vm.mode=1.5;
 	},onEnd: function(evt){
-      $("#top_tag").removeClass("first_drag").removeClass("last_drag");
-      
-      vm.swap_metro(evt.oldIndex,evt.newIndex);
-      vm.mode=1;
-    }
+    $("#top_tag").find(".add").show();
+		$("#top_tag").removeClass("first_drag").removeClass("last_drag");
+		vm.swap_metro(evt.oldIndex,evt.newIndex);
+		vm.mode=1;
+  }
   });
   $(function(){
     //perfectScrollbar
@@ -73,13 +77,17 @@
     });
     
   })
-
+ parse_url("https://www.youtube.com/watch?v=6nhLWBf6lS0")
   function parse_url(url,fn){
  
     $.get("http://54.250.245.226/infometro.asp?url="+url,function(html){
           var iframe = document.createElement("iframe");
           iframe.id="iframe";
           iframe.style.display="none";
+					if(html.indexOf("<body")>-1){//可在伺服器先把body截掉
+						html=html.split("<body")[0]+"<body></body>";
+					}
+			//console.log(html)
           $(document.body).append(iframe);
       var ifrm = document.getElementById('iframe');
           ifrm = ifrm.contentWindow || ifrm.contentDocument.document || ifrm.contentDocument;
@@ -89,29 +97,58 @@
            var url_info={}
            var metas = $("#iframe")[0].contentWindow.document.getElementsByTagName('meta');
            for (var i=0; i<metas.length; i++) { 
-               //console.log(metas[i])
                if(metas[i].getAttribute("name")=="description"){
                    url_info.description=metas[i].getAttribute("content");
                }else if(metas[i].getAttribute("property")=="og:description"){
-                   url_info.fb_description=metas[i].getAttribute("content");
+                   url_info.og_description=metas[i].getAttribute("content");
                }else if(metas[i].getAttribute("property")=="og:image"){
-                   url_info.fb_image=url_info.fb_image +","+ metas[i].getAttribute("content");
+                   url_info.og_image=metas[i].getAttribute("content").split(",")[0];
                }else if(metas[i].getAttribute("property")=="og:title"){
-                   url_info.fb_title=metas[i].getAttribute("content");
-               }else if(metas[i].getAttribute("property")=="og:url"){
-                   url_info.fb_url=metas[i].getAttribute("content");
+                   url_info.og_title=metas[i].getAttribute("content");
                }
            }
-          //var $iframe_body=$(document.getElementById('iframe').contentWindow.document.body);
-         url_info.title=$(document.getElementById('iframe').contentWindow.document).find("title").html();
-          url_info.ico="https://www.google.com/s2/favicons?domain_url="+url;
-          $("#iframe").remove();
-          if(typeof fn ==="function")fn(url_info);
-          console.log(url_info);
+
+			//字串手動劫取
+			if(url_info.fb_image==undefined){//取fb images
+				if(html.indexOf("og:image")>-1){
+					var og_html=html.split("og:image")[1].split(">")[0];
+					og_html=og_html.replace(/\'/gi,"\"");
+					og_html=og_html.split("content=\"")[1].split('"')[0]
+					url_info.fb_image=og_html;
+				}
+			}
+			if(url_info.og_description==undefined ){
+				if(html.indexOf("og:description")>-1){
+					var og_html=html.split("og:description")[1].split(">")[0];
+					og_html=og_html.replace(/\'/gi,"\"");
+					og_html=og_html.split("content=\"")[1].split('"')[0]
+					url_info.og_description=og_html;
+				}
+			}
+			if(url_info.og_title==undefined ){
+				if(html.indexOf("og:title")>-1){
+					var og_html=html.split("og:title")[1].split(">")[0];
+					og_html=og_html.replace(/\'/gi,"\"");
+					og_html=og_html.split("content=\"")[1].split('"')[0]
+					url_info.og_title=og_html;
+				}
+			}
+
+			
+			//var $iframe_body=$(document.getElementById('iframe').contentWindow.document.body);
+			url_info.title=$(document.getElementById('iframe').contentWindow.document).find("title").html();
+			if(url_info.title==undefined)url_info.title="";
+			url_info.ico="https://www.google.com/s2/favicons?domain_url="+url;
+
+			$("#iframe").remove();
+			if(typeof fn ==="function")fn(url_info);
+			console.log(url_info);
       })
   }
 
 
+
+	//一些以前遺留的資料
 
 		// $(document).bind('selectstart',function(){return false;})
 	

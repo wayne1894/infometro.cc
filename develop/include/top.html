@@ -2,14 +2,14 @@
   <div id="top_tag_parent">
     <ul id="top_tag">
       <li v-for="(item, index) in metro" class="metro_list" :data-key="item._key" :data-index="index" :key="item._key">
-        <span v-if="index==0" class="add a_first" @mousedown="new_metro(0)"><img src="src/static/images/+.png"></span>
+        <span v-if="index==0" class="add a_first" @click="new_metro(0)"><img src="src/static/images/+.png"></span>
         
         <i class="top_metro" @click="exchange_metro(item._key)" :style="check_metro(item._key)"></i>
         <span class="top_name" @dblclick="re_name(index,'metro')">{{item.name}}</span>
         <input class="metro_input" type="text" v-model="item.name">
-        <span v-if="metro.length>1" class="top_join"><span v-if="mode == 1 && index>0" class="add" @mousedown="new_metro(index+1)"><img src="src/static/images/+.png"></span></span>
+        <span v-if="metro.length>1" class="top_join"><span v-if="mode == 1 && index>0" class="add" @click="new_metro(index+1)"><img src="src/static/images/+.png"></span></span>
         
-        <span v-if="metro.length==index+1" class="add a_last" @mousedown="new_metro(metro.length)"><img src="src/static/images/+.png"></span>
+        <span v-if="metro.length==index+1" class="add a_last" @click="new_metro(metro.length)"><img src="src/static/images/+.png"></span>
       </li>
     </ul>
   </div>
@@ -19,16 +19,17 @@
 <script>
 
   function move_center(){
-    var total_width=0;
-    var tog_width=$("#top_tag").width();
-    $("#top_tag li").each(function(){
-      total_width=total_width+$(this).width();
-    })
-    if(tog_width > total_width){
-      $("#top_tag").css("left",((tog_width-total_width)/2) +"px");
-    }else{
-      $("#top_tag").css("left",0);
-    }
+			var total_width=0;
+			var tog_width=$("#top_tag").width();
+			$("#top_tag li").each(function(){
+				total_width=total_width+$(this).width();
+			})
+			if(tog_width > total_width){
+				$("#top_tag").css("left",((tog_width-total_width)/2) +"px");
+			}else{
+				$("#top_tag").css("left",0);
+			}
+			$("#top_tag").stop().fadeIn(350);
   }
   function top_tag_scroll(){
     var scroll_val=0;

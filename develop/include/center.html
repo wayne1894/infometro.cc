@@ -72,11 +72,11 @@
 
   function drop(ev){
     var index = ev.dataTransfer.getData("index");
-	print(index);
+		print(index);
     vm.delete_metro(index);
   }  
   function allowDrop(event) { //拖曳的物件移到上面
-    print(1)
+    print("拖曳的物件移到上面")
     event.preventDefault();
   }
 
@@ -116,8 +116,11 @@
             domTextarea.selectionStart = domTextarea.selectionEnd = startPos + pastedValue.length;
             domTextarea.scrollTop = scrollTop;
 //print(pastedValue)
-          
-          if(pastedValue.indexOf("http")>-1 && pastedValue.indexOf("://")>-1){
+					
+          //列出可能的情境
+					
+					
+          if(pastedValue.indexOf("http://")>-1 || pastedValue.indexOf("https://")>-1){
             parse_url(pastedValue,function(url_info){
               print(url_info)
             })
