@@ -77,7 +77,7 @@
     });
     
   })
- parse_url("https://www.youtube.com/watch?v=6nhLWBf6lS0")
+ //parse_url("https://www.youtube.com/watch?v=6nhLWBf6lS0")
   function parse_url(url,fn){
  
     $.get("http://54.250.245.226/infometro.asp?url="+url,function(html){

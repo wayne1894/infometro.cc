@@ -51,7 +51,7 @@ if (location.protocol != 'https:'){
 	  <ul>
 	    <li v-for="(item, index) in line" v-if="item.master" :class="check_line(index)" class="line_list" @drop="drop_line(event,index)">
        	 <input class="line_input" type="text" v-model="item.name">
-	       <i class="line_i" :style="{backgroundColor:item.color}" @click="exchange_line(index)" ></i>
+	       <i class="line_i" :style="{backgroundColor:item.color}" @click="exchange_line(index)" @dblclick="open_color(index,item.color,'master')" ></i>
 	       <a class="line_a" @dblclick="re_name(index,'line')"  @click="exchange_line(index)">{{item.name}}</a>
 	    </li>
 	  </ul>
@@ -90,6 +90,13 @@ $(function(){
   $(document.body).append("<div id='left_color' style='position: absolute;left:0;top:0'></div>");
   $('#left_color').colpick({
     layout:'hex',
+    onHide:function(){
+      vm.pick_master=undefined;
+      vm.pick_color=undefined;
+    },
+    onChange:function(hsb,hex,rgb,el,bySetColor){
+      vm.pick_color="#"+hex;
+    },
     onSubmit:function(hsb,hex,rgb,el,bySetColor){
       $(el).val(hex);
       $(el).colpickHide();
@@ -120,17 +127,17 @@ $(function(){
 <script>
 
   function move_center(){
-			var total_width=0;
-			var tog_width=$("#top_tag").width();
-			$("#top_tag li").each(function(){
-				total_width=total_width+$(this).width();
-			})
-			if(tog_width > total_width){
-				$("#top_tag").css("left",((tog_width-total_width)/2) +"px");
-			}else{
-				$("#top_tag").css("left",0);
-			}
-			$("#top_tag").stop().fadeIn(350);
+    var total_width=0;
+    var tog_width=$("#top_tag").width();
+    $("#top_tag li").each(function(){
+        total_width=total_width+$(this).width();
+    })
+    if(tog_width > total_width){
+        $("#top_tag").css("left",((tog_width-total_width)/2) +"px");
+    }else{
+        $("#top_tag").css("left",0);
+    }
+    $("#top_tag").stop().fadeIn(350);
   }
   function top_tag_scroll(){
     var scroll_val=0;
@@ -166,16 +173,18 @@ $(function(){
 
   </div>
   <div id="center">
-    <div id="board1">
+    <div id="board1" :style="{borderTopColor:master_line_color}">
   <div id="board_line_parent">
-    <div id="board_line"><i :style="{backgroundColor:metro_color}"></i>
-      <div class="board_name">{{ line_name }}</div>
+    <div id="board_line">
+      <i v-show="!is_master()" :style="{backgroundColor:line_color}"></i>
+      <div v-if="is_master()" class="board_name master_big">{{ line_name }}</div>
+      <div v-else class="board_name">{{ line_name }}</div>
     </div>
     <div id="board_edit" @click="mode_click()" ondragover="allowDrop(event)" ondrop="drop(event)"><div class="border_area" :data-tooltip="mode_txt()" data-position="right center"><i :class="mode_class()" class=" icon"></i></div></div>
   </div>
   <div id="board_tag_name">
     <div id="tag_name" v-if="metro_name">
-      <i :style="{backgroundColor:metro_color}"></i>
+      <i :style="{backgroundColor:line_color}"></i>
       <div id="tag_name_info">
         <div>{{ metro_name}}</div>
         <div>資訊共 {{info_count}} 筆</div>
@@ -183,11 +192,11 @@ $(function(){
       </div>
     </div>
   </div>
-  <div id="board3">
-    <div id="board3_header"><i class="heart orange icon"></i><span class="text">最愛連結</span>
+  <div id="board3" :style="{borderTopColor:master_line_color}">
+    <div v-show="info_favorites" id="board3_header"><i class="heart orange icon"></i><span class="text">最愛連結</span>
     </div>
-    <div id="board_favorites">
-      <div v-for="n in 20"></div>
+    <div v-show="info_favorites" id="board_favorites">
+      <div v-for="(item, index) in info_favorites"></div>
     </div>
     <div id="board_search">
       <div id="input_search">
@@ -198,7 +207,7 @@ $(function(){
     <div id="board_copyright"></div>
   </div>
 </div>
-<div id="board2">
+<div id="board2" :style="{borderTopColor:master_line_color}">
   <div id="board_enter_parent">
     <div id="board_img"><img v-if="users.photo" :src="user_photo(users.photo)"></div>
     <div id="board_enter">
@@ -309,6 +318,7 @@ $(function(){
   </div>
   <div id="bottom">
     <div id="blueprint">
+ <div class="bottom_line" :style="{background:color_gradient(master_line_color)}"></div>
   <div id="blueprint_drag">
     <div v-for="(item, index) in blueprint" class="blueprint_list ui top left pointing dropdown"  @click="exchange_blueprint(index)" @dblclick="re_name(index,'blueprint')">
       <a class="blueprint_a" :class="check_blueprint(index)"> {{item.name}}
@@ -330,7 +340,7 @@ $(function(){
 
   </div>
   <div id="right">
-    <div class="right_header_line"></div>
+    <div class="right_header_line" :style="{borderTopColor:master_line_color}"></div>
 <div class="right_tool">
   <div class="over"></div>
   <div class="r_button">
@@ -341,17 +351,17 @@ $(function(){
     <i class="facebook f icon"></i>
   </div>
 -->
-  <div class="r_button active">
+  <div class="r_button active" :style="{backgroundColor:master_line_color}">
     <i class="youtube play icon"></i>
   </div>
 
-  <div class="r_button">
+  <div class="r_button" :style="{backgroundColor:master_line_color}">
     <div id="資訊" class="r_b t2"></div>
   </div>
-  <div class="r_button">
+  <div class="r_button" :style="{backgroundColor:master_line_color}">
     <div id="搜尋" class="r_b t2"></div>
   </div>
-  <div class="r_button">
+  <div class="r_button" :style="{backgroundColor:master_line_color}">
     <div id="問號" class="r_b t2"></div>
   </div>
 </div>

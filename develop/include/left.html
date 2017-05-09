@@ -5,7 +5,7 @@
 	  <ul>
 	    <li v-for="(item, index) in line" v-if="item.master" :class="check_line(index)" class="line_list" @drop="drop_line(event,index)">
        	 <input class="line_input" type="text" v-model="item.name">
-	       <i class="line_i" :style="{backgroundColor:item.color}" @click="exchange_line(index)" ></i>
+	       <i class="line_i" :style="{backgroundColor:item.color}" @click="exchange_line(index)" @dblclick="open_color(index,item.color,'master')" ></i>
 	       <a class="line_a" @dblclick="re_name(index,'line')"  @click="exchange_line(index)">{{item.name}}</a>
 	    </li>
 	  </ul>
@@ -44,6 +44,13 @@ $(function(){
   $(document.body).append("<div id='left_color' style='position: absolute;left:0;top:0'></div>");
   $('#left_color').colpick({
     layout:'hex',
+    onHide:function(){
+      vm.pick_master=undefined;
+      vm.pick_color=undefined;
+    },
+    onChange:function(hsb,hex,rgb,el,bySetColor){
+      vm.pick_color="#"+hex;
+    },
     onSubmit:function(hsb,hex,rgb,el,bySetColor){
       $(el).val(hex);
       $(el).colpickHide();

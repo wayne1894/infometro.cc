@@ -9,7 +9,9 @@ var vm = new Vue({
     action : "load",
     info : [],
     users: [],
-    mode : 0
+    mode : 0,
+    pick_master :undefined,
+    pick_color :undefined
   },updated : function(){
     setTimeout(function(){
       $(window).resize();
@@ -18,6 +20,11 @@ var vm = new Vue({
   },firebase: {
     
   },computed: {
+   master_line_color: function(){//主線目前一律是line 0
+     if(this.blueprint.length==0)return false;
+     if(this.pick_color && this.pick_master)return this.pick_color
+     return this.get_blueprint().line[0].color;
+   },
    line : function(){//載入line
      if(this.blueprint.length==0)return false;
      return this.get_blueprint().line;
@@ -25,6 +32,11 @@ var vm = new Vue({
    line_name : function(){
      if(this.blueprint.length==0)return "";
      return this.get_line().name;
+   },
+   line_color : function(){
+     if(this.blueprint.length==0)return "";
+     if(this.pick_color && !this.pick_master)return this.pick_color
+     return this.get_line().color;
    },
    metro : function(){//載入metro
      if(this.blueprint.length==0)return false;
@@ -41,16 +53,16 @@ var vm = new Vue({
      //http://momentjs.com/
      return moment(timestamp).format("lll");
    },
-   metro_color : function(){
-     if(this.blueprint.length==0)return "";
-     return this.get_line().color;
-   },
    info_count : function(){
      if(this.blueprint.length==0)return "";
      return this.info.length;
    },
    info_favorites : function(){
-     
+     var _info=this.info.filter(function (info) {
+       return info.favorite;
+     });
+     if(_info.length==0)return false
+     return _info
    },
    info_reverse : function(){
        return this.info.reverse();
@@ -71,11 +83,19 @@ var vm = new Vue({
       vm.index_update();
     }
   },methods: {
-		user_photo: function(url){
-			//https://semantic-ui.com/views/card.html
-			if(!url)return "https://semantic-ui.com/images/avatar/large/daniel.jpg";
-			return url;
-		},
+     is_master :function(){
+       if(this.blueprint.length==0)return "";
+       if(vm.index_line==0)return true
+       return false
+     },
+    color_gradient :function(color){
+      return "linear-gradient(to right, #000 50%, "+color+" 0%)";
+    },
+    user_photo: function(url){
+        //https://semantic-ui.com/views/card.html
+        if(!url)return "https://semantic-ui.com/images/avatar/large/daniel.jpg";
+        return url;
+    },
     mode_txt:function(){
       if(this.mode==0){ //一般模式
          setTimeout(function(){sortable["metro"].option("disabled", true);},0)
@@ -212,7 +232,8 @@ var vm = new Vue({
         return "check";
       }
     },exchange_line : function(index){
-			$("#top_tag").stop().fadeOut(0);
+      if(vm.index_line==index)return;//重覆就離開
+      $("#top_tag").stop().fadeOut(0);
       if($("html").hasClass("re_name")){//解決編輯按兩下的BUG
         return setTimeout(function(){
           _el();
@@ -361,11 +382,12 @@ var vm = new Vue({
         var c=["#f2711c","#db2828","#fbbd08","#b5cc18","#21ba45","#00b5ad","#2185d0","#5829bb","#a333c8","#e03997","#a5673f","#767676"][k];
         if(!c)return "#000000";
         return c;
-    },open_color : function(index,color){//打開色票選擇器(line)
+    },open_color : function(index,color,master){//打開色票選擇器(line)
       color=color.split("#")[1];
       var $et=$(event.target);
       var _left=$et.offset().left;
       var _top=$et.offset().top + $et.height()+2;
+      vm.pick_master=master;
       $("#left_color").css({
         "left" : _left,
         "top" : _top

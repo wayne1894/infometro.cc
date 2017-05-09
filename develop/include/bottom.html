@@ -1,4 +1,5 @@
 <div id="blueprint">
+ <div class="bottom_line" :style="{background:color_gradient(master_line_color)}"></div>
   <div id="blueprint_drag">
     <div v-for="(item, index) in blueprint" class="blueprint_list ui top left pointing dropdown"  @click="exchange_blueprint(index)" @dblclick="re_name(index,'blueprint')">
       <a class="blueprint_a" :class="check_blueprint(index)"> {{item.name}}
