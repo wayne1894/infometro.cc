@@ -8,17 +8,19 @@ var vm = new Vue({
     key_metro : "",
     action : "load",
     info : [],
+		info_loading:false,
     users: [],
     mode : 0,
     pick_master :undefined,
-    pick_color :undefined
+    pick_color :undefined,
+		url_info : undefined
   },updated : function(){
     setTimeout(function(){
       $(window).resize();
     },0);
     $("#board_info .ui.active").show();
   },firebase: {
-    
+    //watch key_metro
   },computed: {
    master_line_color: function(){//主線目前一律是line 0
      if(this.blueprint.length==0)return false;
@@ -66,6 +68,12 @@ var vm = new Vue({
    },
    info_reverse : function(){
        return this.info.reverse();
+   },
+	 user_photo: function(){
+		 var url=this.users.photo
+        //https://semantic-ui.com/views/card.html
+        if(!url)return "https://semantic-ui.com/images/avatar/large/daniel.jpg";
+        return url;
    }
   },watch: {
     index_line : function(){
@@ -74,9 +82,27 @@ var vm = new Vue({
         index_array[i].check=false;
       }
       index_array[this.index_line].check=true;
+
+			//更換selection的顏色
+			var _color=vm.line_color;
+			if(!document.getElementById("selection")){
+				var style = document.createElement('style');
+				style.id = 'selection';
+				style.type = 'text/css';
+				document.getElementsByTagName('head')[0].appendChild(style);
+			}
+			//print(vm.master_line_color)
+			document.getElementById("selection").innerHTML="::selection {background: "+_color+";color: #fff;}::-moz-selection {background: "+_color+";color: #fff;}img::selection {background: "+_color+";color: #fff;}img::-moz-selection {background: "+_color+";color: #fff;}";
+
 	},
     key_metro : function(){
+			//https://github.com/vuejs/vuefire
+			//this.info_loading=true;
+			//.orderByChild(...).then is not a function
       var _ref=DB.ref("info/"+vm.get_line_key()+"/metro/"+vm.key_metro).orderByChild("create");
+//			_ref.on('child_added', function (snapshot) {
+//				
+//			})
       vm.$bindAsArray('info',_ref);
       var _index= this.index[this.index_blueprint][this.index_line];
       _index.key_metro=this.key_metro;
@@ -99,22 +125,17 @@ var vm = new Vue({
     color_gradient :function(color){
       return "linear-gradient(to right, #000 50%, "+color+" 0%)";
     },
-    user_photo: function(url){
-        //https://semantic-ui.com/views/card.html
-        if(!url)return "https://semantic-ui.com/images/avatar/large/daniel.jpg";
-        return url;
-    },
     mode_txt:function(){
       if(this.mode==0){ //一般模式
-         setTimeout(function(){sortable["metro"].option("disabled", true);},0)
+         setTimeout(function(){sortable["metro"].option("disabled", true);},5)
         return "變更操作模式"
       }else if(this.mode==1){//修繕模式
-        setTimeout(function(){sortable["metro"].option("disabled", false);},0)
+        setTimeout(function(){sortable["metro"].option("disabled", false);},5)
         return "修繕模式"
       }else if(this.mode==1.5){
         return "修繕模式"
       }else if(this.mode==2){//導覽模式
-       setTimeout(function(){sortable["metro"].option("disabled", true);},0)
+       setTimeout(function(){sortable["metro"].option("disabled", true);},5)
         return "導覽模式"
       }
     },
@@ -251,18 +272,6 @@ var vm = new Vue({
       function _el(){
         vm.index_line=index;
         vm.update_metro_key(vm.get_index_blueprint()[index]);
-
-				//更換selection的顏色
-				var _color=vm.line_color;
-				if(!document.getElementById("selection")){
-					var style = document.createElement('style');
-					style.id = 'selection';
-					style.type = 'text/css';
-					document.getElementsByTagName('head')[0].appendChild(style);
-				}
-				//print(vm.master_line_color)
-				document.getElementById("selection").innerHTML="::selection {background: "+_color+";color: #fff;}::-moz-selection {background: "+_color+";color: #fff;}img::selection {background: "+_color+";color: #fff;}img::-moz-selection {background: "+_color+";color: #fff;}";
-				
         setTimeout(move_center,0);
       }
     },check_line : function(index){
@@ -344,12 +353,18 @@ var vm = new Vue({
 			}
       return _line.metro[_index];
     },new_info : function(){ //新增資訊
+			var board_textarea=$.trim($("#board_textarea").val());
+			if(board_textarea=="")return
       var _data ={
-        message : $("#board_textarea").val() ,
+        message : urlify(board_textarea) ,
         favorite : false ,
-				create : 0 - Date.now()
+				create : 0 - Date.now(),
+				users : user_uid,
+				url_info : vm.url_info
       }
-      $("#board_textarea").val("");
+			vm.url_info=undefined ;//清掉
+      $("#board_textarea").val("");//清掉
+			
      DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).push(_data);
     },delete_info : function(key){ //刪除資訊
       DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).child(key).remove();

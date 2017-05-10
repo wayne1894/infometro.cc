@@ -34,9 +34,10 @@
 </div>
 <div id="board2" :style="{borderTopColor:master_line_color}">
   <div id="board_enter_parent">
-    <div id="board_img"><img v-if="users.photo" :src="user_photo(users.photo)"></div>
+    <div id="board_img"><img v-if="users.photo" :src="user_photo"></div>
     <div id="board_enter">
       <textarea id="board_textarea" name="textarea1" placeholder="輸入資訊"></textarea>
+      <div v-if="url_info">{{url_info}}</div>
     </div>
   </div>
   <div id="board_send_parent">
@@ -58,8 +59,8 @@
     </div>
   </div>
   <div id="board_info" >
-<!--    <div class="ui active centered inline loader" style="margin-top:35px;margin-bottom:35px;"></div>-->
-    <div v-for="(item, index) in info" class="ui vertical segment clear">
+    <div v-if="info_loading" class="ui active centered inline loader" style="margin-top:35px;margin-bottom:35px;"></div>
+    <div v-else v-for="(item, index) in info" class="ui vertical segment clear">
       <img class="ui medium left floated image transition " src="src/static/images/square-image.png">
       <p class="content" v-html="message_filter(item.message)"></p>
       <span class="right_icon">
@@ -71,7 +72,6 @@
 </div>
 
 <script>
-
   function drop(ev){
     var index = ev.dataTransfer.getData("index");
 		print(index);
@@ -117,14 +117,16 @@
             domTextarea.focus();
             domTextarea.selectionStart = domTextarea.selectionEnd = startPos + pastedValue.length;
             domTextarea.scrollTop = scrollTop;
-//print(pastedValue)
+
+					//print(pastedValue)
+					var urlify_url=urlify(pastedValue);
 					
-          //列出可能的情境
-					
-					
-          if(pastedValue.indexOf("http://")>-1 || pastedValue.indexOf("https://")>-1){
-            parse_url(pastedValue,function(url_info){
-              print(url_info)
+          if(urlify_url.indexOf("href")>-1){
+						var url=urlify_url.split("</a>")[0].split(">")[1];
+						vm.url_info="等等...正在為您截取網站";
+            parse_url(url,function(url_info){
+              //print(url_info)
+							vm.url_info=url_info;
             })
           }
           
@@ -137,6 +139,15 @@
     });
     
   })
+function urlify(text) {
+	//http://stackoverflow.com/questions/1500260/detect-urls-in-text-with-javascript
+    var urlRegex = /(https?:\/\/[^\s]+)/g;
+    return text.replace(urlRegex, function(url) {
+        return '<a href="' + url + '">' + url + '</a>';
+    })
+    // or alternatively
+    // return text.replace(urlRegex, '<a href="$1">$1</a>')
+}
 
   
 </script>
