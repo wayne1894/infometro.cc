@@ -1,1 +1,0 @@
-function print(t){console.log(t)}function test(t){$("#test").remove(),$(document.body).append("<div id='test' style='width:50px;height:50px;position:fixed;top:0px;left:0px; z-index:10000;color:red;'>"+t+"</div>")}function id(t){return document.getElementById(t)}
