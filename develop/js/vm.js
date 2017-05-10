@@ -83,6 +83,14 @@ var vm = new Vue({
       vm.index_update();
     }
   },methods: {
+			get_favorite_style: function(favorite,color){
+				if(favorite){
+					return{
+						color: color
+					}
+				}
+				return {}
+			},
      is_master :function(){
        if(this.blueprint.length==0)return "";
        if(vm.index_line==0)return true
@@ -243,6 +251,18 @@ var vm = new Vue({
       function _el(){
         vm.index_line=index;
         vm.update_metro_key(vm.get_index_blueprint()[index]);
+
+				//更換selection的顏色
+				var _color=vm.line_color;
+				if(!document.getElementById("selection")){
+					var style = document.createElement('style');
+					style.id = 'selection';
+					style.type = 'text/css';
+					document.getElementsByTagName('head')[0].appendChild(style);
+				}
+				//print(vm.master_line_color)
+				document.getElementById("selection").innerHTML="::selection {background: "+_color+";color: #fff;}::-moz-selection {background: "+_color+";color: #fff;}img::selection {background: "+_color+";color: #fff;}img::-moz-selection {background: "+_color+";color: #fff;}";
+				
         setTimeout(move_center,0);
       }
     },check_line : function(index){

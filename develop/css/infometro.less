@@ -618,9 +618,12 @@ textarea:focus {
             color: #B3B3B3;
             cursor: pointer;
           }
-          .like.icon:hover,.like.icon.active {
-            color: #f2711c;
-          }
+					.like.icon:not(.active) {
+						color: #B3B3B3!important;
+					}
+					.like.icon:hover{
+						color: inherit!important;
+					}
           .trash {
             font-size: 1.1em;
           }

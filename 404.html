@@ -33,11 +33,22 @@
 
 
 <script>
-if (location.protocol != 'https:'){
-	if(window.location.hostname!="localhost" && window.location.hostname!="127.0.0.1" ){
-      location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+	function print(a){
+		console.log(a)
 	}
-}
+	function test(msg){//測試用
+		$("#test").remove();
+		$(document.body).append("<div id='test' style='width:50px;height:50px;position:fixed;top:0px;left:0px; z-index:10000;color:red;'>"+msg+"</div>");
+	}
+	function id(a){
+		return document.getElementById(a);
+	}
+
+	if (location.protocol != 'https:'){
+		if(window.location.hostname!="localhost" && window.location.hostname!="127.0.0.1" ){
+				location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+		}
+	}
 </script>
 </head>
 <body>
@@ -192,7 +203,7 @@ $(function(){
     </div>
   </div>
   <div id="board3" :style="{borderTopColor:master_line_color}">
-    <div v-show="info_favorites" id="board3_header"><i class="heart orange icon"></i><span class="text">最愛連結</span>
+    <div v-show="info_favorites" id="board3_header"><i :style="{color:line_color}" class="heart icon"></i><span class="text">最愛連結</span>
     </div>
     <div v-show="info_favorites" id="board_favorites">
       <div v-for="(item, index) in info_favorites"></div>
@@ -227,7 +238,7 @@ $(function(){
       </a>
 -->
       <div class="right item">
-        <div id="board_send" @click="new_info()" class="ui mini orange button">送出</div>
+        <div id="board_send" :style="{backgroundColor:line_color}" @click="new_info()" class="ui mini orange button">送出</div>
       </div>
     </div>
   </div>
@@ -237,7 +248,7 @@ $(function(){
       <img class="ui medium left floated image transition " src="src/static/images/square-image.png">
       <p class="content" v-html="message_filter(item.message)"></p>
       <span class="right_icon">
-        <i @click="favorite_info(item)" :class="{active : item.favorite }" class="like icon"></i>
+        <span :style="{color : line_color}"><i @click="favorite_info(item)" :class="{active : item.favorite }" class="like icon" :style="{color : line_color}"></i></span>
         <i @click="delete_info(item['.key'])" class="trash icon"></i>
       </span>
     </div>
