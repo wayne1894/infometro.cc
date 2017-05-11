@@ -80,7 +80,7 @@
 	<a id="new_line" class="default_a" @click="new_line()">新增支線</a>
 </div>
 <div id="edit_parent">
-	<a class="left_icon" ><i class="setting icon"></i></a>
+	<a class="left_icon"><i class="setting icon"></i></a>
 	<a class="left_icon" onclick="登出()"><i class="power icon"></i></a>
 </div>
   <script>
@@ -243,10 +243,10 @@ $(function(){
       </div>
     </div>
   </div>
-  <div id="board_info" >
-    <div v-if="info_loading" class="ui active centered inline loader" style="margin-top:35px;margin-bottom:35px;"></div>
-    <div v-else v-for="(item, index) in info" class="ui vertical segment clear">
-      <img class="ui medium left floated image transition " src="src/static/images/square-image.png">
+  <div id="board_info">
+<!--    <div v-if="info_loading" class="ui active centered inline loader" style="margin-top:35px;margin-bottom:35px;"></div>-->
+    <div v-for="(item, index) in info" class="ui vertical segment clear">
+      <img class="ui left floated image transition mini" :src="user_photo" v-once>
       <p class="content" v-html="message_filter(item.message)"></p>
       <span class="right_icon">
         <span :style="{color : line_color}"><i @click="favorite_info(item)" :class="{active : item.favorite }" class="like icon" :style="{color : line_color}"></i></span>
@@ -259,7 +259,7 @@ $(function(){
 <script>
   function drop(ev){
     var index = ev.dataTransfer.getData("index");
-		print(index);
+	print(index);
     vm.delete_metro(index);
   }  
   function allowDrop(event) { //拖曳的物件移到上面
@@ -303,15 +303,14 @@ $(function(){
             domTextarea.selectionStart = domTextarea.selectionEnd = startPos + pastedValue.length;
             domTextarea.scrollTop = scrollTop;
 
-					//print(pastedValue)
-					var urlify_url=urlify(pastedValue);
+            //print(pastedValue)
+            var urlify_url=urlify(pastedValue);
 					
-          if(urlify_url.indexOf("href")>-1){
-						var url=urlify_url.split("</a>")[0].split(">")[1];
-						vm.url_info="等等...正在為您截取網站";
+          if(urlify_url.indexOf("<a href=")>-1){
+            var url=urlify_url.split("</a>")[0].split(">")[1];
+            vm.url_info="等等...正在為您截取網站";
             parse_url(url,function(url_info){
-              //print(url_info)
-							vm.url_info=url_info;
+			  vm.url_info=url_info;
             })
           }
           
@@ -364,36 +363,41 @@ function urlify(text) {
     <div class="right_header_line" :style="{borderTopColor:master_line_color}"></div>
 <div class="right_tool">
   <div class="over"></div>
-  <div class="r_button">
-    <div id="首頁" class="r_b t2"></div>
+  <div class="r_button" :style="{backgroundColor:master_line_color}">
+    <div id="首頁" class="r_b"></div>
   </div>
-<!--
-  <div class="r_button active">
+  <div class="r_button active" :style="{backgroundColor:master_line_color}">
     <i class="facebook f icon"></i>
   </div>
--->
+<!--
   <div class="r_button active" :style="{backgroundColor:master_line_color}">
     <i class="youtube play icon"></i>
   </div>
+-->
 
+<!--
   <div class="r_button" :style="{backgroundColor:master_line_color}">
-    <div id="資訊" class="r_b t2"></div>
+    <div id="資訊" class="r_b"></div>
   </div>
+-->
+<!--
   <div class="r_button" :style="{backgroundColor:master_line_color}">
-    <div id="搜尋" class="r_b t2"></div>
+    <div id="搜尋" class="r_b"></div>
   </div>
+-->
   <div class="r_button" :style="{backgroundColor:master_line_color}">
-    <div id="問號" class="r_b t2"></div>
+    <div id="問號" class="r_b"></div>
   </div>
 </div>
 <div class="right_main">
-  <div v-for="n in 50">
-    <br><br><br>
-  </div>
+  <div></div>
+  <div></div>
+  <div></div>
 </div>
 <div class="right_line"></div>
 <script>
   $(function(){
+    $("#right").addClass("down");
     $(".right_tool").on("click",function(event){
       if($(event.target).closest(".r_button").length==0){
         $("#right").toggleClass("down");

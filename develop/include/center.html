@@ -58,10 +58,10 @@
       </div>
     </div>
   </div>
-  <div id="board_info" >
-    <div v-if="info_loading" class="ui active centered inline loader" style="margin-top:35px;margin-bottom:35px;"></div>
-    <div v-else v-for="(item, index) in info" class="ui vertical segment clear">
-      <img class="ui medium left floated image transition " src="src/static/images/square-image.png">
+  <div id="board_info">
+<!--    <div v-if="info_loading" class="ui active centered inline loader" style="margin-top:35px;margin-bottom:35px;"></div>-->
+    <div v-for="(item, index) in info" class="ui vertical segment clear">
+      <img class="ui left floated image transition mini" :src="user_photo" v-once>
       <p class="content" v-html="message_filter(item.message)"></p>
       <span class="right_icon">
         <span :style="{color : line_color}"><i @click="favorite_info(item)" :class="{active : item.favorite }" class="like icon" :style="{color : line_color}"></i></span>
@@ -74,7 +74,7 @@
 <script>
   function drop(ev){
     var index = ev.dataTransfer.getData("index");
-		print(index);
+	print(index);
     vm.delete_metro(index);
   }  
   function allowDrop(event) { //拖曳的物件移到上面
@@ -118,15 +118,14 @@
             domTextarea.selectionStart = domTextarea.selectionEnd = startPos + pastedValue.length;
             domTextarea.scrollTop = scrollTop;
 
-					//print(pastedValue)
-					var urlify_url=urlify(pastedValue);
+            //print(pastedValue)
+            var urlify_url=urlify(pastedValue);
 					
-          if(urlify_url.indexOf("href")>-1){
-						var url=urlify_url.split("</a>")[0].split(">")[1];
-						vm.url_info="等等...正在為您截取網站";
+          if(urlify_url.indexOf("<a href=")>-1){
+            var url=urlify_url.split("</a>")[0].split(">")[1];
+            vm.url_info="等等...正在為您截取網站";
             parse_url(url,function(url_info){
-              //print(url_info)
-							vm.url_info=url_info;
+			  vm.url_info=url_info;
             })
           }
           

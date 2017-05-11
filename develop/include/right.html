@@ -1,36 +1,41 @@
 <div class="right_header_line" :style="{borderTopColor:master_line_color}"></div>
 <div class="right_tool">
   <div class="over"></div>
-  <div class="r_button">
-    <div id="首頁" class="r_b t2"></div>
+  <div class="r_button" :style="{backgroundColor:master_line_color}">
+    <div id="首頁" class="r_b"></div>
   </div>
-<!--
-  <div class="r_button active">
+  <div class="r_button active" :style="{backgroundColor:master_line_color}">
     <i class="facebook f icon"></i>
   </div>
--->
+<!--
   <div class="r_button active" :style="{backgroundColor:master_line_color}">
     <i class="youtube play icon"></i>
   </div>
+-->
 
+<!--
   <div class="r_button" :style="{backgroundColor:master_line_color}">
-    <div id="資訊" class="r_b t2"></div>
+    <div id="資訊" class="r_b"></div>
   </div>
+-->
+<!--
   <div class="r_button" :style="{backgroundColor:master_line_color}">
-    <div id="搜尋" class="r_b t2"></div>
+    <div id="搜尋" class="r_b"></div>
   </div>
+-->
   <div class="r_button" :style="{backgroundColor:master_line_color}">
-    <div id="問號" class="r_b t2"></div>
+    <div id="問號" class="r_b"></div>
   </div>
 </div>
 <div class="right_main">
-  <div v-for="n in 50">
-    <br><br><br>
-  </div>
+  <div></div>
+  <div></div>
+  <div></div>
 </div>
 <div class="right_line"></div>
 <script>
   $(function(){
+    $("#right").addClass("down");
     $(".right_tool").on("click",function(event){
       if($(event.target).closest(".r_button").length==0){
         $("#right").toggleClass("down");

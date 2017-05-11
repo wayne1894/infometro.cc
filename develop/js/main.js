@@ -23,13 +23,13 @@
   $("#main").css("visibility","visible").css("left",0);
   //拖亦程式https://github.com/RubaXa/Sortable
   var sortable =[];
-//  sortable["blueprint"] = new Sortable(id("blueprint_drag"),{
-//    animation: 150,
-//    forceFallback: true,
-//    onEnd: function(){
-//      vm.swap_blueprint(evt.oldIndex,evt.newIndex)
-//    }
-//  });
+  sortable["blueprint"] = new Sortable(id("blueprint_drag"),{
+    animation: 150,
+    forceFallback: true,
+    onEnd: function(){
+      //vm.swap_blueprint(evt.oldIndex,evt.newIndex)
+    }
+  });
   sortable["line"] = new Sortable(id("line_drag"),{
     animation: 150,
     forceFallback: false,

@@ -467,6 +467,8 @@ textarea:focus {
           display: block;
         }
         .board_name {
+          word-wrap: break-word;
+          word-break: break-all;
           font-size: 23px;
           font-weight: bold;
           text-align: left;
@@ -593,22 +595,23 @@ textarea:focus {
       }
       #board_info {
          border-bottom: 1px solid #CDCDCD;
-				 word-break: break-all;
+		 word-break: break-all;
         .info {
           padding: 10px;
           border-bottom: 1px solid #CDCDCD;
           word-wrap: break-word;
           word-break: break-all;
         }
+        a:hover{
+          text-decoration: underline;
+        }
         >.ui {
           padding-left: 15px;
           padding-right: 5px;
-          }
-          .image {
-            width: 100px;
+          min-height: 100px;
           }
           p.content {
-            width: 311px;
+            width: 79%;
             float: left;
             padding-right: 10px;
           }
@@ -616,12 +619,12 @@ textarea:focus {
             color: #B3B3B3;
             cursor: pointer;
           }
-					.like.icon:not(.active) {
-						color: #B3B3B3!important;
-					}
-					.like.icon:hover{
-						color: inherit!important;
-					}
+          .like.icon:not(.active) {
+              color: #B3B3B3!important;
+          }
+          .like.icon:hover{
+              color: inherit!important;
+          }
           .trash {
             font-size: 1.1em;
           }
@@ -823,6 +826,7 @@ textarea:focus {
 }
 
 #right {
+
   position: fixed;
   top: 0;
   right: 0;
