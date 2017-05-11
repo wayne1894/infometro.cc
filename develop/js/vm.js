@@ -21,6 +21,10 @@ var vm = new Vue({
   },firebase: {
     //watch key_metro
   },computed: {
+   is_public:function(){
+     if(this.blueprint.length==0)return "";
+     return vm.get_line().public;
+   },
    master_line_color: function(){//主線目前一律是line 0
      if(this.blueprint.length==0)return false;
      if(this.pick_color && this.pick_master)return this.pick_color
@@ -111,14 +115,14 @@ var vm = new Vue({
       vm.index_update();
     }
   },methods: {
-			get_favorite_style: function(favorite,color){
-				if(favorite){
-					return{
-						color: color
-					}
-				}
-				return {}
-			},
+      get_favorite_style: function(favorite,color){
+          if(favorite){
+              return{
+                  color: color
+              }
+          }
+          return {}
+      },
      is_master :function(){
        if(this.blueprint.length==0)return "";
        if(vm.index_line==0)return true
@@ -317,7 +321,6 @@ var vm = new Vue({
       vm.update_metro_key(vm.get_index_line())
       this.更新藍圖(data.key,data);
       DB.ref("info/" + key + "/metro").remove();
-      DB.ref("info/" + key + "/root").remove();
     },get_line_key :function(){
       return vm.get_line()._key;
     },new_metro : function (order){

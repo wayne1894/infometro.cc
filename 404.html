@@ -195,6 +195,13 @@ $(function(){
     </div>
     <div id="board_edit" @click="mode_click()" ondragover="allowDrop(event)" ondrop="drop(event)"><div class="border_area" :data-tooltip="mode_txt()" data-position="right center"><i :class="mode_class()" class=" icon"></i></div></div>
   </div>
+  
+<!--
+  <div id="board_txt">
+    <span v-if="is_public">社交支線 </span>
+    <a href="#" onclick="push_now_line()">推送支線</a>
+  </div>
+-->
   <div id="board_tag_name">
     <div id="tag_name" v-if="metro_name">
       <i :style="{backgroundColor:line_color}"></i>
