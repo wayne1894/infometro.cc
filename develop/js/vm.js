@@ -12,7 +12,7 @@ var vm = new Vue({
     mode : 1,
     pick_master :undefined,
     pick_color :undefined,
-	url_info : undefined
+		url_info : undefined
   },updated : function(){
     setTimeout(function(){
       $(window).resize();
@@ -49,7 +49,7 @@ var vm = new Vue({
    },
    metro_create : function(){
      if(this.blueprint.length==0)return "";
-     var timestamp= this.get_metro().create;
+     var timestamp= this.get_metro().timestamp;
      if(timestamp==undefined) return "";
      //http://momentjs.com/
      return moment(timestamp).format("lll");
@@ -65,8 +65,16 @@ var vm = new Vue({
      if(_info.length==0)return false
      return _info
    },
-   info_reverse : function(){
-     return this.info.reverse();
+   info_sort : function(){//資訊的排序
+		 var _sort=this.info.sort(function(a,b){
+			 if(a.timestamp>b.timestamp)return -1;//先照timestamp
+			 return 1;
+		 });
+		 _sort=_sort.sort(function(a,b){
+			 if(a.favorite)return -1;//在照favorite
+			 return 1;
+		 });
+		 return _sort;
    },
    user_photo: function(){
      var url=this.users.photo;
@@ -96,10 +104,7 @@ var vm = new Vue({
 	},
     key_metro : function(){
       //https://github.com/vuejs/vuefire
-      var _ref=DB.ref("info/"+vm.get_line_key()+"/metro/"+vm.key_metro).orderByChild("create");
-//      _ref.once('child_added', function () {
-//
-//      })
+      var _ref=DB.ref("info/"+vm.get_line_key()+"/metro/"+vm.key_metro).orderByKey();
       vm.$bindAsArray('info',_ref);
       var _index= this.index[this.index_blueprint][this.index_line];
       _index.key_metro=this.key_metro;
@@ -297,7 +302,7 @@ var vm = new Vue({
       var _j=line_json("未命名",get_color);
       _j.metro.push(metro_json("總站"));
       data.line.push(_j);
-	  vm.get_index_blueprint().push([]);//新增line的index陣列
+	  	vm.get_index_blueprint().push([]);//新增line的index陣列
       this.更新藍圖(data.key,data);
     },delete_line : function(index){
       var data=this.get_blueprint();
@@ -371,7 +376,7 @@ var vm = new Vue({
       var _data ={
         message : board_textarea ,
         favorite : false ,
-        create : 0 - Date.now(),
+        timestamp : firebase.database.ServerValue.TIMESTAMP,
         users : user_uid
       }
       if(vm.url_info)_data.url_info=vm.url_info;

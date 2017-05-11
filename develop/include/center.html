@@ -60,7 +60,7 @@
   </div>
   <div id="board_info">
 <!--    <div v-if="info_loading" class="ui active centered inline loader" style="margin-top:35px;margin-bottom:35px;"></div>-->
-    <div v-for="(item, index) in info" class="ui vertical segment clear">
+    <div v-for="(item, index) in info_sort" class="ui vertical segment clear">
       <img class="ui left floated image transition mini" :src="user_photo" v-once>
       <p class="content" v-html="message_filter(item.message)"></p>
       <span class="right_icon">
@@ -125,7 +125,8 @@
             var url=urlify_url.split("</a>")[0].split(">")[1];
             vm.url_info="等等...正在為您截取網站";
             parse_url(url,function(url_info){
-			  vm.url_info=url_info;
+							url_info.url=url;//這個url代表是連結的url
+			  			vm.url_info=url_info;
             })
           }
           

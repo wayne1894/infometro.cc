@@ -8,6 +8,26 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.16/css/perfect-scrollbar.min.css" type="text/css" />
 <link rel="stylesheet" type="text/css" href="src/build/css/infometro.css" />
 
+<script>
+	function print(a){
+		console.log(a)
+	}
+	function test(msg){//測試用
+		$("#test").remove();
+		$(document.body).append("<div id='test' style='width:50px;height:50px;position:fixed;top:0px;left:0px; z-index:10000;color:red;'>"+msg+"</div>");
+	}
+	function id(a){
+		return document.getElementById(a);
+	}
+
+	if (location.protocol != 'https:'){
+		if(window.location.hostname!="localhost" && window.location.hostname!="127.0.0.1" ){
+				location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+		}
+	}
+</script>
+
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.js"></script>
@@ -32,24 +52,7 @@
 <!-- jquery-color-pick -->
 
 
-<script>
-	function print(a){
-		console.log(a)
-	}
-	function test(msg){//測試用
-		$("#test").remove();
-		$(document.body).append("<div id='test' style='width:50px;height:50px;position:fixed;top:0px;left:0px; z-index:10000;color:red;'>"+msg+"</div>");
-	}
-	function id(a){
-		return document.getElementById(a);
-	}
 
-	if (location.protocol != 'https:'){
-		if(window.location.hostname!="localhost" && window.location.hostname!="127.0.0.1" ){
-				location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
-		}
-	}
-</script>
 </head>
 <body>
 <style>
@@ -139,6 +142,7 @@
 	})
 
 </script>
+<script src="src/build/js/vm.js"></script>
 <script src="src/build/js/main.js"></script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

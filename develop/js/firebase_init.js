@@ -156,7 +156,6 @@ function 初始化使用者資訊(fn){
   var user = firebase.auth().currentUser;
   DB.ref('users/' + user.uid).set({
     name : user.displayName,
-    email : user.email,
     url_name: "",
     photo : user.photoURL
   }).then(fn);
@@ -167,12 +166,22 @@ function blueprint_json(name){
     line : []
   }
 }
-function set_line_info(_line_key){
-  DB.ref('info/' + _line_key +"/root").set(user_uid);
+function set_line_root(_line_key,user_uid){//設定支線擁有者
+	DB.ref('info/' + _line_key +"/root").set(user_uid);
+}
+function push_line_public(_line_key,line_name,_metro){//推送分支到遠端
+	DB.ref('info/' + _line_key +"/public").set(true);//設為公開
+	DB.ref('info/' + _line_key +"/w_metro").set(true);//擁有metro編寫權限
+	DB.ref('info/' + _line_key +"/w_info").set(true);//擁有info編寫權限
+	DB.ref('info/' + _line_key +"/line_name").set(line_name);//遠端支線名稱
+	
+	for(var i=0,i<_metro.length;i++){
+		DB.ref('info/' + _line_key +"/metro_info/"+_metro._key).set(_metro[i]);//遠端metro資訊
+	}
 }
 function line_json(name,color,master){
   var _line_key=DB.ref('blueprint/' + user_uid).push().key;
-  set_line_info(_line_key);
+  set_line_root(_line_key,user_uid+"(build)");
   if(!master)master=false
   return {
     _key : _line_key,
@@ -186,8 +195,15 @@ function metro_json(name){
   return {
     _key : DB.ref('blueprint/' + user_uid).push().key,
     name : name ,
-		create: firebase.database.ServerValue.TIMESTAMP
+		timestamp: firebase.database.ServerValue.TIMESTAMP
   }
+}
+function get_other_user(other_user_uid,fn){
+		DB.ref('users/' + other_user_uid).once('value',function(data) { //載入user
+		if(data.val()){
+		  fn(data.val())
+		}
+	});
 }
 function blueprint_init(fn){
   DB.ref('blueprint/' + user_uid).on("value",function(data){
