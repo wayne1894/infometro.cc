@@ -9,9 +9,9 @@
 	       <a class="line_a" @dblclick="re_name(index,'line')"  @click="exchange_line(index)">{{item.name}}</a>
 	    </li>
 	  </ul>
-	<div class="line_text">其他支線：</div>
+	<div class="line_text">一般支線：</div>
       <ul id="line_drag">
-        <li v-for="(item, index) in line" v-show="!item.master"  :class="check_line(index)"   class="line_list" @drop="drop_line(event,index)" :data-key="item._key" :key="item._key">
+        <li v-for="(item, index) in line" v-show="!item.master" :class="check_line(index)"   class="line_list" @drop="drop_line(event,index)" :data-key="item._key" :key="item._key">
           <div v-if="!item.master"  class="tool" @click="delete_line(index)">
             <i class="trash outline icon"></i>
           </div>

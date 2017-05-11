@@ -12,7 +12,7 @@ var vm = new Vue({
     mode : 1,
     pick_master :undefined,
     pick_color :undefined,
-		url_info : undefined
+	url_info : undefined
   },updated : function(){
     setTimeout(function(){
       $(window).resize();
@@ -66,15 +66,15 @@ var vm = new Vue({
      return _info
    },
    info_sort : function(){//資訊的排序
-		 var _sort=this.info.sort(function(a,b){
-			 if(a.timestamp>b.timestamp)return -1;//先照timestamp
-			 return 1;
-		 });
-		 _sort=_sort.sort(function(a,b){
-			 if(a.favorite)return -1;//在照favorite
-			 return 1;
-		 });
-		 return _sort;
+     var _sort=this.info.sort(function(a,b){
+         if(a.timestamp>b.timestamp)return 1;//先照timestamp
+         return -1;
+     });
+     _sort=_sort.sort(function(a,b){
+         if(a.favorite)return -1;//在照favorite
+         return 1;
+     });
+     return _sort;
    },
    user_photo: function(){
      var url=this.users.photo;

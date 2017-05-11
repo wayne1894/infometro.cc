@@ -169,16 +169,43 @@ function blueprint_json(name){
 function set_line_root(_line_key,user_uid){//設定支線擁有者
 	DB.ref('info/' + _line_key +"/root").set(user_uid);
 }
-function push_line_public(_line_key,line_name,_metro){//推送分支到遠端
+function push_line_public(_line_key,_line,_metro){//推送分支到遠端
 	DB.ref('info/' + _line_key +"/public").set(true);//設為公開
 	DB.ref('info/' + _line_key +"/w_metro").set(true);//擁有metro編寫權限
 	DB.ref('info/' + _line_key +"/w_info").set(true);//擁有info編寫權限
-	DB.ref('info/' + _line_key +"/line_name").set(line_name);//遠端支線名稱
-	
-	for(var i=0,i<_metro.length;i++){
-		DB.ref('info/' + _line_key +"/metro_info/"+_metro._key).set(_metro[i]);//遠端metro資訊
+  
+	DB.ref('info/' + _line_key +"/line_data").set(_line);//遠端支線相關
+	for(var i=0;i<_metro.length;i++){
+		DB.ref('info/' + _line_key +"/metro_data/"+_metro[i]._key).set(_metro[i]);//遠端metro資訊
 	}
 }
+function push_now_line(){//傳送現在位置的支線到遠端(更新)
+  var _line=vm.get_line();
+  _line.public=true;//要同步將本地端支線變成public
+  var data=JSON.parse(JSON.stringify(vm.get_blueprint()));//將傳址改為傳值
+  vm.更新藍圖(data.key,data);
+  var _metro=_line.metro;
+  delete _line.metro;
+  push_line_public(_line._key,_line,_metro);
+}
+function copy_public_line(_line_key){//複製某個遠端支線到自己的位置
+  var _data=vm.get_blueprint();
+  for(var i=0;i<_data.line.length;i++){
+    if(_data.line[i]._key==_line_key)return "repeat"
+  }
+  DB.ref('info/' + _line_key + "/line_data").once("value",function(data){
+    _data.line.push(data.val());
+    DB.ref('info/' + _line_key + "/metro_data").once("value",function(data){
+      for(var i=0;i<data.val().length;i++){
+        _data.line[_data.line.length-1].metro.push(data.val()[i]);
+      }
+      _data.line.public=true;
+      vm.更新藍圖(data.key,data);
+    })
+  })
+
+}
+
 function line_json(name,color,master){
   var _line_key=DB.ref('blueprint/' + user_uid).push().key;
   set_line_root(_line_key,user_uid+"(build)");
