@@ -1,4 +1,4 @@
-<div id="board1" :style="{borderTopColor:master_line_color}">
+  <div id="board1" :style="{borderTopColor:master_line_color}">
   <div id="board_line_parent">
     <div id="board_line">
       <i v-show="!is_master()" :style="{backgroundColor:line_color}"></i>
@@ -18,7 +18,7 @@
     <div id="tag_name" v-if="metro_name">
       <i :style="{backgroundColor:line_color}"></i>
       <div id="tag_name_info">
-        <div>{{ metro_name}}</div>
+        <div>{{metro_name}}</div>
         <div>資訊共 {{info_count}} 筆</div>
         <div>建立時間：<span>{{metro_create}}</span></div>
       </div>
@@ -31,9 +31,14 @@
       <div v-for="(item, index) in info_favorites"></div>
     </div>
     <div id="board_search">
-      <div id="input_search">
-        <input type="text" placeholder="Search">
-        <i class="search icon"></i>
+      <div class="ui mini action input" :style="{borderColor:line_color}">
+        <input v-model.trim="filter_search" type="text" placeholder="Filter...">
+          <button v-if="filter_search" class="ui mini icon button" :style="{backgroundColor:line_color}" >
+            <i class="filter icon"></i>
+          </button>
+          <button v-else class="ui mini icon button" >
+            <i class="filter icon"></i>
+          </button>
       </div>
     </div>
     <div id="board_copyright"></div>
@@ -67,7 +72,7 @@
   </div>
   <div id="board_info">
 <!--    <div v-if="info_loading" class="ui active centered inline loader" style="margin-top:35px;margin-bottom:35px;"></div>-->
-    <div v-for="(item, index) in info_sort" class="ui vertical segment clear">
+    <div v-for="(item, index) in info_sort_filter" class="ui vertical segment clear">
       <img class="ui left floated image transition mini" :src="user_photo" v-once>
       <p class="content" v-html="message_filter(item.message)"></p>
       <span class="right_icon">

@@ -12,7 +12,8 @@ var vm = new Vue({
     mode : 1,
     pick_master :undefined,
     pick_color :undefined,
-	url_info : undefined
+	url_info : undefined,
+    filter_search:""
   },updated : function(){
     setTimeout(function(){
       $(window).resize();
@@ -69,7 +70,7 @@ var vm = new Vue({
      if(_info.length==0)return false
      return _info
    },
-   info_sort : function(){//資訊的排序
+   info_sort_filter : function(){//資訊的排序
      var _sort=this.info.sort(function(a,b){
          if(a.timestamp>b.timestamp)return 1;//先照timestamp
          return -1;
@@ -78,7 +79,11 @@ var vm = new Vue({
          if(a.favorite)return -1;//在照favorite
          return 1;
      });
-     return _sort;
+ 
+    return _sort.filter(function(info) {
+      return info.message.indexOf(vm.filter_search) > -1
+    })
+
    },
    user_photo: function(){
      var url=this.users.photo;
@@ -87,25 +92,6 @@ var vm = new Vue({
     return url;
    }
   },watch: {
-    index_line : function(){
-      var index_array=vm.get_index_blueprint();
-      for(var i=0;i<index_array.length;i++){
-        index_array[i].check=false;
-      }
-      index_array[this.index_line].check=true;
-
-			//更換selection的顏色
-			var _color=vm.line_color;
-			if(!document.getElementById("selection")){
-				var style = document.createElement('style');
-				style.id = 'selection';
-				style.type = 'text/css';
-				document.getElementsByTagName('head')[0].appendChild(style);
-			}
-			//print(vm.master_line_color)
-			document.getElementById("selection").innerHTML="::selection {background: "+_color+";color: #fff;}::-moz-selection {background: "+_color+";color: #fff;}img::selection {background: "+_color+";color: #fff;}img::-moz-selection {background: "+_color+";color: #fff;}";
-
-	},
     key_metro : function(){
       //https://github.com/vuejs/vuefire
       var _ref=DB.ref("info/"+vm.get_line_key()+"/metro/"+vm.key_metro).orderByKey();
@@ -173,8 +159,7 @@ var vm = new Vue({
       message=message.replace(/(?:\r\n|\r|\n)/g, '<br />');
       message=urlify(message);//轉成超連結
       message=message.replace(/ /g, "&nbsp;");
-      message=message.replace(/\<a&nbsp;href=/g,"<a href=");
-      
+      message=message.replace(/\<a&nbsp;href=/g,"<a href="); 
       setTimeout(function(){
          $("#board_info").find("a").css("color",vm.line_color).attr("target","_blank");
       },5)
@@ -197,7 +182,7 @@ var vm = new Vue({
       return _blueprint.line[this.index_line];
     },get_index_line : function(){ //得到當前支線索引資料
       return vm.index[vm.index_blueprint][vm.index_line];
-    },update_line_index : function(index_array){
+    },update_index_line :function(index_array){
       var _index=0;
       for(var i=0;i<index_array.length;i++){
         if(index_array[i].check){
@@ -205,7 +190,28 @@ var vm = new Vue({
           break;
         }
       }
-      this.index_line=_index;
+      vm.index_line=_index;
+    },update_index_blueprint_line_check : function(){
+      var index_array=vm.get_index_blueprint();
+      for(var i=0;i<index_array.length;i++){
+        index_array[i].check=false;
+      }
+      index_array[vm.index_line].check=true;
+      
+      
+      //更換selection的顏色
+      var _color=vm.line_color;
+      if(!document.getElementById("selection")){
+          var style = document.createElement('style');
+          style.id = 'selection';
+          style.type = 'text/css';
+          document.getElementsByTagName('head')[0].appendChild(style);
+      }
+      //print(vm.master_line_color)
+      document.getElementById("selection").innerHTML="::selection {background: "+_color+";color: #fff;}::-moz-selection {background: "+_color+";color: #fff;}img::selection {background: "+_color+";color: #fff;}img::-moz-selection {background: "+_color+";color: #fff;}";
+
+
+      
     },update_metro_key : function(index_array){
       var _metro=this.get_line().metro;
       if(index_array.key_metro){//代表有選到的結點
@@ -232,8 +238,7 @@ var vm = new Vue({
 	  vm.action="delete_blueprint";
       var _line=vm.blueprint[index].line;
       for(var i=0;i<_line.length;i++){
-        DB.ref("info/" + _line[i]._key + "/metro").remove();
-        DB.ref("info/" + _line[i]._key + "/root").remove();
+        this.delete_info_line(_line[i]._key);
       }
       vm.index.splice(index,1);
       if(vm.index_blueprint>=index){//刪除到小於自已-就往前倒退索引
@@ -245,7 +250,7 @@ var vm = new Vue({
     },exchange_blueprint : function(index,target){//切換藍圖
       if(event==undefined)return
       if($(event.target).hasClass("blueprint_i"))return;
-			$("#top_tag").stop().fadeOut(0);
+	  $("#top_tag").stop().fadeOut(0);
       var _event=event;
       if($("html").hasClass("re_name")){//解決編輯按兩下的BUG
         return setTimeout(function(){
@@ -263,7 +268,8 @@ var vm = new Vue({
         }
         if(target){
           vm.index_blueprint=index;
-          vm.update_line_index(vm.index[index]);
+          vm.update_index_line(vm.index[index]);
+          vm.update_index_blueprint_line_check();
           vm.update_metro_key(vm.index[index][vm.index_line]);
         }
        setTimeout(move_center,0);
@@ -284,6 +290,7 @@ var vm = new Vue({
       function _el(){
         vm.index_line=index;
         if(!vm.get_index_blueprint()[index])vm.replace_index();//重新設定index
+        vm.update_index_blueprint_line_check();
         vm.update_metro_key(vm.get_index_blueprint()[index]);
         setTimeout(move_center,0);
       }
@@ -295,8 +302,7 @@ var vm = new Vue({
       for(var i=0;i<j;i++){
         _index_blueprint.push([]);//新增line的index陣列
       }
-    },
-    check_line : function(index){
+    },check_line : function(index){
       if(this.index_line==index)return "check";
     },new_line : function(){
       vm.action="new_line";
@@ -306,7 +312,7 @@ var vm = new Vue({
       var _j=line_json("未命名",get_color);
       _j.metro.push(metro_json("總站"));
       data.line.push(_j);
-	  	vm.get_index_blueprint().push([]);//新增line的index陣列
+	  vm.get_index_blueprint().push([]);//新增line的index陣列
       this.更新藍圖(data.key,data);
     },delete_line : function(index){
       var data=this.get_blueprint();
@@ -320,7 +326,7 @@ var vm = new Vue({
       vm.get_index_blueprint().splice(index,1);//移除line的index陣列
       vm.update_metro_key(vm.get_index_line())
       this.更新藍圖(data.key,data);
-      DB.ref("info/" + key + "/metro").remove();
+      this.delete_info_line(key);
     },get_line_key :function(){
       return vm.get_line()._key;
     },new_metro : function (order){
@@ -389,6 +395,9 @@ var vm = new Vue({
      DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).push(_data);
     },delete_info : function(key){ //刪除資訊
       DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).child(key).remove();
+    },delete_info_line : function(_line_key){//從info最上層的line刪除
+      DB.ref("info/" + _line_key + "/metro").remove();
+      DB.ref("info/" + _line_key + "/root").remove();
     },favorite_info : function(item){
       DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).child(item[".key"]).update({favorite : !item.favorite})
     },re_name : function(index,_level){//重新命名(共用)
@@ -466,9 +475,9 @@ var vm = new Vue({
       })
       data.line=new_line;
       vm.index[vm.index_blueprint]=new_index;
-			vm.update_line_index(new_index);
+	  vm.update_index_line(new_index)
       vm.更新藍圖(data.key,data);
-			function get_key(key){
+	  function get_key(key){
         for(var i=0;i<data.line.length;i++){
           if(data.line[i]._key==key)return i;
         }
