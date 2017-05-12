@@ -34,12 +34,19 @@
 </div>
 <div class="right_line"></div>
 <script>
-  $(function(){
-    $(".right_tool").on("click",function(event){
+$(function(){
+  $(".right_tool").on("click",function(event){
+    if($("#right").height()<400){
       if($(event.target).closest(".r_button").length==0){
         $("#right").toggleClass("down");
+        $.cookie('right_tool',$("#right").attr('class'));
       }
-    })
+    }
   })
-
+  if($.cookie('right_tool')){
+    if($.cookie('right_tool').indexOf("down")>-1){
+      $(".right_tool").click();
+    }
+  }
+})
 </script>

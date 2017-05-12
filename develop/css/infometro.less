@@ -612,14 +612,14 @@ textarea:focus {
         a:hover{
           text-decoration: underline;
         }
-        >.ui {
+        >.board_list {
           padding-left: 15px;
           padding-right: 5px;
-          min-height: 100px;
-          }
+          min-height: 110px;
           p.content {
             width: 79%;
             float: left;
+            min-height: 110px;
             padding-right: 10px;
           }
           .icon {
@@ -638,6 +638,31 @@ textarea:focus {
           .trash.icon:hover {
             color: inherit;
           }
+          p.textarea{
+            display: none;
+          }
+          textarea {
+            resize: none;
+            width: 100%;
+            height: 110px;
+            border-radius: 0;
+            &:focus{
+              border-color: inherit;
+            }
+          }
+          .textarea_prompt{
+            font-size: 10px;
+            color: rgba(34,36,38,.15);
+          }
+          &.edit{
+            p.content{
+              display: none!important;
+            }
+            p.textarea {
+              display: block!important;
+            }
+          }
+        }
         
       }
       border-bottom: none;
@@ -839,7 +864,7 @@ textarea:focus {
       height: 35px;
       margin: 0;
       text-align: center;
-//    background-color: #fff;
+      background-color: #fff;
       cursor: pointer;
       &:not(.active) {
         background-color: #fff;
@@ -900,8 +925,8 @@ textarea:focus {
     height: 400px;
     bottom: 42px;
     transition-property: height;
-    transition-duration: 0.15s;
-    transition-timing-function : ease;
+//    transition-duration: 0.1s;
+//    transition-timing-function : ease;
 //    transition-timing-function : cubic-bezier(.45,-0.21,.85,.05) ;
   }
   #right.down{
@@ -911,7 +936,7 @@ textarea:focus {
     width: 100%;
     height: 42px;
     background-color: #5a4a4a;
-    opacity: .6;
+    opacity: .4;
     position: absolute;
     left: 0;
     top: 0;

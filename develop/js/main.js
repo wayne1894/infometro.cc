@@ -145,7 +145,6 @@
 			console.log(url_info);
       })
   }
-
 	//一些以前遺留的資料
 
 		// $(document).bind('selectstart',function(){return false;})

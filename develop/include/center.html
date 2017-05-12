@@ -72,9 +72,13 @@
   </div>
   <div id="board_info">
 <!--    <div v-if="info_loading" class="ui active centered inline loader" style="margin-top:35px;margin-bottom:35px;"></div>-->
-    <div v-for="(item, index) in info_sort_filter" class="ui vertical segment clear">
+    <div v-for="(item, index) in info_sort_filter" class="board_list ui vertical segment clear">
       <img class="ui left floated image transition mini" :src="user_photo" v-once>
-      <p class="content" v-html="message_filter(item.message)"></p>
+      <p class="content" v-html="message_filter(item.message)" @dblclick="update_info(item)"></p>
+      <p class="content textarea ui form" :style="{borderColor:line_color}" >
+        <textarea></textarea>
+        <span class="textarea_prompt">按下Enter儲存 , Esc離開編輯</span>
+      </p>
       <span class="right_icon">
         <span :style="{color : line_color}"><i @click="favorite_info(item)" :class="{active : item.favorite }" class="like icon" :style="{color : line_color}"></i></span>
         <i @click="delete_info(item['.key'])" class="trash icon"></i>
@@ -115,16 +119,11 @@
             endPos = domTextarea.selectionEnd,
             scrollTop = domTextarea.scrollTop;
 
-        //clear textarea temporarily (user wont notice)
         domTextarea.value = '';
 
         setTimeout(function () {
-            //get pasted value
             var pastedValue = domTextarea.value;
 
-            //do work on pastedValue here, if you need to change/validate it before applying the paste
-
-            //recreate textarea as it would be if we hadn't interupted the paste operation
             domTextarea.value = txt.substring(0, startPos) + pastedValue + txt.substring(endPos, txt.length);
             domTextarea.focus();
             domTextarea.selectionStart = domTextarea.selectionEnd = startPos + pastedValue.length;
@@ -141,10 +140,7 @@
 			  			vm.url_info=url_info;
             })
           }
-          
-          
-            //do work on pastedValue here if you simply need to parse its ccontents without modifying it
-
+ 
 
         }, 0);
 

@@ -79,7 +79,6 @@ var vm = new Vue({
          if(a.favorite)return -1;//在照favorite
          return 1;
      });
- 
     return _sort.filter(function(info) {
       return info.message.indexOf(vm.filter_search) > -1
     })
@@ -156,7 +155,7 @@ var vm = new Vue({
     message_filter :function(message,index){
       message=message.replace(/\</g,"&lt;");
       message=message.replace(/\>/g,"&gt;");
-      message=message.replace(/(?:\r\n|\r|\n)/g, '<br />');
+      message=message.replace(/(?:\r\n|\r|\n)/g, '<br/>');
       message=urlify(message);//轉成超連結
       message=message.replace(/ /g, "&nbsp;");
       message=message.replace(/\<a&nbsp;href=/g,"<a href="); 
@@ -251,6 +250,7 @@ var vm = new Vue({
       if(event==undefined)return
       if($(event.target).hasClass("blueprint_i"))return;
 	  $("#top_tag").stop().fadeOut(0);
+      $.cookie("index_blueprint",index);
       var _event=event;
       if($("html").hasClass("re_name")){//解決編輯按兩下的BUG
         return setTimeout(function(){
@@ -391,15 +391,54 @@ var vm = new Vue({
       if(vm.url_info)_data.url_info=vm.url_info;
       vm.url_info=undefined ;//清掉
       $("#board_textarea").val("");//清掉
-			
-     DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).push(_data);
+      DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).push(_data);
     },delete_info : function(key){ //刪除資訊
       DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).child(key).remove();
     },delete_info_line : function(_line_key){//從info最上層的line刪除
       DB.ref("info/" + _line_key + "/metro").remove();
       DB.ref("info/" + _line_key + "/root").remove();
     },favorite_info : function(item){
-      DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).child(item[".key"]).update({favorite : !item.favorite})
+      DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).child(item[".key"]).update({favorite : !item.favorite});
+    },update_info :function(item){
+      $("html").addClass("re_name");
+      var _key=item[".key"];
+      var $target_parent=$(event.target).closest(".board_list");
+      $target_parent.addClass("edit");
+      var $textarea=$target_parent.find("textarea");
+      $textarea.val(item.message);
+      var show_down=false;
+      $textarea.on("keydown."+_key+"_textarea",function(event){
+        if(event.shiftKey){
+          show_down=true;
+          setTimeout(function(){
+            show_down=false;
+          },1500);
+        }
+      });
+      $textarea.focus().on("keyup."+_key+"_textarea",function(event){
+        if(event.keyCode==13 && event.shiftKey){
+           event.preventDefault();
+        }else if(event.keyCode==13){//enter
+          if(show_down){
+            event.preventDefault();
+            return
+          }
+          edit_set();
+          DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).child(_key).update({
+            message : $.trim($textarea.val()),
+            update_timestamp: firebase.database.ServerValue.TIMESTAMP
+          });
+        }else if(event.keyCode==27){//esc
+          edit_set();
+        }
+      })
+      function edit_set(){
+       $(document).one("click",function(){//解決出現Chrome英文翻譯的問題
+         $("html").removeClass("re_name");
+       })
+       $target_parent.removeClass("edit");
+       $textarea.off("keyup."+_key+"_textarea").off("keydown."+_key+"_textarea");
+      }
     },re_name : function(index,_level){//重新命名(共用)
       if($(event.target).hasClass("blueprint_i"))return;
       $("html").addClass("re_name");
@@ -409,10 +448,10 @@ var vm = new Vue({
       var _name=get_level().name;
       var $level_list_input=$level_list.find("."+_level+"_input");
       $level_list_input.select().on("keyup."+_level+"_input",function(event){
-        if(event.which==13){
+        if(event.which==13){//enter
           edit_set();
           vm.更新藍圖();
-        }else if(event.which==27){
+        }else if(event.which==27){//esc
           edit_set();
           get_level().name=_name;
         }

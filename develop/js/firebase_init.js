@@ -313,7 +313,11 @@ function _is_login(){//程式進入點
 		  }
 		}
 	}).then(function(){
-			//vm.index_blueprint=2 預設的藍圖索引
+
+      if($.cookie('index_blueprint')!=undefined){ //預設要載入的藍圖索引
+        vm.index_blueprint=$.cookie('index_blueprint');
+      }
+      
       blueprint_init(function(){
             //一定要等vue資料載完才能載入選單物件
         $(".blueprint_list").dropdown("destroy").dropdown({
