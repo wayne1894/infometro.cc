@@ -2,6 +2,25 @@
 @left_pl : 17px;
 @top_height: 65px;
 @bottom_height: 42px;
+
+//@font-face {
+//   font-family: 'Noto Sans TC';
+//   font-style: normal;
+//   font-weight: 700;
+//   src: url(//fonts.gstatic.com/ea/notosanstc/v1/NotoSansTC-Bold.woff2) format('woff2'),
+//        url(//fonts.gstatic.com/ea/notosanstc/v1/NotoSansTC-Bold.woff) format('woff'),
+//        url(//fonts.gstatic.com/ea/notosanstc/v1/NotoSansTC-Bold.otf) format('opentype');
+// }
+@font-face {
+   font-family: 'Noto Sans TC';
+   font-style: normal;
+   font-weight: 400;
+   src: url(//fonts.gstatic.com/ea/notosanstc/v1/NotoSansTC-Regular.woff2) format('woff2'),
+        url(//fonts.gstatic.com/ea/notosanstc/v1/NotoSansTC-Regular.woff) format('woff'),
+        url(//fonts.gstatic.com/ea/notosanstc/v1/NotoSansTC-Regular.otf) format('opentype');
+ }
+
+
 * {
   margin: 0;
   padding: 0;
@@ -116,8 +135,8 @@ textarea:focus {
           z-index: 5;
           color: black;
           padding-right: 8px;
-					height: 20px;
-					overflow: hidden;
+          height: 20px;
+          overflow: hidden;
 //          white-space: nowrap;
 //          overflow: hidden !important;
 //          text-overflow: ellipsis;
@@ -615,11 +634,12 @@ textarea:focus {
         >.board_list {
           padding-left: 15px;
           padding-right: 5px;
-          min-height: 100px;
+          >div{
+            min-height: 115px;
+          }
           p.content {
             width: 79%;
             float: left;
-            min-height: 100px;
             padding-right: 10px;
           }
           .icon {
@@ -665,6 +685,9 @@ textarea:focus {
               float: right;
               position: relative;
               left: 3px;
+              &.send{
+                color: white;
+              }
             }
 
           }
@@ -696,25 +719,46 @@ textarea:focus {
         margin-top: 16px;
         margin-left: 14px;
         .text {
-          vertical-align: top;
           margin-left: 5px;
+          color: black;
+          font-size: 0.9em;
+          position: relative;
+          top: -1px;
         }
         i {
           font-size: 1.1em;
+          color: inherit;
         }
       }
       #board_favorites {
         margin-top: 12px;
         padding-bottom: 30px;
         border-bottom: 1px solid #CDCDCD;
-        >div {
+        display: inline-block;
+        width: 100%;
+        .favorites_list {
           width: 119px;
           height: 33px;
           float: left;
           background-color: #e1e1e1;
           margin-left: 7px;
           margin-bottom: 5px;
-          border-radius: 5px
+          border-radius: 5px;
+          img{
+            position: relative;
+            top: 4px;
+            margin-right: 3px;
+          }
+          a{
+            color: black;
+            display: block;
+            height: 100%;
+            font-size: 10px;
+            white-space: nowrap;
+            overflow:hidden !important;
+            text-overflow: ellipsis;
+            padding: 5px;
+          }
         }
         .clearfix();
       }
@@ -726,7 +770,6 @@ textarea:focus {
           border-color: inherit!important;
         }
       }
-      #board_copyright {}
       &.board3_left {
         border-top: 1px dashed #cdcdcd!important;
         border-bottom: 0;
@@ -854,7 +897,7 @@ textarea:focus {
 }
 
 #right {
-
+  font-family: 'Noto Sans TC', sans-serif;
   position: fixed;
   top: 0;
   right: 0;
@@ -938,10 +981,6 @@ textarea:focus {
     bottom: 0px;
     height: 400px;
     bottom: 42px;
-    transition-property: height;
-//    transition-duration: 0.1s;
-//    transition-timing-function : ease;
-//    transition-timing-function : cubic-bezier(.45,-0.21,.85,.05) ;
   }
   #right.down{
     height: 42px;

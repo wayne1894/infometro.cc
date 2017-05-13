@@ -25,10 +25,15 @@
     </div>
   </div>
   <div id="board3" :style="{borderTopColor:master_line_color}">
-    <div v-show="info_favorites" id="board3_header"><i :style="{color:line_color}" class="heart icon"></i><span class="text">最愛連結</span>
+    <div id="board3_header" :style="{color:line_color}"><i class="heart icon orange"></i><span class="text">最愛連結</span>
     </div>
-    <div v-show="info_favorites" id="board_favorites">
-      <div v-for="(item, index) in info_favorites"></div>
+    <div id="board_favorites">
+      <div class="favorites_list" v-for="(item, index) in info_favorites">
+        <a :href="item.url_info.url" :title="item.url_info.title" target="_blank"  v-once>
+          <span><img :src="item.url_info.ico"  v-once></span>
+          <span v-once>{{item.url_info.title}}</span>
+        </a>
+      </div>
     </div>
     <div id="board_search">
       <div class="ui mini action input" :style="{borderColor:line_color}">
@@ -41,7 +46,6 @@
           </button>
       </div>
     </div>
-    <div id="board_copyright"></div>
   </div>
 </div>
 <div id="board2" :style="{borderTopColor:master_line_color}">
@@ -72,20 +76,29 @@
   </div>
   <div id="board_info">
 <!--    <div v-if="info_loading" class="ui active centered inline loader" style="margin-top:35px;margin-bottom:35px;"></div>-->
-    <div :id="item['.key']" v-for="(item, index) in info_sort_filter" class="board_list ui vertical segment clear">
-      <img class="ui left floated image transition mini" :src="user_photo" v-once>
-      <p class="content" v-html="message_filter(item.message)" @dblclick="edit_info(item)"></p>
-      <p class="content textarea ui form" :style="{borderColor:line_color}" >
-        <textarea></textarea>
-        <span class="textarea_prompt">
-          <span class="esc">Esc離開編輯</span>
-          <button class="mini ui button">送出</button>
-        </span>
-      </p>
-      <span class="right_icon">
-        <span :style="{color : line_color}"><i @click="favorite_info(item)" :class="{active : item.favorite }" class="like icon" :style="{color : line_color}"></i></span>
-        <i @click="delete_info(item['.key'])" class="trash icon"></i>
+<!--   https://semantic-ui.com/elements/label.html-->
+    <div v-for="(item, index) in info_sort_filter" class="board_list ui vertical segment clear">
+<!--
+      <span class="ui left corner label">
+        <i class="youtube play icon"></i>
       </span>
+-->
+      <div @dblclick="edit_info(item)">
+        <img class="ui left floated image transition mini" :src="user_photo" v-once>
+        <p class="content" v-html="$options.filters.message_filter(item.message)"></p>
+        <p class="content textarea ui form" :style="{borderColor:line_color}">
+          <textarea></textarea>
+          <span class="textarea_prompt" >
+            <span class="esc">Esc離開編輯</span>
+            <button class="send mini ui button" :style="{backgroundColor:line_color}">送出</button>
+            <button class="cancel mini ui button">取消</button>
+          </span>
+        </p>
+        <span class="right_icon">
+          <span :style="{color : line_color}"><i @click="favorite_info(item)" :class="{active : item.favorite }" class="like icon" :style="{color : line_color}"></i></span>
+          <i @click="delete_info(item['.key'])" class="trash icon"></i>
+        </span>
+      </div>
     </div>
   </div>
 </div>
@@ -139,8 +152,8 @@
             var url=urlify_url.split("</a>")[0].split(">")[1];
             vm.url_info="等等...正在為您截取網站";
             parse_url(url,function(url_info){
-							url_info.url=url;//這個url代表是連結的url
-			  			vm.url_info=url_info;
+              url_info.url=url;//這個url代表是連結的url
+              vm.url_info=url_info;
             })
           }
  

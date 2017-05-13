@@ -20,7 +20,7 @@ var vm = new Vue({
     },0);
     $("#board_info .ui.active").show();
   },firebase: {
-    //watch key_metro
+    //watch:key_metro
   },computed: {
    is_public:function(){
      if(this.blueprint.length==0)return "";
@@ -65,8 +65,15 @@ var vm = new Vue({
    },
    info_favorites : function(){
      var _info=this.info.filter(function (info) {
-       return info.favorite;
-     });
+       if(info.favorite){
+         if(info.url_info){//有網址資訊
+           return true
+         }else{
+           return false
+         }
+       }
+       return false;
+     }); 
      if(_info.length==0)return false
      return _info
    },
@@ -90,6 +97,19 @@ var vm = new Vue({
     if(!url)return "https://semantic-ui.com/images/avatar/large/daniel.jpg";
     return url;
    }
+  },filters: {
+    message_filter : function(message){
+      message=message.replace(/\</g,"&lt;");
+      message=message.replace(/\>/g,"&gt;");
+      message=message.replace(/(?:\r\n|\r|\n)/g, '<br/>');
+      message=urlify(message);//轉成超連結
+      message=message.replace(/ /g, "&nbsp;");
+      message=message.replace(/\<a&nbsp;href=/g,"<a href="); 
+      setTimeout(function(){
+         $("#board_info").find("a").css("color",vm.line_color).attr("target","_blank");
+      },5)
+      return message;
+    }
   },watch: {
     key_metro : function(){
       //https://github.com/vuejs/vuefire
@@ -153,19 +173,6 @@ var vm = new Vue({
     },
     index_update : function(){
       DB.ref('users_data/' + user_uid +"/index").set(vm.index);
-    },
-    message_filter :function(message,index){
-      message=message.replace(/\</g,"&lt;");
-      message=message.replace(/\>/g,"&gt;");
-      message=message.replace(/(?:\r\n|\r|\n)/g, '<br/>');
-      message=urlify(message);//轉成超連結
-      message=message.replace(/ /g, "&nbsp;");
-      message=message.replace(/\<a&nbsp;href=/g,"<a href="); 
-      setTimeout(function(){
-         $("#board_info").find("a").css("color",vm.line_color).attr("target","_blank");
-      },5)
-      
-      return message;
     },
     更新藍圖 :function (key,data,fn){
       if(key==undefined || data==undefined){
@@ -410,15 +417,22 @@ var vm = new Vue({
       var $textarea=$target_parent.find("textarea");
       $textarea.val(item.message).focus();
       $(document.body).on("keyup.textarea",function(event){
-        if(event.keyCode==27)vm.leave_edit_info($target_parent);
-      })
-      $target_parent.find("button").one("click",function(){
+        if(event.keyCode==27){
           vm.leave_edit_info($target_parent);
-          DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).child(_key).update({
-            message : $.trim($textarea.val()),
-            update_timestamp: firebase.database.ServerValue.TIMESTAMP
-          });
+        }
       })
+      $target_parent.find("button.send").one("click",function(){
+        vm.leave_edit_info($target_parent);
+        DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).child(_key).update({
+          message : $.trim($textarea.val()),
+          update_timestamp: firebase.database.ServerValue.TIMESTAMP
+        });
+      })
+       $target_parent.find("button.cancel").one("click",function(){
+          vm.leave_edit_info($target_parent);
+       })
+     
+
     },leave_edit_info :function($target){
       if(!$(".board_list").hasClass("edit"))return
       $(document).one("click",function(){//解決出現Chrome英文翻譯的問題

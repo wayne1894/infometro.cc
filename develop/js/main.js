@@ -136,8 +136,13 @@
 
 			
 			//var $iframe_body=$(document.getElementById('iframe').contentWindow.document.body);
-			url_info.title=$(document.getElementById('iframe').contentWindow.document).find("title").html();
-			if(url_info.title==undefined)url_info.title="";
+			
+      if(url_info.og_title){
+        url_info.title=url_info.og_title
+      }else{ 
+        url_info.title=$(document.getElementById('iframe').contentWindow.document).find("title").html();
+        if(url_info.title==undefined)url_info.title="";
+      }
 			url_info.ico="https://www.google.com/s2/favicons?domain_url="+url;
 
 			$("#iframe").remove();
