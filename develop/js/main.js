@@ -150,13 +150,113 @@
 			console.log(url_info);
       })
   }
-	//一些以前遺留的資料
 
-		// $(document).bind('selectstart',function(){return false;})
-	
-    //按右鍵 //if($(event.target).hasClass("blueprint_i"))return;   -->要移掉
-    //    $(".blueprint_list").off("contextmenu.custom").on("contextmenu.custom",function(event){
-    //      event.preventDefault();
-    //      if(event.target.nodeName=="INPUT")return;
-    //      $(this).trigger("customClick");
-    //    })
+
+
+//一些以前遺留的資料
+
+// $(document).bind('selectstart',function(){return false;})
+
+//按右鍵 //if($(event.target).hasClass("blueprint_i"))return;   -->要移掉
+//    $(".blueprint_list").off("contextmenu.custom").on("contextmenu.custom",function(event){
+//      event.preventDefault();
+//      if(event.target.nodeName=="INPUT")return;
+//      $(this).trigger("customClick");
+//    })
+
+
+//社交支線
+//      #board_txt{
+//        border-bottom: 1px solid #CDCDCD;
+//        padding-left: 22px;
+//        padding-top: 10px;
+//        padding-bottom: 10px;
+//      }
+//  <div id="board_txt">
+//    <span v-if="is_public">社交支線 </span>
+//    <a href="#" onclick="push_now_line()">推送支線</a>
+//  </div>
+
+//   computed:
+//   is_public:function(){
+//     if(this.blueprint.length==0)return "";
+//     return vm.get_line().public;
+//   },
+//不穩定，尚在開發
+//function push_line_public(_line_key,_line,_metro){//推送分支到遠端
+//	DB.ref('info/' + _line_key +"/public").set(true);//設為公開
+//	DB.ref('info/' + _line_key +"/w_metro").set(true);//擁有metro編寫權限
+//	DB.ref('info/' + _line_key +"/w_info").set(true);//擁有info編寫權限
+//  
+//	DB.ref('info/' + _line_key +"/line_data").set(_line);//遠端支線相關
+//	DB.ref('info/' + _line_key +"/metro_data/").set(_metro);//遠端metro資訊
+//}
+//function push_now_line(){//傳送現在位置的支線到遠端(更新)
+//  var data=vm.get_blueprint();
+//  var _line=vm.get_line()
+//  _line.public=true;//要同步將本地端支線變成public
+//  vm.更新藍圖(data.key,data);
+//  var _metro=_line.metro;
+//  var __line=JSON.parse(JSON.stringify(_line));//將傳址改為傳值
+//  delete __line.metro;
+//  push_line_public(__line._key,__line,_metro);
+//}
+//function copy_public_line(_line_key){//複製某個遠端支線到自己的位置
+//  var _data=vm.get_blueprint();
+//  for(var i=0;i<_data.line.length;i++){
+//    if(_data.line[i]._key==_line_key)return "repeat"
+//  }
+//  DB.ref('info/' + _line_key + "/line_data").once("value",function(data){
+//    _data.line.push(data.val());
+//    DB.ref('info/' + _line_key + "/metro_data").once("value",function(data){
+//      _data.line[_data.line.length-1].metro=data.val();
+//      _data.line.public=true;
+//      vm.更新藍圖(_data.key,_data);
+//    })
+//  })
+//}
+//function update_public_line(_line_key){//更新某個遠端支線到自己的位置
+//  var _data=vm.get_blueprint();
+//  var update_index
+//  for(var i=0;i<_data.line.length;i++){
+//    if(_data.line[i]._key==_line_key)update_index=i
+//  }
+//  if(update_index==undefined)return false
+//  DB.ref('info/' + _line_key + "/line_data").once("value",function(data){
+//    _data.line[update_index]=data.val();
+//    DB.ref('info/' + _line_key + "/metro_data").once("value",function(data){
+//      _data.line[update_index].metro=data.val();
+//      vm.更新藍圖(_data.key,_data);
+//    })
+//  })
+//}
+
+
+
+
+
+
+
+//index.html的資料
+
+//<h2>email註冊</h2>
+//<input id="registered1" type="text">
+//<input id="registered2" type="password">
+//<button id="emailadd">Email 註冊</button>
+//
+//
+//<h2>email登入</h2>
+//<input id="login1" type="text">
+//<input id="login2" type="password">
+//<button id="emailLogin">Email Login</button>
+
+
+//  $(function(){
+//      $("#emailadd").on("click",function(){
+//          email_註冊($("#registered1").val(),$("#registered2").val(),location_fn)
+//      })
+//      $("#emailLogin").on("click",function(){
+//          email_登入($("#login1").val(),$("#login2").val(),location_fn)
+//      })
+//
+//  })

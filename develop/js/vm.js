@@ -22,10 +22,6 @@ var vm = new Vue({
   },firebase: {
     //watch:key_metro
   },computed: {
-   is_public:function(){
-     if(this.blueprint.length==0)return "";
-     return vm.get_line().public;
-   },
    master_line_color: function(){//主線目前一律是line 0
      if(this.blueprint.length==0)return false;
      if(this.pick_color && this.pick_master)return this.pick_color

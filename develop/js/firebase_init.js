@@ -55,26 +55,26 @@
     user_uid=data.uid;
   });
 
-  function email_註冊(email, password,fn){
-    //如果註冊新帳戶，也會自動登入
-  firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user){
-    //寄認證信
-    初始化使用者資訊(fn)
-  }).catch(function(error) {
-      var errorCode = error.code;
-      var errorMsg = error.message;
-      print(errorMsg);
-    })
-  }
-  function email_登入(email,password,fn){
-    firebase.auth().signInWithEmailAndPassword(email, password).then(function(user){
-      fn();
-    }).catch(function(error) {
-    var errorCode = error.code;
-    var errorMsg = error.message;
-    print(errorMsg+"___");
-  	});
-  }
+//  function email_註冊(email, password,fn){
+//    //如果註冊新帳戶，也會自動登入
+//  firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user){
+//    //寄認證信
+//    初始化使用者資訊(fn)
+//  }).catch(function(error) {
+//      var errorCode = error.code;
+//      var errorMsg = error.message;
+//      print(errorMsg);
+//    })
+//  }
+//  function email_登入(email,password,fn){
+//    firebase.auth().signInWithEmailAndPassword(email, password).then(function(user){
+//      fn();
+//    }).catch(function(error) {
+//    var errorCode = error.code;
+//    var errorMsg = error.message;
+//    print(errorMsg+"___");
+//  	});
+//  }
   function 登出(){
     firebase.auth().signOut().then(function() {
       print("User sign out!");
@@ -150,8 +150,6 @@ function anonymous_login(fn){
 		// ...
 	});
 }
-
-
 function 初始化使用者資訊(fn){
   var user = firebase.auth().currentUser;
   DB.ref('users/' + user.uid).set({
@@ -169,54 +167,6 @@ function blueprint_json(name){
 function set_line_root(_line_key,user_uid){//設定支線擁有者
 	DB.ref('info/' + _line_key +"/root").set(user_uid);
 }
-function push_line_public(_line_key,_line,_metro){//推送分支到遠端
-	DB.ref('info/' + _line_key +"/public").set(true);//設為公開
-	DB.ref('info/' + _line_key +"/w_metro").set(true);//擁有metro編寫權限
-	DB.ref('info/' + _line_key +"/w_info").set(true);//擁有info編寫權限
-  
-	DB.ref('info/' + _line_key +"/line_data").set(_line);//遠端支線相關
-	DB.ref('info/' + _line_key +"/metro_data/").set(_metro);//遠端metro資訊
-}
-function push_now_line(){//傳送現在位置的支線到遠端(更新)
-  var data=vm.get_blueprint();
-  var _line=vm.get_line()
-  _line.public=true;//要同步將本地端支線變成public
-  vm.更新藍圖(data.key,data);
-  var _metro=_line.metro;
-  var __line=JSON.parse(JSON.stringify(_line));//將傳址改為傳值
-  delete __line.metro;
-  push_line_public(__line._key,__line,_metro);
-}
-function copy_public_line(_line_key){//複製某個遠端支線到自己的位置
-  var _data=vm.get_blueprint();
-  for(var i=0;i<_data.line.length;i++){
-    if(_data.line[i]._key==_line_key)return "repeat"
-  }
-  DB.ref('info/' + _line_key + "/line_data").once("value",function(data){
-    _data.line.push(data.val());
-    DB.ref('info/' + _line_key + "/metro_data").once("value",function(data){
-      _data.line[_data.line.length-1].metro=data.val();
-      _data.line.public=true;
-      vm.更新藍圖(_data.key,_data);
-    })
-  })
-}
-function update_public_line(_line_key){//更新某個遠端支線到自己的位置
-  var _data=vm.get_blueprint();
-  var update_index
-  for(var i=0;i<_data.line.length;i++){
-    if(_data.line[i]._key==_line_key)update_index=i
-  }
-  if(update_index==undefined)return false
-  DB.ref('info/' + _line_key + "/line_data").once("value",function(data){
-    _data.line[update_index]=data.val();
-    DB.ref('info/' + _line_key + "/metro_data").once("value",function(data){
-      _data.line[update_index].metro=data.val();
-      vm.更新藍圖(_data.key,_data);
-    })
-  })
-}
-
 
 function line_json(name,color,master){
   var _line_key=DB.ref('blueprint/' + user_uid).push().key;

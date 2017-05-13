@@ -7,38 +7,8 @@
 <style>
   body{
     text-align: center;
-  }
-  h1{
-    font-size: 50px
-  }
-  h2{
-    font-size: 35px;
-  }
-  h3{
-    font-size: 25px;
-  }
-  h4{
-    font-size: 15px;
-  }
-  hr{
-    margin: 40px 0;
-  }
-  
+  }  
 </style>
-
-<!--
-<h2>email註冊</h2>
-<input id="registered1" type="text">
-<input id="registered2" type="password">
-<button id="emailadd">Email 註冊</button>
-
-
-<h2>email登入</h2>
-<input id="login1" type="text">
-<input id="login2" type="password">
-<button id="emailLogin">Email Login</button>
--->
-
 <h1 style="margin-top:150px;margin-bottom:80px;color:#FF6900">infometro.cc 資訊地鐵站</h1>
 
 <h2>從今天開始，改變您搜藏資訊的習慣</h2>
@@ -75,23 +45,11 @@
 <h2>粉絲頁、聯絡、意見回饋</h2>
 
 <script>
-
   function location_fn(){
     location.href = "/:-D";
   }
-  
-	$(function(){
-		$("#emailadd").on("click",function(){
-			email_註冊($("#registered1").val(),$("#registered2").val(),location_fn)
-		})
-		$("#emailLogin").on("click",function(){
-			email_登入($("#login1").val(),$("#login2").val(),location_fn)
-		})
-
-	})
-
 </script>
-
+<script src="src/build/js/main.js"></script>
 @@include('include/footer.html')
 </body>
 </html>
