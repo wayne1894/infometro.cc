@@ -257,12 +257,15 @@ $(function(){
   </div>
   <div id="board_info">
 <!--    <div v-if="info_loading" class="ui active centered inline loader" style="margin-top:35px;margin-bottom:35px;"></div>-->
-    <div v-for="(item, index) in info_sort_filter" class="board_list ui vertical segment clear">
+    <div :id="item['.key']" v-for="(item, index) in info_sort_filter" class="board_list ui vertical segment clear">
       <img class="ui left floated image transition mini" :src="user_photo" v-once>
-      <p class="content" v-html="message_filter(item.message)" @dblclick="update_info(item)"></p>
+      <p class="content" v-html="message_filter(item.message)" @dblclick="edit_info(item)"></p>
       <p class="content textarea ui form" :style="{borderColor:line_color}" >
         <textarea></textarea>
-        <span class="textarea_prompt">按下Enter儲存 , Esc離開編輯</span>
+        <span class="textarea_prompt">
+          <span class="esc">Esc離開編輯</span>
+          <button class="mini ui button">送出</button>
+        </span>
       </p>
       <span class="right_icon">
         <span :style="{color : line_color}"><i @click="favorite_info(item)" :class="{active : item.favorite }" class="like icon" :style="{color : line_color}"></i></span>

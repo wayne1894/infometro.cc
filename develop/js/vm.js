@@ -98,6 +98,8 @@ var vm = new Vue({
       var _index= this.index[this.index_blueprint][this.index_line];
       _index.key_metro=this.key_metro;
       vm.index_update();
+      
+      vm.leave_edit_info();
     }
   },methods: {
       get_favorite_style: function(favorite,color){
@@ -223,6 +225,7 @@ var vm = new Vue({
       }else{//使用預設
         vm.key_metro=_metro[0]._key;
       }
+      
     },new_blueprint : function(){//新增藍圖
       vm.action="new_blueprint";
       var newRef=DB.ref('blueprint/' + user_uid).push();
@@ -399,46 +402,34 @@ var vm = new Vue({
       DB.ref("info/" + _line_key + "/root").remove();
     },favorite_info : function(item){
       DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).child(item[".key"]).update({favorite : !item.favorite});
-    },update_info :function(item){
+    },edit_info :function(item){
       $("html").addClass("re_name");
       var _key=item[".key"];
       var $target_parent=$(event.target).closest(".board_list");
       $target_parent.addClass("edit");
       var $textarea=$target_parent.find("textarea");
-      $textarea.val(item.message);
-      var show_down=false;
-      $textarea.on("keydown."+_key+"_textarea",function(event){
-        if(event.shiftKey){
-          show_down=true;
-          setTimeout(function(){
-            show_down=false;
-          },1500);
-        }
-      });
-      $textarea.focus().on("keyup."+_key+"_textarea",function(event){
-        if(event.keyCode==13 && event.shiftKey){
-           event.preventDefault();
-        }else if(event.keyCode==13){//enter
-          if(show_down){
-            event.preventDefault();
-            return
-          }
-          edit_set();
+      $textarea.val(item.message).focus();
+      $(document.body).on("keyup.textarea",function(event){
+        if(event.keyCode==27)vm.leave_edit_info($target_parent);
+      })
+      $target_parent.find("button").one("click",function(){
+          vm.leave_edit_info($target_parent);
           DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).child(_key).update({
             message : $.trim($textarea.val()),
             update_timestamp: firebase.database.ServerValue.TIMESTAMP
           });
-        }else if(event.keyCode==27){//esc
-          edit_set();
-        }
       })
-      function edit_set(){
-       $(document).one("click",function(){//解決出現Chrome英文翻譯的問題
-         $("html").removeClass("re_name");
-       })
-       $target_parent.removeClass("edit");
-       $textarea.off("keyup."+_key+"_textarea").off("keydown."+_key+"_textarea");
+    },leave_edit_info :function($target){
+      if(!$(".board_list").hasClass("edit"))return
+      $(document).one("click",function(){//解決出現Chrome英文翻譯的問題
+        $("html").removeClass("re_name");
+      })
+      if($target){
+        $target.removeClass("edit");
+      }else{
+        $(".board_list").removeClass("edit");
       }
+      $(document.body).off("keyup.textarea");
     },re_name : function(index,_level){//重新命名(共用)
       if($(event.target).hasClass("blueprint_i"))return;
       $("html").addClass("re_name");
