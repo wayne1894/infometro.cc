@@ -150,7 +150,19 @@
 			console.log(url_info);
       })
   }
-
+  function move_center(){
+    var total_width=0;
+    var tog_width=$("#top_tag").width();
+    $("#top_tag li").each(function(){
+        total_width=total_width+$(this).width();
+    })
+    if(tog_width > total_width){
+        $("#top_tag").css("left",((tog_width-total_width)/2) +"px");
+    }else{
+        $("#top_tag").css("left",0);
+    }
+    $("#top_tag").stop().fadeIn(350);
+  }
 
 
 //一些以前遺留的資料
@@ -232,11 +244,6 @@
 //}
 
 
-
-
-
-
-
 //index.html的資料
 
 //<h2>email註冊</h2>
@@ -260,3 +267,63 @@
 //      })
 //
 //  })
+
+
+//<h2>小額贊助我們，成為infometro初期的贊助者，將獲得
+//未來產品免費的福利。</h2>
+//<h3>infometro是一款正在發展中的創業計畫，很多功能都需要修繕與完整，初期我們需要些許的資金來讓計畫啟動，如果您關注infometro未來的發展請隨時關注我們的官方粉絲頁</h3>
+//
+//
+//
+//<h4>我們的始命：整合網路上的資源，快速做資源整理、激發創意與思考
+//達到資訊 易用、易記、易分享的目的。</h4>
+//
+//<h2>追求卓越與改變世界的勇氣，誠徵對我們產品有興趣的天使投資人。</h2>
+
+
+
+//firebase的部份
+
+//  function email_註冊(email, password,fn){
+//    //如果註冊新帳戶，也會自動登入
+//  firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user){
+//    //寄認證信
+//    初始化使用者資訊(fn)
+//  }).catch(function(error) {
+//      var errorCode = error.code;
+//      var errorMsg = error.message;
+//      print(errorMsg);
+//    })
+//  }
+//  function email_登入(email,password,fn){
+//    firebase.auth().signInWithEmailAndPassword(email, password).then(function(user){
+//      fn();
+//    }).catch(function(error) {
+//    var errorCode = error.code;
+//    var errorMsg = error.message;
+//    print(errorMsg+"___");
+//  	});
+//  }
+
+//更改基本資料
+//function update_Profile(){
+//	var user = firebase.auth().currentUser;
+//	user.updateProfile({
+//		displayName: "wayne",
+//		photoURL: "https://example.com/jane-q-user/profile.jpg"
+//	}).then(function() {
+//		print(user.displayName);
+//		print(user.photoURL);
+//	}, function(error) {
+//		
+//	});
+//}
+
+//  function 寄認證信(){
+//    var user = firebase.auth().currentUser;
+//    user.sendEmailVerification().then(function() {
+//      print("eamil sent")
+//    }, function(error) {
+//      print("error")
+//    });
+//  }

@@ -90,7 +90,9 @@ var vm = new Vue({
    user_photo: function(){
      var url=this.users.photo;
     //https://semantic-ui.com/views/card.html
-    if(!url)return "https://semantic-ui.com/images/avatar/large/daniel.jpg";
+    if(!url){
+      return "https://semantic-ui.com/images/avatar/large/steve.jpg";
+    }
     return url;
    }
   },filters: {

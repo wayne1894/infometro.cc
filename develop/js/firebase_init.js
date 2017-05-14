@@ -55,26 +55,7 @@
     user_uid=data.uid;
   });
 
-//  function email_註冊(email, password,fn){
-//    //如果註冊新帳戶，也會自動登入
-//  firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user){
-//    //寄認證信
-//    初始化使用者資訊(fn)
-//  }).catch(function(error) {
-//      var errorCode = error.code;
-//      var errorMsg = error.message;
-//      print(errorMsg);
-//    })
-//  }
-//  function email_登入(email,password,fn){
-//    firebase.auth().signInWithEmailAndPassword(email, password).then(function(user){
-//      fn();
-//    }).catch(function(error) {
-//    var errorCode = error.code;
-//    var errorMsg = error.message;
-//    print(errorMsg+"___");
-//  	});
-//  }
+
   function 登出(){
     firebase.auth().signOut().then(function() {
       print("User sign out!");
@@ -84,28 +65,6 @@
     })
   }
 
-//更改基本資料
-//function update_Profile(){
-//	var user = firebase.auth().currentUser;
-//	user.updateProfile({
-//		displayName: "wayne",
-//		photoURL: "https://example.com/jane-q-user/profile.jpg"
-//	}).then(function() {
-//		print(user.displayName);
-//		print(user.photoURL);
-//	}, function(error) {
-//		
-//	});
-//}
-
-//  function 寄認證信(){
-//    var user = firebase.auth().currentUser;
-//    user.sendEmailVerification().then(function() {
-//      print("eamil sent")
-//    }, function(error) {
-//      print("error")
-//    });
-//  }
 
 //firebase to fb login
 var provider = new firebase.auth.FacebookAuthProvider();
@@ -113,8 +72,10 @@ function fb_登入(fn){
 	//signInWithPopup signInWithRedirect
 	firebase.auth().signInWithPopup(provider).then(function(result) {
 	  //var token = result.credential.accessToken;
+      print(result)
 	  var user = result.user;
        DB.ref('users/' + user.uid).once('value',function(data) {
+         
          if(!data.val()){
            初始化使用者資訊(fn);
          }else{
@@ -155,6 +116,7 @@ function 初始化使用者資訊(fn){
   DB.ref('users/' + user.uid).set({
     name : user.displayName,
     url_name: "",
+    email: user.email,
     photo : user.photoURL
   }).then(fn);
 }

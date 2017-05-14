@@ -30,16 +30,94 @@
 <script src="src/static/js/colpick.js"></script>
 <!-- jquery-color-pick -->
 </head>
-<body>
 <style>
+@font-face {
+   font-family: 'Noto Sans TC';
+   font-style: normal;
+   font-weight: 700;
+   src: url(//fonts.gstatic.com/ea/notosanstc/v1/NotoSansTC-Bold.woff2) format('woff2'),
+        url(//fonts.gstatic.com/ea/notosanstc/v1/NotoSansTC-Bold.woff) format('woff'),
+        url(//fonts.gstatic.com/ea/notosanstc/v1/NotoSansTC-Bold.otf) format('opentype');
+ }
   body{
     text-align: center;
-  }  
+  }
+  #index_main{
+    width: 100%;
+    height: 100%;
+  }
+  #a1{
+    width: 100%;
+    height: 15%;
+    background-color: #DEDEDE;
+    background: -webkit-gradient(linear, 0 0, 0 bottom, from(#DEDEDE), to(#F1F1F2));
+    background: -webkit-linear-gradient(#DEDEDE, #F1F1F2);
+    background: -moz-linear-gradient(#DEDEDE, #F1F1F2);
+    background: -ms-linear-gradient(#DEDEDE, #F1F1F2);
+    background: -o-linear-gradient(#DEDEDE, #F1F1F2);
+    background: linear-gradient(#DEDEDE, #F1F1F2);
+    border-bottom: 4px solid #FF6900;
+  }
+  .index_wrap{
+    margin: 0 auto;
+    width: 1080px;
+    text-align: left;
+    padding: 0 15px;
+  }
+  #a1 .logo{
+    width: 50px;
+    margin-top: 16px;
+  }
+  #b1{
+    width: 100%;
+    height: 85%;
+    background-color: #F7F7F7;
+    padding-top: 7%;
+  }
+  .logo2{
+     width: 50%;
+  }
+  h1,h2{
+   font-family: 'Noto Sans TC'!important;
+   font-weight: 700;
+  }
+  h1{
+    font-size: 40px;
+    margin-top: 25px;
+    margin-bottom: 5px;
+  }
 </style>
-<h1 style="margin-top:150px;margin-bottom:80px;color:#FF6900">infometro.cc 資訊地鐵站</h1>
+<body>
+<div id="index_main">
+  <div id="a1">
+    <div class="index_wrap">
+      <img class="logo" src="src/static/images/logo.svg">
+    </div>
+  </div>
+  <div id="b1">
+    <div class="index_wrap" style="text-align:center">
+      <img class="logo2" src="src/static/images/logo_big.svg">
+      <h1>從今天開始, 改變您搜藏資訊的習慣</h1>
+      <h2>infometro 是一款利用地鐵地圖來組織資訊的網站，用來保存創意和想法。</h2>
+      <button id="anonymous" onclick="anonymous_login(location_fn)">匿名試用</button>
+      <button id="fbLoginBtn" onclick="fb_登入(location_fn)">用Facebook登入</button>
+    </div>
+  </div>
 
-<h2>從今天開始，改變您搜藏資訊的習慣</h2>
-<h3>infometro 是一款利用支線特性組織資訊的網站，用來保存創意和想法。</h3>
+</div>
+
+
+
+
+
+
+<!--
+  <div>
+    <button class="ui facebook button">使用Facebook註冊</button>
+  </div>
+-->
+
+<!--
 
 <button id="anonymous" onclick="anonymous_login(location_fn)">匿名試用</button>
 <button id="fbLoginBtn" onclick="fb_登入(location_fn)">用Facebook登入</button>
@@ -51,25 +129,16 @@
 
 <h3>infometro lightning ，給大量瀏覽網頁資訊的你，您可以安裝google chrome套件 infometro lightning，隨時結取成千上萬個網頁，伺機整合到你的地鐵裡。</h3>
 <hr>
-
-
-<!--
-<h2>小額贊助我們，成為infometro初期的贊助者，將獲得
-未來產品免費的福利。</h2>
-<h3>infometro是一款正在發展中的創業計畫，很多功能都需要修繕與完整，初期我們需要些許的資金來讓計畫啟動，如果您關注infometro未來的發展請隨時關注我們的官方粉絲頁</h3>
 -->
 
-<!--
-<h4>我們的始命：整合網路上的資源，快速做資源整理、激發創意與思考
-達到資訊 易用、易記、易分享的目的。</h4>
--->
-<!--<h2>追求卓越與改變世界的勇氣，誠徵對我們產品有興趣的天使投資人。</h2>-->
+
+
 
 <!--
 <h2>登出</h2>
 <button onclick="登出()">登出</button>
 -->
-<h2>粉絲頁、聯絡、意見回饋</h2>
+<!--<h2>粉絲頁、聯絡、意見回饋</h2>-->
 
 <script>
   function location_fn(){
@@ -77,6 +146,7 @@
   }
 </script>
 <script src="src/build/js/main.js"></script>
+<script src="src/build/js/vm.js"></script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
