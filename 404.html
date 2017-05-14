@@ -259,7 +259,7 @@ $(function(){
           <i @click="delete_info(item['.key'])" class="trash icon"></i>
         </span>
         <!--包成vue組件 顯示-->
-        <div v-if="item.url_info" class="ui items" style="margin-top:15px;">
+        <div v-if="item.url_info" class="ui items" style="margin-top:15px; display:none">
           <div class="item" style="background-color: whitesmoke;width: 98%;">
             <div v-if="item.url_info.image" class="ui small image"><img :src="item.url_info.image"></div>
             <div class="content" style=" position: relative;padding-left: 1em;padding-right: 1em; padding-bottom: 8px;">
