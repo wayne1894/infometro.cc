@@ -23,9 +23,7 @@
 
   var sortable =[];
   $(function(){
-    //$("#main").css("visibility","visible").css("left",0);
     //拖亦程式https://github.com/RubaXa/Sortable
-    $("#main").css("visibility","visible");
     sortable["blueprint"] = new Sortable(id("blueprint_drag"),{
       animation: 150,
       forceFallback: true,

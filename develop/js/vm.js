@@ -14,6 +14,8 @@ var vm = new Vue({
     pick_color :undefined,
 	url_info : undefined,
     filter_search:""
+  },created:function(){
+   $("#main").css("visibility","visible");
   },updated : function(){
     setTimeout(function(){
       $(window).resize();
