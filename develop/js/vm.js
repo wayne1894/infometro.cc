@@ -89,15 +89,7 @@ var vm = new Vue({
     })
 
    },
-   user_photo: function(){
-     var url=this.users.photo;
-    //https://semantic-ui.com/views/card.html
-    if(!url){
-      return "https://semantic-ui.com/images/avatar/large/steve.jpg";
-    }
-    return url;
-   }
-  },filters: {
+  filters: {
     message_filter : function(message){
       message=message.replace(/\</g,"&lt;");
       message=message.replace(/\>/g,"&gt;");

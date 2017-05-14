@@ -193,7 +193,9 @@ $(function(){
 </div>
 <div id="board2" :style="{borderTopColor:master_line_color}">
   <div id="board_enter_parent">
-    <div id="board_img"><img v-if="users.photo" :src="user_photo" v-once></div>
+<!--   https://semantic-ui.com/views/card.html-->
+
+    <div id="board_img"><img v-if="users.photo" :src="users.photo"><img v-else src="https://semantic-ui.com/images/avatar/large/elliot.jpg"></div>
     <div id="board_enter">
       <textarea id="board_textarea" name="textarea1" placeholder="輸入資訊"></textarea>
     </div>
@@ -244,7 +246,8 @@ $(function(){
       </span>
 -->
       <div @dblclick="edit_info(item)">
-        <img class="ui left floated image transition mini" :src="user_photo" v-once>
+        <img v-if="users.photo" class="ui left floated image transition mini" :src="users.photo">
+        <img v-else class="ui left floated image transition mini" src="https://semantic-ui.com/images/avatar/large/elliot.jpg">
         <p class="info_message content" v-html="$options.filters.message_filter(item.message)"></p>
         <p class="content textarea ui form" :style="{borderColor:line_color}">
           <textarea></textarea>
