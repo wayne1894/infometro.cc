@@ -31,23 +31,40 @@
     <div id="board_search">
       <div class="ui mini action input" :style="{borderColor:line_color}">
         <input v-model.trim="filter_search" type="text" placeholder="Filter...">
-          <button v-if="filter_search" class="ui mini icon button" :style="{backgroundColor:line_color}" >
-            <i class="filter icon"></i>
-          </button>
-          <button v-else class="ui mini icon button" >
-            <i class="filter icon"></i>
-          </button>
+        <button v-if="filter_search" class="ui mini icon button" :style="{backgroundColor:line_color}" >
+          <i class="filter icon"></i>
+        </button>
+        <button v-else class="ui mini icon button" >
+          <i class="filter icon"></i>
+        </button>
       </div>
     </div>
   </div>
 </div>
 <div id="board2" :style="{borderTopColor:master_line_color}">
   <div id="board_enter_parent">
-    <div id="board_img"><img v-if="users.photo" :src="user_photo"></div>
+    <div id="board_img"><img v-if="users.photo" :src="user_photo" v-once></div>
     <div id="board_enter">
       <textarea id="board_textarea" name="textarea1" placeholder="輸入資訊"></textarea>
-      <div v-if="url_info">{{url_info}}</div>
     </div>
+    <!--包成vue組件 輸入-->
+    <div v-if="url_info" class="ui items">
+      <div class="item" style="background-color: whitesmoke;width: 95%;">
+        <div v-if="url_info.image" class="ui small image"><img :src="url_info.image"></div>
+        <div class="content" style=" position: relative;padding-left: 1em;padding-right: 1em; padding-bottom: 8px;">
+          <a href="{{url_info.url}}" target="_blank" class="header" style="margin-top: 6px;color:#000;    width: 240px;">{{url_info.title}}</a>
+          <div class="meta"><span>{{url_info.url_parent}}</span></div>
+          <!-- v-html有風險要改掉 -->
+          <div v-if="url_info.description" class="extra" v-html="url_info.description"></div>
+          <div>
+            <a class="ui right corner label" @click="vm.url_info=''" :style="{borderColor:line_color}" >
+              <i class="remove icon" style="color:#fff;cursor: pointer;"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--包成vue組件 輸入-->
   </div>
   <div id="board_send_parent">
     <div class="ui icon menu">
@@ -78,7 +95,7 @@
 -->
       <div @dblclick="edit_info(item)">
         <img class="ui left floated image transition mini" :src="user_photo" v-once>
-        <p class="content" v-html="$options.filters.message_filter(item.message)"></p>
+        <p class="info_message content" v-html="$options.filters.message_filter(item.message)"></p>
         <p class="content textarea ui form" :style="{borderColor:line_color}">
           <textarea></textarea>
           <span class="textarea_prompt" >
@@ -91,6 +108,24 @@
           <span :style="{color : line_color}"><i @click="favorite_info(item)" :class="{active : item.favorite }" class="like icon" :style="{color : line_color}"></i></span>
           <i @click="delete_info(item['.key'])" class="trash icon"></i>
         </span>
+        <!--包成vue組件 顯示-->
+        <div v-if="item.url_info" class="ui items" style="margin-top:15px;">
+          <div class="item" style="background-color: whitesmoke;width: 98%;">
+            <div v-if="item.url_info.image" class="ui small image"><img :src="item.url_info.image"></div>
+            <div class="content" style=" position: relative;padding-left: 1em;padding-right: 1em; padding-bottom: 8px;">
+              <a href="{{item.url_info.url}}" target="_blank" class="header" style="margin-top: 6px; width: 240px;">{{item.url_info.title}}</a>
+              <div class="meta"><span>{{item.url_info.url_parent}}</span></div>
+              <!-- v-html有風險要改掉 -->
+              <div v-if="item.url_info.description" class="extra" v-html="item.url_info.description"></div>
+              <div>
+                <a class="ui right corner label" :style="{borderColor:line_color}" >
+                  <i class="remove icon" style="color:#fff;cursor: pointer;"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--包成vue組件 顯示-->
       </div>
       <div class="delete_info ui dimmer">
         <div class="content">
@@ -126,44 +161,28 @@
       $(this).height(this.scrollHeight + parseFloat($(this).css("borderTopWidth")) + parseFloat($(this).css("borderBottomWidth")));
 
     });
-    
-    
     $("#board_textarea").on('paste', function () {
-
-       //store references for lateer use
         var domTextarea = this,
             txt = domTextarea.value,
             startPos = domTextarea.selectionStart,
             endPos = domTextarea.selectionEnd,
             scrollTop = domTextarea.scrollTop;
-
-        domTextarea.value = '';
-
+            domTextarea.value = '';
         setTimeout(function () {
-            var pastedValue = domTextarea.value;
-
-            domTextarea.value = txt.substring(0, startPos) + pastedValue + txt.substring(endPos, txt.length);
-            domTextarea.focus();
-            domTextarea.selectionStart = domTextarea.selectionEnd = startPos + pastedValue.length;
-            domTextarea.scrollTop = scrollTop;
-
-            //print(pastedValue)
-            var urlify_url=urlify(pastedValue);
-					
+          var pastedValue = domTextarea.value;
+          domTextarea.value = txt.substring(0, startPos) + pastedValue + txt.substring(endPos, txt.length);
+          domTextarea.focus();
+          domTextarea.selectionStart = domTextarea.selectionEnd = startPos + pastedValue.length;
+          domTextarea.scrollTop = scrollTop;
+          var urlify_url=urlify(pastedValue);	
           if(urlify_url.indexOf("<a href=")>-1){
             var url=urlify_url.split("</a>")[0].split(">")[1];
-            vm.url_info="等等...正在為您截取網站";
             parse_url(url,function(url_info){
-              url_info.url=url;//這個url代表是連結的url
               vm.url_info=url_info;
-            })
+            });
           }
- 
-
         }, 0);
-
     });
-    
   })
 function urlify(text) {
 	//http://stackoverflow.com/questions/1500260/detect-urls-in-text-with-javascript

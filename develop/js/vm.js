@@ -106,7 +106,7 @@ var vm = new Vue({
       message=message.replace(/ /g, "&nbsp;");
       message=message.replace(/\<a&nbsp;href=/g,"<a href="); 
       setTimeout(function(){
-         $("#board_info").find("a").css("color",vm.line_color).attr("target","_blank");
+         $("#board_info .info_message").find("a").css("color",vm.line_color).attr("target","_blank");
       },5)
       return message;
     }
