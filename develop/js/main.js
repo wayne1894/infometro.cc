@@ -20,52 +20,56 @@
     move_center();
   }).resize();
 
-  $("#main").css("visibility","visible").css("left",0);
-  //拖亦程式https://github.com/RubaXa/Sortable
+
   var sortable =[];
-  sortable["blueprint"] = new Sortable(id("blueprint_drag"),{
-    animation: 150,
-    forceFallback: true,
-    onEnd: function(){
-      //vm.swap_blueprint(evt.oldIndex,evt.newIndex)
+  $(function(){
+    //$("#main").css("visibility","visible").css("left",0);
+    //拖亦程式https://github.com/RubaXa/Sortable
+    $("#main").css("visibility","visible");
+    sortable["blueprint"] = new Sortable(id("blueprint_drag"),{
+      animation: 150,
+      forceFallback: true,
+      onEnd: function(){
+        //vm.swap_blueprint(evt.oldIndex,evt.newIndex)
+      }
+    });
+    sortable["line"] = new Sortable(id("line_drag"),{
+      animation: 150,
+      forceFallback: false,
+          onEnd: function (evt) {
+              vm.swap_list(evt.oldIndex,evt.newIndex)
+          }
+    });
+    sortable["metro"] = new Sortable(id("top_tag"),{
+      animation: 50,
+      forceFallback: false,
+          filter: ".add",
+      setData: function (dataTransfer,dragEl) {
+
+              dataTransfer.setData('index',$(dragEl).data("index")); //設定要傳送的資料
+      },onStart: function (evt) {
+          var $top_tag=$("#top_tag");
+          $top_tag.find(".add").hide();
+          if(evt.oldIndex==0){
+              $top_tag.addClass("first_drag");
+          }else if(evt.oldIndex==$("#top_tag li").length-2){
+              $top_tag.addClass("last_drag");
+          }
+          vm.mode=1.5;
+      },onEnd: function(evt){
+      $("#top_tag").find(".add").show();
+          $("#top_tag").removeClass("first_drag").removeClass("last_drag");
+          vm.swap_metro(evt.oldIndex,evt.newIndex);
+          vm.mode=1;
     }
-  });
-  sortable["line"] = new Sortable(id("line_drag"),{
-    animation: 150,
-    forceFallback: false,
-		onEnd: function (evt) {
-			vm.swap_list(evt.oldIndex,evt.newIndex)
-		}
-  });
-  sortable["metro"] = new Sortable(id("top_tag"),{
-    animation: 50,
-    forceFallback: false,
-		filter: ".add",
-    setData: function (dataTransfer,dragEl) {
-     
-			dataTransfer.setData('index',$(dragEl).data("index")); //設定要傳送的資料
-	},onStart: function (evt) {
-		var $top_tag=$("#top_tag");
-		$top_tag.find(".add").hide();
-		if(evt.oldIndex==0){
-			$top_tag.addClass("first_drag");
-		}else if(evt.oldIndex==$("#top_tag li").length-2){
-			$top_tag.addClass("last_drag");
-		}
-		vm.mode=1.5;
-	},onEnd: function(evt){
-    $("#top_tag").find(".add").show();
-		$("#top_tag").removeClass("first_drag").removeClass("last_drag");
-		vm.swap_metro(evt.oldIndex,evt.newIndex);
-		vm.mode=1;
-  }
-  });
+    });
+  })
   $(function(){
     //perfectScrollbar
     $("#right .right_main").perfectScrollbar();
     
     //晃動 https://jackrugile.com/jrumble/
-    $("#logo img").jrumble({
+    $(".logo").jrumble({
       x: 2,
       y: 2,
       opacity: true,

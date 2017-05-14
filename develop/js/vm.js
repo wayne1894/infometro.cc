@@ -137,6 +137,7 @@ var vm = new Vue({
       return "linear-gradient(to right, #000 50%, "+color+" 0%)";
     },
     mode_txt:function(){
+      if(sortable.length==0)return;
       if(this.mode==0){ //一般模式
          setTimeout(function(){sortable["metro"].option("disabled", true);},5)
         return "一般模式"
@@ -242,18 +243,26 @@ var vm = new Vue({
         line : newLine
       })
     },delete_blueprint : function (key,index){//刪除藍圖
-	  vm.action="delete_blueprint";
-      var _line=vm.blueprint[index].line;
-      for(var i=0;i<_line.length;i++){
-        this.delete_info_line(_line[i]._key);
-      }
-      vm.index.splice(index,1);
-      if(vm.index_blueprint>=index){//刪除到小於自已-就往前倒退索引
-        var new_index=index-1;
-        if(new_index<0)new_index=0;
-        vm.index_blueprint=new_index;//重新安排
-      }
-      DB.ref('blueprint/' + user_uid+"/"+key).remove();
+      $("#blueprint_delete_modal").modal({
+        inverted: true,
+        closable : false
+      }).modal('show');
+      $("#blueprint_delete_button").off("click").on("click",function(){
+        vm.action="delete_blueprint";
+        var _line=vm.blueprint[index].line;
+        for(var i=0;i<_line.length;i++){
+          vm.delete_info_line(_line[i]._key);
+        }
+        vm.index.splice(index,1);
+        if(vm.index_blueprint>=index){//刪除到小於自已-就往前倒退索引
+          var new_index=index-1;
+          if(new_index<0)new_index=0;
+          vm.index_blueprint=new_index;//重新安排
+        }
+        DB.ref('blueprint/' + user_uid+"/"+key).remove();
+        $(this).off("click");
+        $("#blueprint_delete_modal").modal("hide");
+      })
     },exchange_blueprint : function(index,target){//切換藍圖
       if(event==undefined)return
       if($(event.target).hasClass("blueprint_i"))return;
@@ -323,18 +332,26 @@ var vm = new Vue({
 	  vm.get_index_blueprint().push([]);//新增line的index陣列
       this.更新藍圖(data.key,data);
     },delete_line : function(index){
-      var data=this.get_blueprint();
-      var key=data.line[index]._key;
-      data.line.splice(index,1);
-      if(vm.index_line>=index){//刪除到小於自已-就往前倒退索引(同刪除藍圖)
-        var new_index=index-1;
-        if(new_index<0)new_index=0;
-        vm.index_line=new_index;//重新安排
-      } 
-      vm.get_index_blueprint().splice(index,1);//移除line的index陣列
-      vm.update_metro_key(vm.get_index_line())
-      this.更新藍圖(data.key,data);
-      this.delete_info_line(key);
+      $('#line_delete_modal').modal({
+        inverted: true,
+        closable : false
+      }).modal('show');
+      $("#line_delete_button").off("click").on("click",function(){
+        var data=vm.get_blueprint();
+        var key=data.line[index]._key;
+        data.line.splice(index,1);
+        if(vm.index_line>=index){//刪除到小於自已-就往前倒退索引(同刪除藍圖)
+          var new_index=index-1;
+          if(new_index<0)new_index=0;
+          vm.index_line=new_index;//重新安排
+        } 
+        vm.get_index_blueprint().splice(index,1);//移除line的index陣列
+        vm.update_metro_key(vm.get_index_line())
+        vm.更新藍圖(data.key,data);
+        vm.delete_info_line(key);
+        $(this).off("click");
+        $("#line_delete_modal").modal("hide");
+      });
     },get_line_key :function(){
       return vm.get_line()._key;
     },new_metro : function (order){
@@ -401,7 +418,21 @@ var vm = new Vue({
       $("#board_textarea").val("");//清掉
       DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).push(_data);
     },delete_info : function(key){ //刪除資訊
-      DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).child(key).remove();
+      var $target_parent=$(event.target).closest(".board_list");
+      if($target_parent.hasClass("edit"))return;
+      $delete_info=$target_parent.find(".delete_info");
+      $delete_info.dimmer({opacity : 0.7,duration: {
+        show : 400,
+        hide : 0
+      }}).dimmer('show');
+      $delete_info.find(".send").off("click").on("click",function(){
+        DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).child(key).remove();
+        $delete_info.dimmer('hide');
+      });
+      $delete_info.find(".cancel").off("click").on("click",function(){
+        $delete_info.dimmer('hide');
+      })
+      
     },delete_info_line : function(_line_key){//從info最上層的line刪除
       DB.ref("info/" + _line_key + "/metro").remove();
       DB.ref("info/" + _line_key + "/root").remove();

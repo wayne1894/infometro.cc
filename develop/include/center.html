@@ -17,8 +17,8 @@
       </div>
     </div>
   </div>
-  <div id="board3" :style="{borderTopColor:master_line_color}">
-    <div id="board3_header" :style="{color:line_color}"><i class="heart icon orange"></i><span class="text">最愛連結</span>
+  <div id="board3" style="color:#FF6900" :style="{borderTopColor:master_line_color}">
+    <div id="board3_header" :style="{color:line_color}"><i class="heart icon"></i><span class="text">最愛連結</span>
     </div>
     <div id="board_favorites">
       <div class="favorites_list" v-for="(item, index) in info_favorites">
@@ -92,11 +92,19 @@
           <i @click="delete_info(item['.key'])" class="trash icon"></i>
         </span>
       </div>
-
+      <div class="delete_info ui dimmer">
+        <div class="content">
+          <div class="center">
+            <i class="trash outline icon" style="color:#fff;font-size: 1.8em;margin-bottom: 13px;cursor: default"></i>
+            <div style="margin-bottom:20px;">確定要刪除資料？</div>
+            <button class="send mini ui button" :style="{backgroundColor:line_color}">刪除</button>
+            <button class="cancel mini ui button">取消</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</div>
-
+</div> 
 <script>
   function drop(ev){
     var index = ev.dataTransfer.getData("index");

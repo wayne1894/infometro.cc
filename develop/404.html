@@ -20,6 +20,40 @@
   <div id="right">
     @@include('include/right.html')
   </div>
+  
+  
+  <div id="blueprint_delete_modal" style="padding: 0;" :style="{borderTopColor:master_line_color}" class="ui small modal orange segment">
+    <div class="header">
+      <img id="blueprint_delete_button" class="logo" src="src/static/images/logo.svg" style="width: 29px;float: right;letter-spacing: 1px;">
+      刪除整個地鐵
+    </div>
+    <div class="image content">
+
+      <div class="description">
+        <p style="line-height: 1em;font-size: 14px;letter-spacing: 1px;">這會造成整個地鐵資料都被刪除，目前暫時沒有備份服務，請三思。</p>
+        <p style="line-height: 1em;font-size: 14px;letter-spacing: 1px;">按下右上角的logo，確定刪除。</p>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="ui cancel button">取消</div>
+    </div>
+  </div>
+  <div id="line_delete_modal" style="padding: 0;" :style="{borderTopColor:line_color}" class="ui small modal orange segment">
+    <div class="header">
+      刪除支線
+    </div>
+    <div class="image content">
+      <div class="description">
+        <p style="line-height: 1em;font-size: 14px;letter-spacing: 1px;">確定刪除這條支線，將會刪除支線內的資料？</p>
+      </div>
+    </div>
+    <div class="actions">
+    <div id="line_delete_button" class="ui button" style="color:#ffffff;margin-right: -5px;" :style="{backgroundColor:line_color}">確定</div>
+    <div class="ui cancel button">取消</div>
+    </div>
+  </div>
+  
+  
 </div>
 <script src="src/build/js/main.js"></script>
 <script src="src/build/js/vm.js"></script>

@@ -231,7 +231,8 @@ function _is_login(){//程式進入點
       }
       
       blueprint_init(function(){
-            //一定要等vue資料載完才能載入選單物件
+        //一定要等vue資料載完才能載入選單物件
+
         $(".blueprint_list").dropdown("destroy").dropdown({
           on : 'customClick'
         });

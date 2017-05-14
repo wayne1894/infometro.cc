@@ -48,22 +48,30 @@ body {
   font-family: Microsoft JhengHei;
 }
 
+.ui.modals{
+  font-family: 'Noto Sans TC', sans-serif;
+  z-index: 10013!important;
+}
+
 button:focus,
 input:focus,
 select:focus,
 textarea:focus {
   outline: 0;
 }
+.logo{
+  cursor: pointer;
+}
 #main {
   visibility: hidden;
   position: relative;
-  left: -3000px;
   height: 100%;
   height: calc(~"100% - 42px");
   width: 80%;
   max-width: 1500px;
   min-width: 1000px;
   //overflow-y: scroll;
+
   #left {
     width: @left_width;
     font-size: 13px;
@@ -81,7 +89,6 @@ textarea:focus {
       padding-left: @left_pl;
       img {
         width: 44px;
-        cursor: pointer;
         box-shadow: 0 0 0 1px rgba(0,0,0,.3) inset,0 .1em 0.4em -0.05em rgba(0,0,0,.5);
       }
     }
@@ -515,7 +522,8 @@ textarea:focus {
         cursor: pointer;
         .border_area{
           display: inline-block;
-          top: 18%;
+          top: 14%;
+          position: relative;
         }
         i {
           font-size: 3.7em;
@@ -669,23 +677,25 @@ textarea:focus {
             .clearfix();
             display: block;
             padding-top: 5px;
+            button{
+              float: right;
+              position: relative;
+              left: 3px;
+            }
             .esc{
               float: left;
               position: relative;
               top: -3px;
             }
-            button{
+          }
+          button{
               padding: .6em 1.2em;
               font-size: .8rem;
-              float: right;
-              position: relative;
-              left: 3px;
+              font-weight: normal;
               &.send{
                 color: white;
               }
-            }
-
-          }
+           }
           &.edit{
             p.content{
               display: none!important;
@@ -722,7 +732,7 @@ textarea:focus {
         }
         i {
           font-size: 1.1em;
-          color: inherit;
+          color: inherit!important;
         }
       }
       #board_favorites {

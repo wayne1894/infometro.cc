@@ -15,7 +15,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vuefire/1.3.1/vuefire.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/Sortable/1.5.1/Sortable.min.js"></script>
 
-<script src="https://www.gstatic.com/firebasejs/3.6.10/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
 <script src="src/static/js/jquery.jrumble.1.3.min.js"></script>
 
 <script src="src/build/js/public.js"></script>
@@ -34,7 +34,7 @@
 <div id="main">
   <div id="left">
     <div id="line_parent">
-	<div id="logo"><img src="src/static/images/icon_128.fw.png"></div>
+	<div id="logo"><img class="logo" src="src/static/images/icon_128.fw.png"></div>
 	<div id="left_line">
 	<div class="line_text">主線：</div>
 	  <ul>
@@ -47,7 +47,7 @@
 	<div class="line_text">一般支線：</div>
       <ul id="line_drag">
         <li v-for="(item, index) in line" v-show="!item.master" :class="check_line(index)"   class="line_list" @drop="drop_line(event,index)" :data-key="item._key" :key="item._key">
-          <div v-if="!item.master"  class="tool" @click="delete_line(index)">
+          <div v-if="!item.master" class="tool" @click="delete_line(index)">
             <i class="trash outline icon"></i>
           </div>
           <input v-if="!item.master" class="line_input" type="text" v-model="item.name">
@@ -167,8 +167,8 @@ $(function(){
       </div>
     </div>
   </div>
-  <div id="board3" :style="{borderTopColor:master_line_color}">
-    <div id="board3_header" :style="{color:line_color}"><i class="heart icon orange"></i><span class="text">最愛連結</span>
+  <div id="board3" style="color:#FF6900" :style="{borderTopColor:master_line_color}">
+    <div id="board3_header" :style="{color:line_color}"><i class="heart icon"></i><span class="text">最愛連結</span>
     </div>
     <div id="board_favorites">
       <div class="favorites_list" v-for="(item, index) in info_favorites">
@@ -242,11 +242,19 @@ $(function(){
           <i @click="delete_info(item['.key'])" class="trash icon"></i>
         </span>
       </div>
-
+      <div class="delete_info ui dimmer">
+        <div class="content">
+          <div class="center">
+            <i class="trash outline icon" style="color:#fff;font-size: 1.8em;margin-bottom: 13px;cursor: default"></i>
+            <div style="margin-bottom:20px;">確定要刪除資料？</div>
+            <button class="send mini ui button" :style="{backgroundColor:line_color}">刪除</button>
+            <button class="cancel mini ui button">取消</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</div>
-
+</div> 
 <script>
   function drop(ev){
     var index = ev.dataTransfer.getData("index");
@@ -397,10 +405,44 @@ $(function(){
 })
 </script>
   </div>
+  
+  
+  <div id="blueprint_delete_modal" style="padding: 0;" :style="{borderTopColor:master_line_color}" class="ui small modal orange segment">
+    <div class="header">
+      <img id="blueprint_delete_button" class="logo" src="src/static/images/logo.svg" style="width: 29px;float: right;letter-spacing: 1px;">
+      刪除整個地鐵
+    </div>
+    <div class="image content">
+
+      <div class="description">
+        <p style="line-height: 1em;font-size: 14px;letter-spacing: 1px;">這會造成整個地鐵資料都被刪除，目前暫時沒有備份服務，請三思。</p>
+        <p style="line-height: 1em;font-size: 14px;letter-spacing: 1px;">按下右上角的logo，確定刪除。</p>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="ui cancel button">取消</div>
+    </div>
+  </div>
+  <div id="line_delete_modal" style="padding: 0;" :style="{borderTopColor:line_color}" class="ui small modal orange segment">
+    <div class="header">
+      刪除支線
+    </div>
+    <div class="image content">
+      <div class="description">
+        <p style="line-height: 1em;font-size: 14px;letter-spacing: 1px;">確定刪除這條支線，將會刪除支線內的資料？</p>
+      </div>
+    </div>
+    <div class="actions">
+    <div id="line_delete_button" class="ui button" style="color:#ffffff;margin-right: -5px;" :style="{backgroundColor:line_color}">確定</div>
+    <div class="ui cancel button">取消</div>
+    </div>
+  </div>
+  
+  
 </div>
 <script src="src/build/js/main.js"></script>
 <script src="src/build/js/vm.js"></script>
-<script>
+ <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
