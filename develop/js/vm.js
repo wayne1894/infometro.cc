@@ -88,8 +88,8 @@ var vm = new Vue({
       return info.message.indexOf(vm.filter_search) > -1
     })
 
-   },
-  filters: {
+   }
+	},filters: {
     message_filter : function(message){
       message=message.replace(/\</g,"&lt;");
       message=message.replace(/\>/g,"&gt;");
