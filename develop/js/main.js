@@ -115,7 +115,6 @@
 	}
 
 	function textarea_paste2(domTextarea,item){
-
 		var txt = domTextarea.value;
 		var startPos = domTextarea.selectionStart;
 		var endPos = domTextarea.selectionEnd;
@@ -123,18 +122,18 @@
 		domTextarea.value = '';
 
 		setTimeout(function () {
-			var pastedValue = domTextarea.value;
-			domTextarea.value = txt.substring(0, startPos) + pastedValue + txt.substring(endPos, txt.length);
-			domTextarea.focus();
-			domTextarea.selectionStart = domTextarea.selectionEnd = startPos + pastedValue.length;
-			domTextarea.scrollTop = scrollTop;
-			var urlify_url=urlify(pastedValue);	
-			if(urlify_url.indexOf("<a href=")>-1){
-				var url=urlify_url.split("</a>")[0].split(">")[1];
-				parse_url(url,function(url_info){
-					item.url_info=url_info;
-				});
-			}
+          var pastedValue = domTextarea.value;
+          domTextarea.value = txt.substring(0, startPos) + pastedValue + txt.substring(endPos, txt.length);
+          domTextarea.focus();
+          domTextarea.selectionStart = domTextarea.selectionEnd = startPos + pastedValue.length;
+          domTextarea.scrollTop = scrollTop;
+          var urlify_url=urlify(pastedValue);
+          if(urlify_url.indexOf("<a href=")>-1){
+            var url=urlify_url.split("</a>")[0].split(">")[1];
+            parse_url(url,function(url_info){
+              item.url_info=url_info;
+            });
+          }
 		}, 0);
 	}
 

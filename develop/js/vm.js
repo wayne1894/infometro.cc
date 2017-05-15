@@ -12,7 +12,7 @@ var vm = new Vue({
     mode : 1,
     pick_master :undefined,
     pick_color :undefined,
-		url_info : undefined,
+	url_info : undefined,
     filter_search:""
   },mounted:function(){
 		$("#main").css("visibility","visible");
@@ -401,10 +401,10 @@ var vm = new Vue({
     },new_info : function(){ //新增資訊
       var board_textarea=$.trim($("#board_textarea").val());
       if(board_textarea=="")return;
-			print(board_textarea)
       var _data ={
         message : board_textarea ,
         favorite : false ,
+        url_info : "",
         timestamp : firebase.database.ServerValue.TIMESTAMP,
         users : user_uid
       }
@@ -436,33 +436,34 @@ var vm = new Vue({
       DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).child(item[".key"]).update({favorite : !item.favorite});
     },edit_info :function(item){
       $("html").addClass("re_name");
-      var _key=item[".key"];
-      var $target_parent=$(event.target).closest(".board_list");
+      var _key = item[".key"];
+      var $target_parent = $(event.target).closest(".board_list");
       $target_parent.addClass("edit");
-      var $textarea=$target_parent.find("textarea");
+      var $textarea = $target_parent.find("textarea");
       $textarea.val(item.message).focus();
-      $(document.body).on("keyup.textarea",function(event){
-        if(event.keyCode==27)vm.leave_edit_info($target_parent);
+      $(document.body).on("keyup.textarea", function (event) {
+        if (event.keyCode == 27) vm.leave_edit_info($target_parent);
       })
-			$textarea.off("paste").on('paste', function(){
-				if(!item.url_info)textarea_paste2($textarea[0],item);
-			});
-      $target_parent.find("button.send").one("click",function(){
-				if(!item.url_info)item.url_info="";
-				var board_textarea=$.trim($textarea.val());
+      $textarea.off("paste").on('paste', function () {
+        if(!item.url_info){
+         textarea_paste2($textarea[0], item);
+        }
+      });
+      $target_parent.find("button.send").one("click", function () {
+        if (!item.url_info) item.url_info = "";
+        var board_textarea = $.trim($textarea.val());
         vm.leave_edit_info($target_parent);
-				$textarea.off("paste");
-				print(board_textarea)
-        DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).child(_key).update({
-          message : board_textarea,
-					url_info: item.url_info,
+        $textarea.off("paste");
+        DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).child(_key).update({
+          message: board_textarea,
+          url_info: item.url_info,
           update_timestamp: firebase.database.ServerValue.TIMESTAMP
         });
       })
-       $target_parent.find("button.cancel").one("click",function(){
-         vm.leave_edit_info($target_parent);
-				 $textarea.off("paste");
-       })
+      $target_parent.find("button.cancel").one("click", function () {
+        vm.leave_edit_info($target_parent);
+        $textarea.off("paste");
+      })
     },leave_edit_info :function($target){
       if(!$(".board_list").hasClass("edit"))return
       $(document).one("click",function(){//解決出現Chrome英文翻譯的問題

@@ -570,6 +570,9 @@ textarea:focus {
       padding-top: 18px;
       padding-left: 27px;
       padding-bottom: 25px;
+      a:not(.ui):hover{
+        text-decoration: underline;
+      }
       #board_img {
         width: 70px;
         display: inline-block;
@@ -616,38 +619,24 @@ textarea:focus {
     #board_info {
        border-bottom: 1px solid #CDCDCD;
        word-break: break-all;
-      .info {
-        padding: 10px;
-        border-bottom: 1px solid #CDCDCD;
-        word-wrap: break-word;
-        word-break: break-all;
-      }
-      a:hover{
+      a:not(.ui):hover{
         text-decoration: underline;
       }
-      >.board_list {
-        padding-left: 17px;
-				padding-right: 8px;
-				padding-top: 17px;
+      .board_list {
         min-height: 115px;
-    		border-bottom: 1px dashed #cdcdcd;
-				transition: background-color 0.2s ease-out;
-				&:hover{
-					background-color: #F3F4F4;
-					.ui.items{
-//					border-radius: 5px!important;
-//					border: 1px solid #cdcdcd!important;
-					}
-				}
-				&:nth-child(odd){
-					
-				}
-				&:nth-child(even){
-					
-				}
-				&:last-child{
-					border-bottom: 1px solid rgba(34,36,38,.15);
-				}
+        border-bottom: 1px dashed #cdcdcd;
+		transition: background-color 0.2s ease-out;
+        &:hover{
+          background-color: #F3F4F4;
+        }
+        .board_message{
+          min-height: 115px;
+          padding-left: 17px;
+          padding-right: 8px;
+        }
+        &:last-child{
+            border-bottom: 1px solid rgba(34,36,38,.15);
+        }
         .info_message {
           width: 80%;
           float: left;
