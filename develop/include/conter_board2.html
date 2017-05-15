@@ -15,7 +15,7 @@
 					<!-- v-html有風險要改掉 -->
 					<div v-if="url_info.description" class="extra" v-html="url_info.description"></div>
 					<div>
-						<a class="ui right corner label" @click="vm.url_info=''">
+						<a class="ui right corner label" @click="vm.url_info=''" style="border-color: rgb(245, 245, 245)" >
 							<i class="remove icon" style="color: rgb(1, 1, 1);cursor: pointer;"></i>
 						</a>
 					</div>
@@ -67,7 +67,7 @@
                           <!-- v-html有風險要改掉 -->
                           <div v-if="item.url_info.description" class="extra" v-html="item.url_info.description"></div>
                           <div class="url_remove">
-                              <a class="ui right corner label" @click="item.url_info=''">
+                              <a class="ui right corner label" @click="item.url_info=''" style="border-color: rgb(245, 245, 245)" >
                                   <i class="remove icon" style="color: rgb(1, 1, 1);cursor: pointer;"></i>
                               </a>
                           </div>
