@@ -17,6 +17,19 @@
 
 
 <script>
+	function move_center(){
+    var total_width=0;
+    var tog_width=$("#top_tag").width();
+    $("#top_tag li").each(function(){
+        total_width=total_width+$(this).width();
+    })
+    if(tog_width > total_width){
+        $("#top_tag").css("left",((tog_width-total_width)/2) +"px");
+    }else{
+        $("#top_tag").css("left",0);
+    }
+    $("#top_tag").stop().fadeIn(350);
+  }
   function top_tag_scroll(){
     var scroll_val=0;
     var container = $("#top_tag"),

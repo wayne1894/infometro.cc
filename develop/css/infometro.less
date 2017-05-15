@@ -561,7 +561,7 @@ textarea:focus {
   #board2 {
     width: 494px;
     margin: 0 22px;
-    margin-bottom: @bottom_height + 20;
+    margin-bottom: @bottom_height + 50;
     left: 310px;
     float: left;
     position: relative;
@@ -626,15 +626,32 @@ textarea:focus {
         text-decoration: underline;
       }
       >.board_list {
-        padding-left: 15px;
-        padding-right: 5px;
-        >div{
-          min-height: 115px;
-        }
-        p.content {
-          width: 79%;
+        padding-left: 17px;
+				padding-right: 8px;
+				padding-top: 17px;
+        min-height: 115px;
+    		border-bottom: 1px dashed #cdcdcd;
+				transition: background-color 0.2s ease-out;
+				&:hover{
+					background-color: #F3F4F4;
+					.ui.items{
+//					border-radius: 5px!important;
+//					border: 1px solid #cdcdcd!important;
+					}
+				}
+				&:nth-child(odd){
+					
+				}
+				&:nth-child(even){
+					
+				}
+				&:last-child{
+					border-bottom: 1px solid rgba(34,36,38,.15);
+				}
+        .info_message {
+          width: 80%;
           float: left;
-          padding-right: 10px;
+          padding-right: 20px;
         }
         .icon {
           color: #B3B3B3;
@@ -689,6 +706,9 @@ textarea:focus {
               color: white;
             }
          }
+				.url_remove{
+					display: none;
+				}
         &.edit{
           p.content{
             display: none!important;
@@ -696,6 +716,9 @@ textarea:focus {
           p.textarea {
             display: block!important;
           }
+					.url_remove{
+						display: block;
+					}
         }
       }
 
@@ -744,11 +767,11 @@ textarea:focus {
         border-radius: 5px;
         img{
           position: relative;
-          top: 4px;
+          top: 3px;
           margin-right: 3px;
         }
         a{
-          color: black;
+					color: #676868;
           display: block;
           height: 100%;
           font-size: 10px;

@@ -31,22 +31,16 @@
 
   //[全域]監聽狀態改變
   firebase.auth().onAuthStateChanged(function(data) {
-    if (data) {
-      print("User is logined");
-
-			var isAnonymous = data.isAnonymous;
-			print(isAnonymous)
-			if(isAnonymous){
-
+    if (data) {//使用者已登入
+			//print(data)
+			if(data.isAnonymous){//匿名使用者
 				 DB.ref('users/' + data.uid).once('value',function(data) {
 					 if(!data.val()){
-						 初始化使用者資訊();
+						 初始化使用者資訊(undefined,"isAnonymous");
 						 location_fn();
 					 }
 				 })
 			}
-
-			
       user_uid=data.uid;
       if(typeof _is_login==="function")_is_login();
     } else {
@@ -72,7 +66,7 @@ function fb_登入(fn){
 	//signInWithPopup signInWithRedirect
 	firebase.auth().signInWithPopup(provider).then(function(result) {
 	  //var token = result.credential.accessToken;
-      print(result)
+    //print(result)
 	  var user = result.user;
        DB.ref('users/' + user.uid).once('value',function(data) {
          
@@ -111,14 +105,21 @@ function anonymous_login(fn){
 		// ...
 	});
 }
-function 初始化使用者資訊(fn){
+function 初始化使用者資訊(fn,isAnonymous){
   var user = firebase.auth().currentUser;
-  DB.ref('users/' + user.uid).set({
+	var data={
     name : user.displayName,
     url_name: "",
     email: user.email,
     photo : user.photoURL
-  }).then(fn);
+  }
+	//https://semantic-ui.com/views/card.html
+	if(isAnonymous=="isAnonymous"){
+		data.photo="https://semantic-ui.com/images/avatar/large/elliot.jpg";
+		data.name="匿名";
+	}
+	
+  DB.ref('users/' + user.uid).set(data).then(fn);
 }
 function blueprint_json(name){
   return {
@@ -129,7 +130,6 @@ function blueprint_json(name){
 function set_line_root(_line_key,user_uid){//設定支線擁有者
 	DB.ref('info/' + _line_key +"/root").set(user_uid);
 }
-
 function line_json(name,color,master){
   var _line_key=DB.ref('blueprint/' + user_uid).push().key;
   set_line_root(_line_key,user_uid+"(build)");

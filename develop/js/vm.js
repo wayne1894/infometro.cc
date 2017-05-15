@@ -12,10 +12,10 @@ var vm = new Vue({
     mode : 1,
     pick_master :undefined,
     pick_color :undefined,
-	url_info : undefined,
+		url_info : undefined,
     filter_search:""
-  },created:function(){
-   $("#main").css("visibility","visible");
+  },mounted:function(){
+		$("#main").css("visibility","visible");
   },updated : function(){
     setTimeout(function(){
       $(window).resize();
@@ -93,8 +93,8 @@ var vm = new Vue({
     message_filter : function(message){
       message=message.replace(/\</g,"&lt;");
       message=message.replace(/\>/g,"&gt;");
-      message=message.replace(/(?:\r\n|\r|\n)/g, '<br/>');
       message=urlify(message);//轉成超連結
+			message=message.replace(/(?:\r\n|\r|\n)/g, '<br/>');
       message=message.replace(/ /g, "&nbsp;");
       message=message.replace(/\<a&nbsp;href=/g,"<a href="); 
       setTimeout(function(){
@@ -131,7 +131,7 @@ var vm = new Vue({
       return "linear-gradient(to right, #000 50%, "+color+" 0%)";
     },
     mode_txt:function(){
-      if(sortable.length==0)return;
+      if(!sortable['blueprint'])return;
       if(this.mode==0){ //一般模式
          setTimeout(function(){sortable["metro"].option("disabled", true);},5)
         return "一般模式"
@@ -401,6 +401,7 @@ var vm = new Vue({
     },new_info : function(){ //新增資訊
       var board_textarea=$.trim($("#board_textarea").val());
       if(board_textarea=="")return;
+			print(board_textarea)
       var _data ={
         message : board_textarea ,
         favorite : false ,
@@ -414,8 +415,10 @@ var vm = new Vue({
     },delete_info : function(key){ //刪除資訊
       var $target_parent=$(event.target).closest(".board_list");
       if($target_parent.hasClass("edit"))return;
-      $delete_info=$target_parent.find(".delete_info");
-      $delete_info.dimmer({opacity : 0.7,duration: {
+      $delete_info=$target_parent.find("._delete_info");
+			//https://semantic-ui.com/modules/dimmer.html
+			//opacity : 0.7,
+      $delete_info.dimmer({duration: {
         show : 400,
         hide : 0
       }}).dimmer('show');
@@ -426,7 +429,6 @@ var vm = new Vue({
       $delete_info.find(".cancel").off("click").on("click",function(){
         $delete_info.dimmer('hide');
       })
-      
     },delete_info_line : function(_line_key){//從info最上層的line刪除
       DB.ref("info/" + _line_key + "/metro").remove();
       DB.ref("info/" + _line_key + "/root").remove();
@@ -440,22 +442,27 @@ var vm = new Vue({
       var $textarea=$target_parent.find("textarea");
       $textarea.val(item.message).focus();
       $(document.body).on("keyup.textarea",function(event){
-        if(event.keyCode==27){
-          vm.leave_edit_info($target_parent);
-        }
+        if(event.keyCode==27)vm.leave_edit_info($target_parent);
       })
+			$textarea.off("paste").on('paste', function(){
+				if(!item.url_info)textarea_paste2($textarea[0],item);
+			});
       $target_parent.find("button.send").one("click",function(){
+				if(!item.url_info)item.url_info="";
+				var board_textarea=$.trim($textarea.val());
         vm.leave_edit_info($target_parent);
+				$textarea.off("paste");
+				print(board_textarea)
         DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).child(_key).update({
-          message : $.trim($textarea.val()),
+          message : board_textarea,
+					url_info: item.url_info,
           update_timestamp: firebase.database.ServerValue.TIMESTAMP
         });
       })
        $target_parent.find("button.cancel").one("click",function(){
-          vm.leave_edit_info($target_parent);
+         vm.leave_edit_info($target_parent);
+				 $textarea.off("paste");
        })
-     
-
     },leave_edit_info :function($target){
       if(!$(".board_list").hasClass("edit"))return
       $(document).one("click",function(){//解決出現Chrome英文翻譯的問題
