@@ -8,7 +8,7 @@
       <i class="blueprint_i dropdown icon"></i>
       <div class="menu">
         <div class="item" @click="re_name(index,'blueprint')"><i class="edit icon"></i>重新命名</div>
-        <div class="item" @click="delete_blueprint(item.key,index)"><i class="delete icon"></i>移除</div>
+        <div v-show="check_blueprint(index)" class="item" @click="delete_blueprint(item.key,index)"><i class="delete icon"></i>移除</div>
         <div v-show="!check_blueprint(index)" class="item" @click="exchange_blueprint(index,true)"><i class="exchange icon"></i>切換</div>
       </div>
     </div>

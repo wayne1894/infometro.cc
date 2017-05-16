@@ -195,8 +195,7 @@ var vm = new Vue({
     },get_index_blueprint : function(){ //得到當前藍圖索引資料
       return vm.index[vm.index_blueprint];
     },get_line : function(){//得到當前支線
-      var _blueprint=this.get_blueprint();
-      return _blueprint.line[this.index_line];
+      return this.get_blueprint().line[this.index_line];
     },get_index_line : function(){ //得到當前支線索引資料
       return vm.index[vm.index_blueprint][vm.index_line];
     },update_index_line :function(index_array){
@@ -341,13 +340,16 @@ var vm = new Vue({
       data.line.push(_j);
 	  vm.get_index_blueprint().push([]);//新增line的index陣列
       this.更新藍圖(data.key,data);
-    },delete_line : function(index){
+    },delete_line : function(index){     
       $('#line_delete_modal').modal({
         inverted: true,
         closable : false
       }).modal('show');
+      var data=vm.get_blueprint();
+      var _color=data.line[index].color;
+      $('#line_delete_modal').css("borderTopColor",_color);
+      $("#line_delete_button").css("backgroundColor",_color)
       $("#line_delete_button").off("click").on("click",function(){
-        var data=vm.get_blueprint();
         var key=data.line[index]._key;
         data.line.splice(index,1);
         if(vm.index_line>=index){//刪除到小於自已-就往前倒退索引(同刪除藍圖)
