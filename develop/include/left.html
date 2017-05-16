@@ -2,7 +2,7 @@
 	<div id="logo"><img class="logo" src="src/static/images/icon_128.fw.png"></div>
 	<div id="left_line">
 	<div class="line_text">主線：</div>
-	  <ul>
+	  <ul id="line_drag_master">
 	    <li v-for="(item, index) in line" v-if="item.master" :class="check_line(index)" class="line_list" @drop="drop_line(event,index)">
        	 <input class="line_input" type="text" v-model="item.name">
 	       <i class="line_i" :style="{backgroundColor:item.color}" @click="exchange_line(index)" @dblclick="open_color(index,item.color,'master')" ></i>
@@ -32,7 +32,7 @@
     var metro_index = event.dataTransfer.getData("index");
     
 	if(metro_index=="")return;
-    var _metro=vm.move_metro(metro_index);
+    var _metro=vm.move_metro(metro_index,index);
     
     if(_metro==undefined)return
     _metro=_metro[0];

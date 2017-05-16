@@ -377,7 +377,7 @@ var vm = new Vue({
       }
     },exchange_metro : function(key){
       this.key_metro=key;
-    },move_metro : function(index){
+    },move_metro : function(index,_line_index){
       var data=this.get_blueprint();
       var old_metro_key=data.line[this.index_line].metro[index]._key;
       if(data.line[this.index_line].metro.length<=1)return
@@ -388,6 +388,13 @@ var vm = new Vue({
         var new_metro_key=data.line[this.index_line].metro[_index]._key;
         this.key_metro=new_metro_key;
       }
+   
+    DB.ref("info/" + data.line[this.index_line]._key + "/metro").child(old_metro_key).once("value",function(old_data){
+
+      DB.ref('info/' + vm.get_blueprint().line[_line_index]._key + "/metro/"+ old_metro_key).set(old_data.val());
+      
+      DB.ref("info/" + data.line[vm.index_line]._key + "/metro").child(old_metro_key).remove();
+    })   
       return _metro
     },delete_metro : function(index){//與move_metro雷同
       var data=JSON.parse(JSON.stringify(this.get_blueprint()));//將傳址改為傳值

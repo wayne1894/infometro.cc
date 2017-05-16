@@ -5,7 +5,6 @@
 <title>infometro.cc | 資訊地鐵站</title>
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="description" content="infometro 是一款利用地鐵圖來組織資訊的網站，用來保存創意和想法。">
 <meta name="keywords" content="資訊收藏,記事本,共享書籤,雲端,雲端儲存,evernote,OneNote">
 <meta property="og:type" content="website">
@@ -47,7 +46,7 @@
 	<div id="logo"><img class="logo" src="src/static/images/icon_128.fw.png"></div>
 	<div id="left_line">
 	<div class="line_text">主線：</div>
-	  <ul>
+	  <ul id="line_drag_master">
 	    <li v-for="(item, index) in line" v-if="item.master" :class="check_line(index)" class="line_list" @drop="drop_line(event,index)">
        	 <input class="line_input" type="text" v-model="item.name">
 	       <i class="line_i" :style="{backgroundColor:item.color}" @click="exchange_line(index)" @dblclick="open_color(index,item.color,'master')" ></i>
@@ -77,7 +76,7 @@
     var metro_index = event.dataTransfer.getData("index");
     
 	if(metro_index=="")return;
-    var _metro=vm.move_metro(metro_index);
+    var _metro=vm.move_metro(metro_index,index);
     
     if(_metro==undefined)return
     _metro=_metro[0];
@@ -124,7 +123,7 @@ $(function(){
 
 
 <script>
-	function move_center(){
+  function move_center(){
     var total_width=0;
     var tog_width=$("#top_tag").width();
     $("#top_tag li").each(function(){
@@ -218,11 +217,11 @@ $(function(){
 <script>
   function drop(ev){
     var index = ev.dataTransfer.getData("index");
-		print(index);
+	//print(index);
     vm.delete_metro(index);
   }  
   function allowDrop(event) { //拖曳的物件移到上面
-    print("拖曳的物件移到上面")
+    //print("拖曳的物件移到上面")
     event.preventDefault();
   }
 </script>

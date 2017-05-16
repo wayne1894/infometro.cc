@@ -45,11 +45,11 @@
 <script>
   function drop(ev){
     var index = ev.dataTransfer.getData("index");
-		print(index);
+	//print(index);
     vm.delete_metro(index);
   }  
   function allowDrop(event) { //拖曳的物件移到上面
-    print("拖曳的物件移到上面")
+    //print("拖曳的物件移到上面")
     event.preventDefault();
   }
 </script>
