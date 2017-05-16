@@ -138,8 +138,7 @@
 	}
 
   function parse_url(url,fn){
-    $.get("//54.250.245.226/infometro.asp?url="+url,function(html){
-      alert("test")
+    $.get("http://54.250.245.226/infometro.asp?url="+url,function(html){
           var iframe = document.createElement("iframe");
           iframe.id="iframe";
           iframe.style.display="none";
