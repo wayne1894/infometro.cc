@@ -192,13 +192,13 @@
 			//var $iframe_body=$(document.getElementById('iframe').contentWindow.document.body);
 			
             if(url_info.og_title){
-              url_info.title=url_info.og_title
+              url_info.title=url_info.og_title;
             }else{ 
             url_info.title=$(document.getElementById('iframe').contentWindow.document).find("title").html();
               if(url_info.title==undefined)url_info.title="";
             }
             if(url_info.og_description){
-              url_info.description=url_info.og_description
+              url_info.description=url_info.og_description;
             }
             if(url_info.og_image){
                url_info.image=url_info.og_image;
@@ -207,12 +207,10 @@
             delete url_info.og_title
             delete url_info.og_description
             delete url_info.og_image
-      
-      
+
             url_info.url=url;//這個url代表是連結的url
             url_info.url_parent=url.split("://")[1].split("/")[0];
-      
-      
+
             //判斷是不是youtube
             if(url.indexOf(".youtube.")>-1){
               url_info.youtube=url.split("?v=")[1].split("&")[0];

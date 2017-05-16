@@ -42,6 +42,12 @@ html.re_name{
 body {
   font-family: Microsoft JhengHei;
 }
+@media screen and (max-width:767px) {
+	body{
+		overflow-x: visible;
+	}
+}
+
 .ui.modals{
   font-family: 'Noto Sans TC', sans-serif;
   z-index: 10013!important;
@@ -65,6 +71,8 @@ textarea:focus {
   min-width: 1000px;
   //overflow-y: scroll;
 }
+
+
 #left {
   width: @left_width;
   font-size: 13px;
@@ -676,6 +684,7 @@ textarea:focus {
           .clearfix();
           display: block;
           padding-top: 5px;
+					padding-bottom: 12px;
           button{
             float: right;
             position: relative;
@@ -1087,4 +1096,8 @@ textarea:focus {
 
 #board2 .ui.items>.item>.content>a.header:hover{
   color: black;
+}
+.extra{
+	word-wrap: break-word;
+  word-break: break-all;
 }

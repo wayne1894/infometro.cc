@@ -12,7 +12,7 @@ var vm = new Vue({
     mode : 1,
     pick_master :undefined,
     pick_color :undefined,
-	url_info : undefined,
+		url_info : undefined,
     filter_search:""
   },mounted:function(){
 		$("#main").css("visibility","visible");
@@ -106,14 +106,30 @@ var vm = new Vue({
     key_metro : function(){
       //https://github.com/vuejs/vuefire
       var _ref=DB.ref("info/"+vm.get_line_key()+"/metro/"+vm.key_metro).orderByKey();
+
       vm.$bindAsArray('info',_ref);
       var _index= this.index[this.index_blueprint][this.index_line];
       _index.key_metro=this.key_metro;
       vm.index_update();
       
       vm.leave_edit_info();
+//			_ref.on("child_added",function(snapshot){ //元件載入後的動作
+//
+//			})
+			
     }
   },methods: {
+			get_youtube_embed: function(item){
+				if(item.url_info && item.url_info.youtube){
+					setTimeout(function(){
+						//https://semantic-ui.com/modules/embed.html#/definition
+						//autoplay: true
+						$("#"+item['.key']).find(".ui.embed:not(.active)").embed();
+					},5);
+					return "flex-direction: column";//順便傳回style
+				}
+				return "";
+			},
       get_favorite_style: function(favorite,color){
           if(favorite){
               return{
@@ -412,6 +428,8 @@ var vm = new Vue({
       vm.url_info=undefined ;//清掉
       $("#board_textarea").val("");//清掉
       DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).push(_data);
+
+			
     },delete_info : function(key){ //刪除資訊
       var $target_parent=$(event.target).closest(".board_list");
       if($target_parent.hasClass("edit"))return;
@@ -550,7 +568,7 @@ var vm = new Vue({
       })
       data.line=new_line;
       vm.index[vm.index_blueprint]=new_index;
-	  vm.update_index_line(new_index)
+	  	vm.update_index_line(new_index)
       vm.更新藍圖(data.key,data);
 	  function get_key(key){
         for(var i=0;i<data.line.length;i++){

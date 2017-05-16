@@ -227,13 +227,13 @@ $(function(){
 		<div v-if="url_info" class="ui items" style="background-color: whitesmoke;width: 95%; margin: .5em 0;">
 			<div class="item">
 				<div v-if="url_info.image" class="ui small image" style="padding-left: 9px; padding-top: 9px;"><img :src="url_info.image"></div>
-				<div class="content" style=" position: relative;padding-left: 1em;padding-right: 1em; padding-bottom: 8px;">
-					<a :href="url_info.url" target="_blank" class="header" style="margin-top: 6px;color: #676868; border-color: rgb(245, 245, 245);width: 240px;font-size: 1.1em;">{{url_info.title}}</a>
+				<div class="content" style=" position: relative;padding-left: 1em;padding-right: 1.6em; padding-bottom: 8px;">
+					<a :href="url_info.url" target="_blank" class="header" style="margin-top: 6px;color: #676868; font-size: 1.1em;">{{url_info.title}}</a>
 					<div class="meta"><span>{{url_info.url_parent}}</span></div>
 					<!-- v-html有風險要改掉 -->
 					<div v-if="url_info.description" class="extra" v-html="url_info.description"></div>
 					<div>
-						<a class="ui right corner label" @click="vm.url_info=''" style="border-color: rgb(245, 245, 245)" >
+						<a class="ui right corner label" @click="vm.url_info=''" style="border-color: transparent" >
 							<i class="remove icon" style="color: rgb(1, 1, 1);cursor: pointer;"></i>
 						</a>
 					</div>
@@ -256,7 +256,7 @@ $(function(){
 	
 	<!--資訊列表-->
 	<div id="board_info">
-		<div v-for="(item, index) in info_sort_filter" :key="item._key" class="board_list ui vertical segment clear">
+		<div :id="item['.key']" v-for="(item, index) in info_sort_filter" :key="item['.key']" class="board_list ui vertical segment clear">
 			<div class="board_message">
 				<img v-if="users.photo" class="ui left floated image transition mini" :src="users.photo">
 				<div class="info_message" @dblclick="edit_info(item)">
@@ -276,42 +276,38 @@ $(function(){
 				</span>
 
 				<!--包成vue組件2 顯示-->
-				<div v-if="item.url_info" class="ui items" style="background-color: whitesmoke;width: 98%;padding: 0; display:inline-block; margin: .7em 0;border: 1px solid #cdcdcd;border-radius: 4px;">
-					<div class="item">
-                      <div v-if="item.url_info.image" class="ui small image" style="padding-left: 9px; padding-top: 9px;"><img :src="item.url_info.image"></div>
-                      <div class="content" style=" position: relative;padding-left: 1em;padding-right: 1em; padding-bottom: 8px;">
-                          <a :href="item.url_info.url" target="_blank" class="header" style="margin-top: 6px; width: 240px;font-size: 1.1em;color: #676868;">{{item.url_info.title}}</a>
-                          <div class="meta"><span>{{item.url_info.url_parent}}</span></div>
-                          <!-- v-html有風險要改掉 -->
-                          <div v-if="item.url_info.description" class="extra" v-html="item.url_info.description"></div>
-                          <div class="url_remove">
-                              <a class="ui right corner label" @click="item.url_info=''" style="border-color: rgb(245, 245, 245)" >
-                                  <i class="remove icon" style="color: rgb(1, 1, 1);cursor: pointer;"></i>
-                              </a>
-                          </div>
-                      </div>
+				<div v-if="item.url_info" class="ui items" style="background-color: whitesmoke;width: 98%;padding: 0; display:inline-block; margin:0;border: 1px solid #cdcdcd;border-radius: 4px;">
+					<div class="item" :style="get_youtube_embed(item)">
+						<div v-if="item.url_info && item.url_info.youtube" class="ui embed" data-source="youtube" :data-id="item.url_info.youtube"></div>
+						<div v-else-if="item.url_info.image" class="ui small image" style="padding-left: 9px; padding-top: 9px;">
+							<img :src="item.url_info.image">
+<!--							<i class="video play outline icon" style="position: absolute;top: 1em;left: 1em;font-size: 4em; color:rgb(247, 247, 247);"></i>-->
+						</div>
+						<div class="content" style=" position: relative;padding-left: 1em;padding-right: 1.6em; padding-bottom: 8px;">
+								<a :href="item.url_info.url" target="_blank" class="header" style="margin-top: 6px; font-size: 1.1em;color: #676868;">{{item.url_info.title}}</a>
+								<div class="meta"><span>{{item.url_info.url_parent}}</span></div>
+								<!-- v-html有風險要改掉 -->
+								<div v-if="item.url_info.description" class="extra" v-html="item.url_info.description"></div>
+								<div class="url_remove">
+										<a class="ui right corner label" @click="item.url_info=''" style="border-color: transparent" >
+												<i class="remove icon" style="color: rgb(1, 1, 1);cursor: pointer;"></i>
+										</a>
+								</div>
+						</div>
 					</div>
 				</div>
 				<!--包成vue組件2 顯示-->
 			</div>
-            <div class="_delete_info ui inverted dimmer">
-              <div class="content">
-                <div class="center">
-                  <i class="trash outline icon" style="font-size: 1.8em;margin-bottom: 13px;color:#000;cursor: default"></i>
-                  <div style="margin-bottom:20px;color:#000;">確定要刪除資料？</div>
-                  <button class="send mini ui button" :style="{backgroundColor:line_color}">刪除</button>
-                  <button class="cancel mini ui button">取消</button>
-                </div>
-              </div>
-            </div>
-			
-<!--
-			<div class="ui embed" data-source="youtube" data-id="O6Xo21L0ybE" data-placeholder="/images/image-16by9.png">
-</div>
--->
-			
-			
-			
+			<div class="_delete_info ui inverted dimmer">
+				<div class="content">
+					<div class="center">
+						<i class="trash outline icon" style="font-size: 1.8em;margin-bottom: 13px;color:#000;cursor: default"></i>
+						<div style="margin-bottom:20px;color:#000;">確定要刪除資料？</div>
+						<button class="send mini ui button" :style="{backgroundColor:line_color}">刪除</button>
+						<button class="cancel mini ui button">取消</button>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<!--資訊列表-->
@@ -365,13 +361,8 @@ $(function(){
     <div id="首頁" class="r_b"></div>
   </div>
   <div class="r_button active" :style="{backgroundColor:master_line_color}">
-    <i class="facebook f icon"></i>
-  </div>
-<!--
-  <div class="r_button active" :style="{backgroundColor:master_line_color}">
     <i class="youtube play icon"></i>
   </div>
--->
 
 <!--
   <div class="r_button" :style="{backgroundColor:master_line_color}">
@@ -381,6 +372,11 @@ $(function(){
 <!--
   <div class="r_button" :style="{backgroundColor:master_line_color}">
     <div id="搜尋" class="r_b"></div>
+  </div>
+-->
+<!--
+  <div class="r_button active" :style="{backgroundColor:master_line_color}">
+    <i class="announcement icon"></i>
   </div>
 -->
   <div class="r_button" :style="{backgroundColor:master_line_color}">
