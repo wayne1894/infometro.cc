@@ -41,7 +41,7 @@
 		<div :id="item['.key']" v-for="(item, index) in info_sort_filter" :key="item['.key']" class="board_list ui vertical segment clear">
 			<div class="board_message">
 				<img v-if="users.photo" class="ui left floated image transition mini" :src="users.photo">
-				<div class="info_message" @dblclick="edit_info(item)">
+				<div class="info_message">
 					<p class="content" v-html="$options.filters.message_filter(item.message)"></p>
 					<p class="content textarea ui form" :style="{borderColor:line_color}">
 						<textarea></textarea>
@@ -54,7 +54,14 @@
 				</div>
 				<span class="right_icon">
 					<span :style="{color : line_color}"><i @click="favorite_info(item)" :class="{active : item.favorite }" class="like icon" :style="{color : line_color}"></i></span>
-					<i @click="delete_info(item['.key'])" class="trash icon"></i>
+					<span class="ui top right pointing dropdown">
+						<i class="setting icon"></i>
+						<div class="menu">
+							<div @click="edit_info(item)" class="item"><i class="write icon"></i>編輯</div>
+							<div @click="delete_info(item['.key'])"  class="item"><i class="trash icon"></i>刪除</div>
+							<a v-if="item.url_info" target="_black" :href="'https://www.facebook.com/sharer/sharer.php?u='+item.url_info.url" class="item" style="text-decoration: none;"><i class="facebook square icon"></i>分享</a>
+						</div>
+					</span>
 				</span>
 
 				<!--包成vue組件2 顯示-->

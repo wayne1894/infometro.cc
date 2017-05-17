@@ -23,13 +23,10 @@
 
   var sortable =[];
   $(function(){
-    //拖亦程式https://github.com/RubaXa/Sortable
+    //拖亦程式 https://github.com/RubaXa/Sortable
     sortable["blueprint"] = new Sortable(id("blueprint_drag"),{
       animation: 150,
-      forceFallback: true,
-      onEnd: function(){
-        //vm.swap_blueprint(evt.oldIndex,evt.newIndex)
-      }
+      forceFallback: false
     });
     sortable["line_master"]=new Sortable(id("line_drag_master"),{
       animation: 150,
@@ -38,17 +35,16 @@
     sortable["line"] = new Sortable(id("line_drag"),{
       animation: 150,
       forceFallback: false,
-          onEnd: function (evt) {
-              vm.swap_list(evt.oldIndex,evt.newIndex)
-          }
+			onEnd: function (evt) {
+					vm.swap_list(evt.oldIndex,evt.newIndex)
+			}
     });
     sortable["metro"] = new Sortable(id("top_tag"),{
       animation: 50,
       forceFallback: false,
-          filter: ".add",
+      filter: ".add",
       setData: function (dataTransfer,dragEl) {
-
-              dataTransfer.setData('index',$(dragEl).data("index")); //設定要傳送的資料
+      	dataTransfer.setData('index',$(dragEl).data("index")); //設定要傳送的資料
       },onStart: function (evt) {
           var $top_tag=$("#top_tag");
           $top_tag.find(".add").hide();
@@ -60,7 +56,7 @@
           vm.mode=1.5;
       },onEnd: function(evt){
       $("#top_tag").find(".add").show();
-          $("#top_tag").removeClass("first_drag").removeClass("last_drag");
+				$("#top_tag").removeClass("first_drag").removeClass("last_drag");
           vm.swap_metro(evt.oldIndex,evt.newIndex);
           vm.mode=1;
     }

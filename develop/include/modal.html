@@ -1,13 +1,13 @@
   <div id="blueprint_delete_modal" style="padding: 0;" :style="{borderTopColor:master_line_color}" class="ui small modal orange segment">
     <div class="header">
       <img id="blueprint_delete_button" class="logo" src="src/static/images/logo.svg" style="width: 29px;float: right;letter-spacing: 1px;">
-      刪除整個地鐵
+      刪除 <span :style="{color:master_line_color}" id="blueprint_delete_name">整個地鐵</span>
     </div>
     <div class="image content">
 
       <div class="description">
-        <p style="line-height: 1em;font-size: 14px;letter-spacing: 1px;">這會造成整個地鐵資料都被刪除，目前暫時沒有備份服務，請三思。</p>
-        <p style="line-height: 1em;font-size: 14px;letter-spacing: 1px;">點擊右上角的logo，確定刪除。</p>
+        <p style="line-height: 1em;font-size: 14px;letter-spacing: 1px;">這會刪除整個地鐵的資料，且無法復原。</p>
+        <p style="line-height: 1em;font-size: 14px;letter-spacing: 1px;">點擊兩下右上角的logo，確定刪除。</p>
       </div>
     </div>
     <div class="actions">

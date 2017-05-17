@@ -225,20 +225,32 @@ function _is_login(){//程式進入點
 		  }
 		}
 	}).then(function(){
-
       if($.cookie('index_blueprint')!=undefined){ //預設要載入的藍圖索引
         vm.index_blueprint=$.cookie('index_blueprint');
       }
-      
+
       blueprint_init(function(){
         //一定要等vue資料載完才能載入選單物件
-
+				//https://semantic-ui.com/modules/dropdown.html#/settings
         $(".blueprint_list").dropdown("destroy").dropdown({
-          on : 'customClick'
+          on : 'customClick',
+					onShow: function(){
+						sortable["blueprint"].option("disabled", true);
+					},
+					onHide:function(){
+						sortable["blueprint"].option("disabled", false);
+					}
         });
-        $(".blueprint_list .blueprint_i").off("click.custom").on("click.custom",function(event){
-          $(this).trigger("customClick");
-        })
+				
+				if(!sortable["blueprint"]){
+					sortable["blueprint"] = new Sortable(id("blueprint_drag"),{
+						animation: 150,
+						forceFallback: false
+					});
+					
+				}
+
+				
       });
     });
 }

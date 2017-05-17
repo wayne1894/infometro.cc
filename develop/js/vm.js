@@ -25,12 +25,12 @@ var vm = new Vue({
     //watch:key_metro
   },computed: {
    master_line_color: function(){//主線目前一律是line 0
-     if(this.blueprint.length==0)return false;
-     if(this.pick_color && this.pick_master)return this.pick_color
+     if(this.blueprint.length==0)return "";
+     if(this.pick_color && this.pick_master)return this.pick_color;
      return this.get_blueprint().line[0].color;
    },
    line : function(){//載入line
-     if(this.blueprint.length==0)return false;
+     if(this.blueprint.length==0)return "";
      return this.get_blueprint().line;
    },
    line_name : function(){
@@ -113,9 +113,11 @@ var vm = new Vue({
       vm.index_update();
       
       vm.leave_edit_info();
-//			_ref.on("child_added",function(snapshot){ //元件載入後的動作
-//
-//			})
+			_ref.on("child_added",function(snapshot){ //元件載入後的動作
+				setTimeout(function(){
+					$("#board_info .dropdown").dropdown("destroy").dropdown();
+				},5)
+			})
 			
     }
   },methods: {
@@ -226,8 +228,6 @@ var vm = new Vue({
       //print(vm.master_line_color)
       document.getElementById("selection").innerHTML="::selection {background: "+_color+";color: #fff;}::-moz-selection {background: "+_color+";color: #fff;}img::selection {background: "+_color+";color: #fff;}img::-moz-selection {background: "+_color+";color: #fff;}";
 
-
-      
     },update_metro_key : function(index_array){
       var _metro=this.get_line().metro;
       if(index_array.key_metro){//代表有選到的結點
@@ -256,7 +256,8 @@ var vm = new Vue({
         inverted: true,
         closable : false
       }).modal('show');
-      $("#blueprint_delete_button").off("click").on("click",function(){
+			$("#blueprint_delete_name").html(vm.get_blueprint().name);
+      $("#blueprint_delete_button").off("dblclick").on("dblclick",function(){
         vm.action="delete_blueprint";
         var _line=vm.blueprint[index].line;
         for(var i=0;i<_line.length;i++){
@@ -267,39 +268,35 @@ var vm = new Vue({
           var new_index=index-1;
           if(new_index<0)new_index=0;
           vm.index_blueprint=new_index;//重新安排
+					$.cookie("index_blueprint",new_index);
         }
         DB.ref('blueprint/' + user_uid+"/"+key).remove();
         $(this).off("click");
         $("#blueprint_delete_modal").modal("hide");
       })
     },exchange_blueprint : function(index,target){//切換藍圖
-      if(event==undefined)return
+			if(vm.action!="load" && vm.index_blueprint==index)return;//重覆就離開
+			if(event==undefined)return;
       if($(event.target).hasClass("blueprint_i"))return;
-	  $("#top_tag").stop().fadeOut(0);
-      $.cookie("index_blueprint",index);
-      var _event=event;
-      if($("html").hasClass("re_name")){//解決編輯按兩下的BUG
-        return setTimeout(function(){
-          _eb();
-        },0);
-      }
-      _eb();
-      function _eb(){
-        if(_event && _event.target){
-          if(_event.target.className!=undefined){
-            if(_event.target.className.indexOf("blueprint_a")>-1 || _event.target.className.indexOf("blueprint_i")>-1){
-              target=true;
-            }
-          }
-        }
-        if(target){
-          vm.index_blueprint=index;
-          vm.update_index_line(vm.index[index]);
-          vm.update_index_blueprint_line_check();
-          vm.update_metro_key(vm.index[index][vm.index_line]);
-        }
-       setTimeout(move_center,0);
-      }
+			if(index>=vm.blueprint.length)index=0;
+			
+			$("#top_tag").stop().fadeOut(0);
+			$.cookie("index_blueprint",index);
+		  if(event && event.target){
+				if(event.target.className!=undefined){
+					if(event.target.className.indexOf("blueprint_a")>-1 || event.target.className.indexOf("blueprint_i")>-1){
+						target=true;
+					}
+				}
+			}
+			if(target){
+				vm.index_blueprint=index;
+				vm.update_index_line(vm.index[index]);
+				vm.update_index_blueprint_line_check();
+				vm.update_metro_key(vm.index[index][vm.index_line]);
+			}
+		 setTimeout(move_center,0);
+     
     },check_blueprint : function(index){
       if(this.index_blueprint==index){
         return "check";
@@ -338,7 +335,7 @@ var vm = new Vue({
       var _j=line_json("未命名",get_color);
       _j.metro.push(metro_json("總站"));
       data.line.push(_j);
-	  vm.get_index_blueprint().push([]);//新增line的index陣列
+	  	vm.get_index_blueprint().push([]);//新增line的index陣列
       this.更新藍圖(data.key,data);
     },delete_line : function(index){     
       $('#line_delete_modal').modal({

@@ -1,16 +1,15 @@
 <div id="blueprint">
  <div class="bottom_line" :style="{background:color_gradient(master_line_color)}"></div>
   <div id="blueprint_drag">
-    <div v-for="(item, index) in blueprint" class="blueprint_list ui top left pointing dropdown"  @click="exchange_blueprint(index)" @dblclick="re_name(index,'blueprint')">
+    <div v-for="(item, index) in blueprint" class="blueprint_list ui top left pointing dropdown icon"  @click="exchange_blueprint(index)" @dblclick="re_name(index,'blueprint')">
       <a class="blueprint_a" :class="check_blueprint(index)"> {{item.name}}
       </a>
-      <input class="blueprint_input" type="text" v-model="item.name">
-      <i class="blueprint_i dropdown icon"></i>
-      <div class="menu">
-        <div class="item" @click="re_name(index,'blueprint')"><i class="edit icon"></i>重新命名</div>
-        <div v-show="check_blueprint(index)" class="item" @click="delete_blueprint(item.key,index)"><i class="delete icon"></i>移除</div>
-        <div v-show="!check_blueprint(index)" class="item" @click="exchange_blueprint(index,true)"><i class="exchange icon"></i>切換</div>
-      </div>
+				<input class="blueprint_input" type="text" v-model="item.name">
+				<i class="blueprint_i dropdown icon"></i>
+				<div class="menu">
+					<div class="item" @click="re_name(index,'blueprint')"><i class="edit icon"></i>重新命名</div>
+					<div class="item" @click="delete_blueprint(item.key,index)"><i class="delete icon"></i>移除</div>
+				</div>
     </div>
   </div>
   <div id="blueprint_new" class="ui icon button" data-tooltip="新增一個地鐵計畫" data-inverted="" @click="new_blueprint()">
@@ -18,3 +17,16 @@
   </div>
 </div>
 <div id="copyright">2017資訊地鐵站 版權所有 </div>
+
+
+<script>
+$(function(){
+	$("#blueprint").on("click",function(event){	
+		if($(event.target).hasClass("blueprint_i")){
+			$(event.target).closest(".blueprint_list").trigger("customClick");
+		}
+	})
+})
+
+					
+</script>
