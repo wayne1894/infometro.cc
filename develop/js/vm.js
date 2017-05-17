@@ -432,7 +432,7 @@ var vm = new Vue({
       }
       if(vm.url_info)_data.url_info=vm.url_info;
       vm.url_info=undefined ;//清掉
-      $("#board_textarea").val("");//清掉
+      $("#board_textarea").val("").keyup();//清掉
       DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).push(_data);
 
 			
@@ -458,10 +458,15 @@ var vm = new Vue({
       DB.ref("info/" + _line_key + "/root").remove();
     },favorite_info : function(item){
       DB.ref('info/' + vm.get_line_key() + "/metro/"+ vm.key_metro).child(item[".key"]).update({favorite : !item.favorite});
-    },edit_info :function(item){
+    },edit_info :function(item,dbl){
+      var $target_parent = $(event.target).closest(".board_list");
+      if(dbl=="dbl"){
+        if(vm.mode!=1)return
+        if($target_parent.hasClass("edit"))return
+      }
+      
       $("html").addClass("re_name");
       var _key = item[".key"];
-      var $target_parent = $(event.target).closest(".board_list");
       $target_parent.addClass("edit");
       var $textarea = $target_parent.find("textarea");
       $textarea.val(item.message).focus();

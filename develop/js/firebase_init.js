@@ -32,21 +32,21 @@
   //[全域]監聽狀態改變
   firebase.auth().onAuthStateChanged(function(data) {
     if (data) {//使用者已登入
-			//print(data)
-			if(data.isAnonymous){//匿名使用者
-				 DB.ref('users/' + data.uid).once('value',function(data) {
-					 if(!data.val()){
-						 初始化使用者資訊(undefined,"isAnonymous");
-						 location_fn();
-					 }
-				 })
-			}
+      if(data.isAnonymous){//匿名使用者
+         DB.ref('users/' + data.uid).once('value',function(data) {
+             if(!data.val()){
+                 初始化使用者資訊(undefined,"isAnonymous");
+                 location_fn();
+             }
+         })
+      }
       user_uid=data.uid;
-      if(typeof _is_login==="function")_is_login();
+      _is_login();
     } else {
       print("User is not logined yet.");
+      if(typeof not_login==="function")not_login()
+      
     }
-    user_uid=data.uid;
   });
 
 
@@ -62,7 +62,7 @@
 
 //firebase to fb login
 var provider = new firebase.auth.FacebookAuthProvider();
-function fb_登入(fn){
+function fb_login(fn){
 	//signInWithPopup signInWithRedirect
 	firebase.auth().signInWithPopup(provider).then(function(result) {
 	  //var token = result.credential.accessToken;
@@ -119,7 +119,7 @@ function 初始化使用者資訊(fn,isAnonymous){
 		data.name="匿名";
 	}
 	
-  DB.ref('users/' + user.uid).set(data).then(fn);
+  DB.ref('users/' + user.uid).set(data).then(fn());
 }
 function blueprint_json(name){
   return {

@@ -1,12 +1,19 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
+<script>
+  function not_login(){//這段放在這裡，給登出導回首頁用
+    location.replace("/");
+  }
+</script>
 <meta charset="utf-8">
 <title>infometro.cc | 資訊地鐵站</title>
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="description" content="infometro 是一款利用地鐵圖來組織資訊的網站，用來保存創意和想法。">
 <meta name="keywords" content="資訊收藏,記事本,共享書籤,雲端,雲端儲存,evernote,OneNote">
+
+<meta property="fb:app_id" content="438516566511315">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://infometro.cc">
 <meta property="og:image" content="https://infometro.cc/src/static/images/icon_128.fw.png">
@@ -43,9 +50,11 @@
 <div id="main">
   <div id="left">
     <div id="line_parent">
-	<div id="logo"><img class="logo" src="src/static/images/icon_128.fw.png"></div>
+	<div id="logo"><img class="logo" src="src/static/images/logo_200.png"></div>
 	<div id="left_line">
-	<div class="line_text">主線：</div>
+	<div class="line_text"><span>主線：</span>
+<!--  <i class="circular inverted orange info loading icon"></i>-->
+  </div>
 	  <ul id="line_drag_master">
 	    <li v-for="(item, index) in line" v-if="item.master" :class="check_line(index)" class="line_list" @drop="drop_line(event,index)">
        	 <input class="line_input" type="text" v-model="item.name">
@@ -57,7 +66,7 @@
       <ul id="line_drag">
         <li v-for="(item, index) in line" v-show="!item.master" :class="check_line(index)"   class="line_list" @drop="drop_line(event,index)" :data-key="item._key" :key="item._key">
           <div v-if="!item.master" class="tool" @click="delete_line(index)">
-            <i class="trash outline icon"></i>
+            <i class="trash outline mini small icon"></i>
           </div>
           <input v-if="!item.master" class="line_input" type="text" v-model="item.name">
           <i v-if="!item.master" class="line_i" @dblclick="open_color(index,item.color)" @click="exchange_line(index)" :style="{backgroundColor:item.color}" ></i>
@@ -71,7 +80,9 @@
 	<a class="left_icon"><i class="setting icon"></i></a>
 	<a class="left_icon" onclick="登出()"><i class="power icon"></i></a>
 </div>
-  <script>
+
+
+<script>
   function drop_line(event,index){
     var metro_index = event.dataTransfer.getData("index");
     
@@ -101,7 +112,7 @@ $(function(){
     }
   }).colpickHide();
 })
-	</script>
+</script>
   </div>
   <div id="top">
     <div class="triangle left"></div>
@@ -239,7 +250,7 @@ $(function(){
 				<div class="content" style=" position: relative;padding-left: 1em;padding-right: 1.6em; padding-bottom: 8px;">
 					<a :href="url_info.url" target="_blank" class="header" style="margin-top: 6px;color: #676868; font-size: 1.1em;">{{url_info.title}}</a>
 					<div class="meta"><span>{{url_info.url_parent}}</span></div>
-					<!-- v-html有風險要改掉 -->
+					<!-- v-html有風險要改掉，推社交前要拿掉 -->
 					<div v-if="url_info.description" class="extra" v-html="url_info.description"></div>
 					<div>
 						<a class="ui right corner label" @click="vm.url_info=''" style="border-color: transparent" >
@@ -268,12 +279,12 @@ $(function(){
 		<div :id="item['.key']" v-for="(item, index) in info_sort_filter" :key="item['.key']" class="board_list ui vertical segment clear">
 			<div class="board_message">
 				<img v-if="users.photo" class="ui left floated image transition mini" :src="users.photo">
-				<div class="info_message">
+				<div class="info_message" @dblclick="edit_info(item,'dbl')">
 					<p class="content" v-html="$options.filters.message_filter(item.message)"></p>
 					<p class="content textarea ui form" :style="{borderColor:line_color}">
 						<textarea></textarea>
 						<span class="textarea_prompt" >
-							<span class="esc">Esc離開編輯</span>
+							<span class="esc">按Esc離開編輯</span>
 							<button class="send mini ui button" :style="{backgroundColor:line_color}">送出</button>
 							<button class="cancel mini ui button">取消</button>
 						</span>
@@ -295,14 +306,14 @@ $(function(){
 				<div v-if="item.url_info" class="ui items" style="background-color: whitesmoke;width: 98%;padding: 0; display:inline-block; margin:0;border: 1px solid #cdcdcd;border-radius: 4px;">
 					<div class="item" :style="get_youtube_embed(item)">
 						<div v-if="item.url_info && item.url_info.youtube" class="ui embed" data-source="youtube" :data-id="item.url_info.youtube"></div>
-						<div v-else-if="item.url_info.image" class="ui small image" style="padding-left: 9px; padding-top: 9px;">
+						<div v-else-if="item.url_info.image" class="ui small image" style="padding-left: 9px; padding-top: 9px;padding-bottom: 9px;">
 							<img :src="item.url_info.image">
 <!--							<i class="video play outline icon" style="position: absolute;top: 1em;left: 1em;font-size: 4em; color:rgb(247, 247, 247);"></i>-->
 						</div>
 						<div class="content" style=" position: relative;padding-left: 1em;padding-right: 1.6em; padding-bottom: 8px;">
 								<a :href="item.url_info.url" target="_blank" class="header" style="margin-top: 6px; font-size: 1.1em;color: #676868;">{{item.url_info.title}}</a>
 								<div class="meta"><span>{{item.url_info.url_parent}}</span></div>
-								<!-- v-html有風險要改掉 -->
+								<!-- v-html有風險要改掉，推社交前要拿掉 -->
 								<div v-if="item.url_info.description" class="extra" v-html="item.url_info.description"></div>
 								<div class="url_remove">
 										<a class="ui right corner label" @click="item.url_info=''" style="border-color: transparent" >
@@ -331,9 +342,6 @@ $(function(){
   
 <script>
 $(function(){
-	$("#board_textarea").keydown(function(e){
-
-	})
 	$("#board_textarea").keyup(function(e) {
 		$(this).height(70);
 		$(this).height(this.scrollHeight + parseFloat($(this).css("borderTopWidth")) + parseFloat($(this).css("borderBottomWidth")));
@@ -385,29 +393,16 @@ $(function(){
 <div class="right_tool">
   <div class="over"></div>
   <div class="r_button" :style="{backgroundColor:master_line_color}">
-    <div id="首頁" class="r_b"></div>
+    <i class="user icon"></i>
   </div>
   <div class="r_button active" :style="{backgroundColor:master_line_color}">
     <i class="youtube play icon"></i>
   </div>
-
-<!--
-  <div class="r_button" :style="{backgroundColor:master_line_color}">
-    <div id="資訊" class="r_b"></div>
-  </div>
--->
-<!--
-  <div class="r_button" :style="{backgroundColor:master_line_color}">
-    <div id="搜尋" class="r_b"></div>
-  </div>
--->
-<!--
   <div class="r_button active" :style="{backgroundColor:master_line_color}">
     <i class="announcement icon"></i>
   </div>
--->
-  <div class="r_button" :style="{backgroundColor:master_line_color}">
-    <div id="問號" class="r_b"></div>
+  <div class="r_button active" :style="{backgroundColor:master_line_color}">
+    <i class="search icon"></i>
   </div>
 </div>
 <div class="right_main">

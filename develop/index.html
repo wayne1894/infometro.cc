@@ -261,7 +261,7 @@
       <h2 id="a3">從今天開始, 改變您搜藏資訊的習慣</h2>
       <h3 id="a4">infometro 是一款利用地鐵圖來組織資訊的網站，用來保存創意和想法。</h3>
       <button class="big ui button orange" onclick="anonymous_login(location_fn)"><i class="rocket icon"></i>快速試用</button>
-      <button class="big ui facebook button" onclick="fb_登入(location_fn)"><i class="facebook f icon"></i>使用 Facebook 登入</button>
+      <button class="big ui facebook button" onclick="fb_login(location_fn)"><i class="facebook f icon"></i>使用 Facebook 登入</button>
     </div>
 
   </div>
@@ -351,7 +351,7 @@
   function location_fn(){
     location.href = "/:-D";
   }
-   function move_center(){
+  function move_center(){
     var total_width=0;
     var tog_width=$("#top_tag").width();
     $("#top_tag li").each(function(){
@@ -368,7 +368,7 @@
   $(window).resize(move_center);
 </script>
 
-<script src="src/build/js/vm.js"></script>
+
 
 
 @@include('include/footer.html')

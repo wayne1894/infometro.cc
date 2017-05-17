@@ -12,7 +12,7 @@
 				<div class="content" style=" position: relative;padding-left: 1em;padding-right: 1.6em; padding-bottom: 8px;">
 					<a :href="url_info.url" target="_blank" class="header" style="margin-top: 6px;color: #676868; font-size: 1.1em;">{{url_info.title}}</a>
 					<div class="meta"><span>{{url_info.url_parent}}</span></div>
-					<!-- v-html有風險要改掉 -->
+					<!-- v-html有風險要改掉，推社交前要拿掉 -->
 					<div v-if="url_info.description" class="extra" v-html="url_info.description"></div>
 					<div>
 						<a class="ui right corner label" @click="vm.url_info=''" style="border-color: transparent" >
@@ -41,12 +41,12 @@
 		<div :id="item['.key']" v-for="(item, index) in info_sort_filter" :key="item['.key']" class="board_list ui vertical segment clear">
 			<div class="board_message">
 				<img v-if="users.photo" class="ui left floated image transition mini" :src="users.photo">
-				<div class="info_message">
+				<div class="info_message" @dblclick="edit_info(item,'dbl')">
 					<p class="content" v-html="$options.filters.message_filter(item.message)"></p>
 					<p class="content textarea ui form" :style="{borderColor:line_color}">
 						<textarea></textarea>
 						<span class="textarea_prompt" >
-							<span class="esc">Esc離開編輯</span>
+							<span class="esc">按Esc離開編輯</span>
 							<button class="send mini ui button" :style="{backgroundColor:line_color}">送出</button>
 							<button class="cancel mini ui button">取消</button>
 						</span>
@@ -68,14 +68,14 @@
 				<div v-if="item.url_info" class="ui items" style="background-color: whitesmoke;width: 98%;padding: 0; display:inline-block; margin:0;border: 1px solid #cdcdcd;border-radius: 4px;">
 					<div class="item" :style="get_youtube_embed(item)">
 						<div v-if="item.url_info && item.url_info.youtube" class="ui embed" data-source="youtube" :data-id="item.url_info.youtube"></div>
-						<div v-else-if="item.url_info.image" class="ui small image" style="padding-left: 9px; padding-top: 9px;">
+						<div v-else-if="item.url_info.image" class="ui small image" style="padding-left: 9px; padding-top: 9px;padding-bottom: 9px;">
 							<img :src="item.url_info.image">
 <!--							<i class="video play outline icon" style="position: absolute;top: 1em;left: 1em;font-size: 4em; color:rgb(247, 247, 247);"></i>-->
 						</div>
 						<div class="content" style=" position: relative;padding-left: 1em;padding-right: 1.6em; padding-bottom: 8px;">
 								<a :href="item.url_info.url" target="_blank" class="header" style="margin-top: 6px; font-size: 1.1em;color: #676868;">{{item.url_info.title}}</a>
 								<div class="meta"><span>{{item.url_info.url_parent}}</span></div>
-								<!-- v-html有風險要改掉 -->
+								<!-- v-html有風險要改掉，推社交前要拿掉 -->
 								<div v-if="item.url_info.description" class="extra" v-html="item.url_info.description"></div>
 								<div class="url_remove">
 										<a class="ui right corner label" @click="item.url_info=''" style="border-color: transparent" >
@@ -104,9 +104,6 @@
   
 <script>
 $(function(){
-	$("#board_textarea").keydown(function(e){
-
-	})
 	$("#board_textarea").keyup(function(e) {
 		$(this).height(70);
 		$(this).height(this.scrollHeight + parseFloat($(this).css("borderTopWidth")) + parseFloat($(this).css("borderBottomWidth")));

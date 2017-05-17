@@ -1,7 +1,9 @@
 <div id="line_parent">
-	<div id="logo"><img class="logo" src="src/static/images/icon_128.fw.png"></div>
+	<div id="logo"><img class="logo" src="src/static/images/logo_200.png"></div>
 	<div id="left_line">
-	<div class="line_text">主線：</div>
+	<div class="line_text"><span>主線：</span>
+<!--  <i class="circular inverted orange info loading icon"></i>-->
+  </div>
 	  <ul id="line_drag_master">
 	    <li v-for="(item, index) in line" v-if="item.master" :class="check_line(index)" class="line_list" @drop="drop_line(event,index)">
        	 <input class="line_input" type="text" v-model="item.name">
@@ -13,7 +15,7 @@
       <ul id="line_drag">
         <li v-for="(item, index) in line" v-show="!item.master" :class="check_line(index)"   class="line_list" @drop="drop_line(event,index)" :data-key="item._key" :key="item._key">
           <div v-if="!item.master" class="tool" @click="delete_line(index)">
-            <i class="trash outline icon"></i>
+            <i class="trash outline mini small icon"></i>
           </div>
           <input v-if="!item.master" class="line_input" type="text" v-model="item.name">
           <i v-if="!item.master" class="line_i" @dblclick="open_color(index,item.color)" @click="exchange_line(index)" :style="{backgroundColor:item.color}" ></i>
@@ -27,7 +29,9 @@
 	<a class="left_icon"><i class="setting icon"></i></a>
 	<a class="left_icon" onclick="登出()"><i class="power icon"></i></a>
 </div>
-  <script>
+
+
+<script>
   function drop_line(event,index){
     var metro_index = event.dataTransfer.getData("index");
     
@@ -57,4 +61,4 @@ $(function(){
     }
   }).colpickHide();
 })
-	</script>
+</script>

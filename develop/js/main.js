@@ -74,69 +74,69 @@
 	  opacityMin: .5
     }).hover(function(){
 	  $(this).trigger('startRumble');
-    }, function(){
+    },function(){
       $(this).trigger('stopRumble');
     });
     
   })
  //parse_url("https://www.youtube.com/watch?v=6nhLWBf6lS0")
-	function urlify(text) {
-		//http://stackoverflow.com/questions/1500260/detect-urls-in-text-with-javascript
-			var urlRegex = /(https?:\/\/[^\s]+)/g;
-			return text.replace(urlRegex, function(url) {
-					return '<a href="' + url + '">' + url + '</a>';
-			})
-			// or alternatively
-			// return text.replace(urlRegex, '<a href="$1">$1</a>')
-	}
-	function textarea_paste(){
-		if(vm.url_info)return;
-		var domTextarea = this;
-		var txt = domTextarea.value;
-		var startPos = domTextarea.selectionStart;
-		var endPos = domTextarea.selectionEnd;
-		var scrollTop = domTextarea.scrollTop;
-		domTextarea.value = '';
+  function urlify(text) {
+      //http://stackoverflow.com/questions/1500260/detect-urls-in-text-with-javascript
+          var urlRegex = /(https?:\/\/[^\s]+)/g;
+          return text.replace(urlRegex, function(url) {
+                  return '<a href="' + url + '">' + url + '</a>';
+          })
+          // or alternatively
+          // return text.replace(urlRegex, '<a href="$1">$1</a>')
+  }
+  function textarea_paste(){
+      if(vm.url_info)return;
+      var domTextarea = this;
+      var txt = domTextarea.value;
+      var startPos = domTextarea.selectionStart;
+      var endPos = domTextarea.selectionEnd;
+      var scrollTop = domTextarea.scrollTop;
+      domTextarea.value = '';
 
-		setTimeout(function (item) {
-			var pastedValue = domTextarea.value;
-			domTextarea.value = txt.substring(0, startPos) + pastedValue + txt.substring(endPos, txt.length);
-			domTextarea.focus();
-			domTextarea.selectionStart = domTextarea.selectionEnd = startPos + pastedValue.length;
-			domTextarea.scrollTop = scrollTop;
-			var urlify_url=urlify(pastedValue);	
-			if(urlify_url.indexOf("<a href=")>-1){
-				var url=urlify_url.split("</a>")[0].split(">")[1];
-				parse_url(url,function(url_info){
-					vm.url_info=url_info;
-				});
-			}
-		}, 0);
-	}
-
-	function textarea_paste2(domTextarea,item){
-		var txt = domTextarea.value;
-		var startPos = domTextarea.selectionStart;
-		var endPos = domTextarea.selectionEnd;
-		var scrollTop = domTextarea.scrollTop;
-		domTextarea.value = '';
-
-		setTimeout(function () {
+      setTimeout(function (item) {
           var pastedValue = domTextarea.value;
           domTextarea.value = txt.substring(0, startPos) + pastedValue + txt.substring(endPos, txt.length);
           domTextarea.focus();
           domTextarea.selectionStart = domTextarea.selectionEnd = startPos + pastedValue.length;
           domTextarea.scrollTop = scrollTop;
-          var urlify_url=urlify(pastedValue);
+          var urlify_url=urlify(pastedValue);	
           if(urlify_url.indexOf("<a href=")>-1){
-            var url=urlify_url.split("</a>")[0].split(">")[1];
-            parse_url(url,function(url_info){
-              item.url_info=url_info;
-            });
+              var url=urlify_url.split("</a>")[0].split(">")[1];
+              parse_url(url,function(url_info){
+                  vm.url_info=url_info;
+              });
           }
-		}, 0);
-	}
+      }, 0);
+  }
 
+  function textarea_paste2(domTextarea,item){
+      var txt = domTextarea.value;
+      var startPos = domTextarea.selectionStart;
+      var endPos = domTextarea.selectionEnd;
+      var scrollTop = domTextarea.scrollTop;
+      domTextarea.value = '';
+
+      setTimeout(function () {
+        var pastedValue = domTextarea.value;
+        domTextarea.value = txt.substring(0, startPos) + pastedValue + txt.substring(endPos, txt.length);
+        domTextarea.focus();
+        domTextarea.selectionStart = domTextarea.selectionEnd = startPos + pastedValue.length;
+        domTextarea.scrollTop = scrollTop;
+        var urlify_url=urlify(pastedValue);
+        if(urlify_url.indexOf("<a href=")>-1){
+          var url=urlify_url.split("</a>")[0].split(">")[1];
+          parse_url(url,function(url_info){
+            item.url_info=url_info;
+          });
+        }
+      }, 0);
+  }
+ 
   function parse_url(url,fn){
     $.get("https://54.250.245.226/infometro.asp?url="+url,function(html){
           var iframe = document.createElement("iframe");
