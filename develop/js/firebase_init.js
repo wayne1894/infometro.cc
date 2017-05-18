@@ -227,6 +227,9 @@ function _is_login(){//程式進入點
 	 DB.ref('users/' + user_uid).once('value',function(data) {//載入使用者基本資料
 		 if(data.val()){
 			 vm.users=data.val();
+		 }else{
+			 初始化使用者資訊();
+			//沒有會員資料 
 		 }
 	 });
 	DB.ref('users_data/' + user_uid).once('value',function(data) { //載入user_data
