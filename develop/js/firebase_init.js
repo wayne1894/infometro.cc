@@ -196,6 +196,7 @@ function blueprint_init(fn){
     $.extend(index_array,vm.index);
     vm.index=index_array;
    
+
 		var _index = vm.index_blueprint; //預載入的藍圖
 
 		var _action = vm.action; //操作動作執行
@@ -224,7 +225,6 @@ function blueprint_init(fn){
 }
 
 function _is_login(){//程式進入點
-  alert(0)
 	 DB.ref('users/' + user_uid).once('value',function(data) {//載入使用者基本資料
 		 if(data.val()){
 			 vm.users=data.val();
@@ -265,7 +265,6 @@ function _is_login(){//程式進入點
 					});
 					
 				}
-
 				
       });
     });

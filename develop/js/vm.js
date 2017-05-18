@@ -12,10 +12,10 @@ var vm = new Vue({
     mode : 1,
     pick_master :undefined,
     pick_color :undefined,
-		url_info : undefined,
+	url_info : undefined,
     filter_search:""
   },mounted:function(){
-		$("#main").css("visibility","visible");
+	$("#main").css("visibility","visible");
   },updated : function(){
     setTimeout(function(){
       $(window).resize();
@@ -334,7 +334,7 @@ var vm = new Vue({
       var _j=line_json("未命名",get_color);
       _j.metro.push(metro_json("總站"));
       data.line.push(_j);
-	  	vm.get_index_blueprint().push([]);//新增line的index陣列
+	  vm.get_index_blueprint().push([]);//新增line的index陣列
       this.更新藍圖(data.key,data);
     },delete_line : function(index){     
       $('#line_delete_modal').modal({
