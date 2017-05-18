@@ -32,25 +32,28 @@
   //[全域]監聽狀態改變
   firebase.auth().onAuthStateChanged(function(data) {
     if (data) {//使用者已登入
+			user_uid=data.uid;
       if(data.isAnonymous){//匿名使用者
          DB.ref('users/' + data.uid).once('value',function(data) {
-             if(!data.val()){
-                 初始化使用者資訊(undefined,"isAnonymous");
-                 location_fn();
-             }
+					 if(!data.val()){
+						 var fn=_is_login;
+						 if(typeof anonymous_fn=="function")fn=anonymous_fn;
+						 初始化使用者資訊(fn,"isAnonymous");
+					 }else{
+						 if(get_page()=="main")_is_login();
+					 }
          })
-      }
-      user_uid=data.uid;
-      _is_login();
+      }else{
+				if(get_page()=="main")_is_login();
+			}
     } else {
       print("User is not logined yet.");
-      if(typeof not_login==="function")not_login()
-      
+      if(get_page()=="main")location.replace("/");//登出
     }
   });
 
 
-  function 登出(){
+function 登出(){
     firebase.auth().signOut().then(function() {
       print("User sign out!");
       window.location.href="/"
@@ -58,7 +61,13 @@
       print("User sign out error!");
     })
   }
-
+function get_page(){
+	if(location.href.split("://")[1].split("/")[1]==""){//代表首頁
+		return "";
+	}else{
+		return "main";
+	}
+}
 
 //firebase to fb login
 var provider = new firebase.auth.FacebookAuthProvider();
@@ -66,16 +75,15 @@ function fb_login(fn){
 	//signInWithPopup signInWithRedirect
 	firebase.auth().signInWithPopup(provider).then(function(result) {
 	  //var token = result.credential.accessToken;
-    //print(result)
-	  var user = result.user;
-       DB.ref('users/' + user.uid).once('value',function(data) {
-         
-         if(!data.val()){
-           初始化使用者資訊(fn);
-         }else{
-           fn();
-         }
-       })
+	   var user = result.user;
+		 DB.ref('users/' + user.uid).once('value',function(data) {
+
+			 if(!data.val()){
+				 初始化使用者資訊(fn);
+			 }else{
+				 fn();
+			 }
+		 })
 
 	}).catch(function(error) {
 		var errorCode = error.code;
@@ -96,22 +104,19 @@ function fb_login(fn){
 		}
 	});
 }
-
+var anonymous_fn
 function anonymous_login(fn){
-	firebase.auth().signInAnonymously().catch(function(error) {
-		// Handle Errors here.
-		var errorCode = error.code;
-		var errorMessage = error.message;
-		// ...
-	});
+	if(user_uid!=undefined)fn();
+	anonymous_fn=fn;
+	firebase.auth().signInAnonymously();
 }
 function 初始化使用者資訊(fn,isAnonymous){
   var user = firebase.auth().currentUser;
 	var data={
     name : user.displayName,
     url_name: "",
-    email: user.email,
-    photo : user.photoURL
+    photo : user.photoURL,
+		
   }
 	//https://semantic-ui.com/views/card.html
 	if(isAnonymous=="isAnonymous"){
@@ -119,7 +124,18 @@ function 初始化使用者資訊(fn,isAnonymous){
 		data.name="匿名";
 	}
 	
-  DB.ref('users/' + user.uid).set(data).then(fn());
+  DB.ref('users/' + user.uid).set(data).then(初始化藍圖資料(fn));
+}
+function 初始化藍圖資料(fn){
+	var newRef=DB.ref('blueprint/' + user_uid).push();
+	var newLine=[];
+	newLine.push(line_json("橘線","#FF6900",true));//新增第一條線
+	newLine[newLine.length-1].metro.push(metro_json("總站"));//第一條線下面的站
+	newRef.set({//將他存到藍圖
+		name: "我的地鐵計畫",
+		line : newLine
+	})
+	if(typeof fn=="function")fn()
 }
 function blueprint_json(name){
   return {
@@ -164,8 +180,7 @@ function blueprint_init(fn){
       _init[_init.length-1].key=childData.key;
     });
     if(_init.length==0){//第一次進來
-			vm.new_blueprint();
-			return ;
+			return 初始化藍圖資料();
 		}
     vm.blueprint=_init ;
     var index_array=[];
@@ -212,9 +227,6 @@ function _is_login(){//程式進入點
 	 DB.ref('users/' + user_uid).once('value',function(data) {//載入使用者基本資料
 		 if(data.val()){
 			 vm.users=data.val();
-		 }else{
-			 location.href = "/";
-			//沒有會員資料 
 		 }
 	 });
 	DB.ref('users_data/' + user_uid).once('value',function(data) { //載入user_data
@@ -232,7 +244,7 @@ function _is_login(){//程式進入點
       blueprint_init(function(){
         //一定要等vue資料載完才能載入選單物件
 				//https://semantic-ui.com/modules/dropdown.html#/settings
-        $(".blueprint_list").dropdown("destroy").dropdown({
+       $(".blueprint_list").dropdown("destroy").dropdown({
           on : 'customClick',
 					onShow: function(){
 						sortable["blueprint"].option("disabled", true);

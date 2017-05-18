@@ -71,9 +71,9 @@
       x: 2,
       y: 2,
       opacity: true,
-	  opacityMin: .5
+	  	opacityMin: .5
     }).hover(function(){
-	  $(this).trigger('startRumble');
+	  	$(this).trigger('startRumble');
     },function(){
       $(this).trigger('stopRumble');
     });

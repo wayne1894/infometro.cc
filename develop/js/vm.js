@@ -43,7 +43,7 @@ var vm = new Vue({
      return this.get_line().color;
    },
    metro : function(){//載入metro
-     if(this.blueprint.length==0)return false;
+     if(this.blueprint.length==0)return "";
      return this.get_line().metro;
    },
    metro_name : function(){
@@ -118,7 +118,6 @@ var vm = new Vue({
 					$("#board_info .dropdown").dropdown("destroy").dropdown();
 				},5)
 			})
-			
     }
   },methods: {
 			get_youtube_embed: function(item){
