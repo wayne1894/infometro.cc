@@ -186,44 +186,55 @@ function get_other_user(other_user_uid, fn) {
 function blueprint_init(fn) {
   DB.ref('blueprint/' + user_uid).on("value", function (data) {
     var _init = [];
+		var load_index=vm.index_blueprint; //預載入的藍圖
     data.forEach(function (childData) {
       _init.push(childData.val());
       _init[_init.length - 1].key = childData.key;
     });
-    if (_init.length == 0) { //第一次進來
-      return 初始化藍圖資料();
-    }
+    if (_init.length == 0) return 初始化藍圖資料();
     vm.blueprint = _init;
+		if(load_index+1>=vm.blueprint.length){
+			$.cookie("index_blueprint","0");
+			load_index=0;
+		}
+
     var index_array = [];
+		var old_index_array=[];
     for (var i = 0; i < _init.length; i++) {
       index_array.push([]);
+			old_index_array.push([]);
       if (_init[i].line) {
         for (var j = 0; j < _init[i].line.length; j++) {
           index_array[i].push([]);
+					old_index_array[i].push([]);
           index_array[i][index_array[i].length - 1].check = false;
+          old_index_array[i][index_array[i].length - 1].check = false;
         }
       }
     }
+
     $.extend(index_array, vm.index);
     vm.index = index_array;
 
-
-    var _index = vm.index_blueprint; //預載入的藍圖
-
+		if(vm.blueprint[load_index].line.length!=vm.index[load_index].length){
+			vm.index[load_index]=old_index_array[load_index];
+			print("重新設定index[全部]");
+		}
+		
     var _action = vm.action; //操作動作執行
     if (_action == "new_blueprint") { //判斷動作
-      _index = vm.index.length - 1; //移到最後一個
+      var _index = vm.index.length - 1; //移到最後一個
       vm.exchange_blueprint(_index, true); //切換藍圖
     } else if (_action == "new_line") {
       vm.index_update();
-      vm.exchange_line(vm.index[_index].length - 1);
+      vm.exchange_line(vm.index[load_index].length - 1);
     } else if (_action == "swap_list") {
       vm.index_update();
     } else if (_action == "delete_blueprint") {
       vm.index_update();
-      vm.exchange_blueprint(_index, true); //切換藍圖
+      vm.exchange_blueprint(load_index, true); //切換藍圖
     } else if (_action == "load") {
-      vm.exchange_blueprint(_index, true); //切換藍圖
+      vm.exchange_blueprint(load_index, true); //切換藍圖
     }
 
     if (typeof fn == "function") {
@@ -232,10 +243,10 @@ function blueprint_init(fn) {
     vm.action = "";
     vm.blueprint = _init; //載入資料
   })
-
 }
 
 function _is_login() { //程式進入點
+	
   DB.ref('users/' + user_uid).once('value', function (data) { //載入使用者基本資料
     if (data.val()) {
       vm.users = data.val();
