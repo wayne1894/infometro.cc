@@ -360,7 +360,7 @@ $(function(){
 				<i class="blueprint_i dropdown icon"></i>
 				<div class="menu">
 					<div class="item" @click="re_name(index,'blueprint')"><i class="edit icon"></i>重新命名</div>
-					<div v-if="index_blueprint==index" class="item" @click="delete_blueprint(item.key,index)"><i class="delete icon"></i>移除</div><!--移除藍圖一定要在本頁-->
+					<div v-if="index_blueprint!=index" class="item" @click="delete_blueprint(item.key)"><i class="delete icon"></i>移除</div>
 				</div>
     </div>
   </div>
