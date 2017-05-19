@@ -168,11 +168,6 @@ var vm = new Vue({
         return "編輯模式"
       } else if (this.mode == 1.5) {
         return "編輯模式"
-      } else if (this.mode == 2) { //導覽模式
-        setTimeout(function () {
-          sortable["metro"].option("disabled", true);
-        }, 5)
-        return "導覽模式"
       }
     },
     mode_click: function () {
@@ -190,8 +185,6 @@ var vm = new Vue({
         return "configure"
       } else if (this.mode == 1.5) {
         return "trash"
-      } else if (this.mode == 2) { //導覽模式
-        return "help circle outline"
       }
     },
     index_update: function () {

@@ -72,8 +72,8 @@
 	<a id="new_line" class="default_a" @click="new_line()">新增支線</a>
 </div>
 <div id="edit_parent">
-	<a class="left_icon"><i class="setting icon"></i></a>
-	<a class="left_icon" onclick="登出()"><i class="power icon"></i></a>
+	<a class="left_icon" data-tooltip="切換導覽"  data-position="right center"><i class="help circle icon"></i></a>
+	<a class="left_icon" data-tooltip="登出"  data-position="right center" onclick="登出()"><i class="power icon"></i></a>
 </div>
 
 
@@ -393,10 +393,10 @@ $(function(){
   <div class="r_button active" :style="{backgroundColor:master_line_color}">
     <i class="youtube play icon"></i>
   </div>
-  <div class="r_button active" :style="{backgroundColor:master_line_color}">
+  <div class="r_button" :style="{backgroundColor:master_line_color}">
     <i class="announcement icon"></i>
   </div>
-  <div class="r_button active" :style="{backgroundColor:master_line_color}">
+  <div class="r_button" :style="{backgroundColor:master_line_color}">
     <i class="search icon"></i>
   </div>
 </div>
