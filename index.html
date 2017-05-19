@@ -387,7 +387,11 @@
 </div>
 <script>
   function location_fn(){
-    location.href = "/:-D";
+    if(location.href.indexOf("localhost:1313/")>-1){
+      location.href = "404.html";
+    }else{
+      location.href = "/:-D";
+    }
   }
   function move_center(){
     var total_width=0;
