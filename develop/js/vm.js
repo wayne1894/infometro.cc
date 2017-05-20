@@ -283,16 +283,27 @@ var vm = new Vue({
        vm.action = "delete_blueprint";
        var _line = vm.blueprint[index].line;
        for (var i = 0; i < _line.length; i++)vm.delete_info_line(_line[i]._key);//刪除info
-       vm.index.splice(index, 1);//刪除索引
-       vm.index_update();//更新index
-       vm.index_line=0;
-       vm.index_blueprint=0;
-       vm.update_index_line(vm.index[vm.index_blueprint]);
-       vm.update_index_line_check();
-       vm.update_selection_color();
-       vm.update_metro_key(vm.index[vm.index_blueprint][vm.index_line]);
-       DB.ref('blueprint/' + user_uid + "/" + key).remove();
- 
+      if(vm.blueprint.length>1){
+         vm.index.splice(index, 1);//刪除索引
+         vm.index_update();//更新index
+         vm.index_line=0;
+         vm.index_blueprint=0;
+         vm.update_index_line(vm.index[vm.index_blueprint]);
+         vm.update_index_line_check();
+         vm.update_selection_color();
+         vm.update_metro_key(vm.index[vm.index_blueprint][vm.index_line]);
+         DB.ref('blueprint/' + user_uid + "/" + key).remove();
+      }else{
+        DB.ref('blueprint/' + user_uid + "/" + key).remove().then(function(){
+          vm.index.splice(index, 1);//刪除索引
+          vm.index_update();//更新index
+          location.reload();
+        })
+
+      }
+       
+
+      
         //$("#blueprint_delete_button").off("click");
         //$("#blueprint_delete_modal").modal("hide");
     // })

@@ -28,7 +28,7 @@
       animation: 150,
       forceFallback: false,
       onEnd: function (evt) {
-        vm.swap_blueprint(evt.oldIndex, evt.newIndex)
+        //vm.swap_blueprint(evt.oldIndex, evt.newIndex)
       }
     });
     sortable["line_master"] = new Sortable(id("line_drag_master"), {
