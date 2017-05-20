@@ -24,13 +24,6 @@
   var sortable = [];
   $(function () {
     //拖亦程式 https://github.com/RubaXa/Sortable
-    sortable["blueprint"] = new Sortable(id("blueprint_drag"), {
-      animation: 150,
-      forceFallback: false,
-      onEnd: function (evt) {
-        //vm.swap_blueprint(evt.oldIndex, evt.newIndex)
-      }
-    });
     sortable["line_master"] = new Sortable(id("line_drag_master"), {
       animation: 150,
       forceFallback: false
@@ -38,6 +31,9 @@
     sortable["line"] = new Sortable(id("line_drag"), {
       animation: 150,
       forceFallback: false,
+      setData: function (dataTransfer, dragEl) {
+        dataTransfer.setData('line_index', $(dragEl).data("line_index")); //設定要傳送的資料
+      },
       onEnd: function (evt) {
         vm.swap_list(evt.oldIndex, evt.newIndex)
       }

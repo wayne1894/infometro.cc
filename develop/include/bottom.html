@@ -1,7 +1,7 @@
 <div id="blueprint">
  <div class="bottom_line" :style="{background:color_gradient(master_line_color)}"></div>
   <div id="blueprint_drag">
-    <div v-for="(item, index) in blueprint" class="blueprint_list ui top left pointing dropdown icon"  @click="exchange_blueprint(index)" @dblclick="re_name(index,'blueprint')" :data-key="item.key" >
+    <div v-for="(item, index) in blueprint" class="blueprint_list ui top left pointing dropdown icon" @drop="drop_blueprint(event,item.key)"  @click="exchange_blueprint(index)" @dblclick="re_name(index,'blueprint')" :data-key="item.key" >
       <a class="blueprint_a" :class="{check:index_blueprint==index}"> {{item.name}}
       </a>
 				<input class="blueprint_input" type="text" v-model="item.name">
@@ -17,10 +17,30 @@
     <i class="add icon"></i>
   </div>
 </div>
-<div id="copyright">2017資訊地鐵站 版權所有 </div>
+<div id="copyright">© 2017資訊地鐵站 版權所有 </div>
 
 
 <script>
+function drop_blueprint(event,key){
+  
+  if(key==vm.blueprint[vm.index_blueprint].key)return
+  var line_index = event.dataTransfer.getData("line_index");
+  if(line_index=="")return;
+  var _line=vm.move_line(line_index,key);
+  _line=_line[0];
+  for(var i=0;i<vm.blueprint.length;i++){
+    if(vm.blueprint[i].key==key){
+      vm.blueprint[i].line.push(_line);
+      vm.index[i].push([]);
+      vm.index[i][vm.index[i].length - 1].check = false;
+      vm.更新藍圖(key,vm.blueprint[i]);
+      vm.index_update();
+      break;
+    }
+  }
+  
+}
+  
 $(function(){
 	$("#blueprint").on("click",function(event){	
 		if($(event.target).hasClass("blueprint_i")){

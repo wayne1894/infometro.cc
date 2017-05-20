@@ -637,14 +637,28 @@ textarea:focus {
       .board_list {
         min-height: 115px;
         border-bottom: 1px dashed #cdcdcd;
-				transition: background-color 0.2s ease-out;
+		transition: background-color 0.2s ease-out;
         &:hover{
           background-color: #F3F4F4;
+        }
+        &.active{
+          position: relative;
+          background-color: #F3F4F4;
+          &::before{
+            content: "";
+            display: inline-block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            border-left: 4px solid currentColor;
+          }
         }
         .board_message{
           min-height: 115px;
           padding-left: 17px;
           padding-right: 8px;
+          color: rgba(0,0,0,.87);
         }
         &:last-child{
             border-bottom: 1px solid rgba(34,36,38,.15);
@@ -961,9 +975,30 @@ textarea:focus {
       font-size: 1.5em;
       &:before {
         position: relative;
-        top: 9px;
+        top: 7px;
         left: 2px;
       }
+    }
+    i.icon.youtube{
+      &:before {
+        top: 9px;
+      }
+      
+    }
+    i.svg.home img{
+      width: 75%;
+      position: relative;
+      top: 5px;
+    }
+    i.svg.search img{
+      width: 65%;
+      position: relative;
+      top: 7px;
+    }
+    i.svg.question img{
+      width: 70%;
+      position: relative;
+      top: 5px;
     }
     .clearfix()
   }

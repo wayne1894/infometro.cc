@@ -1,22 +1,59 @@
 <div class="right_header_line" :style="{borderTopColor:master_line_color}"></div>
 <div class="right_tool">
   <div class="over"></div>
+  
   <div class="r_button active" :style="{backgroundColor:master_line_color}">
-    <i class="home icon"></i>
+    <i class="svg home"><img src="src/static/images/home.svg"></i>
   </div>
-<!--
-  <div class="r_button active" :style="{backgroundColor:master_line_color}">
+  <div class="r_button" :style="{backgroundColor:master_line_color}">
     <i class="youtube play icon"></i>
   </div>
--->
   <div class="r_button" :style="{backgroundColor:master_line_color}">
-    <i class="comments outline icon"></i>
+    <i class="svg search"><img src="src/static/images/search.svg"></i>
   </div>
+  <div class="r_button" :style="{backgroundColor:master_line_color}">
+    <i class="comment icon"></i>
+  </div>
+<!--
+  <div class="r_button" :style="{backgroundColor:master_line_color}">
+    <i class="svg question"><img src="src/static/images/question.svg"></i>
+  </div>
+-->
+
 </div>
+
 <div class="right_main">
-  <div></div>
-  <div></div>
-  <div></div>
+  <div style="display:none;">
+    infometro 最新消息公告：
+  </div>
+  <div style="display:none;">
+    YOUTUBE播放清單：
+    即將推出
+  </div>
+  <div style="display:none;">
+    全站搜尋：
+    喔喔，目前暫時還沒有這個功能喔。
+  </div>
+  <div style="display:none;">
+    議建回覆：
+    
+  </div>
+  <div style="display:none;">
+  全站式導覽：
+  infometro是什麼？
+  
+  目前提供的服務
+    目前完全免費，
+  
+  資訊儲存安全嗎？
+    我們採用google的firebase雲端儲存，當然重要的資料
+  
+  我如何刪除帳號？
+    目前暫時沒有刪除帳號功能，不過您可以手動將資訊全部刪除，並取消facebook與我們的綁定，
+  
+  更多問題：
+    請寫信給我們
+  </div>
 </div>
 <div class="right_line"></div>
 <script>

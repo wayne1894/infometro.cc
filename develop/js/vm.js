@@ -5,6 +5,7 @@ var vm = new Vue({
     index: [],
     index_blueprint: 0,
     index_line: 0,
+    info_active: "",
     key_metro: "",
     action: "load",
     info: [],
@@ -109,14 +110,29 @@ var vm = new Vue({
     }
   },
   watch: {
+    info_active : function(){
+      var _index=this.get_index_line();
+      if(!_index.info_active)_index.info_active=[];
+      _index.info_active[vm.key_metro]=this.info_active || "";
+      vm.index_update();
+    },
     key_metro: function () {
       //https://github.com/vuejs/vuefire
       var _ref = DB.ref("info/" + vm.get_line_key() + "/metro/" + vm.key_metro).orderByKey();
 
       vm.$bindAsArray('info', _ref);
-      var _index = this.index[this.index_blueprint][this.index_line];
+      var _index =this.get_index_line();
       _index.key_metro = this.key_metro;
-      vm.index_update();
+      if(_index.info_active){//等下會更新到，這邊就不用更新了
+        var _active=_index.info_active[this.key_metro];
+        this.info_active=_active;
+        setTimeout(function(){
+          $("#"+_active).velocity("scroll",{duration: 0,offset: -250})
+        },50);
+       
+      }else{
+        vm.index_update();
+      }
       vm.leave_edit_info();
       _ref.on("child_added", function (snapshot) { //元件載入後的動作
         setTimeout(function () {
@@ -261,18 +277,16 @@ var vm = new Vue({
       })
     },
     delete_blueprint: function (key) { //刪除藍圖
-      //if(vm.blueprint.length<=1)return
-//      $('.ui.modal').modal("refresh");
-//      setTimeout(function () {
-//        $("#blueprint_delete_modal").modal({
-//          inverted: true,
-//          closable: false
-//        }).modal('show');
-//      })
+      $('.ui.modal').modal("refresh");
+      setTimeout(function () {
+        $("#blueprint_delete_modal").modal({
+          inverted: true,
+          closable: false
+        }).modal('show');
+      })
 
       $("#blueprint_delete_name").html(vm.get_blueprint().name);
-     // $("#blueprint_delete_button").off("dblclick").on("dblclick", function () {
-        
+      $("#blueprint_delete_button").off("dblclick").on("dblclick", function () {
         var index ;//從刪除KEY找到他排在陣列的第幾個
         for(var i=0;i<vm.blueprint.length;i++){//找到刪除的index
           if(vm.blueprint[i].key==key){
@@ -299,14 +313,10 @@ var vm = new Vue({
           vm.index_update();//更新index
           location.reload();
         })
-
       }
-       
-
-      
-        //$("#blueprint_delete_button").off("click");
-        //$("#blueprint_delete_modal").modal("hide");
-    // })
+        $("#blueprint_delete_button").off("click");
+        $("#blueprint_delete_modal").modal("hide");
+     })
     },
     檢查更新錯誤索引:function(index){
       if(vm.blueprint[index].line.length!=vm.index[index].length){
@@ -314,7 +324,7 @@ var vm = new Vue({
         var index_array=[]
         for(var i=0;i<_line.length;i++){
           index_array.push([]);
-          index_array[index_array.length-1].check = false;
+          index_array[index_array.length-1].check = false; 
         }
         print("重新更新索引");
         vm.index[index]=index_array;
@@ -338,7 +348,7 @@ var vm = new Vue({
       }
       
       if (target) {
-        vm.檢查更新錯誤索引(index);
+        //vm.檢查更新錯誤索引(index);
         vm.index_blueprint = index; //重新安排
         vm.update_index_line(vm.index[index]);
         vm.update_index_line_check();
@@ -386,19 +396,32 @@ var vm = new Vue({
       vm.get_index_blueprint().push([]); //新增line的index陣列
       this.更新藍圖(data.key, data);
     },
+    move_line: function(index){
+      var data = vm.get_blueprint();
+      var _line= data.line.splice(index, 1);
+      if (vm.index_line >= index) { //刪除到小於自已-就往前倒退索引(同刪除藍圖)
+        var new_index = index - 1;
+        if (new_index < 0) new_index = 0;
+        vm.index_line = new_index; //重新安排
+      }   
+      vm.get_index_blueprint().splice(index, 1); //移除line的index陣列
+      vm.update_metro_key(vm.get_index_line())
+      vm.更新藍圖(data.key, data);
+      return _line
+    },
     delete_line: function (index) {
-//      $('.ui.modal').modal("refresh");
-//      setTimeout(function () {
-//        $('#line_delete_modal').modal({
-//          inverted: true,
-//          closable: false
-//        }).modal('show');
-//      }, 0)
+      $('.ui.modal').modal("refresh");
+      setTimeout(function () {
+        $('#line_delete_modal').modal({
+          inverted: true,
+          closable: false
+        }).modal('show');
+      }, 0)
       var data = vm.get_blueprint();
       var _color = data.line[index].color;
       $('#line_delete_modal').css("borderTopColor", _color);
       $("#line_delete_button").css("backgroundColor", _color)
-     // $("#line_delete_button").off("click").on("click", function () {
+      $("#line_delete_button").off("click").on("click", function () {
         var key = data.line[index]._key;
         data.line.splice(index, 1);
         if (vm.index_line >= index) { //刪除到小於自已-就往前倒退索引(同刪除藍圖)
@@ -412,7 +435,7 @@ var vm = new Vue({
         vm.delete_info_line(key);
         $("#line_delete_button").off("click");
         $("#line_delete_modal").modal("hide");
-    //  });
+      });
     },
     get_line_key: function () {
       return vm.get_line()._key;
@@ -530,7 +553,6 @@ var vm = new Vue({
         if (vm.mode != 1) return
         if ($target_parent.hasClass("edit")) return
       }
-
       $("html").addClass("re_name");
       var _key = item[".key"];
       $target_parent.addClass("edit");
@@ -640,28 +662,7 @@ var vm = new Vue({
       });
     },
     swap_blueprint: function(oldIndex, newIndex){
-//      if (oldIndex == newIndex) return;
-//      var data = this.blueprint; //將傳址改為傳值
-//      var new_index = [];
-//      $("#blueprint_drag .blueprint_list").each(function () {
-//        var index_key = get_key($(this).data("key"));
-//        new_index.push(vm.index[index_key]);
-//      })
-//
-//      vm.index = new_index;
-//
-//      if(oldIndex==vm.index_blueprint){
-//        vm.index_blueprint=newIndex;
-//      }else if(newIndex==vm.index_blueprint){
-//        vm.index_blueprint=oldIndex;
-//      }
-//  
-//      function get_key(key) {
-//        for (var i = 0; i < data.length; i++) {
-//          if (data[i].key == key) return i;
-//        }
-//      }
-      
+
     },
     swap_list: function (oldIndex, newIndex) {
       if (oldIndex == newIndex) return;

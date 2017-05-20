@@ -59,7 +59,7 @@
 	  </ul>
 	<div class="line_text">一般支線：</div>
       <ul id="line_drag">
-        <li v-for="(item, index) in line" v-show="!item.master" :class="{check:index_line==index}"   class="line_list" @drop="drop_line(event,index)" :data-key="item._key" :key="item._key">
+        <li v-for="(item, index) in line" v-show="!item.master" :class="{check:index_line==index}" class="line_list" @drop="drop_line(event,index)" :data-line_index="index" :data-key="item._key" :key="item._key">
           <div v-if="!item.master" class="tool" @click="delete_line(index)">
             <i class="trash outline mini small icon"></i>
           </div>
@@ -271,7 +271,7 @@ $(function(){
 	
 	<!--資訊列表-->
 	<div id="board_info">
-		<div :id="item['.key']" v-for="(item, index) in info_sort_filter" :key="item['.key']" class="board_list ui vertical segment clear">
+		<div :id="item['.key']" v-for="(item, index) in info_sort_filter" :key="item['.key']" :class="{active :info_active==item['.key']}" :style="{color : line_color}" @click="info_active=item['.key']" class="board_list ui vertical segment  clear">
 			<div class="board_message">
 				<img v-if="users.photo" class="ui left floated image transition mini" :src="users.photo">
 				<div class="info_message" @dblclick="edit_info(item,'dbl')">
@@ -353,7 +353,7 @@ $(function(){
     <div id="blueprint">
  <div class="bottom_line" :style="{background:color_gradient(master_line_color)}"></div>
   <div id="blueprint_drag">
-    <div v-for="(item, index) in blueprint" class="blueprint_list ui top left pointing dropdown icon"  @click="exchange_blueprint(index)" @dblclick="re_name(index,'blueprint')" :data-key="item.key" >
+    <div v-for="(item, index) in blueprint" class="blueprint_list ui top left pointing dropdown icon" @drop="drop_blueprint(event,item.key)"  @click="exchange_blueprint(index)" @dblclick="re_name(index,'blueprint')" :data-key="item.key" >
       <a class="blueprint_a" :class="{check:index_blueprint==index}"> {{item.name}}
       </a>
 				<input class="blueprint_input" type="text" v-model="item.name">
@@ -369,10 +369,30 @@ $(function(){
     <i class="add icon"></i>
   </div>
 </div>
-<div id="copyright">2017資訊地鐵站 版權所有 </div>
+<div id="copyright">© 2017資訊地鐵站 版權所有 </div>
 
 
 <script>
+function drop_blueprint(event,key){
+  
+  if(key==vm.blueprint[vm.index_blueprint].key)return
+  var line_index = event.dataTransfer.getData("line_index");
+  if(line_index=="")return;
+  var _line=vm.move_line(line_index,key);
+  _line=_line[0];
+  for(var i=0;i<vm.blueprint.length;i++){
+    if(vm.blueprint[i].key==key){
+      vm.blueprint[i].line.push(_line);
+      vm.index[i].push([]);
+      vm.index[i][vm.index[i].length - 1].check = false;
+      vm.更新藍圖(key,vm.blueprint[i]);
+      vm.index_update();
+      break;
+    }
+  }
+  
+}
+  
 $(function(){
 	$("#blueprint").on("click",function(event){	
 		if($(event.target).hasClass("blueprint_i")){
@@ -388,22 +408,59 @@ $(function(){
     <div class="right_header_line" :style="{borderTopColor:master_line_color}"></div>
 <div class="right_tool">
   <div class="over"></div>
+  
   <div class="r_button active" :style="{backgroundColor:master_line_color}">
-    <i class="home icon"></i>
+    <i class="svg home"><img src="src/static/images/home.svg"></i>
   </div>
-<!--
-  <div class="r_button active" :style="{backgroundColor:master_line_color}">
+  <div class="r_button" :style="{backgroundColor:master_line_color}">
     <i class="youtube play icon"></i>
   </div>
--->
   <div class="r_button" :style="{backgroundColor:master_line_color}">
-    <i class="comments outline icon"></i>
+    <i class="svg search"><img src="src/static/images/search.svg"></i>
   </div>
+  <div class="r_button" :style="{backgroundColor:master_line_color}">
+    <i class="comment icon"></i>
+  </div>
+<!--
+  <div class="r_button" :style="{backgroundColor:master_line_color}">
+    <i class="svg question"><img src="src/static/images/question.svg"></i>
+  </div>
+-->
+
 </div>
+
 <div class="right_main">
-  <div></div>
-  <div></div>
-  <div></div>
+  <div style="display:none;">
+    infometro 最新消息公告：
+  </div>
+  <div style="display:none;">
+    YOUTUBE播放清單：
+    即將推出
+  </div>
+  <div style="display:none;">
+    全站搜尋：
+    喔喔，目前暫時還沒有這個功能喔。
+  </div>
+  <div style="display:none;">
+    議建回覆：
+    
+  </div>
+  <div style="display:none;">
+  全站式導覽：
+  infometro是什麼？
+  
+  目前提供的服務
+    目前完全免費，
+  
+  資訊儲存安全嗎？
+    我們採用google的firebase雲端儲存，當然重要的資料
+  
+  我如何刪除帳號？
+    目前暫時沒有刪除帳號功能，不過您可以手動將資訊全部刪除，並取消facebook與我們的綁定，
+  
+  更多問題：
+    請寫信給我們
+  </div>
 </div>
 <div class="right_line"></div>
 <script>

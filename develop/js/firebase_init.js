@@ -197,16 +197,16 @@ function blueprint_init(blueprint_fn) {
     vm.blueprint = _init;
 
     var index_array = [];
-    var old_index_array = [];
+    //var old_index_array = [];
     for (var i = 0; i < _init.length; i++) {
       index_array.push([]);
-      old_index_array.push([]);
+      //old_index_array.push([]);
       if (_init[i].line) {
         for (var j = 0; j < _init[i].line.length; j++) {
           index_array[i].push([]);
-          old_index_array[i].push([]);
+          //old_index_array[i].push([]);
           index_array[i][index_array[i].length - 1].check = false;
-          old_index_array[i][index_array[i].length - 1].check = false;
+          //old_index_array[i][index_array[i].length - 1].check = false;
         }
       }
     }

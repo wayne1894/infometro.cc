@@ -38,7 +38,7 @@
 	
 	<!--資訊列表-->
 	<div id="board_info">
-		<div :id="item['.key']" v-for="(item, index) in info_sort_filter" :key="item['.key']" class="board_list ui vertical segment clear">
+		<div :id="item['.key']" v-for="(item, index) in info_sort_filter" :key="item['.key']" :class="{active :info_active==item['.key']}" :style="{color : line_color}" @click="info_active=item['.key']" class="board_list ui vertical segment  clear">
 			<div class="board_message">
 				<img v-if="users.photo" class="ui left floated image transition mini" :src="users.photo">
 				<div class="info_message" @dblclick="edit_info(item,'dbl')">
