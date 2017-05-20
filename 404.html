@@ -353,14 +353,15 @@ $(function(){
     <div id="blueprint">
  <div class="bottom_line" :style="{background:color_gradient(master_line_color)}"></div>
   <div id="blueprint_drag">
-    <div v-for="(item, index) in blueprint" class="blueprint_list ui top left pointing dropdown icon"  @click="exchange_blueprint(index)" @dblclick="re_name(index,'blueprint')" >
+    <div v-for="(item, index) in blueprint" class="blueprint_list ui top left pointing dropdown icon"  @click="exchange_blueprint(index)" @dblclick="re_name(index,'blueprint')" :data-key="item.key" >
       <a class="blueprint_a" :class="{check:index_blueprint==index}"> {{item.name}}
       </a>
 				<input class="blueprint_input" type="text" v-model="item.name">
 				<i class="blueprint_i dropdown icon"></i>
 				<div class="menu">
 					<div class="item" @click="re_name(index,'blueprint')"><i class="edit icon"></i>重新命名</div>
-					<div v-if="index_blueprint!=index" class="item" @click="delete_blueprint(item.key)"><i class="delete icon"></i>移除</div>
+					 <div v-show="index_blueprint!=index" class="item" @click="exchange_blueprint(index,true)"><i class="exchange icon"></i>切換</div>
+					<div v-if="index_blueprint==index" class="item" @click="delete_blueprint(item.key)"><i class="delete icon"></i>移除</div>
 				</div>
     </div>
   </div>

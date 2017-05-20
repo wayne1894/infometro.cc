@@ -26,7 +26,10 @@
     //拖亦程式 https://github.com/RubaXa/Sortable
     sortable["blueprint"] = new Sortable(id("blueprint_drag"), {
       animation: 150,
-      forceFallback: false
+      forceFallback: false,
+      onEnd: function (evt) {
+        vm.swap_blueprint(evt.oldIndex, evt.newIndex)
+      }
     });
     sortable["line_master"] = new Sortable(id("line_drag_master"), {
       animation: 150,

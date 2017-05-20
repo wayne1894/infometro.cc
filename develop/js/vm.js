@@ -117,7 +117,6 @@ var vm = new Vue({
       var _index = this.index[this.index_blueprint][this.index_line];
       _index.key_metro = this.key_metro;
       vm.index_update();
-
       vm.leave_edit_info();
       _ref.on("child_added", function (snapshot) { //元件載入後的動作
         setTimeout(function () {
@@ -220,7 +219,7 @@ var vm = new Vue({
       }
       vm.index_line = _index;
     },
-    update_index_blueprint_line_check: function () {
+    update_index_line_check: function () {
       var index_array = vm.get_index_blueprint();
       for (var i = 0; i < index_array.length; i++) {
         index_array[i].check = false;
@@ -262,6 +261,7 @@ var vm = new Vue({
       })
     },
     delete_blueprint: function (key) { //刪除藍圖
+      //if(vm.blueprint.length<=1)return
 //      $('.ui.modal').modal("refresh");
 //      setTimeout(function () {
 //        $("#blueprint_delete_modal").modal({
@@ -273,22 +273,26 @@ var vm = new Vue({
       $("#blueprint_delete_name").html(vm.get_blueprint().name);
      // $("#blueprint_delete_button").off("dblclick").on("dblclick", function () {
         
-        var index ;//從刪除KEY找到他排在第幾個
+        var index ;//從刪除KEY找到他排在陣列的第幾個
         for(var i=0;i<vm.blueprint.length;i++){//找到刪除的index
           if(vm.blueprint[i].key==key){
             index=i;
             break;
           }
         }
-        if(vm.index_blueprint>index){
-          vm.index_blueprint=vm.index_blueprint-1;
-        }
-      
-        vm.action = "delete_blueprint";
-        var _line = vm.blueprint[index].line;
-        for (var i = 0; i < _line.length; i++)vm.delete_info_line(_line[i]._key);//刪除info
-        vm.index.splice(index, 1);
-        DB.ref('blueprint/' + user_uid + "/" + key).remove();
+       vm.action = "delete_blueprint";
+       var _line = vm.blueprint[index].line;
+       for (var i = 0; i < _line.length; i++)vm.delete_info_line(_line[i]._key);//刪除info
+       vm.index.splice(index, 1);//刪除索引
+       vm.index_update();//更新index
+       vm.index_line=0;
+       vm.index_blueprint=0;
+       vm.update_index_line(vm.index[vm.index_blueprint]);
+       vm.update_index_line_check();
+       vm.update_selection_color();
+       vm.update_metro_key(vm.index[vm.index_blueprint][vm.index_line]);
+       DB.ref('blueprint/' + user_uid + "/" + key).remove();
+ 
         //$("#blueprint_delete_button").off("click");
         //$("#blueprint_delete_modal").modal("hide");
     // })
@@ -326,7 +330,7 @@ var vm = new Vue({
         vm.檢查更新錯誤索引(index);
         vm.index_blueprint = index; //重新安排
         vm.update_index_line(vm.index[index]);
-        vm.update_index_blueprint_line_check();
+        vm.update_index_line_check();
         vm.update_selection_color();
         vm.update_metro_key(vm.index[index][vm.index_line]);
       }
@@ -347,7 +351,7 @@ var vm = new Vue({
       function _el() {
         vm.index_line = index;
         if (!vm.get_index_blueprint()[index]) vm.replace_index(); //重新設定index
-        vm.update_index_blueprint_line_check();
+        vm.update_index_line_check();
         vm.update_selection_color();
         vm.update_metro_key(vm.get_index_blueprint()[index]);
         setTimeout(move_center, 0);
@@ -624,6 +628,30 @@ var vm = new Vue({
         $(this).off("click.op");
       });
     },
+    swap_blueprint: function(oldIndex, newIndex){
+//      if (oldIndex == newIndex) return;
+//      var data = this.blueprint; //將傳址改為傳值
+//      var new_index = [];
+//      $("#blueprint_drag .blueprint_list").each(function () {
+//        var index_key = get_key($(this).data("key"));
+//        new_index.push(vm.index[index_key]);
+//      })
+//
+//      vm.index = new_index;
+//
+//      if(oldIndex==vm.index_blueprint){
+//        vm.index_blueprint=newIndex;
+//      }else if(newIndex==vm.index_blueprint){
+//        vm.index_blueprint=oldIndex;
+//      }
+//  
+//      function get_key(key) {
+//        for (var i = 0; i < data.length; i++) {
+//          if (data[i].key == key) return i;
+//        }
+//      }
+      
+    },
     swap_list: function (oldIndex, newIndex) {
       if (oldIndex == newIndex) return;
       vm.action = "swap_list";
@@ -637,7 +665,7 @@ var vm = new Vue({
       })
       data.line = new_line;
       vm.index[vm.index_blueprint] = new_index;
-      vm.update_index_line(new_index)
+      vm.update_index_line(new_index);
       vm.更新藍圖(data.key, data);
 
       function get_key(key) {
