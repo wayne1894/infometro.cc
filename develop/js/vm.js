@@ -127,7 +127,7 @@ var vm = new Vue({
         var _active=_index.info_active[this.key_metro];
         this.info_active=_active;
         setTimeout(function(){
-          $("#"+_active).velocity("scroll",{duration: 300,offset: -250});
+          $("#"+_active).velocity("scroll",{duration: 0,offset: -250});
         },50);
        
       }else{
@@ -254,16 +254,22 @@ var vm = new Vue({
     },
     update_metro_key: function (index_array) {
       var _metro = this.get_line().metro;
+      var is_check=false
       if (index_array.key_metro) { //代表有選到的結點
         for (var i = 0; i < _metro.length; i++) {
           if (_metro[i]._key == index_array.key_metro) {
             vm.key_metro = _metro[i]._key;
+            is_check=true
             break;
           }
+        }
+        if(!is_check){
+          vm.key_metrovm.get_line().metro[0]._key;//如果都沒有把第一個給他
         }
       } else { //使用預設
         vm.key_metro = _metro[0]._key;
       }
+      
     },
     new_blueprint: function () { //新增藍圖
       vm.action = "new_blueprint";

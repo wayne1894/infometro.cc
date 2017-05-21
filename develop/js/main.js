@@ -116,8 +116,13 @@
       var urlify_url = urlify(pastedValue);
       if (urlify_url.indexOf("<a href=") > -1) {
         var url = urlify_url.split("</a>")[0].split(">")[1];
+        $("#board_enter .world.icon").show();
+        $("#board_enter .idea.icon").hide();
+
         parse_url(url, function (url_info) {
           vm.url_info = url_info;
+          $("#board_enter .world.icon").hide();
+          $("#board_enter .idea.icon").show();
         });
       }
     }, 0);
