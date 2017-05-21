@@ -401,7 +401,7 @@ var vm = new Vue({
       vm.get_index_blueprint().push([]); //新增line的index陣列
       vm.action = "new_line";
       setTimeout(function(){
-        this.更新藍圖(data.key, data);
+        vm.更新藍圖(data.key, data);
       },0)
     },
     move_line: function(index){
