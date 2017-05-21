@@ -354,7 +354,7 @@ var vm = new Vue({
       }
       
       if (target) {
-        //vm.檢查更新錯誤索引(index);
+        vm.檢查更新錯誤索引(index);
         vm.index_blueprint = index; //重新安排
         vm.update_index_line(vm.index[index]);
         vm.update_index_line_check();
