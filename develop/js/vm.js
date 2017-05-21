@@ -400,7 +400,9 @@ var vm = new Vue({
       data.line.push(_j);
       vm.get_index_blueprint().push([]); //新增line的index陣列
       vm.action = "new_line";
-      this.更新藍圖(data.key, data);
+      setTimeout(function(){
+        this.更新藍圖(data.key, data);
+      },0)
     },
     move_line: function(index){
       var data = vm.get_blueprint();
@@ -526,7 +528,20 @@ var vm = new Vue({
       if (vm.url_info) _data.url_info = vm.url_info;
       vm.url_info = undefined; //清掉
       $("#board_textarea").val("").keyup(); //清掉
-      DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).push(_data);
+      DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).push(_data,function(error){
+        if(error){
+          if(error.toString().indexOf("Permission denied")>-1){
+            set_line_root(vm.get_line_key(),user_uid + "(build)");
+            setTimeout(function(){
+              print("未發現root，重新寫入root")
+              location.reload();
+            },0)
+            
+          }
+        }else{
+           //console.log("Data hss been saved succesfully")
+        }
+      });
     },
     delete_info: function (key,event) { //刪除資訊
       var $target_parent = $(event.target).closest(".board_list");

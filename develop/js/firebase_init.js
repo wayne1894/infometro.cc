@@ -186,9 +186,7 @@ function get_other_user(other_user_uid, fn) {
 
 function blueprint_init(blueprint_fn) {
   DB.ref('blueprint/' + user_uid).on("value", function (data) {
-    var _action = vm.action; //操作動作執行
-    if(_action=="")return;
-    print(_action)
+    var _action = vm.action; //操作動作執行  
     var _init = [];
     var load_index = vm.index_blueprint; //預載入的藍圖
     data.forEach(function (childData) {
