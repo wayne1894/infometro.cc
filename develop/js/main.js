@@ -17,7 +17,7 @@
       $("#board2").css("left", b2_left + _move);
       $("#board3").css("left", b3_left + _move);
     }
-    move_center();
+    setTimeout(move_center, 0);
   }).resize();
 
 
@@ -47,6 +47,8 @@
       },
       onStart: function (evt) {
         var $top_tag = $("#top_tag");
+       $("#top_tag_parent").css("left",$top_tag.css("left"));
+       $top_tag.addClass("left_inherit");
         $top_tag.find(".add").hide();
         if (evt.oldIndex == 0) {
           $top_tag.addClass("first_drag");
@@ -56,8 +58,13 @@
         vm.mode = 1.5;
       },
       onEnd: function (evt) {
-        $("#top_tag").find(".add").show();
-        $("#top_tag").removeClass("first_drag").removeClass("last_drag");
+        var $top_tag = $("#top_tag");
+        $top_tag.find(".add").show();
+        setTimeout(function(){
+          $top_tag.removeClass("left_inherit");
+        },100)
+        
+         $top_tag.removeClass("first_drag").removeClass("last_drag");
         vm.swap_metro(evt.oldIndex, evt.newIndex);
         vm.mode = 1;
       }

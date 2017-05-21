@@ -665,6 +665,7 @@ textarea:focus {
         }
         .info_message {
           width: 80%;
+          min-height: 60px;
           float: left;
           padding-right: 20px;
         }
@@ -722,9 +723,9 @@ textarea:focus {
               color: white;
             }
          }
-				.url_remove{
-					display: none;
-				}
+        .url_remove{
+            display: none;
+        }
         &.edit{
           p.content{
             display: none!important;
@@ -732,15 +733,26 @@ textarea:focus {
           p.textarea {
             display: block!important;
           }
-					.url_remove{
-						display: block;
-					}
+          .url_remove{
+              display: block;
+          }
         }
       }
 
     }
+    #board_enter{
+      position: relative;
+      i.icon{
+        position: absolute;
+        top: 32%;
+        left: 36%;
+        font-size: 2.3em;
+        color: #b0b0b0;
+        opacity: .3
+      }
+    }
     #board_textarea{
-      
+
     }
     border-bottom: none;
     .clear {
@@ -1120,7 +1132,9 @@ textarea:focus {
     width: 100%;
   }
 }
-
+.left_inherit{
+  left: inherit!important
+}
 
 #board2 .ui.items>.item>.content>a.header:hover{
   color: black;

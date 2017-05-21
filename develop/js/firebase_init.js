@@ -187,6 +187,8 @@ function get_other_user(other_user_uid, fn) {
 function blueprint_init(blueprint_fn) {
   DB.ref('blueprint/' + user_uid).on("value", function (data) {
     var _action = vm.action; //操作動作執行
+    if(_action=="")return;
+    //print(_action)
     var _init = [];
     var load_index = vm.index_blueprint; //預載入的藍圖
     data.forEach(function (childData) {
@@ -195,7 +197,6 @@ function blueprint_init(blueprint_fn) {
     });
     if (_init.length == 0) return 初始化藍圖資料();
     vm.blueprint = _init;
-
     var index_array = [];
     //var old_index_array = [];
     for (var i = 0; i < _init.length; i++) {
@@ -215,7 +216,7 @@ function blueprint_init(blueprint_fn) {
     vm.index = index_array;
 
     if (vm.blueprint.length != vm.index.length) {
-      vm.index = old_index_array;
+      //vm.index = old_index_array;
       print("重新設定index[載入-全部重設]");
     }
 

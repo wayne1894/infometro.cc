@@ -5,7 +5,7 @@
         <span v-if="index==0" class="add a_first" @click="new_metro(0)"><img src="src/static/images/+.png"></span>
         
         <i class="top_metro" @click="exchange_metro(item._key)" :style="check_metro(item._key)"></i>
-        <span class="top_name" @dblclick="re_name(index,'metro')">{{item.name}}</span>
+        <span class="top_name" @dblclick="re_name(index,'metro',$event)">{{item.name}}</span>
         <input class="metro_input" type="text" v-model="item.name">
         <span v-if="metro.length>1" class="top_join"><span v-if="mode == 1 && index>0" class="add" @click="new_metro(index)"><img src="src/static/images/+.png"></span></span>
         
@@ -17,14 +17,14 @@
 
 
 <script>
-  function move_center(){
+  function move_center(is_move){
     var total_width=0;
     var tog_width=$("#top_tag").width();
     $("#top_tag li").each(function(){
         total_width=total_width+$(this).width();
     })
     if(tog_width > total_width){
-        $("#top_tag").css("left",((tog_width-total_width)/2) +"px");
+        $("#top_tag").css("left",(((tog_width-total_width)/2)+15) +"px");
     }else{
         $("#top_tag").css("left",0);
     }
