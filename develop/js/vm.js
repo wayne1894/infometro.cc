@@ -126,9 +126,9 @@ var vm = new Vue({
       if(_index.info_active){//等下會更新到，這邊就不用更新了
         var _active=_index.info_active[this.key_metro];
         this.info_active=_active;
-        setTimeout(function(){
-          $("#"+_active).velocity("scroll",{duration: 0,offset: -250});
-        },50);
+//        setTimeout(function(){
+//          $("#"+_active).velocity("scroll",{duration: 0,offset: -250});
+//        },50);
        
       }else{
         vm.index_update();

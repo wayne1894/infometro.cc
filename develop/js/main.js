@@ -85,9 +85,24 @@
     }, function () {
       $(this).trigger('stopRumble');
     });
-
+    setTimeout(function(){
+      $(".nav_i:not(.custom)").popup({
+        on: 'click'
+      })
+    },5);
+    
+    setTimeout(function(){
+     $('.nav_i.custom')
+      .popup({
+        popup : $('.custom.popup'),
+        on : 'click'
+      })
+     },5);
+    
+ 
   })
   //parse_url("https://www.youtube.com/watch?v=6nhLWBf6lS0")
+
   function urlify(text) {
     //http://stackoverflow.com/questions/1500260/detect-urls-in-text-with-javascript
     var urlRegex = /(https?:\/\/[^\s]+)/g;

@@ -100,9 +100,13 @@ textarea:focus {
     font-size: 14px;
     color: black;
     padding-left: @left_pl;
+    .clearfix();
   }
   #left_line {
     margin-bottom: 10px;
+    #line_drag{
+      position: relative;
+    }
     .line_input {
       display: none;
       .public_input();
@@ -223,6 +227,11 @@ textarea:focus {
       border-top: 1px solid #CDCDCD;
     }
   }
+  .navigation.active{
+    background-color: color: #f3f4f4;
+    
+  }
+  
 }
 #top {
   @li_width: 90px;
@@ -528,9 +537,10 @@ textarea:focus {
       .border_area{
         display: inline-block;
         top: 14%;
+        height: 60px;
         position: relative;
       }
-      i {
+      i:not(.nav_i){
         font-size: 3.7em;
         position: relative;
         &.icon::before{
@@ -582,6 +592,7 @@ textarea:focus {
       padding-top: 18px;
       padding-left: 27px;
       padding-bottom: 25px;
+      position: relative;
       a:not(.ui):hover{
         text-decoration: underline;
       }
@@ -629,8 +640,9 @@ textarea:focus {
       }
     }
     #board_info {
-       border-bottom: 1px solid #CDCDCD;
-       word-break: break-all;
+      border-bottom: 1px solid #CDCDCD;
+      word-break: break-all;
+      position: relative;
       a:not(.ui):hover{
         text-decoration: underline;
       }
@@ -691,7 +703,6 @@ textarea:focus {
         textarea {
           resize: none;
           width: 100%;
-          height: 100px;
           border-radius: 0;
           &:focus{
             border-color: inherit;
@@ -789,7 +800,7 @@ textarea:focus {
     }
     #board_favorites {
       margin-top: 12px;
-      padding-bottom: 30px;
+      padding-bottom: 15px;
       border-bottom: 1px solid #CDCDCD;
       display: inline-block;
       width: 100%;
@@ -1103,6 +1114,9 @@ textarea:focus {
     border-color: rgb(255, 105, 0);
   }
 }
+i.orange.icon {
+  color: #ff6900!important;
+}
 .left_line {
   position: absolute;
   width: 4px;
@@ -1140,6 +1154,10 @@ textarea:focus {
 .left_inherit{
   left: inherit!important
 }
+.nav_i{
+  cursor: pointer;
+}
+
 
 #board2 .ui.items>.item>.content>a.header:hover{
   color: black;

@@ -47,8 +47,9 @@
     <div id="line_parent">
 	<div id="logo"><img class="logo" src="src/static/images/logo_200.png"></div>
 	<div id="left_line">
-	<div class="line_text"><span>主線：</span>
-<!--  <i class="circular inverted orange info loading icon"></i>-->
+  <div class="line_text ">
+    <span>主線：</span>
+    <i style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="主線" data-content="主線在一個地鐵計畫裡只能擁有一條，它能夠串連支線，組織支線網路。"></i>
   </div>
 	  <ul id="line_drag_master">
 	    <li v-for="(item, index) in line" v-if="item.master" :class="{check:index_line==index}" class="line_list" @drop="drop_line($event,index)">
@@ -57,7 +58,10 @@
 	       <a class="line_a" @dblclick="re_name(index,'line',$event)"  @click="exchange_line(index)">{{item.name}}</a>
 	    </li>
 	  </ul>
-	<div class="line_text">一般支線：</div>
+	<div class="line_text">
+       <span>一般支線：</span>
+       <i style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="主線" data-content="主線在一個地鐵計畫裡只能擁有一條，它能夠串連支線，組織支線網路。"></i>
+    </div>
       <ul id="line_drag">
         <li v-for="(item, index) in line" v-show="!item.master" :class="{check:index_line==index}" class="line_list" @drop="drop_line($event,index)" :data-line_index="index" :data-key="item._key" :key="item._key">
           <div v-if="!item.master" class="tool" @click="delete_line(index)">
@@ -67,12 +71,16 @@
           <i v-if="!item.master" class="line_i" @dblclick="open_color(index,item.color)" @click="exchange_line(index)" :style="{backgroundColor:item.color}" ></i>
           <a v-if="!item.master" class="line_a" @dblclick="re_name(index,'line',$event)" @click="exchange_line(index)">{{item.name}}</a>
         </li>
+        <div v-show="line.length>1" style="position: absolute; top: 0px; right: -23px; z-index:55;">
+          <i style="height: 100%;" class="nav_i custom ui orange help circle icon" ></i>
+          <div class="ui custom popup hidden" style="width:100px;">I'm not on the same level as the button, but i can still be found. </div>
+        </div>
       </ul>
 	</div>
 	<a id="new_line" class="default_a" @click="new_line()">新增支線</a>
 </div>
 <div id="edit_parent">
-	<a class="left_icon" data-tooltip="切換導覽"  data-position="right center"><i class="help circle icon"></i></a>
+	<a class="left_icon navigation" data-tooltip="切換導覽"  data-position="right center"><i class="help circle icon"></i></a>
 	<a class="left_icon" data-tooltip="登出"  data-position="right center" onclick="登出()"><i class="power icon"></i></a>
 </div>
 
@@ -123,6 +131,8 @@ $(function(){
         <span v-if="metro.length==index+1" class="add a_last" @click="new_metro(metro.length)"><img src="src/static/images/+.png"></span>
       </li>
     </ul>
+    <i style="position: absolute; left:50%; top:45px; margin-left:-5px; z-index:55" class="nav_i ui orange help circle icon" data-title="主線" data-content="主線在一個地鐵計畫裡只能擁有一條，它能夠串連支線，組織支線網路。"></i>
+    <i style="position: absolute; left:4%; top:6px; margin-left:-3px;z-index:55" class="nav_i ui orange help circle icon" data-title="主線" data-content="主線在一個地鐵計畫裡只能擁有一條，它能夠串連支線，組織支線網路。"></i>
   </div>
 <div class="triangle right"></div>
 
@@ -182,7 +192,12 @@ $(function(){
       <div v-if="is_master()" class="board_name master_big">{{ line_name }}</div>
       <div v-else class="board_name">{{ line_name }}</div>
     </div>
-    <div id="board_edit" @click="mode_click()" ondragover="allowDrop(event)" ondrop="drop(event)"><div class="border_area" :data-tooltip="mode_txt()" data-position="right center"><i :class="mode_class()" class=" icon"></i></div></div>
+    <div id="board_edit" ondragover="allowDrop(event)" ondrop="drop(event)">
+      <div class="border_area" @click="mode_click()" :data-tooltip="mode_txt()" data-position="right center">
+        <i :class="mode_class()" class=" icon"></i>
+      </div>
+      <i style=" position: absolute; bottom:8px; right:3px;" class="nav_i ui orange help circle icon" data-title="操作模式" data-content="操作模式目前有一般模式及編輯模式，在編輯模式，你可以將站點作脫亦更換的動作"></i>
+    </div>
   </div>
   <div id="board_tag_name">
     <div id="tag_name" v-if="metro_name">
@@ -236,8 +251,7 @@ $(function(){
 		<div id="board_img"><img v-if="users.photo" :src="users.photo"></div>
 		<div id="board_enter">
 		  <i style="display:none;" class="idea icon"></i>
-		  <i style="display:none;" class="world loading icon"></i>
-		  
+		  <i style="display:none;" class="world loading icon"></i> 
 		  <textarea id="board_textarea" name="textarea1" placeholder="輸入資訊"></textarea>
 		</div>
 		<!--包成vue組件1 輸入-->
@@ -258,6 +272,8 @@ $(function(){
 			</div>
 		</div>
 		<!--包成vue組件1 輸入-->
+		<i style="position: absolute; right:-5%; top:6px;z-index:55" class="nav_i ui orange help circle icon" data-title="主線" data-content="主線在一個地鐵計畫裡只能擁有一條，它能夠串連支線，組織支線網路。"></i>
+
 	</div>
 	<!--資訊輸入-->
 	
@@ -273,6 +289,7 @@ $(function(){
 	
 	<!--資訊列表-->
 	<div id="board_info">
+	  <i v-show="info_sort_filter.length" style="position: absolute; right:-5%; top:1px;z-index:55" class="nav_i ui orange help circle icon" data-title="主線" data-content="主線在一個地鐵計畫裡只能擁有一條，它能夠串連支線，組織支線網路。"></i>
 		<div :id="item['.key']" v-for="(item, index) in info_sort_filter" :key="item['.key']" :class="{active :info_active==item['.key']}" :style="{color : line_color}" @click="info_active=item['.key']" class="board_list ui vertical segment  clear">
 			<div class="board_message">
 				<img v-if="users.photo" class="ui left floated image transition mini" :src="users.photo">
@@ -486,17 +503,18 @@ $(function(){
   </div>
      <div id="blueprint_delete_modal" style="padding: 0;" :style="{borderTopColor:master_line_color}" class="ui small modal orange segment">
     <div class="header">
-      <img id="blueprint_delete_button" class="logo" src="src/static/images/logo.svg" style="width: 29px;float: right;letter-spacing: 1px;">
+<!--      <img id="blueprint_delete_button" class="logo" src="src/static/images/logo.svg" style="width: 29px;float: right;letter-spacing: 1px;">-->
       刪除 <span :style="{color:master_line_color}" id="blueprint_delete_name"></span>
     </div>
     <div class="image content">
 
       <div class="description">
         <p style="line-height: 1em;font-size: 14px;letter-spacing: 1px;">這個動作將會刪除整個地鐵的資料，且無法復原。</p>
-        <p style="line-height: 1em;font-size: 14px;letter-spacing: 1px;">點擊兩下右上角的logo，確定刪除。</p>
+        <p style="line-height: 1em;font-size: 14px;letter-spacing: 1px;">連續點擊按鈕兩下刪除。</p>
       </div>
     </div>
     <div class="actions">
+      <div id="blueprint_delete_button" class="ui button" :style="{backgroundColor:master_line_color}" style="color:#ffffff;margin-right: -5px;">確定</div>
       <div class="ui cancel button">取消</div>
     </div>
   </div>

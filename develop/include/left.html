@@ -1,8 +1,9 @@
 <div id="line_parent">
 	<div id="logo"><img class="logo" src="src/static/images/logo_200.png"></div>
 	<div id="left_line">
-	<div class="line_text"><span>主線：</span>
-<!--  <i class="circular inverted orange info loading icon"></i>-->
+  <div class="line_text ">
+    <span>主線：</span>
+    <i style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="主線" data-content="主線在一個地鐵計畫裡只能擁有一條，它能夠串連支線，組織支線網路。"></i>
   </div>
 	  <ul id="line_drag_master">
 	    <li v-for="(item, index) in line" v-if="item.master" :class="{check:index_line==index}" class="line_list" @drop="drop_line($event,index)">
@@ -11,7 +12,10 @@
 	       <a class="line_a" @dblclick="re_name(index,'line',$event)"  @click="exchange_line(index)">{{item.name}}</a>
 	    </li>
 	  </ul>
-	<div class="line_text">一般支線：</div>
+	<div class="line_text">
+       <span>一般支線：</span>
+       <i style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="主線" data-content="主線在一個地鐵計畫裡只能擁有一條，它能夠串連支線，組織支線網路。"></i>
+    </div>
       <ul id="line_drag">
         <li v-for="(item, index) in line" v-show="!item.master" :class="{check:index_line==index}" class="line_list" @drop="drop_line($event,index)" :data-line_index="index" :data-key="item._key" :key="item._key">
           <div v-if="!item.master" class="tool" @click="delete_line(index)">
@@ -21,12 +25,16 @@
           <i v-if="!item.master" class="line_i" @dblclick="open_color(index,item.color)" @click="exchange_line(index)" :style="{backgroundColor:item.color}" ></i>
           <a v-if="!item.master" class="line_a" @dblclick="re_name(index,'line',$event)" @click="exchange_line(index)">{{item.name}}</a>
         </li>
+        <div v-show="line.length>1" style="position: absolute; top: 0px; right: -23px; z-index:55;">
+          <i style="height: 100%;" class="nav_i custom ui orange help circle icon" ></i>
+          <div class="ui custom popup hidden" style="width:100px;">I'm not on the same level as the button, but i can still be found. </div>
+        </div>
       </ul>
 	</div>
 	<a id="new_line" class="default_a" @click="new_line()">新增支線</a>
 </div>
 <div id="edit_parent">
-	<a class="left_icon" data-tooltip="切換導覽"  data-position="right center"><i class="help circle icon"></i></a>
+	<a class="left_icon navigation" data-tooltip="切換導覽"  data-position="right center"><i class="help circle icon"></i></a>
 	<a class="left_icon" data-tooltip="登出"  data-position="right center" onclick="登出()"><i class="power icon"></i></a>
 </div>
 
