@@ -25,7 +25,9 @@
 			</div>
 		</div>
 		<!--包成vue組件1 輸入-->
-		<i style="position: absolute; right:-5%; top:6px;z-index:55" class="nav_i ui orange help circle icon" data-title="主線" data-content="主線在一個地鐵計畫裡只能擁有一條，它能夠串連支線，組織支線網路。"></i>
+		<transition name="fade">
+  		<i v-show="is_nav" style="position: absolute; right:0%; top:6px;z-index:55" class="nav_i ui orange help circle icon" data-title="主線" data-content="主線在一個地鐵計畫裡只能擁有一條，它能夠串連支線，組織支線網路。"></i>
+        </transition>
 
 	</div>
 	<!--資訊輸入-->
@@ -42,7 +44,9 @@
 	
 	<!--資訊列表-->
 	<div id="board_info">
-	  <i v-show="info_sort_filter.length" style="position: absolute; right:-5%; top:1px;z-index:55" class="nav_i ui orange help circle icon" data-title="主線" data-content="主線在一個地鐵計畫裡只能擁有一條，它能夠串連支線，組織支線網路。"></i>
+      <transition name="fade">
+	  <i v-show="is_nav && info_sort_filter.length" style="position: absolute; right:-5.5%; top:14px;z-index:55" class="nav_i ui orange help circle icon" data-title="主線" data-content="主線在一個地鐵計畫裡只能擁有一條，它能夠串連支線，組織支線網路。"></i>
+      </transition>
 		<div :id="item['.key']" v-for="(item, index) in info_sort_filter" :key="item['.key']" :class="{active :info_active==item['.key']}" :style="{color : line_color}" @click="info_active=item['.key']" class="board_list ui vertical segment  clear">
 			<div class="board_message">
 				<img v-if="users.photo" class="ui left floated image transition mini" :src="users.photo">
@@ -51,7 +55,9 @@
 					<p class="content textarea ui form" :style="{borderColor:line_color}">
 						<textarea></textarea>
 						<span class="textarea_prompt" >
-							<span class="esc">按Esc離開編輯</span>
+							<span class="esc">
+							<i class="ui info circle icon" ></i>按Esc離開編輯
+							</span>
 							<button class="send mini ui button" :style="{backgroundColor:line_color}">送出</button>
 							<button class="cancel mini ui button">取消</button>
 						</span>

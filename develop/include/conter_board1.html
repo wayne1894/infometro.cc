@@ -9,7 +9,9 @@
       <div class="border_area" @click="mode_click()" :data-tooltip="mode_txt()" data-position="right center">
         <i :class="mode_class()" class=" icon"></i>
       </div>
-      <i style=" position: absolute; bottom:8px; right:3px;" class="nav_i ui orange help circle icon" data-title="操作模式" data-content="操作模式目前有一般模式及編輯模式，在編輯模式，你可以將站點作脫亦更換的動作"></i>
+      <transition name="fade">
+        <i v-show="is_nav" style="position: absolute; bottom:8px; right:3px;" class="nav_i ui orange help circle icon" data-title="操作模式" data-content="操作模式目前有一般模式及編輯模式，在編輯模式，你可以將站點作脫亦更換的動作"></i>
+      </transition>
     </div>
   </div>
   <div id="board_tag_name">

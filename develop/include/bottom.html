@@ -4,18 +4,22 @@
     <div v-for="(item, index) in blueprint" class="blueprint_list ui top left pointing dropdown icon" @drop="drop_blueprint($event,item.key)"  @click="exchange_blueprint(index,undefined,$event)" @dblclick="re_name(index,'blueprint',$event)" :data-key="item.key" >
       <a class="blueprint_a" :class="{check:index_blueprint==index}"> {{item.name}}
       </a>
-				<input class="blueprint_input" type="text" v-model="item.name">
-				<i class="blueprint_i dropdown icon"></i>
-				<div class="menu">
-					<div class="item" @click="re_name(index,'blueprint',$event)"><i class="edit icon"></i>重新命名</div>
-					 <div v-show="index_blueprint!=index" class="item" @click="exchange_blueprint(index,true,$event)"><i class="exchange icon"></i>切換</div>
-					<div v-if="index_blueprint==index" class="item" @click="delete_blueprint(item.key)"><i class="delete icon"></i>移除</div>
-				</div>
+      <input class="blueprint_input" type="text" v-model="item.name">
+      <i class="blueprint_i dropdown icon"></i>
+      <div class="menu">
+          <div class="item" @click="re_name(index,'blueprint',$event)"><i class="edit icon"></i>重新命名</div>
+           <div v-show="index_blueprint!=index" class="item" @click="exchange_blueprint(index,true,$event)"><i class="exchange icon"></i>切換</div>
+          <div v-if="index_blueprint==index" class="item" @click="delete_blueprint(item.key)"><i class="delete icon"></i>移除</div>
+      </div>
     </div>
   </div>
   <div id="blueprint_new" class="ui icon button" data-tooltip="新增一個地鐵計畫" data-inverted="" @click="new_blueprint()">
     <i class="add icon"></i>
   </div>
+  
+  <transition name="fade">
+    <i v-show="is_nav" style=" position: absolute; top:-38px; left:163px" class="nav_i ui orange help circle icon" data-title="主線" data-content="主線在一個地鐵計畫裡只能擁有一條，它能夠串連支線，組織支線網路。"></i>
+  </transition>
 </div>
 <div id="copyright">© 2017資訊地鐵站 版權所有 </div>
 
@@ -23,10 +27,10 @@
 <script>
 function drop_blueprint(event,key){
   if(key==vm.blueprint[vm.index_blueprint].key){
-		print("移動失敗，相同的blueprint");
-		return;
-	}
-	var line_key = event.dataTransfer.getData("line_key");
+    print("相同的blueprint");
+    return;
+  }
+  var line_key = event.dataTransfer.getData("line_key");
   if(line_key=="")return;
   var _line=vm.move_line(line_key);
   _line=_line[0];
