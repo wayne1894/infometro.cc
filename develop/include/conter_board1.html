@@ -5,7 +5,7 @@
       <div v-if="is_master()" class="board_name master_big">{{ line_name }}</div>
       <div v-else class="board_name">{{ line_name }}</div>
     </div>
-    <div id="board_edit" ondragover="allowDrop(event)" ondrop="drop(event)">
+    <div id="board_edit" @dragover="allowDrop($event)" @drop="drop($event)">
       <div class="border_area" @click="mode_click()" :data-tooltip="mode_txt()" data-position="right center">
         <i :class="mode_class()" class=" icon"></i>
       </div>
@@ -51,11 +51,13 @@
 
 <script>
   function drop(event){
-		var key = event.dataTransfer.getData("key");
+	var key = event.dataTransfer.getData("key");
     vm.delete_metro(key);
   }  
   function allowDrop(event) { //拖曳的物件移到上面
     //print("拖曳的物件移到上面")
-    event.preventDefault();
+    //var key = event.dataTransfer.getData("key");
+    //print(key)
+    //event.preventDefault();
   }
 </script>
