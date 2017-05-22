@@ -206,7 +206,10 @@ var vm = new Vue({
       }
     },
     index_update: function () {
-      DB.ref('users_data/' + user_uid + "/index").set(vm.index);
+      var data = JSON.parse(JSON.stringify(vm.index)); //將傳址改為傳值
+      setTimeout(function(){
+        DB.ref('users_data/' + user_uid + "/index").set(data);
+      },0)
     },
     更新藍圖: function (key, data) {
       if (key == undefined || data == undefined) {
@@ -342,10 +345,10 @@ var vm = new Vue({
         var _index = vm.index[index];
         var index_array = []
         for (var i = 0; i < _line.length; i++) {
-          if (vm.index[index]) {
+          if (vm.index[index][i]!=undefined) {
             index_array.push(vm.index[index][i]);
           } else {
-            index_array.push([]);
+            index_array.push({check:false});
             index_array[index_array.length - 1].check = false;
           }
         }
@@ -410,7 +413,7 @@ var vm = new Vue({
       var _j = line_json("未命名", get_color);
       _j.metro.push(metro_json("總站"));
       data.line.push(_j);
-      get_index.push([]); //新增line的index陣列
+      get_index.push({check:false}); //新增line的index陣列
       vm.action = "new_line";
       vm.更新藍圖(data.key, data);
     },

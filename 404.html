@@ -207,14 +207,11 @@ $(function(){
       <div v-if="is_master()" class="board_name master_big">{{ line_name }}</div>
       <div v-else class="board_name">{{ line_name }}</div>
     </div>
-    <div id="board_edit" @dragover="allowDrop($event)" @drop="drop($event)">
-      <div class="border_area" @click="mode_click()" :data-tooltip="mode_txt()" data-position="right center">
-        <i :class="mode_class()" class=" icon"></i>
-      </div>
-      <transition name="fade">
+    <div id="board_edit" @click="mode_click()" @dragover="allowDrop($event)" @drop="drop($event)"><div class="border_area" :data-tooltip="mode_txt()" data-position="right center"><i :class="mode_class()" class=" icon"></i></div></div>
+    <transition name="fade">
         <i v-show="is_nav" style="position: absolute; bottom:8px; right:3px;" class="nav_i ui orange help circle icon" data-title="操作模式" data-content="操作模式目前有一般模式及編輯模式，在編輯模式，你可以將站點作脫亦更換的動作"></i>
-      </transition>
-    </div>
+    </transition>
+
   </div>
   <div id="board_tag_name">
     <div id="tag_name" v-if="metro_name">
@@ -254,13 +251,14 @@ $(function(){
 <script>
   function drop(event){
 	var key = event.dataTransfer.getData("key");
-    vm.delete_metro(key);
-  }  
+    if(key)vm.delete_metro(key);
+    var line_index=event.dataTransfer.getData("line_index");
+    if(line_index)vm.delete_line(line_index);
+    
+  }
   function allowDrop(event) { //拖曳的物件移到上面
     //print("拖曳的物件移到上面")
-    //var key = event.dataTransfer.getData("key");
-    //print(key)
-    //event.preventDefault();
+    event.preventDefault();
   }
 </script>
     <div id="board2" :style="{borderTopColor:master_line_color}">

@@ -32,10 +32,13 @@
       animation: 150,
       forceFallback: false,
       setData: function (dataTransfer, dragEl) {
-				dataTransfer.setData('line_key', $(dragEl).data("key")); //設定要傳送的資料
+		dataTransfer.setData('line_key', $(dragEl).data("key")); //設定要傳送的資料
+        dataTransfer.setData('line_index', $(dragEl).data("line_index")); //設定要傳送的資料
       },
       onEnd: function (evt) {
-        vm.swap_list(evt.oldIndex, evt.newIndex)
+        setTimeout(function(){
+          vm.swap_list(evt.oldIndex, evt.newIndex);
+        },5)
       }
     });
     sortable["metro"] = new Sortable(id("top_tag"), {
@@ -63,10 +66,12 @@
         setTimeout(function(){
           $top_tag.removeClass("left_inherit");
         },100)
-        
-         $top_tag.removeClass("first_drag").removeClass("last_drag");
-        vm.swap_metro(evt.oldIndex, evt.newIndex);
-        vm.mode = 1;
+
+        $top_tag.removeClass("first_drag").removeClass("last_drag");
+        setTimeout(function(){
+          vm.swap_metro(evt.oldIndex, evt.newIndex);
+          vm.mode = 1;
+        },5)
       }
     });
   })
