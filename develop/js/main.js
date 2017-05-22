@@ -32,7 +32,7 @@
       animation: 150,
       forceFallback: false,
       setData: function (dataTransfer, dragEl) {
-        dataTransfer.setData('line_index', $(dragEl).data("line_index")); //設定要傳送的資料
+				dataTransfer.setData('line_key', $(dragEl).data("key")); //設定要傳送的資料
       },
       onEnd: function (evt) {
         vm.swap_list(evt.oldIndex, evt.newIndex)
@@ -43,7 +43,7 @@
       forceFallback: false,
       filter: ".add",
       setData: function (dataTransfer, dragEl) {
-        dataTransfer.setData('index', $(dragEl).data("index")); //設定要傳送的資料
+				dataTransfer.setData('key', $(dragEl).data("key")); 
       },
       onStart: function (evt) {
         var $top_tag = $("#top_tag");

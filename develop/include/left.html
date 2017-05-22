@@ -41,15 +41,19 @@
 
 <script>
   function drop_line(event,index){
-    var metro_index = event.dataTransfer.getData("index");
-	if(metro_index=="")return;
-    var _metro=vm.move_metro(metro_index,index);
-    if(_metro==undefined)return
-    _metro=_metro[0];
-    vm.get_blueprint().line[index].metro.push(_metro);
-    vm.action="drop_line";
-    vm.更新藍圖();
-  }
+		if(vm.index_line==index)return;
+		
+		var metro_key = event.dataTransfer.getData("key");
+		if(metro_key=="")return;
+		var _metro=vm.move_metro(metro_key,index);
+		if(_metro==undefined)return
+		_metro=_metro[0];
+		var data = JSON.parse(JSON.stringify(vm.get_blueprint())); //將傳址改為傳值
+		data.line[index].metro.push(_metro);
+		vm.action="drop_line";
+		vm.更新藍圖(data.key,data);
+		
+	}
     
 $(function(){
   $(document.body).append("<div id='left_color' style='position: absolute;left:0;top:0'></div>");

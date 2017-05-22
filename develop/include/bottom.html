@@ -22,11 +22,13 @@
 
 <script>
 function drop_blueprint(event,key){
-  
-  if(key==vm.blueprint[vm.index_blueprint].key)return
-  var line_index = event.dataTransfer.getData("line_index");
-  if(line_index=="")return;
-  var _line=vm.move_line(line_index,key);
+  if(key==vm.blueprint[vm.index_blueprint].key){
+		print("移動失敗，相同的blueprint");
+		return;
+	}
+	var line_key = event.dataTransfer.getData("line_key");
+  if(line_key=="")return;
+  var _line=vm.move_line(line_key);
   _line=_line[0];
   for(var i=0;i<vm.blueprint.length;i++){
     if(vm.blueprint[i].key==key){

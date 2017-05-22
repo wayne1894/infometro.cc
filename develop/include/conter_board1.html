@@ -48,10 +48,9 @@
 </div>
 
 <script>
-  function drop(ev){
-    var index = ev.dataTransfer.getData("index");
-	//print(index);
-    vm.delete_metro(index);
+  function drop(event){
+		var key = event.dataTransfer.getData("key");
+    vm.delete_metro(key);
   }  
   function allowDrop(event) { //拖曳的物件移到上面
     //print("拖曳的物件移到上面")

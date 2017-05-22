@@ -188,7 +188,6 @@ function blueprint_init(blueprint_fn) {
   DB.ref('blueprint/' + user_uid).on("value", function (data) {
     var _action = vm.action; //操作動作執行  
     var _init = [];
-    var load_index = vm.index_blueprint; //預載入的藍圖
     data.forEach(function (childData) {
       _init.push(childData.val());
       _init[_init.length - 1].key = childData.key;
@@ -196,16 +195,12 @@ function blueprint_init(blueprint_fn) {
     if (_init.length == 0) return 初始化藍圖資料();
     vm.blueprint = _init;
     var index_array = [];
-    //var old_index_array = [];
     for (var i = 0; i < _init.length; i++) {
       index_array.push([]);
-      //old_index_array.push([]);
       if (_init[i].line) {
         for (var j = 0; j < _init[i].line.length; j++) {
           index_array[i].push([]);
-          //old_index_array[i].push([]);
-          index_array[i][index_array[i].length - 1].check = false;
-          //old_index_array[i][index_array[i].length - 1].check = false;
+          index_array[i][index_array[i].length - 1].check = false;//必要，這樣至少才有一個初始資料
         }
       }
     }
@@ -213,8 +208,19 @@ function blueprint_init(blueprint_fn) {
     $.extend(index_array, vm.index);
     vm.index = index_array;
 
-    if (vm.blueprint.length != vm.index.length) {
-      //vm.index = old_index_array;
+    if (vm.blueprint.length != vm.index.length) {//修補程式(不常發生)
+      var _array = [];
+			for (var i = 0; i < _init.length; i++) {
+				_array.push([]);
+				if (_init[i].line) {
+					for (var j = 0; j < _init[i].line.length; j++) {
+						_array[i].push([]);
+						_array[i][_array[i].length - 1].check = false;
+					}
+				}
+			}
+			vm.index = _array;
+			vm.index_blueprint = 0;
       print("重新設定index[載入-全部重設]");
     }
 
@@ -225,14 +231,14 @@ function blueprint_init(blueprint_fn) {
       setTimeout(blueprint_fn, 5);
     } else if (_action == "new_line") {
       vm.index_update();
-      vm.exchange_line(vm.index[load_index].length - 1);
+      vm.exchange_line(vm.index[vm.index_blueprint].length - 1);
     } else if (_action == "swap_list") {
       vm.index_update();
     } else if (_action == "delete_blueprint") {
       setTimeout(blueprint_fn, 5);
-      vm.exchange_blueprint(load_index, true); //切換藍圖
+      vm.exchange_blueprint(vm.index_blueprint, true); //切換藍圖
     } else if (_action == "load") {
-      vm.exchange_blueprint(load_index, true); //切換藍圖
+      vm.exchange_blueprint(vm.index_blueprint, true); //切換藍圖
       setTimeout(blueprint_fn, 5);
     }
 
@@ -252,7 +258,7 @@ function _is_login() { //程式進入點
   });
   DB.ref('users_data/' + user_uid).once('value', function (data) { //載入user_data
     if (data.val()) {
-      if (data.val().index) { //初始化index
+      if (data.val().index) { //初始化vm.index
         vm.index = data.val().index;
         delete data.val().index;
       }
