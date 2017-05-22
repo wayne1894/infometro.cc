@@ -188,6 +188,7 @@ function blueprint_init(blueprint_fn) {
   DB.ref('blueprint/' + user_uid).on("value", function (data) {
     var _action = vm.action; //操作動作執行  
     var _init = [];
+    
     data.forEach(function (childData) {
       _init.push(childData.val());
       _init[_init.length - 1].key = childData.key;
@@ -223,7 +224,12 @@ function blueprint_init(blueprint_fn) {
 			vm.index_blueprint = 0;
       print("重新設定index[載入-全部重設]");
     }
-
+    if(vm.action==""){
+      for(var i=0;i<vm.blueprint.length;i++){
+        vm.檢查更新錯誤索引(i);
+      }
+    }
+    
    
     if (_action == "new_blueprint") { //判斷動作
       var _index = vm.index.length - 1; //移到最後一個

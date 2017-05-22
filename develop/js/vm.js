@@ -50,6 +50,7 @@ var vm = new Vue({
     },
     metro: function () { //載入metro
       if (this.blueprint.length == 0) return "";
+      
       return this.get_line().metro;
     },
     metro_name: function () {
@@ -224,7 +225,11 @@ var vm = new Vue({
       return vm.index[vm.index_blueprint];
     },
     get_line: function () {
-      return this.get_blueprint().line[this.index_line];
+      var _l=this.get_blueprint().line;
+      if(_l[this.index_line]==undefined){
+        vm.exchange_line(0);
+      }
+      return _l[this.index_line]
     },
     get_index_line: function () { //得到當前支線索引資料
       return vm.index[vm.index_blueprint][vm.index_line];
