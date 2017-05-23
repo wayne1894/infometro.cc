@@ -12,8 +12,17 @@
     @@include('include/top.html')
   </div>
   <div id="center">
+    <div v-show="action!='load'">
     @@include('include/conter_board1.html')
     @@include('include/conter_board2.html')
+    </div>
+
+    <div v-show="action=='load'" style="position: absolute;top: 45%;left: 50%;margin-left:-25%;
+    margin-top: -80px; width: 100%;">
+      <img style="width:50%;" src="src/static/images/logo_big.svg" alt="">
+    </div>
+
+    
   </div>
   <div id="bottom">
     @@include('include/bottom.html')

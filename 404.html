@@ -200,6 +200,7 @@ $(function(){
 
   </div>
   <div id="center">
+    <div v-show="action!='load'">
     <div id="board1" :style="{borderTopColor:master_line_color}">
   <div id="board_line_parent">
     <div id="board_line">
@@ -388,6 +389,14 @@ $(function(){
 	
 
 </script>
+    </div>
+
+    <div v-show="action=='load'" style="position: absolute;top: 45%;left: 50%;margin-left:-25%;
+    margin-top: -80px; width: 100%;">
+      <img style="width:50%;" src="src/static/images/logo_big.svg" alt="">
+    </div>
+
+    
   </div>
   <div id="bottom">
     <div id="blueprint">
@@ -405,10 +414,9 @@ $(function(){
       </div>
     </div>
   </div>
-  <div id="blueprint_new" class="ui icon button" data-tooltip="新增一個地鐵計畫" data-inverted="" @click="new_blueprint()">
-    <i class="add icon"></i>
-  </div>
-  
+    <div id="blueprint_new" class="ui icon button" data-tooltip="新增一個地鐵計畫" data-inverted="" @click="new_blueprint()">
+      <i class="add icon"></i>
+    </div>
   <transition name="fade">
     <i v-show="is_nav" style=" position: absolute; top:-38px; left:163px" class="nav_i ui orange help circle icon" data-title="主線" data-content="主線在一個地鐵計畫裡只能擁有一條，它能夠串連支線，組織支線網路。"></i>
   </transition>
@@ -477,22 +485,22 @@ $(function(){
 </div>
 
 <div class="right_main">
-  <div style="display:none;">
+  <div class="r_content active">
     infometro 最新消息公告：
   </div>
-  <div style="display:none;">
+  <div class="r_content">
     YOUTUBE播放清單：
     即將推出
   </div>
-  <div style="display:none;">
+  <div class="r_content">
     全站搜尋：
-    喔喔，目前暫時還沒有這個功能喔。
+    
   </div>
-  <div style="display:none;">
+  <div class="r_content">
     議建回覆：
     
   </div>
-  <div style="display:none;">
+  <div class="r_content">
   全站式導覽：
   infometro是什麼？
   
@@ -512,6 +520,14 @@ $(function(){
 <div class="right_line"></div>
 <script>
 $(function(){
+  $("#right .r_button").on("click",function(){
+    var _index=$(this).index();
+    $(this).addClass("active").siblings().removeClass("active");
+    $("#right .r_content:eq("+_index+")").addClass("active").siblings().removeClass("active");
+  })
+  
+  
+  
   $(".right_tool").on("click",function(event){
     if($("#right").height()<400){
       if($(event.target).closest(".r_button").length==0){
@@ -536,8 +552,8 @@ $(function(){
     <div class="image content">
 
       <div class="description">
-        <p style="line-height: 1em;font-size: 14px;letter-spacing: 1px;">這個動作將會刪除整個地鐵的資料，且無法復原。</p>
-        <p style="line-height: 1em;font-size: 14px;letter-spacing: 1px;">連續點擊按鈕兩下刪除。</p>
+        <p style="line-height: 1em;font-size: 15px;letter-spacing: 1px;">這個動作將會刪除整個地鐵的資料，且無法復原。</p>
+        <p style="line-height: 1em;font-size: 15px;letter-spacing: 1px;">連續點擊按鈕兩下刪除。</p>
       </div>
     </div>
     <div class="actions">
@@ -551,7 +567,7 @@ $(function(){
     </div>
     <div class="image content">
       <div class="description">
-        <p style="line-height: 1em;font-size: 14px;letter-spacing: 1px;">確定刪除支線，也會刪除支線裡的所有資料？</p>
+        <p style="line-height: 1em;font-size: 15px;letter-spacing: 1px;">確定刪除支線，也會刪除支線裡的所有資料？</p>
       </div>
     </div>
     <div class="actions">

@@ -15,7 +15,7 @@ var vm = new Vue({
     pick_color: undefined,
     url_info: undefined,
     filter_search: "",
-    is_nav: true
+    is_nav: false
   },
   mounted: function () {
     $("#main").css("visibility", "visible");
@@ -284,6 +284,7 @@ var vm = new Vue({
 
     },
     new_blueprint: function () { //新增藍圖
+      if(vm.action=="load")return;
       vm.action = "new_blueprint";
       var newRef = DB.ref('blueprint/' + user_uid).push();
       var newLine = [];
@@ -339,9 +340,10 @@ var vm = new Vue({
         $("#blueprint_delete_modal").modal("hide");
       })
     },
-    檢查更新錯誤索引: function (index) { //修補程式(不常發生)
-      if (vm.blueprint[index].line.length != vm.index[index].length) {
-        var _line = vm.blueprint[index].line;
+    檢查更新錯誤索引: function (index,_vm_blueprint) { //修補程式(不常發生)
+      if (!_vm_blueprint[index]) return ;
+      if (_vm_blueprint[index].line.length != vm.index[index].length) {
+        var _line = _vm_blueprint[index].line;
         var _index = vm.index[index];
         var index_array = []
         for (var i = 0; i < _line.length; i++) {
@@ -359,7 +361,7 @@ var vm = new Vue({
     exchange_blueprint: function (index, target, event) { //切換藍圖
       if (vm.action != "load" && vm.index_blueprint == index) return; //重覆就離開
       if (event && $(event.target).hasClass("blueprint_i")) return;
-      vm.檢查更新錯誤索引(index);
+      vm.檢查更新錯誤索引(index,vm.blueprint);
       if (index >= vm.blueprint.length) index = 0;
       $("#top_tag").stop().fadeOut(0);
       $.cookie("index_blueprint", index);
@@ -406,6 +408,7 @@ var vm = new Vue({
       print("重新設定了index");
     },
     new_line: function () {
+      if(vm.action=="load")return;
       var data = this.get_blueprint();
       var get_index = vm.get_index_blueprint()
       if (!data.line) data.line = []; //如果沒有line就新增一個空陣列

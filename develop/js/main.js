@@ -108,7 +108,8 @@
       })
      },5);
     
- 
+    //右脫亦
+    $("#right .right_line").on('mouseover',line_over);
   })
   //parse_url("https://www.youtube.com/watch?v=6nhLWBf6lS0")
 
@@ -264,3 +265,37 @@
 			 if (typeof fn === "function") fn();
 		})
   }
+
+function line_over(event){
+	var e=event.target;
+	document.body.style.cursor="e-resize"
+	$(e).on('mousedown',function(event){
+	document.body.style.cursor="e-resize"
+	$(document).on('selectstart',function(){return false;})
+	$(document).on('dragstart',function(){return false;})
+	  var target_x=event.screenX;
+	  var target_y=event.screenY;
+	  var this_drag=$("#right");
+	  $(document).on('mousemove.line',function(event){
+          var a=(this_drag.width()+(target_x-event.screenX));
+          if(a<270)a=270;//最小寬度
+          //if(a>650)a=650;
+          id("right").style.width=a+"px";
+          target_x=event.screenX;
+          target_y=event.screenY;
+		});
+		$(document).on('mouseup.line',function(event){
+			document.body.style.cursor="auto";
+            $(e).off('mousedown');
+            $(document).off('mousemove.line');
+            $(document).off('mouseup.line');
+            $(document).off('selectstart');
+            $(document).off('dragstart');
+		});
+	})
+	$(e).on('mouseout',function(event){
+        document.body.style.cursor="auto"
+        $(e).off('mouseout');
+        $(e).off('mousedown');
+	});
+}

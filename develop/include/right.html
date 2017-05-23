@@ -23,22 +23,22 @@
 </div>
 
 <div class="right_main">
-  <div style="display:none;">
+  <div class="r_content active">
     infometro 最新消息公告：
   </div>
-  <div style="display:none;">
+  <div class="r_content">
     YOUTUBE播放清單：
     即將推出
   </div>
-  <div style="display:none;">
+  <div class="r_content">
     全站搜尋：
-    喔喔，目前暫時還沒有這個功能喔。
+    
   </div>
-  <div style="display:none;">
+  <div class="r_content">
     議建回覆：
     
   </div>
-  <div style="display:none;">
+  <div class="r_content">
   全站式導覽：
   infometro是什麼？
   
@@ -58,6 +58,14 @@
 <div class="right_line"></div>
 <script>
 $(function(){
+  $("#right .r_button").on("click",function(){
+    var _index=$(this).index();
+    $(this).addClass("active").siblings().removeClass("active");
+    $("#right .r_content:eq("+_index+")").addClass("active").siblings().removeClass("active");
+  })
+  
+  
+  
   $(".right_tool").on("click",function(event){
     if($("#right").height()<400){
       if($(event.target).closest(".r_button").length==0){

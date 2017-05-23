@@ -193,7 +193,9 @@ function blueprint_init(blueprint_fn) {
       _init.push(childData.val());
       _init[_init.length - 1].key = childData.key;
     });
-    if (_init.length == 0) return 初始化藍圖資料();
+    if(_action != "load"){
+      if (_init.length == 0) return 初始化藍圖資料();
+    }
     vm.blueprint = _init;
     var index_array = [];
     for (var i = 0; i < _init.length; i++) {
@@ -209,39 +211,38 @@ function blueprint_init(blueprint_fn) {
     $.extend(index_array, vm.index);
     vm.index = index_array;
 
-    if (vm.blueprint.length != vm.index.length) {//修補程式(不常發生)
+    if (vm.blueprint.length != vm.index.length) { //修補程式(不常發生)
       var _array = [];
-			for (var i = 0; i < _init.length; i++) {
-				_array.push([]);
-				if (_init[i].line) {
-					for (var j = 0; j < _init[i].line.length; j++) {
-						_array[i].push([]);
-						_array[i][_array[i].length - 1].check = false;
-					}
-				}
-			}
-			vm.index = _array;
-			vm.index_blueprint = 0;
+      for (var i = 0; i < _init.length; i++) {
+        _array.push([]);
+        if (_init[i].line) {
+          for (var j = 0; j < _init[i].line.length; j++) {
+            _array[i].push([]);
+            _array[i][_array[i].length - 1].check = false;
+          }
+        }
+      }
+      vm.index = _array;
+      vm.index_blueprint = 0;
       print("重新設定index[載入-全部重設]");
     }
     if(vm.action==""){
-      for(var i=0;i<vm.blueprint.length;i++){
-        vm.檢查更新錯誤索引(i);
+      var _vm_blueprint=vm.blueprint
+      for(var i=0;i<_vm_blueprint.length;i++){
+        vm.檢查更新錯誤索引(i,_vm_blueprint);
       }
     }
-    
-   
     if (_action == "new_blueprint") { //判斷動作
       var _index = vm.index.length - 1; //移到最後一個
       vm.exchange_blueprint(_index, true); //切換藍圖
-      setTimeout(blueprint_fn, 5);
+      setTimeout(blueprint_set, 5);
     } else if (_action == "new_line") {
       vm.index_update();
       vm.exchange_line(vm.index[vm.index_blueprint].length - 1);
     } else if (_action == "swap_list") {
       vm.index_update();
     } else if (_action == "delete_blueprint") {
-      setTimeout(blueprint_fn, 5);
+      setTimeout(blueprint_set, 5);
       vm.exchange_blueprint(vm.index_blueprint, true); //切換藍圖
     } else if (_action == "load") {
       vm.exchange_blueprint(vm.index_blueprint, true); //切換藍圖
@@ -251,9 +252,27 @@ function blueprint_init(blueprint_fn) {
     vm.action = "";
   })
 }
+function blueprint_set(){
+  //https://semantic-ui.com/modules/dropdown.html#/settings 
+  $(".blueprint_list").dropdown("hide").dropdown("destroy").dropdown({
+        on: 'customClick',
+        onShow: function () {
+          sortable["blueprint"].option("disabled", true);
+        },
+        onHide: function () {
+          sortable["blueprint"].option("disabled", false);
+        }
+      });
 
+      if (!sortable["blueprint"]) {
+        sortable["blueprint"] = new Sortable(id("blueprint_drag"), {
+          animation: 150,
+          forceFallback: false
+        });
+
+      }
+}
 function _is_login() { //程式進入點
-
   DB.ref('users/' + user_uid).once('value', function (data) { //載入使用者基本資料
     if (data.val()) {
       vm.users = data.val();
@@ -275,27 +294,10 @@ function _is_login() { //程式進入點
     }
 
     blueprint_init(function () {
-      //一定要等vue資料載完才能載入選單物件
-      //https://semantic-ui.com/modules/dropdown.html#/settings
-      
-      $(".blueprint_list").dropdown("hide").dropdown("destroy").dropdown({
-        on: 'customClick',
-        onShow: function () {
-          sortable["blueprint"].option("disabled", true);
-        },
-        onHide: function () {
-          sortable["blueprint"].option("disabled", false);
-        }
-      });
-
-      if (!sortable["blueprint"]) {
-        sortable["blueprint"] = new Sortable(id("blueprint_drag"), {
-          animation: 150,
-          forceFallback: false
-        });
-
-      }
-
+      //這裡只要vm.load會執行
+      blueprint_set();
+      vm.is_nav=true;
     });
+    
   });
 }

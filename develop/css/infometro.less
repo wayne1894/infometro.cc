@@ -3,14 +3,14 @@
 @top_height: 65px;
 @bottom_height: 42px;
 
-//@font-face {
-//   font-family: 'Noto Sans TC';
-//   font-style: normal;
-//   font-weight: 700;
-//   src: url(//fonts.gstatic.com/ea/notosanstc/v1/NotoSansTC-Bold.woff2) format('woff2'),
-//        url(//fonts.gstatic.com/ea/notosanstc/v1/NotoSansTC-Bold.woff) format('woff'),
-//        url(//fonts.gstatic.com/ea/notosanstc/v1/NotoSansTC-Bold.otf) format('opentype');
-// }
+@font-face {
+   font-family: 'Noto Sans TC';
+   font-style: normal;
+   font-weight: 700;
+   src: url(//fonts.gstatic.com/ea/notosanstc/v1/NotoSansTC-Bold.woff2) format('woff2'),
+        url(//fonts.gstatic.com/ea/notosanstc/v1/NotoSansTC-Bold.woff) format('woff'),
+        url(//fonts.gstatic.com/ea/notosanstc/v1/NotoSansTC-Bold.otf) format('opentype');
+ }
 @font-face {
    font-family: 'Noto Sans TC';
    font-style: normal;
@@ -50,6 +50,10 @@ body {
 
 .ui.modals{
   font-family: 'Noto Sans TC', sans-serif;
+  .header{
+    font-family: 'Noto Sans TC', sans-serif!important;
+  }
+  font-weight: 700;
   z-index: 10013!important;
 }
 button:focus,
@@ -233,6 +237,8 @@ textarea:focus {
   
 }
 #top {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 400;
   @li_width: 90px;
   height: @top_height;
   top: 0;
@@ -346,7 +352,7 @@ textarea:focus {
           vertical-align: top;
           position: relative;
           top: 3px;
-          left: 0px;
+          left: 1px;
         }
       }
       .top_join{
@@ -910,9 +916,9 @@ textarea:focus {
       }
     }
     .blueprint_i{
-			&:hover{
-				color: rgba(0, 0, 0, 0.5);
-			}
+      &:hover{
+          color: rgba(0, 0, 0, 0.5);
+      }
        &::after{
           content: '';
           position: absolute;
@@ -973,6 +979,7 @@ textarea:focus {
   }
 #right {
   font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 700;
   position: fixed;
   top: 0;
   right: 0;
@@ -1036,6 +1043,13 @@ textarea:focus {
   .right_main {
     position: relative;
     height: 100%;
+    .r_content{
+      display: none;
+      padding: 10px;
+      &.active{
+        display: block;
+      }
+    }
   }
   .right_line {
     position: absolute;
