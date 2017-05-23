@@ -33,11 +33,15 @@
       forceFallback: false,
       setData: function (dataTransfer, dragEl) {
 		dataTransfer.setData('line_key', $(dragEl).data("key")); //設定要傳送的資料
-        dataTransfer.setData('line_index', $(dragEl).data("line_index")); //設定要傳送的資料
+        dataTransfer.setData('line_key', $(dragEl).data("key")); //設定要傳送的資料
       },
+			onStart: function(){
+				vm.mode = 1.5;
+			},
       onEnd: function (evt) {
         setTimeout(function(){
           vm.swap_list(evt.oldIndex, evt.newIndex);
+					vm.mode = 1;
         },5)
       }
     });
@@ -140,9 +144,9 @@
         $("#board_enter .idea.icon").hide();
 
         parse_url(url, function (url_info) {
-          vm.url_info = url_info;
+          if(url_info)vm.url_info = url_info;
           $("#board_enter .world.icon").hide();
-          $("#board_enter .idea.icon").show();
+          //$("#board_enter .idea.icon").show();
         });
       }
     }, 0);
@@ -256,5 +260,7 @@
       if (typeof fn === "function") fn(url_info);
 
       //console.log(url_info);
-    })
+    }).fail(function(){
+			 if (typeof fn === "function") fn();
+		})
   }

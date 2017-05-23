@@ -50,9 +50,8 @@
   function drop(event){
 	var key = event.dataTransfer.getData("key");
     if(key)vm.delete_metro(key);
-    var line_index=event.dataTransfer.getData("line_index");
-    if(line_index)vm.delete_line(line_index);
-    
+    var line_key=event.dataTransfer.getData("line_key");
+    if(line_key)vm.delete_line(line_key);
   }
   function allowDrop(event) { //拖曳的物件移到上面
     //print("拖曳的物件移到上面")

@@ -417,14 +417,16 @@ var vm = new Vue({
       vm.action = "new_line";
       vm.更新藍圖(data.key, data);
     },
-    move_line: function (key) {
-      var data = vm.get_blueprint();
-      var index;
-      for (var i = 0; i < data.line.length; i++) {
+		find_line_index: function(key, data){
+			for (var i = 0; i < data.line.length; i++) {
         if (data.line[i]._key == key) {
-          index = i;
+          return i;
         }
       }
+		},
+    move_line: function (key) {
+      var data = vm.get_blueprint();
+      var index= vm.find_line_index(key,data);
       if (index == undefined) return
       var _line = data.line.splice(index, 1);
       vm.get_index_blueprint().splice(index, 1); //移除line的index索引陣列
@@ -438,7 +440,10 @@ var vm = new Vue({
       vm.更新藍圖(data.key, data);
       return _line
     },
-    delete_line: function (index) {
+    delete_line: function (key) {
+			var data = vm.get_blueprint();
+			var index= vm.find_line_index(key,data);
+			if (index == undefined) return
       $('.ui.modal').modal("refresh");
       setTimeout(function () {
         $('#line_delete_modal').modal({
@@ -446,12 +451,10 @@ var vm = new Vue({
           closable: false
         }).modal('show');
       }, 0)
-      var data = vm.get_blueprint();
-      var _color = data.line[index].color;
-      $('#line_delete_modal').css("borderTopColor", _color);
-      $("#line_delete_button").css("backgroundColor", _color)
+			var _color = data.line[index].color;
+			$('#line_delete_modal').css("borderTopColor", _color);
+			$("#line_delete_button").css("backgroundColor", _color);
       $("#line_delete_button").off("click").on("click", function () {
-        var key = data.line[index]._key;
         data.line.splice(index, 1); //移除line
         vm.get_index_blueprint().splice(index, 1); //移除line的index索引陣列
         if (vm.index_line >= index) { //刪除到自已或小於自已-就往前倒退索引(同刪除藍圖)
