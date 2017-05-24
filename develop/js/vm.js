@@ -84,18 +84,18 @@ var vm = new Vue({
       return _info
     },
     info_sort_filter: function () { //資訊的排序
-      var _sort = this.info.sort(function (a, b) {
-        if (a.timestamp > b.timestamp) return 1; //先照timestamp
+			var _sort=this.info;
+      _sort = _sort.sort(function (a, b) {
+        if (a.update_timestamp > b.update_timestamp) return 1; //先照timestamp
         return -1;
       });
       _sort = _sort.sort(function (a, b) {
         if (a.favorite) return -1; //在照favorite
         return 1;
       });
-      return _sort.filter(function (info) {
-        return info.message.indexOf(vm.filter_search) > -1
-      })
-
+			return _sort.filter(function (info) {
+				return info.message.indexOf(vm.filter_search) > -1
+			})
     }
   },
   filters: {
@@ -121,7 +121,7 @@ var vm = new Vue({
     },
     key_metro: function () {
       //https://github.com/vuejs/vuefire
-      var _ref = DB.ref("info/" + vm.get_line_key() + "/metro/" + vm.key_metro).orderByKey();
+      var _ref = DB.ref("info/" + vm.get_line_key() + "/metro/" + vm.key_metro).orderByChild("update_timestamp");
 
       vm.$bindAsArray('info', _ref);
       var _index = this.get_index_line();
@@ -558,6 +558,7 @@ var vm = new Vue({
         message: board_textarea,
         favorite: false,
         url_info: "",
+				update_timestamp: firebase.database.ServerValue.TIMESTAMP,
         timestamp: firebase.database.ServerValue.TIMESTAMP,
         users: user_uid
       }
@@ -605,7 +606,8 @@ var vm = new Vue({
     },
     favorite_info: function (item) {
       DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).child(item[".key"]).update({
-        favorite: !item.favorite
+        favorite: !item.favorite,
+				update_timestamp: firebase.database.ServerValue.TIMESTAMP
       });
     },
     edit_info: function (item, dbl, event) {

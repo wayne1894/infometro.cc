@@ -45,7 +45,7 @@
 	<!--資訊列表-->
 	<div id="board_info">
       <transition name="fade">
-	  <i v-show="is_nav && info_sort_filter.length" style="position: absolute; right:-5.5%; top:14px;z-index:55" class="nav_i ui orange help circle icon" data-title="主線" data-content="主線在一個地鐵計畫裡只能擁有一條，它能夠串連支線，組織支線網路。"></i>
+	  <i v-show="is_nav && info.length" style="position: absolute; right:-5.5%; top:14px;z-index:55" class="nav_i ui orange help circle icon" data-title="主線" data-content="主線在一個地鐵計畫裡只能擁有一條，它能夠串連支線，組織支線網路。"></i>
       </transition>
 		<div :id="item['.key']" v-for="(item, index) in info_sort_filter" :key="item['.key']" :class="{active :info_active==item['.key']}" :style="{color : line_color}" @click="info_active=item['.key']" class="board_list ui vertical segment  clear">
 			<div class="board_message">
