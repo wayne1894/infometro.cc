@@ -84,7 +84,7 @@ var vm = new Vue({
       return _info
     },
     info_sort_filter: function () { //資訊的排序
-			var _sort=this.info;
+	  var _sort=this.info;
       _sort = _sort.sort(function (a, b) {
         if (a.update_timestamp > b.update_timestamp) return 1; //先照timestamp
         return -1;
@@ -93,9 +93,9 @@ var vm = new Vue({
         if (a.favorite) return -1; //在照favorite
         return 1;
       });
-			return _sort.filter(function (info) {
-				return info.message.indexOf(vm.filter_search) > -1
-			})
+      return _sort.filter(function (info) {
+          return info.message.indexOf(vm.filter_search) > -1
+      })
     }
   },
   filters: {
@@ -612,28 +612,28 @@ var vm = new Vue({
     },
     edit_info: function (item, dbl, event) {
       var $target_parent = $(event.target).closest(".board_list");
-      if (dbl == "dbl") {
-        if (vm.mode != 1) return
-        if ($target_parent.hasClass("edit")) return
-      }
+      if ($target_parent.hasClass("edit")) return false
+      vm.leave_edit_info();
+      if (dbl == "dbl" && vm.mode != 1) return false
       $("html").addClass("re_name");
       var _key = item[".key"];
       $target_parent.addClass("edit");
       var $textarea = $target_parent.find("textarea");
       $textarea.val(item.message).focus();
-      $(document.body).on("keyup.textarea", function (event) {
+      $textarea.on("keyup.textarea", function (event) {
+        auto_height2(this);
         if (event.keyCode == 27) vm.leave_edit_info($target_parent);
-      })
-      $textarea.off("paste").on('paste', function () {
-        if (!item.url_info) {
-          textarea_paste2($textarea[0], item);
-        }
+      }).keyup();
+      $textarea.on('paste', function () {
+        if (!item.url_info) textarea_paste2($textarea[0], item);
       });
       $target_parent.find("button.send").one("click", function () {
         if (!item.url_info) item.url_info = "";
         var board_textarea = $.trim($textarea.val());
         vm.leave_edit_info($target_parent);
-        $textarea.off("paste");
+        setTimeout(function(){
+          $target_parent.velocity("scroll",{duration: 500,offset: -250});
+        },50);
         DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).child(_key).update({
           message: board_textarea,
           url_info: item.url_info,
@@ -642,20 +642,22 @@ var vm = new Vue({
       })
       $target_parent.find("button.cancel").one("click", function () {
         vm.leave_edit_info($target_parent);
-        $textarea.off("paste");
       })
     },
     leave_edit_info: function ($target) {
-      if (!$(".board_list").hasClass("edit")) return
       $(document).one("click", function () { //解決出現Chrome英文翻譯的問題
         $("html").removeClass("re_name");
       })
       if ($target) {
         $target.removeClass("edit");
+        $target.off("keyup.textarea").off("paste");
+        $target.find("button").off("click");
       } else {
         $(".board_list").removeClass("edit");
+        $("#board_info textarea").off("keyup.textarea").off("paste");
+        $("#board_info .textarea button").off("click");
       }
-      $(document.body).off("keyup.textarea");
+      
     },
     re_name: function (index, _level, event) { //重新命名(共用)
       if ($(event.target).hasClass("blueprint_i")) return;

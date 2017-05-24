@@ -107,9 +107,6 @@
         on : 'click'
       })
      },5);
-    
-    //右脫亦
-    $("#right .right_line").on('mouseover',line_over);
   })
   //parse_url("https://www.youtube.com/watch?v=6nhLWBf6lS0")
 
@@ -265,37 +262,38 @@
 			 if (typeof fn === "function") fn();
 		})
   }
-
-function line_over(event){
-	var e=event.target;
-	document.body.style.cursor="e-resize"
-	$(e).on('mousedown',function(event){
-	document.body.style.cursor="e-resize"
+  function auto_height(textarea){
+    $(textarea).height(70);
+    $(textarea).height(textarea.scrollHeight + parseFloat($(textarea).css("borderTopWidth")) + parseFloat($(textarea).css("borderBottomWidth")));
+  }
+  function auto_height2(textarea){
+    $(textarea).height(0);
+    var _height=textarea.scrollHeight + parseFloat($(textarea).css("borderTopWidth")) + parseFloat($(textarea).css("borderBottomWidth"));
+    $(textarea).height(_height);
+  }
+$(function(){
+  //右脫亦
+  $("#right .right_line").on('mousedown',function(event){
 	$(document).on('selectstart',function(){return false;})
 	$(document).on('dragstart',function(){return false;})
+      var max_width=$(window).width()-120;
 	  var target_x=event.screenX;
 	  var target_y=event.screenY;
 	  var this_drag=$("#right");
 	  $(document).on('mousemove.line',function(event){
           var a=(this_drag.width()+(target_x-event.screenX));
           if(a<270)a=270;//最小寬度
-          //if(a>650)a=650;
+          if(a>max_width)a=max_width;
           id("right").style.width=a+"px";
           target_x=event.screenX;
           target_y=event.screenY;
 		});
-		$(document).on('mouseup.line',function(event){
-			document.body.style.cursor="auto";
-            $(e).off('mousedown');
-            $(document).off('mousemove.line');
-            $(document).off('mouseup.line');
-            $(document).off('selectstart');
-            $(document).off('dragstart');
-		});
+      $(document).on('mouseup.line',function(event){
+        $(document).off('mouseup.line');
+        $(document).off('mousemove.line');
+        $(document).off('selectstart');
+        $(document).off('dragstart');
+      });
 	})
-	$(e).on('mouseout',function(event){
-        document.body.style.cursor="auto"
-        $(e).off('mouseout');
-        $(e).off('mousedown');
-	});
-}
+})
+	

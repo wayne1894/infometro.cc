@@ -655,21 +655,17 @@ textarea:focus {
         min-height: 115px;
         border-bottom: 1px dashed #cdcdcd;
 		transition: background-color 0.2s ease-out;
+        position: relative;
         &:hover{
           background-color: #F3F4F4;
         }
-        &.active{
-          position: relative;
-          background-color: #F3F4F4;
-          &::before{
-            content: "";
-            display: inline-block;
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            border-left: 4px solid currentColor;
-          }
+        .active_left{
+           display: inline-block;
+           position: absolute;
+           top: 0;
+           left: 0;
+           height: 100%;
+           border-left: 4px solid currentColor;
         }
         .board_message{
           min-height: 115px;
@@ -709,6 +705,7 @@ textarea:focus {
           resize: none;
           width: 100%;
           border-radius: 0;
+          max-height: none!important;
           &:focus{
             border-color: inherit;
           }
@@ -719,7 +716,7 @@ textarea:focus {
           .clearfix();
           display: block;
           padding-top: 5px;
-					padding-bottom: 12px;
+		  padding-bottom: 12px;
           button{
             float: right;
             position: relative;
@@ -1047,6 +1044,11 @@ textarea:focus {
     .r_content{
       display: none;
       padding: 10px;
+//      &.google{
+//        padding: 0;
+//        padding-top: 2px;
+//      }
+      height: 96%;
       &.active{
         display: block;
       }
@@ -1060,6 +1062,9 @@ textarea:focus {
     background-image: url(../../static/images/right_line_2.png);
     top: 0px;
     z-index: 4;
+    &:hover{
+      cursor: e-resize;
+    }
   }
 }
 
