@@ -100,11 +100,11 @@ var vm = new Vue({
 					new_sort.push(_sort[i]);
 				}
 			}
-      new_sort = new_sort.sort(function (a, b) {
-        if (a.update_timestamp > b.update_timestamp) return -1; //先照timestamp
-        return 1;
-      });
-			return [].concat(favorites_sort,new_sort);
+//      new_sort = new_sort.sort(function (a, b) {
+//        if (a.update_timestamp > b.update_timestamp) return -1; //照timestamp
+//        return 1;
+//      });
+			return [].concat(new_sort,favorites_sort);
 
     }
   },

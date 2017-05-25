@@ -648,14 +648,21 @@ textarea:focus {
       border-bottom: 1px solid #CDCDCD;
       word-break: break-all;
       position: relative;
+			
+			display: -webkit-flex; /* Safari */
+			-webkit-flex-direction: column-reverse; /* Safari 6.1+ */
+			display: flex;
+			flex-direction: column-reverse;
+			
       a:not(.ui):hover{
         text-decoration: underline;
       }
       .board_list {
         min-height: 115px;
         border-bottom: 1px dashed #cdcdcd;
-		transition: background-color 0.2s ease-out;
+				transition: background-color 0.2s ease-out;
         position: relative;
+
         &:hover{
           background-color: #F3F4F4;
         }
