@@ -83,19 +83,29 @@ var vm = new Vue({
       if (_info.length == 0) return false
       return _info
     },
-    info_sort_filter: function () { //資訊的排序
-	  var _sort=this.info;
-      _sort = _sort.sort(function (a, b) {
-        if (a.update_timestamp > b.update_timestamp) return 1; //先照timestamp
-        return -1;
-      });
-      _sort = _sort.sort(function (a, b) {
-        if (a.favorite) return -1; //在照favorite
+    info_sort_filter: function () { //資訊的排序與過濾
+			if (this.blueprint.length == 0) return "";
+	  	var _sort=this.info;
+			if(vm.filter_search){
+				_sort=_sort.filter(function (info) { //先從濾鏡開始
+					return info.message.indexOf(vm.filter_search) > -1
+				})
+			}
+			var favorites_sort=[];
+			var new_sort=[];
+			for(var i=0;i<_sort.length;i++){
+				if(_sort[i].favorite){
+					favorites_sort.push(_sort[i]);
+				}else{
+					new_sort.push(_sort[i]);
+				}
+			}
+      new_sort = new_sort.sort(function (a, b) {
+        if (a.update_timestamp > b.update_timestamp) return -1; //先照timestamp
         return 1;
       });
-      return _sort.filter(function (info) {
-          return info.message.indexOf(vm.filter_search) > -1
-      })
+			return [].concat(favorites_sort,new_sort);
+
     }
   },
   filters: {
@@ -122,7 +132,6 @@ var vm = new Vue({
     key_metro: function () {
       //https://github.com/vuejs/vuefire
       var _ref = DB.ref("info/" + vm.get_line_key() + "/metro/" + vm.key_metro).orderByChild("update_timestamp");
-
       vm.$bindAsArray('info', _ref);
       var _index = this.get_index_line();
       _index.key_metro = this.key_metro;

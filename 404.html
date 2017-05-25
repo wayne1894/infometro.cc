@@ -317,14 +317,14 @@ $(function(){
 				<div class="info_message" @dblclick="edit_info(item,'dbl',$event)">
 					<p class="content" v-html="$options.filters.message_filter(item.message)"></p>
 					<p class="content textarea ui form" :style="{borderColor:line_color}">
-                      <textarea></textarea>
-                      <span class="textarea_prompt" >
-                          <span class="esc">
-                          <i class="ui info circle icon" ></i>按Esc離開編輯
-                          </span>
-                          <button class="send mini ui button" :style="{backgroundColor:line_color}">送出</button>
-                          <button class="cancel mini ui button">取消</button>
-                      </span>
+						<textarea></textarea>
+						<span class="textarea_prompt" >
+								<span class="esc">
+								<i class="ui info circle icon" ></i>按Esc離開編輯
+								</span>
+								<button class="send mini ui button" :style="{backgroundColor:line_color}">送出</button>
+								<button class="cancel mini ui button">取消</button>
+						</span>
 					</p>
 				</div>
 				<span class="right_icon">
