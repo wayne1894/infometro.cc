@@ -567,14 +567,17 @@ var vm = new Vue({
         message: board_textarea,
         favorite: false,
         url_info: "",
-				update_timestamp: firebase.database.ServerValue.TIMESTAMP,
+		update_timestamp: firebase.database.ServerValue.TIMESTAMP,
         timestamp: firebase.database.ServerValue.TIMESTAMP,
         users: user_uid
       }
       if (vm.url_info) _data.url_info = vm.url_info;
       vm.url_info = undefined; //清掉
       $("#board_textarea").val("").keyup(); //清掉
-      DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).push(_data, function (error) {
+      if($("#top_tag").find("[data-key='"+vm.key_metro+"']").length==0){
+        print("目前不在任何地鐵上")
+      }else{
+        DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).push(_data, function (error) {
         if (error) { //修補程式(不常發生)
           if (error.toString().indexOf("Permission denied") > -1) {
             set_line_root(vm.get_line_key(), user_uid + "(build)");
@@ -586,8 +589,9 @@ var vm = new Vue({
           }
         } else {
           //console.log("Data hss been saved succesfully")
-        }
-      });
+          }
+        });
+      }
     },
     delete_info: function (key, event) { //刪除資訊
       var $target_parent = $(event.target).closest(".board_list");

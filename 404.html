@@ -492,43 +492,33 @@ $(function(){
     infometro 最新消息公告：
   </div>
   <div class="r_content">
-    YOUTUBE播放清單：
+    播放清單列表：
+    <br>
     即將推出
   </div>
   <div class="r_content">
     全站搜尋：
+    <br>
+    即將推出
   </div>
   <div class="r_content">
     議建回覆：
   </div>
-  <div class="r_content google">
 <!--
-    全站式導覽：
-    infometro是什麼？
+  <div class="r_content google">
 
-    目前提供的服務
-      目前完全免費，
-
-    資訊儲存安全嗎？
-      我們採用google的firebase雲端儲存，當然重要的資料
-
-    我如何刪除帳號？
-      目前暫時沒有刪除帳號功能，不過您可以手動將資訊全部刪除，並取消facebook與我們的綁定，
-
-    更多問題：
-      請寫信給我們
--->
  
        <iframe src="https://www.surveycake.com/s/O0mL3" width="100%" height="100%" frameborder="0" ></iframe>
  
  
   </div>
+-->
 </div>
 <div class="right_line"></div>
 <script>
 $(function(){
   $("#right .r_button").on("click",function(){
-    var _index=$(this).index();
+    var _index=$(this).index()-1;
     $(this).addClass("active").siblings().removeClass("active");
     $("#right .r_content:eq("+_index+")").addClass("active").siblings().removeClass("active");
   })
