@@ -271,10 +271,6 @@
     var _height=textarea.scrollHeight + parseFloat($(textarea).css("borderTopWidth")) + parseFloat($(textarea).css("borderBottomWidth"));
     $(textarea).height(_height);
   }
-  function auto_height3(textarea){
-    $(textarea).height(70);
-    $(textarea).height(textarea.scrollHeight + parseFloat($(textarea).css("borderTopWidth")) + parseFloat($(textarea).css("borderBottomWidth")));
-  }
 $(function(){
   //右脫亦
   $("#right .right_line").on('mousedown',function(event){
