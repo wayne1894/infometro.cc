@@ -174,7 +174,7 @@
   }
 
   function parse_url(url, fn) {
-    $.get("https://54.250.245.226/infometro.asp?url=" + url, function (html) {
+    $.get("https://infometro.hopto.org/infometro.asp?url=" + url, function (html) {
       var iframe = document.createElement("iframe");
       iframe.id = "iframe";
       iframe.style.display = "none";
@@ -267,6 +267,7 @@
     $(textarea).height(textarea.scrollHeight + parseFloat($(textarea).css("borderTopWidth")) + parseFloat($(textarea).css("borderBottomWidth")));
   }
   function auto_height2(textarea){
+    if(!textarea)return false
     $(textarea).height(0);
     var _height=textarea.scrollHeight + parseFloat($(textarea).css("borderTopWidth")) + parseFloat($(textarea).css("borderBottomWidth"));
     $(textarea).height(_height);

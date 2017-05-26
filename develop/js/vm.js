@@ -16,7 +16,7 @@ var vm = new Vue({
     url_info: undefined,
     filter_search: "",
     is_nav: false,
-		line_name: ""
+	line_name: ""
   },
   mounted: function () {
     $("#main").css("visibility", "visible");
@@ -149,14 +149,16 @@ var vm = new Vue({
         }, 5)
       })
     },
-		line_name: function(){
-			setTimeout(function(){
-				auto_height2(id("board_line_textarea"));
-				vm.get_line().name = vm.line_name;
-				vm.action = "re_name";
-				vm.更新藍圖();
-			},0);
-		}
+    line_name: function(){
+      if(id("board_line_textarea")){
+        setTimeout(function(){
+            auto_height2(id("board_line_textarea"));
+            vm.get_line().name = vm.line_name;
+            vm.action = "re_name";
+            vm.更新藍圖();
+        },0);
+      }
+    }
 	
   },
   methods: {
@@ -196,7 +198,7 @@ var vm = new Vue({
         return "一般模式"
       } else if (this.mode == 1) { //編輯模式
         setTimeout(function () {
-					auto_height2(id("board_line_textarea"));
+		  auto_height2(id("board_line_textarea"));
           sortable["metro"].option("disabled", false);
         }, 5)
         return "編輯模式"
@@ -395,7 +397,7 @@ var vm = new Vue({
         vm.update_selection_color();
         vm.update_metro_key(vm.index[index][vm.index_line]);
       }
-			vm.line_name=vm.get_line().name;
+	  vm.line_name=vm.get_line().name;
       setTimeout(move_center, 0);
     },
     exchange_line: function (index) {
@@ -414,7 +416,7 @@ var vm = new Vue({
         vm.update_index_line_check();
         vm.update_selection_color();
         vm.update_metro_key(vm.get_index_blueprint()[index]);
-				vm.line_name=vm.get_line().name;
+		vm.line_name=vm.get_line().name;
         setTimeout(move_center, 0);
       }
     },
@@ -694,7 +696,7 @@ var vm = new Vue({
           edit_set();
           vm.action = "re_name"
           vm.更新藍圖();
-					if(_level == "line")vm.line_name=this.value;
+		  if(_level == "line")vm.line_name=this.value;
         } else if (event.which == 27) { //esc
           edit_set();
           get_level().name = _name;
