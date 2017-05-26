@@ -17,114 +17,104 @@
 
 //https://firebase.google.com/docs/reference/security/database/    rules進階
 
-// Initialize Firebase 初始化
-var config = {
-  apiKey: "AIzaSyAalJEx21SpnVU5q5lW0eTSVPTz18s2Hy8",
-  authDomain: "infometro-cc.firebaseapp.com",
-  databaseURL: "https://infometro-cc.firebaseio.com",
-  storageBucket: "infometro-cc.appspot.com",
-  messagingSenderId: "358423331162"
-};
-firebase.initializeApp(config);
-var DB = firebase.database();
+var DB
 var user_uid;
+var provider;
+var isAnonymous;
 
-//[全域]監聽狀態改變
-firebase.auth().onAuthStateChanged(function (data) {
-  if (data) { //使用者已登入
-    user_uid = data.uid;
-    if (data.isAnonymous) { //匿名使用者
-      DB.ref('users/' + data.uid).once('value', function (data) {
-        if (!data.val()) {
-          var fn = _is_login;
-          if (typeof anonymous_fn == "function") fn = anonymous_fn;
-          初始化使用者資訊(fn, "isAnonymous");
-        } else {
-          if (get_page() == "main") _is_login();
-        }
-      })
-    } else {
-      if (get_page() == "main") _is_login();
-    }
-  } else {
-    print("User is not logined yet.");
-    if (get_page() == "main") location.replace("/"); //登出
-  }
-});
+$(function(){
+	// Initialize Firebase 初始化
+	var config = {
+		apiKey: "AIzaSyAalJEx21SpnVU5q5lW0eTSVPTz18s2Hy8",
+		authDomain: "infometro-cc.firebaseapp.com",
+		databaseURL: "https://infometro-cc.firebaseio.com",
+		storageBucket: "infometro-cc.appspot.com",
+		messagingSenderId: "358423331162"
+	};
+	firebase.initializeApp(config);
+	DB = firebase.database();
+	//[全域]監聽狀態改變
+	firebase.auth().onAuthStateChanged(function (data) {
+		var page=get_page();
+		if (data) { //使用者已登入
+			user_uid = data.uid;
+			if (data.isAnonymous) { //匿名使用者
+				isAnonymous=true;
+				DB.ref('users/' + data.uid).once('value', function (data) {
+					if (!data.val()) {
+						var fn = _is_login;
+						if (page == "index") fn = location_fn;
+						初始化使用者資訊(fn);
+					} else {
+						if ( page == "main") _is_login();
+					}
+				})
+			} else {
+				if ( page== "main") _is_login();
+			}
+		} else {
+			print("User is not logined yet.");
+			if ( page == "main") location.replace("/"); //登出
+		}
+	});
+
+})	
 
 
-function 登出() {
+function logout() {
   firebase.auth().signOut().then(function () {
-    print("User sign out!");
     window.location.href = "/"
-  }, function (error) {
-    print("User sign out error!");
   })
 }
-
 function get_page() {
-  if (location.href.split("://")[1].split("/")[1] == "") { //代表首頁
-    return "";
+  if(location.pathname=="/" || location.pathname=="/index.html"){  //代表首頁
+    return "index";
   } else {
     return "main";
   }
 }
+function location_fn(){
+	if(location.href.indexOf("localhost:1313")>-1){//代表測試環境
+		location.href = "404.html";
+	}else{
+		location.href = "/:-D";
+	}
+}
 
-//firebase to fb login
-var provider = new firebase.auth.FacebookAuthProvider();
+function fb_login() {
+	if(DB==undefined) return setTimeout(fb_login,500);
+  if (user_uid != undefined && !isAnonymous) return location_fn();
+	
+	//firebase to fb login
+	provider = new firebase.auth.FacebookAuthProvider()
 
-function fb_login(fn) {
-  if (user_uid != undefined) return fn();
   //signInWithPopup signInWithRedirect
   firebase.auth().signInWithPopup(provider).then(function (result) {
-    //var token = result.credential.accessToken;
     var user = result.user;
     DB.ref('users/' + user.uid).once('value', function (data) {
-
       if (!data.val()) {
-        初始化使用者資訊(fn);
+        初始化使用者資訊(location_fn);
       } else {
-        fn();
+        location_fn();
       }
     })
-
-  }).catch(function (error) {
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    var email = error.email;
-    var credential = error.credential;
-    if (error.code === 'auth/account-exists-with-different-credential') {
-      firebase.auth().fetchProvidersForEmail(email).then(function (providers) {
-        if (providers[0] === "password") {
-          var password = prompt("請輸入email密碼與facebook帳戶綁定");
-          firebase.auth().signInWithEmailAndPassword(email, password).then(function (user) {
-            user.link(credential); //與FB連結
-          }).then(function () {
-            print("成功連結");
-          });
-        }
-      });
-    }
-  });
+  })
 }
-var anonymous_fn
-
-function anonymous_login(fn) {
-  if (user_uid != undefined) fn();
-  anonymous_fn = fn;
+function anonymous_login() {
+	if(DB==undefined) return setTimeout(anonymous_login,500);
+  if (user_uid != undefined) location_fn();
   firebase.auth().signInAnonymously();
 }
 
-function 初始化使用者資訊(fn, isAnonymous) {
+function 初始化使用者資訊(fn) {
   var user = firebase.auth().currentUser;
   var data = {
     name: user.displayName,
     url_name: "",
-    photo: user.photoURL,
-
+    photo: user.photoURL
   }
   //https://semantic-ui.com/views/card.html
-  if (isAnonymous == "isAnonymous") {
+  if (isAnonymous) {
     data.photo = "https://semantic-ui.com/images/avatar/large/elliot.jpg";
     data.name = "匿名";
   }
@@ -140,8 +130,9 @@ function 初始化藍圖資料(fn) {
   newRef.set({ //將他存到藍圖
     name: "我的地鐵計畫",
     line: newLine
-  })
-  if (typeof fn == "function") fn()
+  },function(error){
+		if (typeof fn == "function") fn()
+	})
 }
 
 function blueprint_json(name) {
