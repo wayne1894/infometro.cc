@@ -37,10 +37,10 @@
         </transition>
       </ul>
 	</div>
-	<a id="new_line" class="default_a" @click="new_line()">新增支線</a>
+	<a id="new_line" class="default_a" onclick="vm.new_line()">新增支線</a>
 </div>
 <div id="edit_parent">
-	<a :class="{ active: is_nav }" @click="is_nav=!is_nav" class="left_icon navigation" data-tooltip="切換導覽"  data-position="right center"><i class="help circle icon"></i></a>
+	<a :class="{ active: is_nav }" onclick="vm.is_nav=!vm.is_nav" class="left_icon navigation" data-tooltip="切換導覽" data-position="right center"><i class="help circle icon"></i></a>
 	<a class="left_icon" data-tooltip="登出"  data-position="right center" onclick="logout()"><i class="power icon"></i></a>
 </div>
 

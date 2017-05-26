@@ -3,9 +3,12 @@
     <div id="board_line">
       <i v-show="!is_master()" :style="{backgroundColor:line_color}"></i>
       <div v-if="is_master()" class="board_name master_big">{{ line_name }}</div>
-      <div v-else class="board_name">{{ line_name }}</div>
+      <div v-else class="board_name">
+        <textarea v-if="mode==1" id="board_line_textarea" v-model="line_name"></textarea>
+        <div v-else>{{ line_name }}</div>
+      </div>
     </div>
-    <div id="board_edit" @click="mode_click()" @dragover="allowDrop($event)" @drop="drop($event)"><div class="border_area" :data-tooltip="mode_txt()" data-position="right center"><i :class="mode_class()" class=" icon"></i></div></div>
+    <div id="board_edit" onclick="vm.mode_click()" @dragover="allowDrop($event)" @drop="drop($event)"><div class="border_area" :data-tooltip="mode_txt()" data-position="right center"><i :class="mode_class()" class=" icon"></i></div></div>
     <transition name="fade">
         <i v-show="is_nav" style="position: absolute; bottom:8px; right:3px;" class="nav_i ui orange help circle icon" data-title="操作模式" data-content="操作模式目前有一般模式及編輯模式，在編輯模式，你可以將站點作脫亦更換的動作"></i>
     </transition>

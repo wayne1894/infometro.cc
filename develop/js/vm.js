@@ -15,7 +15,8 @@ var vm = new Vue({
     pick_color: undefined,
     url_info: undefined,
     filter_search: "",
-    is_nav: false
+    is_nav: false,
+		line_name: ""
   },
   mounted: function () {
     $("#main").css("visibility", "visible");
@@ -38,10 +39,6 @@ var vm = new Vue({
     line: function () { //載入line
       if (this.blueprint.length == 0) return "";
       return this.get_blueprint().line;
-    },
-    line_name: function () {
-      if (this.blueprint.length == 0) return "";
-      return this.get_line().name;
     },
     line_color: function (index) {
       if (this.blueprint.length == 0) return "";
@@ -151,7 +148,16 @@ var vm = new Vue({
           $("#board_info .dropdown").dropdown("destroy").dropdown();
         }, 5)
       })
-    }
+    },
+		line_name: function(){
+			setTimeout(function(){
+				auto_height2(id("board_line_textarea"));
+				vm.get_line().name = vm.line_name;
+				vm.action = "re_name";
+				vm.更新藍圖();
+			},0);
+		}
+	
   },
   methods: {
     get_youtube_embed: function (item) {
@@ -175,7 +181,7 @@ var vm = new Vue({
     },
     is_master: function () {
       if (this.blueprint.length == 0) return "";
-      if (vm.index_line == 0) return true
+      if (vm.index_line == 0) return true;
       return false
     },
     color_gradient: function (color) {
@@ -190,6 +196,7 @@ var vm = new Vue({
         return "一般模式"
       } else if (this.mode == 1) { //編輯模式
         setTimeout(function () {
+					auto_height2(id("board_line_textarea"));
           sortable["metro"].option("disabled", false);
         }, 5)
         return "編輯模式"
@@ -388,6 +395,7 @@ var vm = new Vue({
         vm.update_selection_color();
         vm.update_metro_key(vm.index[index][vm.index_line]);
       }
+			vm.line_name=vm.get_line().name;
       setTimeout(move_center, 0);
     },
     exchange_line: function (index) {
@@ -406,6 +414,7 @@ var vm = new Vue({
         vm.update_index_line_check();
         vm.update_selection_color();
         vm.update_metro_key(vm.get_index_blueprint()[index]);
+				vm.line_name=vm.get_line().name;
         setTimeout(move_center, 0);
       }
     },
@@ -685,6 +694,7 @@ var vm = new Vue({
           edit_set();
           vm.action = "re_name"
           vm.更新藍圖();
+					if(_level == "line")vm.line_name=this.value;
         } else if (event.which == 27) { //esc
           edit_set();
           get_level().name = _name;

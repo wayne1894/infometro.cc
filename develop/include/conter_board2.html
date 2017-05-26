@@ -5,7 +5,7 @@
 		<div id="board_enter">
 		  <i style="display:none;" class="idea icon"></i>
 		  <i style="display:none;" class="world loading icon"></i> 
-		  <textarea id="board_textarea" name="textarea1" placeholder="輸入資訊"></textarea>
+		  <textarea id="board_textarea" placeholder="輸入資訊"></textarea>
 		</div>
 		<!--包成vue組件1 輸入-->
 		<div v-if="url_info" class="ui items" style="background-color: whitesmoke;width: 95%; margin: .5em 0;">
@@ -36,7 +36,7 @@
 	<div id="board_send_parent">
 		<div class="ui icon menu">
 			<div class="right item">
-				<div id="board_send" :style="{backgroundColor:line_color}" @click="new_info()" class="ui mini orange button">送出</div>
+				<div id="board_send" :style="{backgroundColor:line_color}" onclick="vm.new_info()" class="ui mini orange button">送出</div>
 			</div>
 		</div>
 	</div>
@@ -44,7 +44,7 @@
 	
 	<!--資訊列表-->
 	<div id="board_info">
-      <transition name="fade">
+    <transition name="fade">
 	  <i v-show="is_nav && info.length" style="position: absolute; right:-5.5%; top:14px;z-index:55" class="nav_i ui orange help circle icon" data-title="主線" data-content="主線在一個地鐵計畫裡只能擁有一條，它能夠串連支線，組織支線網路。"></i>
       </transition>
 		<div :id="item['.key']" v-for="(item, index) in info_sort_filter" :key="item['.key']"  @click="info_active=item['.key']" class="board_list ui vertical segment  clear">
