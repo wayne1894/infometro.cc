@@ -207,8 +207,8 @@ $(function(){
       <i v-show="!is_master()" :style="{backgroundColor:line_color}"></i>
       <div v-if="is_master()" class="board_name master_big">{{ line_name }}</div>
       <div v-else class="board_name">
-        <textarea v-if="mode==1" id="board_line_textarea" v-model="line_name"></textarea>
-        <div v-else>{{ line_name }}</div>
+        <div id="border_line_name" @dblclick="edit_name($event,'line')">{{ line_name }}</div>
+        <textarea id="board_line_textarea">{{ line_name }}</textarea>
       </div>
     </div>
     <div id="board_edit" onclick="vm.mode_click()" @dragover="allowDrop($event)" @drop="drop($event)"><div class="border_area" :data-tooltip="mode_txt()" data-position="right center"><i :class="mode_class()" class=" icon"></i></div></div>
@@ -221,7 +221,8 @@ $(function(){
     <div id="tag_name" v-if="metro_name">
       <i :style="{backgroundColor:line_color}"></i>
       <div id="tag_name_info">
-        <div>{{metro_name}}</div>
+        <div id="border_metro_name" @dblclick="edit_name($event,'metro')">{{metro_name}}</div>
+        <textarea id="board_metro_textarea">{{ metro_name }}</textarea>
         <div>資訊共 {{info_count}} 筆</div>
         <div>建立時間：<span>{{metro_create}}</span></div>
       </div>

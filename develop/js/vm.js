@@ -15,8 +15,7 @@ var vm = new Vue({
     pick_color: undefined,
     url_info: undefined,
     filter_search: "",
-    is_nav: false,
-	line_name: ""
+    is_nav: false
   },
   mounted: function () {
     $("#main").css("visibility", "visible");
@@ -50,6 +49,10 @@ var vm = new Vue({
       var _line=this.get_line();
       if(_line==undefined)vm.exchange_line(0);   
       return _line.metro;
+    },
+    line_name: function(){
+      if (this.blueprint.length == 0) return "";
+      return this.get_line().name;
     },
     metro_name: function () {
       if (this.blueprint.length == 0) return "";
@@ -148,18 +151,7 @@ var vm = new Vue({
           $("#board_info .dropdown").dropdown("destroy").dropdown();
         }, 5)
       })
-    },
-    line_name: function(){
-      if(id("board_line_textarea")){
-        setTimeout(function(){
-            auto_height2(id("board_line_textarea"));
-            vm.get_line().name = vm.line_name;
-            vm.action = "re_name";
-            vm.更新藍圖();
-        },0);
-      }
     }
-	
   },
   methods: {
     get_youtube_embed: function (item) {
@@ -198,7 +190,6 @@ var vm = new Vue({
         return "一般模式"
       } else if (this.mode == 1) { //編輯模式
         setTimeout(function () {
-		  auto_height2(id("board_line_textarea"));
           sortable["metro"].option("disabled", false);
         }, 5)
         return "編輯模式"
@@ -397,7 +388,6 @@ var vm = new Vue({
         vm.update_selection_color();
         vm.update_metro_key(vm.index[index][vm.index_line]);
       }
-	  vm.line_name=vm.get_line().name;
       setTimeout(move_center, 0);
     },
     exchange_line: function (index) {
@@ -416,7 +406,6 @@ var vm = new Vue({
         vm.update_index_line_check();
         vm.update_selection_color();
         vm.update_metro_key(vm.get_index_blueprint()[index]);
-		vm.line_name=vm.get_line().name;
         setTimeout(move_center, 0);
       }
     },
@@ -683,6 +672,40 @@ var vm = new Vue({
       }
       
     },
+    edit_name:function(event,_level){
+      $("#border_"+_level+"_name").hide();
+      var $textarea=$("#board_"+_level+"_textarea");
+      $textarea.show();
+      $textarea.focus();
+      
+      if(_level=="line"){
+        var get_level=vm.get_line();
+      }else if(_level=="metro"){
+        var get_level=vm.get_metro();
+      }
+      $textarea.val(get_level.name);
+      auto_height2($textarea[0]);
+      $textarea.on("keyup",function(event){
+        auto_height2($textarea[0]);
+        if (event.which == 13 || (event.shiftKey && event.which == 13)) { //enter
+          get_level.name=$.trim($textarea.val());
+          vm.action = "re_name";
+          vm.更新藍圖();
+          edit_set();
+        } else if (event.which == 27) { //esc
+          edit_set();
+        }
+      })
+      $(document).on("click.edit_"+_level, function (event) {
+        if (event.target.id!="board_"+_level+"_textarea") edit_set();
+      })
+      function edit_set(){
+        $(document).off("click.edit_"+_level);
+        $textarea.off("keyup");
+        $("#border_"+_level+"_name").show();
+        $textarea.hide();
+      }
+    },
     re_name: function (index, _level, event) { //重新命名(共用)
       if ($(event.target).hasClass("blueprint_i")) return;
       $("html").addClass("re_name");
@@ -696,7 +719,6 @@ var vm = new Vue({
           edit_set();
           vm.action = "re_name"
           vm.更新藍圖();
-		  if(_level == "line")vm.line_name=this.value;
         } else if (event.which == 27) { //esc
           edit_set();
           get_level().name = _name;

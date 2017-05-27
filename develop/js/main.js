@@ -267,7 +267,6 @@
     $(textarea).height(textarea.scrollHeight + parseFloat($(textarea).css("borderTopWidth")) + parseFloat($(textarea).css("borderBottomWidth")));
   }
   function auto_height2(textarea){
-    if(!textarea)return false
     $(textarea).height(0);
     var _height=textarea.scrollHeight + parseFloat($(textarea).css("borderTopWidth")) + parseFloat($(textarea).css("borderBottomWidth"));
     $(textarea).height(_height);
