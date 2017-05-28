@@ -111,17 +111,6 @@
 </head>
 <body>
 
-
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v2.9&appId=342992472466556";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
-
 <style>
   ::selection {
   background-color: #cce2ff;
@@ -207,6 +196,16 @@
       }
     }
 </style>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v2.9&appId=438516566511315";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
 <!-- Following Menu -->
 <div id="top" style="width: 100%;left: 0;">
   <div class="ui vertical st/ripe segment">
@@ -214,6 +213,9 @@
       <div class="row">
        <div class="column">
         <img class="logo" src="src/static/images/logo_200.png">
+        </div>
+        <div class="column" style="position: absolute;right: 0;top: 25px;">
+          <div class="fb-like" data-href="https://www.facebook.com/infometro.cc/" data-layout="button_count" data-action="like" data-size="small" data-show-faces="true" data-share="false"></div>
         </div>
       </div>
     </div>

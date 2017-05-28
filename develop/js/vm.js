@@ -84,7 +84,7 @@ var vm = new Vue({
       return _info
     },
     info_sort_filter: function () { //資訊的排序與過濾
-			if (this.blueprint.length == 0) return "";
+		if (this.blueprint.length == 0) return "";
 	  	var _sort=this.info;
 			if(vm.filter_search){
 				_sort=_sort.filter(function (info) { //先從濾鏡開始
@@ -429,7 +429,7 @@ var vm = new Vue({
       vm.action = "new_line";
       vm.更新藍圖(data.key, data);
     },
-		find_line_index: function(key, data){
+	find_line_index: function(key, data){
 			for (var i = 0; i < data.line.length; i++) {
         if (data.line[i]._key == key) {
           return i;

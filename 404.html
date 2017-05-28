@@ -428,7 +428,7 @@ $(function(){
     <i v-show="is_nav" style=" position: absolute; top:-38px; left:163px" class="nav_i ui orange help circle icon" data-title="主線" data-content="主線在一個地鐵計畫裡只能擁有一條，它能夠串連支線，組織支線網路。"></i>
   </transition>
 </div>
-<div id="copyright">© 2017資訊地鐵站 版權所有 </div>
+<div id="copyright">© 2017 infometro.cc 資訊地鐵站</div>
 
 
 <script>
@@ -480,56 +480,91 @@ $(function(){
   <div class="r_button" :style="{backgroundColor:master_line_color}">
     <i class="svg search"><img src="src/static/images/search.svg"></i>
   </div>
+<!--
   <div class="r_button" :style="{backgroundColor:master_line_color}">
     <i class="comment icon"></i>
   </div>
-<!--
+-->
   <div class="r_button" :style="{backgroundColor:master_line_color}">
     <i class="svg question"><img src="src/static/images/question.svg"></i>
   </div>
--->
 
 </div>
 
 <div class="right_main">
   <div class="r_content active">
-    infometro 最新消息公告：
+    <div style="font-size: 1rem;">重要公告：</div>
+      <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
+      <div style="margin-top:-3px;color:#757575;font-size: .9rem;">※本平台最佳瀏覽器為 <a class="default_a" href="https://www.google.com.tw/chrome/browser/desktop/" target="_blank">Google Chrome</a></div>
+    <div style="margin-top:1px;color:#757575;font-size: .9rem;">※目前還不支援手機版</div>
+   
+    <div style="font-size: 1rem; margin-top:3rem">給我們建議：</div>
+    <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
+      <div class="clearfix" style="margin-top:5px;">
+        <div class="text_b"><i class="write icon"></i>網站使用滿意度調查</div>
+        <div class="text_b"><i class="comment icon"></i>提供建議</div>
+      </div>
+    
+    <div style="font-size: 1rem; margin-top:3rem">關注我們：</div>
+    <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
+    <div style="margin-top:5px;">
+      <button class="ui circular facebook icon button">
+        <i class="facebook icon"></i>
+      </button>
+    </div>
+    <div style="margin-bottom:20px;"></div>
+    
   </div>
   <div class="r_content">
-    播放清單列表：
-    <br>
-    即將推出
+    <div style="font-size: 1rem;">youtube播放列表：</div>
+    <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
+    <div style="color:#757575;">
+      即將推出的功能，您可將youtube影片置放於此，這樣切換站點時不需重覆播放。
+    </div>
   </div>
   <div class="r_content">
-    全站搜尋：
-    <br>
-    即將推出
+    <div style="font-size: 1rem;">全站搜尋：</div>
+    <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
+    <div style="color:#757575;">
+       即將推出的功能，針對一個地鐵計畫的全站搜尋機制。
+    </div>
   </div>
   <div class="r_content">
-    議建回覆：
+    <div style="font-size: 1rem;">常見問題：</div>
+    <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
+    <div class="ui accordion">
+<!--     https://semantic-ui.com/modules/accordion.html#/definition-->
+      <div class="title"><i class="dropdown icon"></i> What is a dog? </div>
+      <div class="content">
+        <p class="transition hidden">A dog is a type of domesticated animal. Known for its loyalty and faithfulness, it can be found as a welcome guest in many households across the world.</p>
+      </div>
+      <div class="title"><i class="dropdown icon"></i> What kinds of dogs are there? </div>
+      <div class="content">
+        <p class="transition hidden">There are many breeds of dogs. Each breed varies in size and temperament. Owners often select a breed of dog that they find to be compatible with their own lifestyle and desires from a companion.</p>
+      </div>
+      <div class="title active"><i class="dropdown icon"></i> How do you acquire a dog? </div>
+      <div class="content active">
+        <p class="transition visible">Three common ways for a prospective owner to acquire a dog is from pet shops, private owners, or shelters.</p>
+        <p class="transition visible">A pet shop may be the most convenient way to buy a dog. Buying a dog from a private owner allows you to assess the pedigree and upbringing of your dog before choosing to take it home. Lastly, finding your dog from a shelter, helps give a good home to a dog who may not find one so readily.</p>
+      </div>
+    </div>
   </div>
-<!--
-  <div class="r_content google">
 
- 
-       <iframe src="https://www.surveycake.com/s/O0mL3" width="100%" height="100%" frameborder="0" ></iframe>
- 
- 
-  </div>
--->
 </div>
 <div class="right_line"></div>
 <script>
 $(function(){
-  $("#right .r_button").on("click",function(){
+   //perfectScrollbar
+    $("#right .r_content").perfectScrollbar();
+
+  
+   $("#right .r_button").on("click",function(){
     var _index=$(this).index()-1;
     $(this).addClass("active").siblings().removeClass("active");
     $("#right .r_content:eq("+_index+")").addClass("active").siblings().removeClass("active");
   })
-  
-  
-  
-  $(".right_tool").on("click",function(event){
+
+  $("#right .right_tool").on("click",function(event){
     if($("#right").height()<400){
       if($(event.target).closest(".r_button").length==0){
         $("#right").toggleClass("down");
@@ -542,6 +577,31 @@ $(function(){
       $(".right_tool").click();
     }
   }
+
+  //拖動拉Bar
+ $("#right .right_line").on('mousedown',function(event){
+    $(document).on('selectstart',function(){return false;})
+    $(document).on('dragstart',function(){return false;})
+      var max_width=$(window).width()-120;
+      var gX=($("#right").width()-($(window).width()-event.pageX));
+      $(document).on('mousemove.line',function(event){
+        var _w=($(window).width()-event.pageX) -gX;
+        //if(_w<270)_w=270;//最小寬度
+        if(_w>max_width)_w=max_width;
+        $("#right").css("width",_w)
+      });
+      $(document).on('mouseup.line',function(event){
+        $(document).off('mouseup.line');
+        $(document).off('mousemove.line');
+        $(document).off('selectstart');
+        $(document).off('dragstart');
+      });
+    })
+
+  // https://semantic-ui.com/modules/accordion.html#/definition
+  $('#right .ui.accordion').accordion();//折疊菜單
+  
+  
 })
 </script>
   </div>

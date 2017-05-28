@@ -80,9 +80,6 @@
     });
   })
   $(function () {
-    //perfectScrollbar
-    $("#right .right_main").perfectScrollbar();
-
     //晃動 https://jackrugile.com/jrumble/
     $(".logo").jrumble({
       x: 2,
@@ -140,9 +137,10 @@
         var url = urlify_url.split("</a>")[0].split(">")[1];
         $("#board_enter .world.icon").show();
         $("#board_enter .idea.icon").hide();
-
         parse_url(url, function (url_info) {
-          if(url_info)vm.url_info = url_info;
+          if($("#board_textarea").val()!=""){
+            if(url_info)vm.url_info = url_info;
+          }
           $("#board_enter .world.icon").hide();
           //$("#board_enter .idea.icon").show();
         });
@@ -259,8 +257,8 @@
 
       //console.log(url_info);
     }).fail(function(){
-			 if (typeof fn === "function") fn();
-		})
+      if (typeof fn === "function") fn();
+	})
   }
   function auto_height(textarea){
     $(textarea).height(70);
@@ -271,29 +269,4 @@
     var _height=textarea.scrollHeight + parseFloat($(textarea).css("borderTopWidth")) + parseFloat($(textarea).css("borderBottomWidth"));
     $(textarea).height(_height);
   }
-$(function(){
-  //右脫亦
-  $("#right .right_line").on('mousedown',function(event){
-	$(document).on('selectstart',function(){return false;})
-	$(document).on('dragstart',function(){return false;})
-    var max_width=$(window).width()-120;
-	  var target_x=event.screenX;
-	  var target_y=event.screenY;
-	  var this_drag=$("#right");
-	  $(document).on('mousemove.line',function(event){
-			var a=(this_drag.width()+(target_x-event.screenX));
-			if(a<270)a=270;//最小寬度
-			if(a>max_width)a=max_width;
-			id("right").style.width=a+"px";
-			target_x=event.screenX;
-			target_y=event.screenY;
-		});
-      $(document).on('mouseup.line',function(event){
-        $(document).off('mouseup.line');
-        $(document).off('mousemove.line');
-        $(document).off('selectstart');
-        $(document).off('dragstart');
-      });
-	})
-})
 	

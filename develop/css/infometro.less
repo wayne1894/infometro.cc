@@ -710,10 +710,10 @@ textarea:focus {
           color: #B3B3B3;
           cursor: pointer;
         }
-        .like.icon:not(.active) {
+        .like.icon:not(.active),.arrow.icon:not(.active){
             color: #B3B3B3!important;
         }
-        .like.icon:hover{
+        .like.icon:hover,.arrow.icon:hover{
             color: inherit!important;
         }
         .setting {
@@ -1005,10 +1005,11 @@ textarea:focus {
   height: calc(~"100% - 42px");
   padding-bottom: 10px;
   //max-width: 245px;
-  width: 270px;
+  width: 275px;
   border-left: 1px solid #DEDFDF;
   z-index: 1000;
   .backgroup_1();
+//  background-color: #dfdfdf;
   .right_header_line {
     border-top: 7px solid #FF6900;
   }
@@ -1023,6 +1024,9 @@ textarea:focus {
       text-align: center;
       background-color: #fff;
       cursor: pointer;
+      &.active {
+        background-color:#FF6900;//預設
+      }
       &:not(.active) {
         background-color: #fff!important;
       }
@@ -1065,10 +1069,7 @@ textarea:focus {
     .r_content{
       display: none;
       padding: 10px;
-//      &.google{
-//        padding: 0;
-//        padding-top: 2px;
-//      }
+      padding-top: 15px;
       height: 96%;
       &.active{
         display: block;
@@ -1087,6 +1088,23 @@ textarea:focus {
       cursor: e-resize;
     }
   }
+  .text_b{
+      background-image: url(../../static/images/index_5.png);
+      width:164px;
+      height:36px;
+      float:left;
+      margin-left:4px;
+      margin-top:4px;
+      text-align:center;
+      line-height:34px;
+      font-size:13px;
+      cursor:pointer;
+  }
+  .text_b:hover{
+      background-position:0px 36px;
+      color:#FFFFFF;
+  }
+  
 }
 
 @media screen and (max-width:1400px) {
@@ -1113,7 +1131,9 @@ textarea:focus {
     z-index: 15
   }
 }
-
+.clearfix{
+  .clearfix()
+}
 .clearfix() {
   &:before,
   &:after {
@@ -1123,6 +1143,16 @@ textarea:focus {
   &:after {
     clear: both;
   }
+}
+.backgroup_0() {
+  background-color: #DEDEDE;
+  background: -webkit-gradient(linear, 0 0, 0 bottom, from(#DEDEDE), to(#F3F4F4));
+  background: -webkit-linear-gradient(#DEDEDE, #F3F4F4);
+  background: -moz-linear-gradient(#DEDEDE, #F3F4F4);
+  background: -ms-linear-gradient(#DEDEDE, #F3F4F4);
+  background: -o-linear-gradient(#DEDEDE, #F3F4F4);
+  background: linear-gradient(#DEDEDE, #F3F4F4);
+  -pie-background: linear-gradient(#DEDEDE, #F3F4F4);
 }
 .backgroup_1() {
   background-color: #DEDEDE;
