@@ -104,6 +104,7 @@ textarea:focus {
     font-size: 14px;
     color: black;
     padding-left: @left_pl;
+    position: relative;
     .clearfix();
   }
   #left_line {
@@ -506,6 +507,12 @@ textarea:focus {
       width: 100%;
       border: 0;
       overflow: hidden;
+      &.board_master{
+        font-size: 37px;
+        line-height: 42px;
+        font-weight: bold;
+        width: 99%;
+      }
     }
     #board_metro_textarea{
       display: none;
@@ -523,7 +530,7 @@ textarea:focus {
       position: relative;
       padding-top: 23px;
       padding-left: 22px;
-      i {
+      i:not(.nav_i){
         width: 120px;
         height: 7px;
         display: block;
@@ -575,6 +582,7 @@ textarea:focus {
       height: 100px;
       padding-top: 20px;
       padding-left: 22px;
+      position: relative;
       #tag_name {
         #tag_name_info {
           display: inline-block;
@@ -916,8 +924,8 @@ textarea:focus {
     #blueprint_new {
       margin-left: 1px;
       padding: 6px;
-			position: relative;
-			top: 1px;
+      position: relative;
+      top: 1px;
     }
     .blueprint_a {
       color: black;
@@ -1008,6 +1016,7 @@ textarea:focus {
   width: 275px;
   border-left: 1px solid #DEDFDF;
   z-index: 1000;
+  
   .backgroup_1();
 //  background-color: #dfdfdf;
   .right_header_line {
@@ -1015,10 +1024,15 @@ textarea:focus {
   }
   .ui.accordion .title{
     font-family: inherit!important;
+    letter-spacing: 1px;
   }
   .ui.accordion p{
     padding-left: 25px;
-    color:#757575;
+    color:#919191;
+    letter-spacing: 1px;
+    font-size: 1.05em;
+    position: relative;
+    top: -8px;
   }
   .right_tool {
     background-color: #CCCCCC;
@@ -1076,7 +1090,7 @@ textarea:focus {
       display: none;
       padding: 10px;
       padding-top: 15px;
-      height: 96%;
+      height: 100%;
       position: relative;
       &.active{
         display: block;
@@ -1121,7 +1135,7 @@ textarea:focus {
   width: 100%;
   position: absolute;
   left: 0px;
-  bottom: 0;
+  bottom: 30px;
   ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
     color: #b2b2b2;
   }
@@ -1179,9 +1193,6 @@ textarea:focus {
     left: 0;
     top: 0;
     z-index: 15
-  }
-  #right_search{
-    bottom: 16px;
   }   
 }
 .clearfix{

@@ -26,8 +26,8 @@
   <div class="r_content active">
     <div style="font-size: 1rem;">重要公告：</div>
       <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
-      <div style="margin-top:-3px;color:#757575;font-size: .9rem;">※本平台最佳瀏覽器為 <a class="default_a" href="https://www.google.com.tw/chrome/browser/desktop/" target="_blank">Google Chrome</a></div>
-    <div style="margin-top:1px;color:#757575;font-size: .9rem;">※目前還不支援手機版</div>
+      <div style="margin-top:-3px;color:#757575;font-size: .95rem;">※本平台最佳瀏覽器為 <a class="default_a" href="https://www.google.com.tw/chrome/browser/desktop/" target="_blank">Google Chrome</a></div>
+    <div style="margin-top:1px;color:#757575;font-size: .95rem;">※目前還不支援手機版</div>
    
     <div style="font-size: 1rem; margin-top:3rem">給我們建議：</div>
     <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
@@ -47,15 +47,15 @@
   <div class="r_content">
     <div style="font-size: 1rem;">youtube播放列表：</div>
     <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
-    <div style="color:#757575;">
+    <div style="color:#757575;font-size: 1rem;">
       即將推出的功能，您可將youtube影片置放於此。
     </div>
   </div>
   <div class="r_content">
     <div style="font-size: 1rem;">全站搜尋：</div>
     <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
-    <div style="color:#757575;">
-       請在下方輸入關鍵字搜尋
+    <div style="color:#757575;font-size: 1rem;">
+       即將推出的功能，請在下方輸入關鍵字搜尋
     </div>
     <div id="right_search">
       <input type="text" placeholder="搜尋此地鐵">
@@ -66,32 +66,37 @@
   <div class="r_content">
     <div style="font-size: 1rem;">常見問題：</div>
     <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
-    <div class="ui accordion">
+    <div class="ui accordion" style="margin-bottom:60px;">
 <!--     https://semantic-ui.com/modules/accordion.html#/definition-->
-     <div class="title"><i class="dropdown icon"></i> infometro.cc 快速介紹 </div>
-      <div class="content">
-        <p class="transition hidden">A dog is a type of domesticated animal. Known for its loyalty and faithfulness, it can be found as a welcome guest in many households across the world.</p>
-      </div>
-      <div class="title"><i class="dropdown icon"></i> 如何使用？</div>
-      <div class="content">
-        <p class="transition hidden">A dog is a type of domesticated animal. Known for its loyalty and faithfulness, it can be found as a welcome guest in many households across the world.</p>
-      </div>
-      <div class="title"><i class="dropdown icon"></i> infometro.cc 短期內將發展的功能 </div>
-      <div class="content">
-        <p class="transition hidden">A dog is a type of domesticated animal. Known for its loyalty and faithfulness, it can be found as a welcome guest in many households across the world.</p>
-      </div>
-      <div class="title"><i class="dropdown icon"></i> infometro.cc 未來發展計畫 </div>
-      <div class="content">
-        <p class="transition hidden">A dog is a type of domesticated animal. Known for its loyalty and faithfulness, it can be found as a welcome guest in many households across the world.</p>
+      <div class="title active"><i class="dropdown icon"></i> 如何使用？</div>
+      <div class="content active">
+        <p class="transition visible">目前infometro的介面操作，位在左邊的導覽功能上(點擊<i class="help circle icon"></i>切換)，若還有疑問，歡迎 <a class="default_a" href="javascript:$('#feedback_modal').modal({closable: false}).modal('show')">留言</a> 讓我們知道。</p>
       </div>
       <div class="title"><i class="dropdown icon"></i> 如何刪除我的帳號 </div>
       <div class="content">
-        <p class="transition hidden">There are many breeds of dogs. Each breed varies in size and temperament. Owners often select a breed of dog that they find to be compatible with their own lifestyle and desires from a companion.</p>
+        <p class="transition hidden">infometro 目前登入的方式使用facebook帳號進行綁定，您可以在facebook上解除與我們的關係。</p>
+        <p class="transition visible">
+          如果您要完全刪除帳號，以不留下任何記錄，請<a class="default_a" href="javascript:$('#feedback_modal').modal({closable: false}).modal('show')">回覆訊息</a>給我們，我們將手動為您刪除。
+        </p>
       </div>
-      <div class="title"><i class="dropdown icon"></i> infometro.cc 裡的資料安全嗎？ </div>
+      <div class="title"><i class="dropdown icon"></i> infometro 資料安全嗎？ </div>
       <div class="content">
-        <p class="transition visible">Three common ways for a prospective owner to acquire a dog is from pet shops, private owners, or shelters.</p>
-        <p class="transition visible">A pet shop may be the most convenient way to buy a dog. Buying a dog from a private owner allows you to assess the pedigree and upbringing of your dog before choosing to take it home. Lastly, finding your dog from a shelter, helps give a good home to a dog who may not find one so readily.</p>
+        <p class="transition visible">infometro 使用google的 <a class="default_a" href="https://firebase.google.com/" target="_blank">firebase</a>做為核心資料庫,並且設定<a class="default_a" href="https://firebase.google.com/docs/database/security/" target="_blank">安全權限</a>，資料只能由創建帳號的擁有人存取，所以一般人無法讀取您的資料，透過任何駭客手法也相當困難(除非google的firebase機制有漏洞)，所以可以安心使用。不過建議敏感性的資料不要存放在infometro上。</p>
+        <p class="transition hidden">
+           目前infometro是私密的環境，在未來推廣社交功能前，我們也會特別加強資料的安全與隱私性。
+        </p>
+       
+      </div>
+      <div class="title"><i class="dropdown icon"></i> infometro 正在開發的功能</div>
+      <div class="content">
+        <p class="transition hidden">infometro 即將推出的功能：上傳檔案、全站搜尋機制、地鐵計畫匯出與匯入、主線串聯分線、更換個人照片等等</p>
+      </div>
+      <div class="title"><i class="dropdown icon"></i> infometro 未來發展計畫 </div>
+      <div class="content">
+        <p class="transition hidden">infometro 將發展成社交性的，使用者可以快速分享支線(成為共公支線)或者與其他人共同編輯支線。
+        </p>
+        <p class="transition hidden">
+        如果您對我們未來的發展有任何建議、想法，歡迎<a class="default_a" href="javascript:$('#feedback_modal').modal({closable: false}).modal('show')">留言給我們</a>。</p>
       </div>
     </div>
   </div>

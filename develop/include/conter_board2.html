@@ -26,7 +26,7 @@
 		</div>
 		<!--包成vue組件1 輸入-->
 		<transition name="fade">
-  		<i v-show="is_nav" style="position: absolute; right:0%; top:6px;z-index:55" class="nav_i ui orange help circle icon" data-title="主線" data-content="主線在一個地鐵計畫裡只能擁有一條，它能夠串連支線，組織支線網路。"></i>
+  		<i v-show="is_nav" style="position: absolute; right:0%; top:6px;z-index:55" class="nav_i ui orange help circle icon" data-title="新增資訊" data-content="在任何一個站點底下，你可以新增無數條資訊，並且貼上網址可以進行網址的進階資訊擷取"></i>
         </transition>
 
 	</div>
@@ -45,7 +45,7 @@
 	<!--資訊列表-->
 	<div id="board_info">
     <transition name="fade">
-	  <i v-show="is_nav && info.length" style="position: absolute; right:-5.5%; top:14px;z-index:55" class="nav_i ui orange help circle icon" data-title="主線" data-content="主線在一個地鐵計畫裡只能擁有一條，它能夠串連支線，組織支線網路。"></i>
+	  <i v-show="is_nav && info.length" style="position: absolute; right:-5.5%; top:14px;z-index:55" class="nav_i ui orange help circle icon" data-title="資訊列表" data-content="infometro顯示資訊的地方，您可透過切換站點來變更不同站點的資訊，在編輯模式下，您可以對資訊快速按兩下，以修改資訊。"></i>
       </transition>
 		<div :id="item['.key']" v-for="(item, index) in info_sort_filter" :key="item['.key']"  @click="info_active=item['.key']" class="board_list ui vertical segment  clear">
 			<div class="board_message">
