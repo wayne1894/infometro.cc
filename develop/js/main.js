@@ -23,7 +23,7 @@
 
   var sortable = [];
   $(function () {
-    //拖亦程式 https://github.com/RubaXa/Sortable
+    //拖亦的部份 https://github.com/RubaXa/Sortable
     sortable["line_master"] = new Sortable(id("line_drag_master"), {
       animation: 150,
       forceFallback: false
@@ -78,34 +78,21 @@
         },5)
       }
     });
-  })
-  $(function () {
-    //晃動 https://jackrugile.com/jrumble/
-    $(".logo").jrumble({
-      x: 2,
-      y: 2,
-      opacity: true,
-      opacityMin: .5
-    }).hover(function () {
-      $(this).trigger('startRumble');
-    }, function () {
-      $(this).trigger('stopRumble');
-    });
-    setTimeout(function(){
+    
+    //導覽的部份
+    setTimeout(function () {
+      $('.nav_i.custom')
+        .popup({
+          popup: $('.custom.popup'),
+          on: 'click'
+        })
+    }, 5);
+    setTimeout(function () {
       $(".nav_i:not(.custom)").popup({
         on: 'click'
       })
-    },5);
-    
-    setTimeout(function(){
-     $('.nav_i.custom')
-      .popup({
-        popup : $('.custom.popup'),
-        on : 'click'
-      })
-     },5);
+    }, 5);
   })
-  //parse_url("https://www.youtube.com/watch?v=6nhLWBf6lS0")
 
   function urlify(text) {
     //http://stackoverflow.com/questions/1500260/detect-urls-in-text-with-javascript
@@ -269,4 +256,272 @@
     var _height=textarea.scrollHeight + parseFloat($(textarea).css("borderTopWidth")) + parseFloat($(textarea).css("borderBottomWidth"));
     $(textarea).height(_height);
   }
-	
+
+
+//----------------------分塊程式碼------------------
+
+
+//top
+ function move_center(is_move) {
+   var total_width = 0;
+   var tog_width = $("#top_tag").width();
+   $("#top_tag li").each(function () {
+     total_width = total_width + $(this).width();
+   })
+   if (tog_width > total_width) {
+     $("#top_tag").css("left", (((tog_width - total_width) / 2) + 15) + "px");
+   } else {
+     $("#top_tag").css("left", 0);
+   }
+   $("#top_tag").stop().fadeIn(350);
+ }
+ function top_tag_scroll() {
+   var scroll_val = 0;
+   var container = $("#top_tag"),
+     slide = !container.find(">li.active").length ? 0 : container.find(">li.active").index(),
+     direct = $(this).hasClass("right") ? 1 : -1,
+     target = slide + direct < 0 ? [] : container.find(">li").eq(slide + direct);
+   if (target.length) {
+     scroll_val = $("#top_tag").scrollLeft();
+     target.addClass("active").velocity("stop", true).velocity("scroll", {
+       axis: "x",
+       duration: 150,
+       offset: -42,
+       easing: "ease",
+       container: container,
+       complete: function () {
+         if (direct) {
+           if ($("#top_tag").scrollLeft() == scroll_val) {
+             target.removeClass("active").prev().addClass("active");
+           }
+         }
+       }
+     }).siblings().removeClass("active");
+   }
+ }
+
+ $(function () {
+   //http://velocityjs.org/#scroll
+   $(".triangle").click(top_tag_scroll);
+ })
+//top
+
+
+
+
+
+
+
+
+
+//bottom
+function drop_blueprint(event,key){
+  if(key==vm.blueprint[vm.index_blueprint].key){
+    print("相同的blueprint");
+    return;
+  }
+  var line_key = event.dataTransfer.getData("line_key");
+  if(line_key=="")return;
+  var _line=vm.move_line(line_key);
+  _line=_line[0];
+  for(var i=0;i<vm.blueprint.length;i++){
+    if(vm.blueprint[i].key==key){
+      vm.blueprint[i].line.push(_line);
+      vm.index[i].push([]);
+      vm.index[i][vm.index[i].length - 1].check = false;
+      vm.action="drop_blueprint";
+      vm.更新藍圖(key,vm.blueprint[i]);
+      vm.index_update();
+      break;
+    }
+  }
+  
+}
+$(function(){
+  $("#blueprint").on("click",function(event){	
+    if($(event.target).hasClass("blueprint_i")){
+        $(event.target).closest(".blueprint_list").trigger("customClick");
+    }
+  })
+})
+
+//var export_json={};
+//function load_info(key){
+//  DB.ref("info/"+key+"/metro").once("value",function(data){
+//    export_json.info[key]=data.val();
+//  })
+//}
+//function 匯出藍圖(key){
+//  for(var i=0;i<vm.blueprint.length;i++){
+//    if(vm.blueprint[i].key==key){
+//      export_json.name=vm.blueprint[i].name;
+//      export_json.line=vm.blueprint[i].line;
+//      export_json.info={};
+//      for(var j=0;j<export_json.line.length;j++){
+//         var key=export_json.line[j]._key;
+//         export_json.info[key]="";
+//         load_info(key);
+//      }
+//      return
+//    }
+//  }
+//}
+
+//bottom
+
+
+
+
+
+
+
+
+
+
+
+//left
+ function drop_line(event,index){
+  if(vm.index_line==index)return;
+
+  var metro_key = event.dataTransfer.getData("key");
+  if(metro_key=="")return;
+  var _metro=vm.move_metro(metro_key,index);
+  if(_metro==undefined)return
+  _metro=_metro[0];
+  var data = JSON.parse(JSON.stringify(vm.get_blueprint())); //將傳址改為傳值
+  data.line[index].metro.push(_metro);
+  vm.action="drop_line";
+  vm.更新藍圖(data.key,data);
+}  
+$(function(){
+  //晃動 https://jackrugile.com/jrumble/
+  $(".logo").jrumble({
+    x: 2,
+    y: 2,
+    opacity: true,
+    opacityMin: .5
+  }).hover(function () {
+    $(this).trigger('startRumble');
+  }, function () {
+    $(this).trigger('stopRumble');
+  });
+  
+  $(document.body).append("<div id='left_color' style='position: absolute;left:0;top:0'></div>");
+  $('#left_color').colpick({
+    layout:'hex',
+    onHide:function(){
+      vm.pick_master=undefined;
+      vm.pick_color=undefined;
+    },
+    onChange:function(hsb,hex,rgb,el,bySetColor){
+      vm.pick_color="#"+hex;
+    },
+    onSubmit:function(hsb,hex,rgb,el,bySetColor){
+      $(el).val(hex);
+      $(el).colpickHide();
+    }
+  }).colpickHide();
+})
+//left
+
+
+
+
+
+
+
+
+
+
+//right
+$(function(){
+   //perfectScrollbar
+    $("#right .r_content").perfectScrollbar();
+
+  
+   $("#right .r_button").on("click",function(){
+    var _index=$(this).index()-1;
+    $(this).addClass("active").siblings().removeClass("active");
+    $("#right .r_content:eq("+_index+")").addClass("active").siblings().removeClass("active");
+  })
+
+  $("#right .right_tool").on("click",function(event){
+    if($("#right").height()<400){
+      if($(event.target).closest(".r_button").length==0){
+        $("#right").toggleClass("down");
+        $.cookie('right_tool',$("#right").attr('class'));
+      }
+    }
+  })
+  if($.cookie('right_tool')){
+    if($.cookie('right_tool').indexOf("down")>-1){
+      $(".right_tool").click();
+    }
+  }
+
+  //拖動拉Bar
+ $("#right .right_line").on('mousedown',function(event){
+    $(document).on('selectstart',function(){return false;})
+    $(document).on('dragstart',function(){return false;})
+      var max_width=$(window).width()-120;
+      var gX=($("#right").width()-($(window).width()-event.pageX));
+      $(document).on('mousemove.line',function(event){
+        var _w=($(window).width()-event.pageX) -gX;
+        //if(_w<270)_w=270;//最小寬度
+        if(_w>max_width)_w=max_width;
+        $("#right").css("width",_w)
+      });
+      $(document).on('mouseup.line',function(event){
+        $(document).off('mouseup.line');
+        $(document).off('mousemove.line');
+        $(document).off('selectstart');
+        $(document).off('dragstart');
+      });
+    })
+
+  // https://semantic-ui.com/modules/accordion.html#/definition
+  $('#right .ui.accordion').accordion();//折疊菜單
+})
+function send_feedback(){
+  var a=$.trim($("#feedback1").val());
+  var b="///"+user_uid;
+  var c="";
+  if($("#feedback2").is( ":checked" ))c="////請回信"
+  if(a!=""){
+    a=a+b+c;
+    var newRef=DB.ref("feedback/").push()
+    newRef.set(a);
+  }
+  $("#feedback_modal").modal("hide")
+}
+//right
+
+
+
+
+
+
+
+
+
+//center
+function drop(event){
+  var key = event.dataTransfer.getData("key");
+  if(key)vm.delete_metro(key);
+  var line_key=event.dataTransfer.getData("line_key");
+  if(line_key)vm.delete_line(line_key);
+}
+function allowDrop(event) { //拖曳的物件移到上面
+  //print("拖曳的物件移到上面")
+  event.preventDefault();
+}
+$(function(){
+    $("#board_textarea").keyup(function(e) {	
+      auto_height(this)
+    });
+    $("#board_textarea").on('paste', textarea_paste);
+})
+//center
+
+
+

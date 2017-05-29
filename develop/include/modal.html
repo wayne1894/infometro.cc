@@ -29,4 +29,27 @@
     <div class="ui cancel button">取消</div>
     </div>
   </div>
+
   
+<div id="feedback_modal" style="padding: 0;" class="ui small modal ">
+ <i class="close icon" style="top: 1.0535rem;right: 1rem; color: rgba(0,0,0,.87);"></i>
+ <div class="header" style="letter-spacing: 2px;"><i class="comment icon"></i>提供建議</div>
+  <div class="content">
+      <div class="ui form">
+        <div class="field">
+<!--          <label style="letter-spacing: 2px;">建議或bug回報</label>-->
+          <textarea id="feedback1" style="letter-spacing: 2px;font-weight: normal;" placeholder="建議或bug回報"></textarea>
+        </div>
+        <div class="field">
+          <div class="ui checkbox" onclick="if($('#feedback2').is(':checked')){$('#feedback2').prop('checked', false)}else{$('#feedback2').prop('checked', true);}">
+            <input id="feedback2" type="checkbox" tabindex="0" class="hidden">
+            <label><span style="letter-spacing: 1px;">回信給我 (請留下您的email或聯絡方式)</span></label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="ui cancel button">Cancel</div>
+      <div class="ui orange button" onclick="send_feedback()">Send</div>
+    </div>
+</div>

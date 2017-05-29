@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="description" content="infometro 是一款利用地鐵圖來組織資訊的網站，用來保存創意和想法。">
-<meta name="keywords" content="雲端筆記,雲端記事本,共享書籤,雲端儲存,資訊收藏,note,evernote,OneNote">
+<meta name="keywords" content="網路記事本,網路筆記本,雲端筆記,共享書籤,資訊收藏,note,evernote,oneNote,keep">
 
 <meta property="fb:app_id" content="438516566511315">
 <meta property="og:type" content="website">
@@ -26,11 +26,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vuefire/1.3.1/vuefire.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/Sortable/1.5.1/Sortable.min.js"></script>
 
-<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.0.0/firebase.js"></script>
 <script src="src/static/js/jquery.jrumble.1.3.min.js"></script>
-
-<script src="src/build/js/public.js"></script>
-<script src="src/build/js/firebase_init.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.5.0/velocity.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
@@ -40,6 +37,10 @@
 <link rel="stylesheet" type="text/css" href="src/static/css/colpick.css" />
 <script src="src/static/js/colpick.js"></script>
 <!-- jquery-color-pick -->
+
+<script src="src/build/js/public.js"></script>
+<script src="src/build/js/firebase_init.js"></script>
+
 </head>
 <body>
 <div id="main">
@@ -89,42 +90,6 @@
 	<a :class="{ active: is_nav }" onclick="vm.is_nav=!vm.is_nav" class="left_icon navigation" data-tooltip="切換導覽" data-position="right center"><i class="help circle icon"></i></a>
 	<a class="left_icon" data-tooltip="登出"  data-position="right center" onclick="logout()"><i class="power icon"></i></a>
 </div>
-
-
-<script>
-  function drop_line(event,index){
-		if(vm.index_line==index)return;
-		
-		var metro_key = event.dataTransfer.getData("key");
-		if(metro_key=="")return;
-		var _metro=vm.move_metro(metro_key,index);
-		if(_metro==undefined)return
-		_metro=_metro[0];
-		var data = JSON.parse(JSON.stringify(vm.get_blueprint())); //將傳址改為傳值
-		data.line[index].metro.push(_metro);
-		vm.action="drop_line";
-		vm.更新藍圖(data.key,data);
-		
-	}
-    
-$(function(){
-  $(document.body).append("<div id='left_color' style='position: absolute;left:0;top:0'></div>");
-  $('#left_color').colpick({
-    layout:'hex',
-    onHide:function(){
-      vm.pick_master=undefined;
-      vm.pick_color=undefined;
-    },
-    onChange:function(hsb,hex,rgb,el,bySetColor){
-      vm.pick_color="#"+hex;
-    },
-    onSubmit:function(hsb,hex,rgb,el,bySetColor){
-      $(el).val(hex);
-      $(el).colpickHide();
-    }
-  }).colpickHide();
-})
-</script>
   </div>
   <div id="top">
     <div class="triangle left"></div>
@@ -150,54 +115,6 @@ $(function(){
     
   </div>
 <div class="triangle right"></div>
-
-
-<script>
-  function move_center(is_move){
-    var total_width=0;
-    var tog_width=$("#top_tag").width();
-    $("#top_tag li").each(function(){
-        total_width=total_width+$(this).width();
-    })
-    if(tog_width > total_width){
-        $("#top_tag").css("left",(((tog_width-total_width)/2)+15) +"px");
-    }else{
-        $("#top_tag").css("left",0);
-    }
-    $("#top_tag").stop().fadeIn(350);
-  }
-  function top_tag_scroll(){
-    var scroll_val=0;
-    var container = $("#top_tag"),
-        slide = !container.find(">li.active").length ? 0 : container.find(">li.active").index(),
-        direct = $(this).hasClass("right") ? 1 : -1,
-        target = slide + direct < 0 ? [] : container.find(">li").eq(slide + direct);
-    if (target.length){
-        scroll_val=$("#top_tag").scrollLeft();
-        target.addClass("active").velocity("stop", true).velocity("scroll", {
-            axis: "x",
-            duration: 150,
-            offset : -42,
-            easing: "ease",
-            container: container,
-            complete: function () {
-              if(direct){
-                if($("#top_tag").scrollLeft()==scroll_val){
-                  target.removeClass("active").prev().addClass("active");
-                }
-              }
-			}
-    }).siblings().removeClass("active");
-    }
-  }
-  
-$(function(){
-  //http://velocityjs.org/#scroll
-  $(".triangle").click(top_tag_scroll);
-})  
-
-</script>
-
   </div>
   <div id="center">
     <div v-show="action!='load'">
@@ -252,19 +169,6 @@ $(function(){
     </div>
   </div>
 </div>
-
-<script>
-  function drop(event){
-	var key = event.dataTransfer.getData("key");
-    if(key)vm.delete_metro(key);
-    var line_key=event.dataTransfer.getData("line_key");
-    if(line_key)vm.delete_line(line_key);
-  }
-  function allowDrop(event) { //拖曳的物件移到上面
-    //print("拖曳的物件移到上面")
-    event.preventDefault();
-  }
-</script>
     <div id="board2" :style="{borderTopColor:master_line_color}">
 	<!--資訊輸入-->
 	<div id="board_enter_parent">
@@ -386,16 +290,6 @@ $(function(){
 	</div>
 	<!--資訊列表-->
 </div>
-  
-<script>
-$(function(){
-	$("#board_textarea").keyup(function(e) {	
-      auto_height(this)
-	});
-	$("#board_textarea").on('paste', textarea_paste);
-})
-
-</script>
     </div>
 
     <div v-show="action=='load'" style="position: absolute;top: 50%;left: 50%;margin-left:-25%;
@@ -418,6 +312,8 @@ $(function(){
           <div class="item" @click="re_name(index,'blueprint',$event)"><i class="edit icon"></i>重新命名</div>
            <div v-show="index_blueprint!=index" class="item" @click="exchange_blueprint(index,true,$event)"><i class="exchange icon"></i>切換</div>
           <div v-if="index_blueprint==index" class="item" @click="delete_blueprint(item.key)"><i class="delete icon"></i>移除</div>
+<!--          <div class="item" @click="匯出藍圖(item.key)"><i class="external icon"></i>匯出(備份)</div>-->
+          
       </div>
     </div>
   </div>
@@ -428,43 +324,8 @@ $(function(){
     <i v-show="is_nav" style=" position: absolute; top:-38px; left:163px" class="nav_i ui orange help circle icon" data-title="主線" data-content="主線在一個地鐵計畫裡只能擁有一條，它能夠串連支線，組織支線網路。"></i>
   </transition>
 </div>
-<div id="copyright">© 2017 infometro.cc 資訊地鐵站</div>
+<div id="copyright">© 2017 資訊地鐵站 版權所有</div>
 
-
-<script>
-function drop_blueprint(event,key){
-  if(key==vm.blueprint[vm.index_blueprint].key){
-    print("相同的blueprint");
-    return;
-  }
-  var line_key = event.dataTransfer.getData("line_key");
-  if(line_key=="")return;
-  var _line=vm.move_line(line_key);
-  _line=_line[0];
-  for(var i=0;i<vm.blueprint.length;i++){
-    if(vm.blueprint[i].key==key){
-      vm.blueprint[i].line.push(_line);
-      vm.index[i].push([]);
-      vm.index[i][vm.index[i].length - 1].check = false;
-      vm.action="drop_blueprint";
-      vm.更新藍圖(key,vm.blueprint[i]);
-      vm.index_update();
-      break;
-    }
-  }
-  
-}
-  
-$(function(){
-	$("#blueprint").on("click",function(event){	
-		if($(event.target).hasClass("blueprint_i")){
-			$(event.target).closest(".blueprint_list").trigger("customClick");
-		}
-	})
-})
-
-					
-</script>
   </div>
   <div id="right">
     <div class="right_header_line" :style="{borderTopColor:master_line_color}"></div>
@@ -502,15 +363,13 @@ $(function(){
     <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
       <div class="clearfix" style="margin-top:5px;">
         <div class="text_b"><i class="write icon"></i>網站使用滿意度調查</div>
-        <div class="text_b"><i class="comment icon"></i>提供建議</div>
+        <a onclick="$('#feedback_modal').modal({closable: false}).modal('show')" target="_blank"><div class="text_b"><i class="comment icon"></i>提供建議</div></a>
       </div>
     
-    <div style="font-size: 1rem; margin-top:3rem">關注我們：</div>
+    <div style="font-size: 1rem; margin-top:1.5rem">關注我們：</div>
     <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
     <div style="margin-top:5px;">
-      <button class="ui circular facebook icon button">
-        <i class="facebook icon"></i>
-      </button>
+      <a href="https://www.facebook.com/infometro.cc/" target="_blank"><button class="ui facebook button mini"><i class="facebook icon"></i> Facebook </button></a>
     </div>
     <div style="margin-bottom:20px;"></div>
     
@@ -519,31 +378,48 @@ $(function(){
     <div style="font-size: 1rem;">youtube播放列表：</div>
     <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
     <div style="color:#757575;">
-      即將推出的功能，您可將youtube影片置放於此，這樣切換站點時不需重覆播放。
+      即將推出的功能，您可將youtube影片置放於此。
     </div>
   </div>
   <div class="r_content">
     <div style="font-size: 1rem;">全站搜尋：</div>
     <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
     <div style="color:#757575;">
-       即將推出的功能，針對一個地鐵計畫的全站搜尋機制。
+       請在下方輸入關鍵字搜尋
     </div>
+    <div id="right_search">
+      <input type="text" placeholder="搜尋此地鐵">
+      <img src="src/static/images/search.svg">
+    </div>
+    
   </div>
   <div class="r_content">
     <div style="font-size: 1rem;">常見問題：</div>
     <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
     <div class="ui accordion">
 <!--     https://semantic-ui.com/modules/accordion.html#/definition-->
-      <div class="title"><i class="dropdown icon"></i> What is a dog? </div>
+     <div class="title"><i class="dropdown icon"></i> infometro.cc 快速介紹 </div>
       <div class="content">
         <p class="transition hidden">A dog is a type of domesticated animal. Known for its loyalty and faithfulness, it can be found as a welcome guest in many households across the world.</p>
       </div>
-      <div class="title"><i class="dropdown icon"></i> What kinds of dogs are there? </div>
+      <div class="title"><i class="dropdown icon"></i> 如何使用？</div>
+      <div class="content">
+        <p class="transition hidden">A dog is a type of domesticated animal. Known for its loyalty and faithfulness, it can be found as a welcome guest in many households across the world.</p>
+      </div>
+      <div class="title"><i class="dropdown icon"></i> infometro.cc 短期內將發展的功能 </div>
+      <div class="content">
+        <p class="transition hidden">A dog is a type of domesticated animal. Known for its loyalty and faithfulness, it can be found as a welcome guest in many households across the world.</p>
+      </div>
+      <div class="title"><i class="dropdown icon"></i> infometro.cc 未來發展計畫 </div>
+      <div class="content">
+        <p class="transition hidden">A dog is a type of domesticated animal. Known for its loyalty and faithfulness, it can be found as a welcome guest in many households across the world.</p>
+      </div>
+      <div class="title"><i class="dropdown icon"></i> 如何刪除我的帳號 </div>
       <div class="content">
         <p class="transition hidden">There are many breeds of dogs. Each breed varies in size and temperament. Owners often select a breed of dog that they find to be compatible with their own lifestyle and desires from a companion.</p>
       </div>
-      <div class="title active"><i class="dropdown icon"></i> How do you acquire a dog? </div>
-      <div class="content active">
+      <div class="title"><i class="dropdown icon"></i> infometro.cc 裡的資料安全嗎？ </div>
+      <div class="content">
         <p class="transition visible">Three common ways for a prospective owner to acquire a dog is from pet shops, private owners, or shelters.</p>
         <p class="transition visible">A pet shop may be the most convenient way to buy a dog. Buying a dog from a private owner allows you to assess the pedigree and upbringing of your dog before choosing to take it home. Lastly, finding your dog from a shelter, helps give a good home to a dog who may not find one so readily.</p>
       </div>
@@ -552,58 +428,6 @@ $(function(){
 
 </div>
 <div class="right_line"></div>
-<script>
-$(function(){
-   //perfectScrollbar
-    $("#right .r_content").perfectScrollbar();
-
-  
-   $("#right .r_button").on("click",function(){
-    var _index=$(this).index()-1;
-    $(this).addClass("active").siblings().removeClass("active");
-    $("#right .r_content:eq("+_index+")").addClass("active").siblings().removeClass("active");
-  })
-
-  $("#right .right_tool").on("click",function(event){
-    if($("#right").height()<400){
-      if($(event.target).closest(".r_button").length==0){
-        $("#right").toggleClass("down");
-        $.cookie('right_tool',$("#right").attr('class'));
-      }
-    }
-  })
-  if($.cookie('right_tool')){
-    if($.cookie('right_tool').indexOf("down")>-1){
-      $(".right_tool").click();
-    }
-  }
-
-  //拖動拉Bar
- $("#right .right_line").on('mousedown',function(event){
-    $(document).on('selectstart',function(){return false;})
-    $(document).on('dragstart',function(){return false;})
-      var max_width=$(window).width()-120;
-      var gX=($("#right").width()-($(window).width()-event.pageX));
-      $(document).on('mousemove.line',function(event){
-        var _w=($(window).width()-event.pageX) -gX;
-        //if(_w<270)_w=270;//最小寬度
-        if(_w>max_width)_w=max_width;
-        $("#right").css("width",_w)
-      });
-      $(document).on('mouseup.line',function(event){
-        $(document).off('mouseup.line');
-        $(document).off('mousemove.line');
-        $(document).off('selectstart');
-        $(document).off('dragstart');
-      });
-    })
-
-  // https://semantic-ui.com/modules/accordion.html#/definition
-  $('#right .ui.accordion').accordion();//折疊菜單
-  
-  
-})
-</script>
   </div>
      <div id="blueprint_delete_modal" style="padding: 0;" :style="{borderTopColor:master_line_color}" class="ui small modal orange segment">
     <div class="header">
@@ -636,10 +460,34 @@ $(function(){
     <div class="ui cancel button">取消</div>
     </div>
   </div>
+
   
+<div id="feedback_modal" style="padding: 0;" class="ui small modal ">
+ <i class="close icon" style="top: 1.0535rem;right: 1rem; color: rgba(0,0,0,.87);"></i>
+ <div class="header" style="letter-spacing: 2px;"><i class="comment icon"></i>提供建議</div>
+  <div class="content">
+      <div class="ui form">
+        <div class="field">
+<!--          <label style="letter-spacing: 2px;">建議或bug回報</label>-->
+          <textarea id="feedback1" style="letter-spacing: 2px;font-weight: normal;" placeholder="建議或bug回報"></textarea>
+        </div>
+        <div class="field">
+          <div class="ui checkbox" onclick="if($('#feedback2').is(':checked')){$('#feedback2').prop('checked', false)}else{$('#feedback2').prop('checked', true);}">
+            <input id="feedback2" type="checkbox" tabindex="0" class="hidden">
+            <label><span style="letter-spacing: 1px;">回信給我 (請留下您的email或聯絡方式)</span></label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="ui cancel button">Cancel</div>
+      <div class="ui orange button" onclick="send_feedback()">Send</div>
+    </div>
 </div>
-<script src="src/build/js/main.js"></script>
-<script src="src/build/js/vm.js"></script>
+
+</div>
+<script src="src/build/js/main.js?v=20170528"></script>
+<script src="src/build/js/vm.js?v=20170528"></script>
  <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

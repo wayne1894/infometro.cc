@@ -1013,6 +1013,13 @@ textarea:focus {
   .right_header_line {
     border-top: 7px solid #FF6900;
   }
+  .ui.accordion .title{
+    font-family: inherit!important;
+  }
+  .ui.accordion p{
+    padding-left: 25px;
+    color:#757575;
+  }
   .right_tool {
     background-color: #CCCCCC;
     cursor: pointer;
@@ -1043,7 +1050,6 @@ textarea:focus {
       &:before {
         top: 9px;
       }
-      
     }
     i.svg.home img{
       width: 75%;
@@ -1071,6 +1077,7 @@ textarea:focus {
       padding: 10px;
       padding-top: 15px;
       height: 96%;
+      position: relative;
       &.active{
         display: block;
       }
@@ -1089,16 +1096,17 @@ textarea:focus {
     }
   }
   .text_b{
-      background-image: url(../../static/images/index_5.png);
-      width:164px;
-      height:36px;
-      float:left;
-      margin-left:4px;
-      margin-top:4px;
-      text-align:center;
-      line-height:34px;
-      font-size:13px;
-      cursor:pointer;
+    background-image: url(../../static/images/index_5.png);
+    width:164px;
+    height:36px;
+    float:left;
+    margin-left:4px;
+    margin-top:4px;
+    text-align:center;
+    line-height:34px;
+    font-size:13px;
+    cursor:pointer;
+    color: black;
   }
   .text_b:hover{
       background-position:0px 36px;
@@ -1106,7 +1114,49 @@ textarea:focus {
   }
   
 }
-
+#right_search{
+  height: 30px;
+  line-height: 30px;
+  background-color: #b2b2b2;
+  width: 100%;
+  position: absolute;
+  left: 0px;
+  bottom: 0;
+  ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+    color: #b2b2b2;
+  }
+  ::-moz-placeholder { /* Firefox 19+ */
+    color: #b2b2b2;
+  }
+  :-ms-input-placeholder { /* IE 10+ */
+    color: #b2b2b2;
+  }
+  :-moz-placeholder { /* Firefox 18- */
+    color: #b2b2b2;
+  }
+  input{
+    -webkit-border-radius: 7px;
+	-moz-border-radius: 7px;
+	border-radius: 7px;
+    border: 1px solid #8E8E8E;
+    padding: 1px 6px;
+    margin-left: 5px;
+	background-color:#DEDEDE;
+    width: 70%;
+    height: 21px;
+    line-height: 21px;
+    font-size: 12px;
+    display: inline-block;
+    position: relative;
+    bottom: 2px;
+  }
+  img{
+    display: inline-block;
+    width: 16px;
+    position: relative;
+    top: 1px;
+  }
+}
 @media screen and (max-width:1400px) {
   #main {
     width: 95%;
@@ -1130,6 +1180,9 @@ textarea:focus {
     top: 0;
     z-index: 15
   }
+  #right_search{
+    bottom: 16px;
+  }   
 }
 .clearfix{
   .clearfix()
@@ -1248,4 +1301,8 @@ i.orange.icon {
 .fade-enter, .fade-leave-active {
   
   opacity: 0!important;
+}
+
+#feedback_modal textarea:focus{
+  border-color: #ff6900;
 }

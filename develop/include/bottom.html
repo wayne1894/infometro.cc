@@ -10,6 +10,8 @@
           <div class="item" @click="re_name(index,'blueprint',$event)"><i class="edit icon"></i>重新命名</div>
            <div v-show="index_blueprint!=index" class="item" @click="exchange_blueprint(index,true,$event)"><i class="exchange icon"></i>切換</div>
           <div v-if="index_blueprint==index" class="item" @click="delete_blueprint(item.key)"><i class="delete icon"></i>移除</div>
+<!--          <div class="item" @click="匯出藍圖(item.key)"><i class="external icon"></i>匯出(備份)</div>-->
+          
       </div>
     </div>
   </div>
@@ -20,40 +22,4 @@
     <i v-show="is_nav" style=" position: absolute; top:-38px; left:163px" class="nav_i ui orange help circle icon" data-title="主線" data-content="主線在一個地鐵計畫裡只能擁有一條，它能夠串連支線，組織支線網路。"></i>
   </transition>
 </div>
-<div id="copyright">© 2017 infometro.cc 資訊地鐵站</div>
-
-
-<script>
-function drop_blueprint(event,key){
-  if(key==vm.blueprint[vm.index_blueprint].key){
-    print("相同的blueprint");
-    return;
-  }
-  var line_key = event.dataTransfer.getData("line_key");
-  if(line_key=="")return;
-  var _line=vm.move_line(line_key);
-  _line=_line[0];
-  for(var i=0;i<vm.blueprint.length;i++){
-    if(vm.blueprint[i].key==key){
-      vm.blueprint[i].line.push(_line);
-      vm.index[i].push([]);
-      vm.index[i][vm.index[i].length - 1].check = false;
-      vm.action="drop_blueprint";
-      vm.更新藍圖(key,vm.blueprint[i]);
-      vm.index_update();
-      break;
-    }
-  }
-  
-}
-  
-$(function(){
-	$("#blueprint").on("click",function(event){	
-		if($(event.target).hasClass("blueprint_i")){
-			$(event.target).closest(".blueprint_list").trigger("customClick");
-		}
-	})
-})
-
-					
-</script>
+<div id="copyright">© 2017 資訊地鐵站 版權所有</div>

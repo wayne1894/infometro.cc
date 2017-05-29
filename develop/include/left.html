@@ -43,39 +43,3 @@
 	<a :class="{ active: is_nav }" onclick="vm.is_nav=!vm.is_nav" class="left_icon navigation" data-tooltip="切換導覽" data-position="right center"><i class="help circle icon"></i></a>
 	<a class="left_icon" data-tooltip="登出"  data-position="right center" onclick="logout()"><i class="power icon"></i></a>
 </div>
-
-
-<script>
-  function drop_line(event,index){
-		if(vm.index_line==index)return;
-		
-		var metro_key = event.dataTransfer.getData("key");
-		if(metro_key=="")return;
-		var _metro=vm.move_metro(metro_key,index);
-		if(_metro==undefined)return
-		_metro=_metro[0];
-		var data = JSON.parse(JSON.stringify(vm.get_blueprint())); //將傳址改為傳值
-		data.line[index].metro.push(_metro);
-		vm.action="drop_line";
-		vm.更新藍圖(data.key,data);
-		
-	}
-    
-$(function(){
-  $(document.body).append("<div id='left_color' style='position: absolute;left:0;top:0'></div>");
-  $('#left_color').colpick({
-    layout:'hex',
-    onHide:function(){
-      vm.pick_master=undefined;
-      vm.pick_color=undefined;
-    },
-    onChange:function(hsb,hex,rgb,el,bySetColor){
-      vm.pick_color="#"+hex;
-    },
-    onSubmit:function(hsb,hex,rgb,el,bySetColor){
-      $(el).val(hex);
-      $(el).colpickHide();
-    }
-  }).colpickHide();
-})
-</script>
