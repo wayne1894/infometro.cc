@@ -1,6 +1,6 @@
 # infometro.cc 資訊地鐵站
-http://infometro.cc (登入頁)<br>
-http://infometro.cc/metro.html  (主頁)
+http://infometro.cc/index.html (登入頁)<br>
+http://infometro.cc/404.html  (主頁)
 
 ## 開發環境建置
 開發要在 develop資料夾下開發，透過node.js gulp程式 將檔案build到上層 <br>
@@ -19,9 +19,3 @@ http://infometro.cc/metro.html  (主頁)
   <br>
   4、cd到 develop ，輸入 gulp，會自動跳出網頁(監聽1313 port)，日後你修改develop裡檔案的內容，網頁會自動重整
   <br>
-  
-## 第一版本要開發的功能
-  <br>
-  1、infometro 網站主要功能
-  <br>
-  2、google chrome 書籤的部份
