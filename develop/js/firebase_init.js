@@ -15,7 +15,7 @@
 
 //https://firebase.google.com/docs/database/web/offline-capabilities#server-timestamps  firebase 離線功能
 
-//https://firebase.google.com/docs/reference/security/database/    rules進階
+//https://firebase.google.com/docs/reference/security/database/    rules進階//
 
 var DB
 var user_uid;
