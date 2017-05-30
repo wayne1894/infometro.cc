@@ -35,13 +35,13 @@
 		dataTransfer.setData('line_key', $(dragEl).data("key")); //設定要傳送的資料
         dataTransfer.setData('line_key', $(dragEl).data("key")); //設定要傳送的資料
       },
-			onStart: function(){
-				vm.mode = 1.5;
-			},
+      onStart: function(){
+        vm.mode = 1.5;
+      },
       onEnd: function (evt) {
         setTimeout(function(){
           vm.swap_list(evt.oldIndex, evt.newIndex);
-					vm.mode = 1;
+		  vm.mode = 1;
         },5)
       }
     });
@@ -238,7 +238,7 @@
       } else if (url.indexOf("youtu.be/") > -1) {
         url_info.youtube = url.split("be/")[1];
       }
-      url_info.ico = "https://www.google.com/s2/favicons?domain_url=" + url;
+//      url_info.ico = "https://www.google.com/s2/favicons?domain_url=" + url; 減少流量這個不存了
       $("#iframe").remove();
       if (typeof fn === "function") fn(url_info);
 
@@ -259,7 +259,6 @@
 
 
 //----------------------分塊程式碼------------------
-
 
 //top
  function move_center(is_move) {
@@ -306,22 +305,14 @@
  })
 //top
 
-
-
-
-
-
-
-
-
 //bottom
 function drop_blueprint(event,key){
+  var line_key = event.dataTransfer.getData("line_key");
+  if(line_key=="")return;
   if(key==vm.blueprint[vm.index_blueprint].key){
     print("相同的blueprint");
     return;
   }
-  var line_key = event.dataTransfer.getData("line_key");
-  if(line_key=="")return;
   var _line=vm.move_line(line_key);
   _line=_line[0];
   for(var i=0;i<vm.blueprint.length;i++){
@@ -369,16 +360,6 @@ $(function(){
 
 //bottom
 
-
-
-
-
-
-
-
-
-
-
 //left
  function drop_line(event,index){
   if(vm.index_line==index)return;
@@ -423,15 +404,6 @@ $(function(){
   }).colpickHide();
 })
 //left
-
-
-
-
-
-
-
-
-
 
 //right
 $(function(){
@@ -494,15 +466,50 @@ function send_feedback(){
   }
   $("#feedback_modal").modal("hide")
 }
+
+function info_search_db(line_key,_val){
+  DB.ref("info/"+line_key+"/metro/").once("value",function(data){
+    data.forEach(function (childData) {
+      for(var info_key in childData.val()) {
+        if(childData.val()[info_key].message.indexOf(_val)>-1){
+           vm.search_info.push({
+             line_key : line_key ,
+             metro_key: childData.key,
+             message : childData.val()[info_key].message
+           })
+        }
+      }
+    });
+  })
+}
+function info_search(){//搜尋地鐵功能
+  //先從藍圖資訊找到
+  return false
+  var _val=$.trim($("#right_search input").val());
+  vm.search_metro=[];
+  vm.search_info=[];
+  if(_val=="")return
+
+  var _blueprint=vm.get_blueprint();
+  for(var i=0;i<_blueprint.line.length;i++){
+    var _key=_blueprint.line[i]._key;
+    var _name=_blueprint.line[i].name;
+    var _m=_blueprint.line[i].metro;
+    for(var j=0;j<_m.length;j++){
+      if(_m[j].name.indexOf(_val)>-1){
+        vm.search_metro.push({
+          line_name: _name,
+          line_id:i ,
+          metro_name:_m[j].name ,
+          metro_id : j
+        });
+      }
+    }
+    info_search_db(_key,_val);
+  }
+
+}
 //right
-
-
-
-
-
-
-
-
 
 //center
 function drop(event){
@@ -522,6 +529,3 @@ $(function(){
     $("#board_textarea").on('paste', textarea_paste);
 })
 //center
-
-
-

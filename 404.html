@@ -46,7 +46,7 @@
 <div id="main">
   <div id="left">
     <div id="line_parent">
-	<div id="logo"><img onclick="location.href='/'" class="logo" src="src/static/images/logo_200.png"></div>
+	<div id="logo"><a href="/"><img class="logo" src="src/static/images/logo_200.png"></a></div>
 	<div id="left_line">
   <div class="line_text ">
     <span>主線：</span>
@@ -85,7 +85,7 @@
       </ul>
 	</div>
 	<div>
-	  <a id="new_line" class="default_a" onclick="vm.new_line()">新增支線</a>
+	  <a id="new_line" class="default_a" @click="new_line()">新增支線</a>
 	  <transition name="fade">
        <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="新增支線" data-content="新增一條支線，在色彩的地方『點擊兩下』可以更換顏色，名字的地方可以更換名字。更改支線不需額外存檔，會即時存檔。"></i>
       </transition>
@@ -93,8 +93,8 @@
 	
 </div>
 <div id="edit_parent">
-	<a :class="{ active: is_nav }" onclick="vm.is_nav=!vm.is_nav" class="left_icon navigation" data-tooltip="切換導覽" data-position="right center"><i class="help circle icon"></i></a>
-	<a class="left_icon" data-tooltip="登出"  data-position="right center" onclick="logout()"><i class="power icon"></i></a>
+  <a :class="{ active: is_nav }" onclick="vm.is_nav=!vm.is_nav" class="left_icon navigation" data-tooltip="切換導覽" data-position="right center"><i class="help circle icon"></i></a>
+  <a class="left_icon" data-tooltip="登出"  data-position="right center" onclick="logout()"><i class="power icon"></i></a>
 </div>
   </div>
   <div id="top">
@@ -113,7 +113,7 @@
       </li>
     </ul>
     <transition name="fade">
-    <i v-show="is_nav" v-show="is_nav" style="position: absolute; left:37px; top:6px; margin-left:0px; z-index:55" class="nav_i ui orange help circle icon" data-title="站點" data-content="文字編輯"></i>
+    <i v-show="is_nav" v-show="is_nav" style="position: absolute; left:37px; top:6px; margin-left:0px; z-index:55" class="nav_i ui orange help circle icon" data-title="站點" data-content="站點是infometro資料儲存的節點，您可以透過適當的命名來讓資料更容易被識別，多個站點就組一條路線，您可以透過拖曳來安排位置，在編輯模式下，您也可以把站點拖曳到其他的支線去。"></i>
     </transition>
     <transition name="fade">
     <i v-show="is_nav" v-show="is_nav" style="position: absolute; left:15px; margin-left:0px; top:6px;z-index:55" class="nav_i ui orange film icon" data-title="主線" data-content="主線在一個地鐵計畫裡只能擁有一條，它能夠串連支線，組織支線網路。"></i>
@@ -171,7 +171,7 @@
     <div id="board_favorites">
       <div class="favorites_list" v-for="(item, index) in info_favorites">
         <a :href="item.url_info.url" :title="item.url_info.title" target="_blank"  v-once>
-          <span><img :src="item.url_info.ico"  v-once></span>
+          <span><img :src="'https://www.google.com/s2/favicons?domain_url='+item.url_info.url"  v-once></span>
           <span v-once>{{item.url_info.title}}</span>
         </a>
       </div>
@@ -334,7 +334,7 @@
       </div>
     </div>
   </div>
-    <div id="blueprint_new" class="ui icon button" data-tooltip="新增一個地鐵計畫" data-inverted="" onclick="vm.new_blueprint()">
+    <div id="blueprint_new" class="ui icon button" data-tooltip="新增一個地鐵計畫" data-inverted="" @click="new_blueprint()">
       <i class="add icon"></i>
     </div>
   <transition name="fade">
@@ -402,13 +402,25 @@
     </div>
   </div>
   <div class="r_content">
-    <div style="font-size: 1rem;">全站搜尋：</div>
+    <div style="font-size: 1rem;">搜尋結果：</div>
     <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
     <div style="color:#757575;font-size: 1rem;">
-       即將推出的功能，請在下方輸入關鍵字搜尋
+      即將推出的功能。
+       <div v-if="search_metro.length>0">
+          <div v-for="(item, index) in search_metro">
+            <div>{{item.line_name}}-->{{item.metro_name}}</div>
+          </div>
+          <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
+       </div>
+      <div v-if="search_info.length>0">
+        <div v-for="(item, index) in search_info">
+          <div>{{item.message}}</div>
+        </div>
+      </div>
+       
     </div>
     <div id="right_search">
-      <input type="text" placeholder="搜尋此地鐵">
+      <input type="text" placeholder="搜尋此地鐵" onkeyup="info_search()">
       <img src="src/static/images/search.svg">
     </div>
     
@@ -420,33 +432,14 @@
 <!--     https://semantic-ui.com/modules/accordion.html#/definition-->
       <div class="title active"><i class="dropdown icon"></i> 如何使用？</div>
       <div class="content active">
-        <p class="transition visible">目前infometro的介面操作，位在左邊的導覽功能上(點擊<i class="help circle icon"></i>切換)，若還有疑問，歡迎 <a class="default_a" href="javascript:$('#feedback_modal').modal({closable: false}).modal('show')">留言</a> 讓我們知道。</p>
+        <p class="transition visible">目前infometro 的操作說明，位在左邊的導覽功能上(點擊<i class="help circle icon"></i>切換)，若還有疑問，歡迎<a class="default_a" href="javascript:$('#feedback_modal').modal({closable: false}).modal('show')">留言</a>詢問讓我們知道。</p>
       </div>
       <div class="title"><i class="dropdown icon"></i> 如何刪除我的帳號 </div>
       <div class="content">
         <p class="transition hidden">infometro 目前登入的方式使用facebook帳號進行綁定，您可以在facebook上解除與我們的關係。</p>
         <p class="transition visible">
-          如果您要完全刪除帳號，以不留下任何記錄，請<a class="default_a" href="javascript:$('#feedback_modal').modal({closable: false}).modal('show')">回覆訊息</a>給我們，我們將手動為您刪除。
+          如果您想完全刪除帳號不留下任何記錄，請<a class="default_a" href="javascript:$('#feedback_modal').modal({closable: false}).modal('show')">留言</a>給我們，我們將手動為您刪除。
         </p>
-      </div>
-      <div class="title"><i class="dropdown icon"></i> infometro 資料安全嗎？ </div>
-      <div class="content">
-        <p class="transition visible">infometro 使用google的 <a class="default_a" href="https://firebase.google.com/" target="_blank">firebase</a>做為核心資料庫,並且設定<a class="default_a" href="https://firebase.google.com/docs/database/security/" target="_blank">安全權限</a>，資料只能由創建帳號的擁有人存取，所以一般人無法讀取您的資料，透過任何駭客手法也相當困難(除非google的firebase機制有漏洞)，所以可以安心使用。不過建議敏感性的資料不要存放在infometro上。</p>
-        <p class="transition hidden">
-           目前infometro是私密的環境，在未來推廣社交功能前，我們也會特別加強資料的安全與隱私性。
-        </p>
-       
-      </div>
-      <div class="title"><i class="dropdown icon"></i> infometro 正在開發的功能</div>
-      <div class="content">
-        <p class="transition hidden">infometro 即將推出的功能：上傳檔案、全站搜尋機制、地鐵計畫匯出與匯入、主線串聯分線、更換個人照片等等</p>
-      </div>
-      <div class="title"><i class="dropdown icon"></i> infometro 未來發展計畫 </div>
-      <div class="content">
-        <p class="transition hidden">infometro 將發展成社交性的，使用者可以快速分享支線(成為共公支線)或者與其他人共同編輯支線。
-        </p>
-        <p class="transition hidden">
-        如果您對我們未來的發展有任何建議、想法，歡迎<a class="default_a" href="javascript:$('#feedback_modal').modal({closable: false}).modal('show')">留言給我們</a>。</p>
       </div>
     </div>
   </div>
@@ -463,7 +456,7 @@
 
       <div class="description">
         <p style="line-height: 1em;font-size: 15px;letter-spacing: 1px;">這個動作將會刪除整個地鐵的資料，且無法復原。</p>
-        <p style="line-height: 1em;font-size: 15px;letter-spacing: 1px;">連續點擊按鈕兩下刪除。</p>
+        <p style="line-height: 1em;font-size: 15px;letter-spacing: 1px;">連續『點擊按鈕兩下』刪除。</p>
       </div>
     </div>
     <div class="actions">

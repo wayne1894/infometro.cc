@@ -101,7 +101,7 @@ function fb_login() {
   })
 }
 function anonymous_login() {
-	if(DB==undefined) return setTimeout(anonymous_login,500);
+  if(DB==undefined) return setTimeout(anonymous_login,500);
   if (user_uid != undefined) location_fn();
   firebase.auth().signInAnonymously();
 }
@@ -118,7 +118,7 @@ function 初始化使用者資訊(fn) {
     data.photo = "https://semantic-ui.com/images/avatar/large/elliot.jpg";
     data.name = "匿名";
   }
-
+  $.cookie("start","Y");
   DB.ref('users/' + user.uid).set(data).then(初始化藍圖資料(fn));
 }
 
@@ -131,8 +131,8 @@ function 初始化藍圖資料(fn) {
     name: "我的地鐵計畫",
     line: newLine
   },function(error){
-		if (typeof fn == "function") fn()
-	})
+	if (typeof fn == "function") fn()
+  })
 }
 
 function blueprint_json(name) {
@@ -148,14 +148,15 @@ function set_line_root(_line_key, user_uid) { //設定支線擁有者
 
 function line_json(name, color, master) {
   var _line_key = DB.ref('blueprint/' + user_uid).push().key;
-  set_line_root(_line_key, user_uid + "(build)");
+  set_line_root(_line_key, user_uid );
   if (!master) master = false
   return {
     _key: _line_key,
     name: name,
     master: master,
     color: color,
-    metro: []
+    metro: [],
+    timestamp: firebase.database.ServerValue.TIMESTAMP
   }
 }
 
@@ -175,7 +176,7 @@ function get_other_user(other_user_uid, fn) {
   });
 }
 
-function blueprint_init(blueprint_fn) {
+function blueprint_init(blueprint_fn,load_fn) {
   DB.ref('blueprint/' + user_uid).on("value", function (data) {
     var _action = vm.action; //操作動作執行  
     var _init = [];
@@ -226,20 +227,20 @@ function blueprint_init(blueprint_fn) {
     if (_action == "new_blueprint") { //判斷動作
       var _index = vm.index.length - 1; //移到最後一個
       vm.exchange_blueprint(_index, true); //切換藍圖
-      setTimeout(blueprint_set, 5);
+      blueprint_fn();
     } else if (_action == "new_line") {
       vm.index_update();
       vm.exchange_line(vm.index[vm.index_blueprint].length - 1);
     } else if (_action == "swap_list") {
       vm.index_update();
     } else if (_action == "delete_blueprint") {
-      setTimeout(blueprint_set, 5);
+      blueprint_fn();
       vm.exchange_blueprint(vm.index_blueprint, true); //切換藍圖
     } else if (_action == "load") {
       vm.exchange_blueprint(vm.index_blueprint, true); //切換藍圖
-      setTimeout(blueprint_fn, 5);
+      blueprint_fn();
+      load_fn();
     }
-
     vm.action = "";
   })
 }
@@ -283,11 +284,25 @@ function _is_login() { //程式進入點
     if ($.cookie('index_blueprint') != undefined) { //預設要載入的藍圖索引
       vm.index_blueprint = $.cookie('index_blueprint');
     }
+    if($.cookie("start")=="Y" || 1==1){//代表第一次進來
+      //vm.is_nav=true; 預設我們就不要開啟導覽了
+      $("#edit_parent").append("<div class='navOne ui left pointing red basic label'>第一次進來嗎？點擊這裡開始導覽。<i class='delete icon' style='float:right'></i></div>");
+       $("#edit_parent .navigation").one("click",navOne_set);
+       $("#edit_parent .navOne i").one("click",navOne_set);
+        
+       function navOne_set(){
+          $.removeCookie("start");
+          $("#edit_parent .navOne").remove();
+          $("#edit_parent .navigation").off("click");
+        }
+    }
 
-    blueprint_init(function () {
-      //這裡只要vm.load會執行
-      blueprint_set();
-      vm.is_nav=true;
+    blueprint_init(function () {//這裡是變動藍圖資訊都會執行 
+      setTimeout(blueprint_set, 5);
+    },function(){//這裡只要vm.load會執行
+      setTimeout(function(){
+        $("#edit_parent .navOne").transition("flash");
+      },700);
     });
     
   });

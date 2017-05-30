@@ -45,7 +45,7 @@
     <div id="board_favorites">
       <div class="favorites_list" v-for="(item, index) in info_favorites">
         <a :href="item.url_info.url" :title="item.url_info.title" target="_blank"  v-once>
-          <span><img :src="item.url_info.ico"  v-once></span>
+          <span><img :src="'https://www.google.com/s2/favicons?domain_url='+item.url_info.url"  v-once></span>
           <span v-once>{{item.url_info.title}}</span>
         </a>
       </div>

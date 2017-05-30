@@ -15,7 +15,9 @@ var vm = new Vue({
     pick_color: undefined,
     url_info: undefined,
     filter_search: "",
-    is_nav: false
+    is_nav: false ,
+    search_info : [],
+    search_metro : []
   },
   mounted: function () {
     $("#main").css("visibility", "visible");
@@ -182,7 +184,10 @@ var vm = new Vue({
       return "linear-gradient(to right, #000 50%, " + color + " 0%)";
     },
     mode_txt: function () {
-      if (!sortable['blueprint']) return;
+      if (!sortable['blueprint']){
+        if(this.mode==0)return "一般模式";
+        if(this.mode==1)return "編輯模式";
+      } 
       if (this.mode == 0) { //一般模式
         setTimeout(function () {
           sortable["metro"].option("disabled", true);
@@ -301,7 +306,8 @@ var vm = new Vue({
       newLine[newLine.length - 1].metro.push(metro_json("總站")); //第一條線下面的站
       newRef.set({ //將他存到藍圖
         name: "我的地鐵計畫",
-        line: newLine
+        line: newLine,
+        timestamp: firebase.database.ServerValue.TIMESTAMP,
       })
     },
     delete_blueprint: function (key) { //刪除藍圖
@@ -580,15 +586,12 @@ var vm = new Vue({
         DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).push(_data, function (error) {
         if (error) { //修補程式(不常發生)
           if (error.toString().indexOf("Permission denied") > -1) {
-            set_line_root(vm.get_line_key(), user_uid + "(build)");
+            set_line_root(vm.get_line_key(), user_uid );
+            DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).push(_data)
             setTimeout(function () {
-              print("未發現root，重新寫入root")
               location.reload();
             }, 0)
 
-          }
-        } else {
-          //console.log("Data hss been saved succesfully")
           }
         });
       }

@@ -52,13 +52,25 @@
     </div>
   </div>
   <div class="r_content">
-    <div style="font-size: 1rem;">全站搜尋：</div>
+    <div style="font-size: 1rem;">搜尋結果：</div>
     <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
     <div style="color:#757575;font-size: 1rem;">
-       即將推出的功能，請在下方輸入關鍵字搜尋
+      即將推出的功能。
+       <div v-if="search_metro.length>0">
+          <div v-for="(item, index) in search_metro">
+            <div>{{item.line_name}}-->{{item.metro_name}}</div>
+          </div>
+          <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
+       </div>
+      <div v-if="search_info.length>0">
+        <div v-for="(item, index) in search_info">
+          <div>{{item.message}}</div>
+        </div>
+      </div>
+       
     </div>
     <div id="right_search">
-      <input type="text" placeholder="搜尋此地鐵">
+      <input type="text" placeholder="搜尋此地鐵" onkeyup="info_search()">
       <img src="src/static/images/search.svg">
     </div>
     
@@ -70,33 +82,14 @@
 <!--     https://semantic-ui.com/modules/accordion.html#/definition-->
       <div class="title active"><i class="dropdown icon"></i> 如何使用？</div>
       <div class="content active">
-        <p class="transition visible">目前infometro的介面操作，位在左邊的導覽功能上(點擊<i class="help circle icon"></i>切換)，若還有疑問，歡迎 <a class="default_a" href="javascript:$('#feedback_modal').modal({closable: false}).modal('show')">留言</a> 讓我們知道。</p>
+        <p class="transition visible">目前infometro 的操作說明，位在左邊的導覽功能上(點擊<i class="help circle icon"></i>切換)，若還有疑問，歡迎<a class="default_a" href="javascript:$('#feedback_modal').modal({closable: false}).modal('show')">留言</a>詢問讓我們知道。</p>
       </div>
       <div class="title"><i class="dropdown icon"></i> 如何刪除我的帳號 </div>
       <div class="content">
         <p class="transition hidden">infometro 目前登入的方式使用facebook帳號進行綁定，您可以在facebook上解除與我們的關係。</p>
         <p class="transition visible">
-          如果您要完全刪除帳號，以不留下任何記錄，請<a class="default_a" href="javascript:$('#feedback_modal').modal({closable: false}).modal('show')">回覆訊息</a>給我們，我們將手動為您刪除。
+          如果您想完全刪除帳號不留下任何記錄，請<a class="default_a" href="javascript:$('#feedback_modal').modal({closable: false}).modal('show')">留言</a>給我們，我們將手動為您刪除。
         </p>
-      </div>
-      <div class="title"><i class="dropdown icon"></i> infometro 資料安全嗎？ </div>
-      <div class="content">
-        <p class="transition visible">infometro 使用google的 <a class="default_a" href="https://firebase.google.com/" target="_blank">firebase</a>做為核心資料庫,並且設定<a class="default_a" href="https://firebase.google.com/docs/database/security/" target="_blank">安全權限</a>，資料只能由創建帳號的擁有人存取，所以一般人無法讀取您的資料，透過任何駭客手法也相當困難(除非google的firebase機制有漏洞)，所以可以安心使用。不過建議敏感性的資料不要存放在infometro上。</p>
-        <p class="transition hidden">
-           目前infometro是私密的環境，在未來推廣社交功能前，我們也會特別加強資料的安全與隱私性。
-        </p>
-       
-      </div>
-      <div class="title"><i class="dropdown icon"></i> infometro 正在開發的功能</div>
-      <div class="content">
-        <p class="transition hidden">infometro 即將推出的功能：上傳檔案、全站搜尋機制、地鐵計畫匯出與匯入、主線串聯分線、更換個人照片等等</p>
-      </div>
-      <div class="title"><i class="dropdown icon"></i> infometro 未來發展計畫 </div>
-      <div class="content">
-        <p class="transition hidden">infometro 將發展成社交性的，使用者可以快速分享支線(成為共公支線)或者與其他人共同編輯支線。
-        </p>
-        <p class="transition hidden">
-        如果您對我們未來的發展有任何建議、想法，歡迎<a class="default_a" href="javascript:$('#feedback_modal').modal({closable: false}).modal('show')">留言給我們</a>。</p>
       </div>
     </div>
   </div>
