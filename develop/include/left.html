@@ -17,7 +17,14 @@
 	<div class="line_text">
        <span>一般支線：</span>
        <transition name="fade">
-       <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="一般支線" data-content="一般支線可以有無數條，您可以點擊下方『新增支線』，來新增一條支線，做為您分類資訊的依據。"></i>
+       <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="一般支線" data-content="一般支線可以有無數條，您可以點擊下方『新增支線』，來新增一條支線，做為您分類資訊的依據。另外您也可以拖曳支線移動順序，或者拖曳到下方的地鐵去，籍此移動支線。"></i>
+      </transition>
+      <transition name="fade">
+        <div v-show="is_nav" style="position: absolute; top: 2px; right: -25px; z-index:55;">
+          <i style="height: 100%;" class="nav_i custom ui orange film icon" ></i>
+          <div class="ui custom popup hidden" data-img="https://s3-ap-northeast-1.amazonaws.com/infometro.cc/nav/NL3HirBbiz.gif" style="width:150px;min-height:200px;">
+          </div>
+        </div>
       </transition>
     </div>
       <ul id="line_drag">
@@ -29,18 +36,12 @@
           <i v-if="!item.master" class="line_i" @dblclick="open_color(index,item.color)" @click="exchange_line(index)" :style="{backgroundColor:item.color}" ></i>
           <a v-if="!item.master" class="line_a" @dblclick="re_name(index,'line',$event)" @click="exchange_line(index)">{{item.name}}</a>
         </li>
-        <transition name="fade">
-          <div v-show="is_nav && line.length>1" style="position: absolute; top: 0px; right: -24px; z-index:55;">
-            <i style="height: 100%;" class="nav_i custom ui orange film icon" ></i>
-            <div class="ui custom popup hidden" style="width:100px;">I'm not on the same level as the button, but i can still be found. </div>
-          </div>
-        </transition>
       </ul>
 	</div>
 	<div>
 	  <a id="new_line" class="default_a" @click="new_line()">新增支線</a>
 	  <transition name="fade">
-       <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="新增支線" data-content="新增一條支線，在色彩的地方『點擊兩下』可以更換顏色，名字的地方可以更換名字。更改支線不需額外存檔，會即時存檔。"></i>
+       <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="新增支線" data-content="新增一條支線，在色彩的地方『點擊兩下』可以更換顏色，名字點擊兩下也可以更換名字。"></i>
       </transition>
 	</div>
 	

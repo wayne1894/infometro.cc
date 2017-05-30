@@ -78,13 +78,21 @@
         },5)
       }
     });
-    
     //導覽的部份
     setTimeout(function () {
       $('.nav_i.custom')
         .popup({
           popup: $('.custom.popup'),
-          on: 'click'
+          on: 'click',
+          onShow : function(){
+            var _html="";
+            var _img=$(this).data("img");
+            if(_img!=""){
+              _html="<img style='width: 100%;' src='"+_img+"'>";
+              $(this).html(_html);
+            }
+            
+          }
         })
     }, 5);
     setTimeout(function () {

@@ -13,11 +13,14 @@
       </li>
     </ul>
     <transition name="fade">
-    <i v-show="is_nav" v-show="is_nav" style="position: absolute; left:37px; top:6px; margin-left:0px; z-index:55" class="nav_i ui orange help circle icon" data-title="站點" data-content="站點是infometro資料儲存的節點，您可以透過適當的命名來讓資料更容易被識別，多個站點就組一條路線，您可以透過拖曳來安排位置，在編輯模式下，您也可以把站點拖曳到其他的支線去。"></i>
+    <i v-show="is_nav" v-show="is_nav" style="position: absolute; left:15px; margin-left:0px; top:6px;z-index:55" class="nav_i ui orange help circle icon" data-title="站點" data-content="站點是infometro資料儲存的節點，您可以透過適當的命名來讓資料更容易被識別，多個站點就組成一條路線，您可以透過拖曳來安排位置，在編輯模式下，您也可以把站點拖曳到其他的支線去。"></i>
     </transition>
     <transition name="fade">
-    <i v-show="is_nav" v-show="is_nav" style="position: absolute; left:15px; margin-left:0px; top:6px;z-index:55" class="nav_i ui orange film icon" data-title="主線" data-content="主線在一個地鐵計畫裡只能擁有一條，它能夠串連支線，組織支線網路。"></i>
+      <div v-show="is_nav" style="position: absolute; left:37px; top:6px; margin-left:0px; z-index:55" >
+        <i style="height: 100%;" class="nav_i custom ui orange film icon" ></i>
+        <div class="ui custom popup hidden" data-img="https://s3-ap-northeast-1.amazonaws.com/infometro.cc/nav/LHXNGI0XjP.gif" style="width:550px;max-width:550px;min-height:200px;">
+        </div>
+     </div>
     </transition>
-    
   </div>
 <div class="triangle right"></div>

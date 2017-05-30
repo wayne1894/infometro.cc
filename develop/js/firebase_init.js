@@ -264,13 +264,27 @@ function blueprint_set(){
 
       }
 }
+function start_set(){
+  if($.cookie("start")=="Y"){//代表第一次進來
+    $("#edit_parent").append("<div class='navOne ui left pointing red basic label'>第一次進來嗎？點擊這裡開始導覽。<i class='delete icon' style='float:right'></i></div>");
+     $("#edit_parent .navigation").one("click",_fn);
+     $("#edit_parent .navOne i").one("click",_fn);
+     setTimeout(function(){
+       $("#edit_parent .navOne").transition("flash");
+     },700);
+  }
+  function _fn(){
+    $.removeCookie("start");
+    $("#edit_parent .navOne").remove();
+    $("#edit_parent .navigation").off("click");
+  }
+}
 function _is_login() { //程式進入點
   DB.ref('users/' + user_uid).once('value', function (data) { //載入使用者基本資料
     if (data.val()) {
       vm.users = data.val();
-    } else {
+    } else {//沒有會員資料 
       初始化使用者資訊();
-      //沒有會員資料 
     }
   });
   DB.ref('users_data/' + user_uid).once('value', function (data) { //載入user_data
@@ -284,25 +298,10 @@ function _is_login() { //程式進入點
     if ($.cookie('index_blueprint') != undefined) { //預設要載入的藍圖索引
       vm.index_blueprint = $.cookie('index_blueprint');
     }
-    if($.cookie("start")=="Y" || 1==1){//代表第一次進來
-      //vm.is_nav=true; 預設我們就不要開啟導覽了
-      $("#edit_parent").append("<div class='navOne ui left pointing red basic label'>第一次進來嗎？點擊這裡開始導覽。<i class='delete icon' style='float:right'></i></div>");
-       $("#edit_parent .navigation").one("click",navOne_set);
-       $("#edit_parent .navOne i").one("click",navOne_set);
-        
-       function navOne_set(){
-          $.removeCookie("start");
-          $("#edit_parent .navOne").remove();
-          $("#edit_parent .navigation").off("click");
-        }
-    }
-
     blueprint_init(function () {//這裡是變動藍圖資訊都會執行 
       setTimeout(blueprint_set, 5);
     },function(){//這裡只要vm.load會執行
-      setTimeout(function(){
-        $("#edit_parent .navOne").transition("flash");
-      },700);
+      start_set();
     });
     
   });

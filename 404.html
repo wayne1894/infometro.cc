@@ -64,7 +64,14 @@
 	<div class="line_text">
        <span>一般支線：</span>
        <transition name="fade">
-       <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="一般支線" data-content="一般支線可以有無數條，您可以點擊下方『新增支線』，來新增一條支線，做為您分類資訊的依據。"></i>
+       <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="一般支線" data-content="一般支線可以有無數條，您可以點擊下方『新增支線』，來新增一條支線，做為您分類資訊的依據。另外您也可以拖曳支線移動順序，或者拖曳到下方的地鐵去，籍此移動支線。"></i>
+      </transition>
+      <transition name="fade">
+        <div v-show="is_nav" style="position: absolute; top: 2px; right: -25px; z-index:55;">
+          <i style="height: 100%;" class="nav_i custom ui orange film icon" ></i>
+          <div class="ui custom popup hidden" data-img="https://s3-ap-northeast-1.amazonaws.com/infometro.cc/nav/NL3HirBbiz.gif" style="width:150px;min-height:200px;">
+          </div>
+        </div>
       </transition>
     </div>
       <ul id="line_drag">
@@ -76,18 +83,12 @@
           <i v-if="!item.master" class="line_i" @dblclick="open_color(index,item.color)" @click="exchange_line(index)" :style="{backgroundColor:item.color}" ></i>
           <a v-if="!item.master" class="line_a" @dblclick="re_name(index,'line',$event)" @click="exchange_line(index)">{{item.name}}</a>
         </li>
-        <transition name="fade">
-          <div v-show="is_nav && line.length>1" style="position: absolute; top: 0px; right: -24px; z-index:55;">
-            <i style="height: 100%;" class="nav_i custom ui orange film icon" ></i>
-            <div class="ui custom popup hidden" style="width:100px;">I'm not on the same level as the button, but i can still be found. </div>
-          </div>
-        </transition>
       </ul>
 	</div>
 	<div>
 	  <a id="new_line" class="default_a" @click="new_line()">新增支線</a>
 	  <transition name="fade">
-       <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="新增支線" data-content="新增一條支線，在色彩的地方『點擊兩下』可以更換顏色，名字的地方可以更換名字。更改支線不需額外存檔，會即時存檔。"></i>
+       <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="新增支線" data-content="新增一條支線，在色彩的地方『點擊兩下』可以更換顏色，名字點擊兩下也可以更換名字。"></i>
       </transition>
 	</div>
 	
@@ -113,12 +114,15 @@
       </li>
     </ul>
     <transition name="fade">
-    <i v-show="is_nav" v-show="is_nav" style="position: absolute; left:37px; top:6px; margin-left:0px; z-index:55" class="nav_i ui orange help circle icon" data-title="站點" data-content="站點是infometro資料儲存的節點，您可以透過適當的命名來讓資料更容易被識別，多個站點就組一條路線，您可以透過拖曳來安排位置，在編輯模式下，您也可以把站點拖曳到其他的支線去。"></i>
+    <i v-show="is_nav" v-show="is_nav" style="position: absolute; left:15px; margin-left:0px; top:6px;z-index:55" class="nav_i ui orange help circle icon" data-title="站點" data-content="站點是infometro資料儲存的節點，您可以透過適當的命名來讓資料更容易被識別，多個站點就組成一條路線，您可以透過拖曳來安排位置，在編輯模式下，您也可以把站點拖曳到其他的支線去。"></i>
     </transition>
     <transition name="fade">
-    <i v-show="is_nav" v-show="is_nav" style="position: absolute; left:15px; margin-left:0px; top:6px;z-index:55" class="nav_i ui orange film icon" data-title="主線" data-content="主線在一個地鐵計畫裡只能擁有一條，它能夠串連支線，組織支線網路。"></i>
+      <div v-show="is_nav" style="position: absolute; left:37px; top:6px; margin-left:0px; z-index:55" >
+        <i style="height: 100%;" class="nav_i custom ui orange film icon" ></i>
+        <div class="ui custom popup hidden" data-img="https://s3-ap-northeast-1.amazonaws.com/infometro.cc/nav/LHXNGI0XjP.gif" style="width:550px;max-width:550px;min-height:200px;">
+        </div>
+     </div>
     </transition>
-    
   </div>
 <div class="triangle right"></div>
   </div>
@@ -143,10 +147,10 @@
     
     
     <transition name="fade">
-      <i v-show="is_nav && mode==1" style="position: absolute; bottom:7px; right:113px;" class="nav_i ui orange help circle icon" data-title="編輯支線" data-content="目前在編輯模式下，點擊兩下可以快速修改名稱。"></i>
+      <i v-show="is_nav && mode==1" style="position: absolute; bottom:7px; right:113px;" class="nav_i ui orange help circle icon" data-title="修改支線名" data-content="目前在編輯模式下，點擊兩下可以修改名稱。"></i>
     </transition>
     <transition name="fade">
-        <i v-show="is_nav" style="position: absolute; bottom:8px; right:0;" class="nav_i ui orange help circle icon" data-title="切換操作模式" data-content="操作模式目前有『一般模式』及『編輯模式』，『點擊』按鈕切換，在編輯模式下，可以彈性操作大部份資訊的編輯，例如，您可以將『站點』作拖曳更換位置，也可以將他拖到其他支線籍此更換位置。在文字資訊的部份點擊兩下也可快速進入修改"></i>
+        <i v-show="is_nav" style="position: absolute; bottom:8px; right:0;" class="nav_i ui orange help circle icon" data-title="切換操作模式" data-content="操作模式目前有『一般模式』及『編輯模式』，在編輯模式下，可以彈性操作大部份的編輯動作，例如，您可以將『站點』拖曳到其他支線籍此更換位置。在文字資訊的部份，點擊兩下也可快速修改文字。"></i>
     </transition>
 
   </div>
@@ -162,7 +166,7 @@
       </div>
     </div>
     <transition name="fade">
-      <i v-show="is_nav && mode==1" style="position: absolute; bottom:7px; right:0;" class="nav_i ui orange help circle icon" data-title="編輯站點" data-content="目前在編輯模式下，點擊兩下可以快速修改名稱。"></i>
+      <i v-show="is_nav && mode==1" style="position: absolute; bottom:7px; right:0;" class="nav_i ui orange help circle icon" data-title="修改站名" data-content="目前在編輯模式下，點擊兩下可以修改名稱。"></i>
     </transition>
   </div>
   <div id="board3" style="color:#FF6900" :style="{borderTopColor:master_line_color}">
@@ -217,7 +221,7 @@
 		</div>
 		<!--包成vue組件1 輸入-->
 		<transition name="fade">
-  		<i v-show="is_nav" style="position: absolute; right:0%; top:6px;z-index:55" class="nav_i ui orange help circle icon" data-title="新增資訊" data-content="在任何一個站點底下，你可以新增無數條資訊，並且貼上網址可以進行網址的進階資訊擷取"></i>
+  		<i v-show="is_nav" style="position: absolute; right:0%; top:6px;z-index:55" class="nav_i ui orange help circle icon" data-title="新增資訊" data-content="在任何一個站點底下，你可以新增數條資訊，貼上網址會為您做資訊擷取。"></i>
         </transition>
 
 	</div>
@@ -236,7 +240,7 @@
 	<!--資訊列表-->
 	<div id="board_info">
     <transition name="fade">
-	  <i v-show="is_nav && info.length" style="position: absolute; right:-5.5%; top:14px;z-index:55" class="nav_i ui orange help circle icon" data-title="資訊列表" data-content="infometro顯示資訊的地方，您可透過切換站點來變更不同站點的資訊，在編輯模式下，您可以對資訊快速按兩下，以修改資訊。"></i>
+	  <i v-show="is_nav && info.length" style="position: absolute; right:-5.5%; top:14px;z-index:55" class="nav_i ui orange help circle icon" data-title="資訊列表" data-content="infometro顯示資訊的地方，在編輯模式下，您可以對資訊快速按兩下，以修改資訊。"></i>
       </transition>
 		<div :id="item['.key']" v-for="(item, index) in info_sort_filter" :key="item['.key']"  @click="info_active=item['.key']" class="board_list ui vertical segment  clear">
 			<div class="board_message">
@@ -440,6 +444,10 @@
         <p class="transition visible">
           如果您想完全刪除帳號不留下任何記錄，請<a class="default_a" href="javascript:$('#feedback_modal').modal({closable: false}).modal('show')">留言</a>給我們，我們將手動為您刪除。
         </p>
+      </div>
+      <div class="title"><i class="dropdown icon"></i> 目前支援的平台/瀏覽器 </div>
+      <div class="content">
+        <p class="transition hidden">因為infometro正值初步開發期，所以僅針對電腦螢幕的使用者做設計、手機或平版只能用目前的版本下去瀏覽，瀏覽器方面以google 的chrome 會得到較好的速度與體驗。</p>
       </div>
     </div>
   </div>
