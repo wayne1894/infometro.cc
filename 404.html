@@ -64,7 +64,7 @@
 	<div class="line_text">
        <span>一般支線：</span>
        <transition name="fade">
-       <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="一般支線" data-content="一般支線可以有無數條，您可以點擊下方『新增支線』，來新增一條支線，做為您分類資訊的依據。另外您也可以拖曳支線移動順序，或者拖曳到下方的地鐵去，籍此移動支線。"></i>
+       <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="一般支線" data-content="一般支線可以有無數條，您可以點擊下方『新增支線』來新增一條支線，做為您分類資訊的依據。另外您也可以拖曳支線移動順序，或者拖曳到下方的地鐵去，籍此移動支線。"></i>
       </transition>
       <transition name="fade">
         <div v-show="is_nav" style="position: absolute; top: 2px; right: -25px; z-index:55;">
@@ -88,7 +88,7 @@
 	<div>
 	  <a id="new_line" class="default_a" @click="new_line()">新增支線</a>
 	  <transition name="fade">
-       <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="新增支線" data-content="新增一條支線，在色彩的地方『點擊兩下』可以更換顏色，名字點擊兩下也可以更換名字。"></i>
+       <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="新增支線" data-content="新增一條支線，在色塊的地方『點擊兩下』可以更換顏色，名字處點擊兩下也可以更換名字。"></i>
       </transition>
 	</div>
 	
@@ -147,7 +147,7 @@
     
     
     <transition name="fade">
-      <i v-show="is_nav && mode==1" style="position: absolute; bottom:7px; right:113px;" class="nav_i ui orange help circle icon" data-title="修改支線名" data-content="目前在編輯模式下，點擊兩下可以修改名稱。"></i>
+      <i v-show="is_nav && mode==1" style="position: absolute; bottom:7px; right:113px;" class="nav_i ui orange help circle icon" data-title="修改支線名" data-content="目前在編輯模式下，點擊文字兩下可以修改名稱。"></i>
     </transition>
     <transition name="fade">
         <i v-show="is_nav" style="position: absolute; bottom:8px; right:0;" class="nav_i ui orange help circle icon" data-title="切換操作模式" data-content="操作模式目前有『一般模式』及『編輯模式』，在編輯模式下，可以彈性操作大部份的編輯動作，例如，您可以將『站點』拖曳到其他支線籍此更換位置。在文字資訊的部份，點擊兩下也可快速修改文字。"></i>
@@ -166,7 +166,7 @@
       </div>
     </div>
     <transition name="fade">
-      <i v-show="is_nav && mode==1" style="position: absolute; bottom:7px; right:0;" class="nav_i ui orange help circle icon" data-title="修改站名" data-content="目前在編輯模式下，點擊兩下可以修改名稱。"></i>
+      <i v-show="is_nav && mode==1" style="position: absolute; bottom:7px; right:0;" class="nav_i ui orange help circle icon" data-title="修改站名" data-content="目前在編輯模式下，點擊文字兩下可以修改名稱。"></i>
     </transition>
   </div>
   <div id="board3" style="color:#FF6900" :style="{borderTopColor:master_line_color}">
@@ -221,7 +221,7 @@
 		</div>
 		<!--包成vue組件1 輸入-->
 		<transition name="fade">
-  		<i v-show="is_nav" style="position: absolute; right:0%; top:6px;z-index:55" class="nav_i ui orange help circle icon" data-title="新增資訊" data-content="在任何一個站點底下，你可以新增數條資訊，貼上網址會為您做資訊擷取。"></i>
+  		<i v-show="is_nav" style="position: absolute; right:0%; top:6px;z-index:55" class="nav_i ui orange help circle icon" data-title="新增資訊" data-content="在任何一個站點底下，你可以在這裡新增資訊。貼上網址，會為您擷取網站的文字資料。"></i>
         </transition>
 
 	</div>
@@ -448,6 +448,11 @@
       <div class="title"><i class="dropdown icon"></i> 目前支援的平台/瀏覽器 </div>
       <div class="content">
         <p class="transition hidden">因為infometro正值初步發展期，所以僅針對電腦螢幕的使用者做設計、手機或平版只能用目前的電腦版本下去瀏覽，瀏覽器方面以google 的chrome 會得到較好的速度與體驗。</p>
+      </div>
+      <div class="title"><i class="dropdown icon"></i> infometro裡的資料安全嗎？</div>
+      <div class="content">
+        <p class="transition hidden">安全議題在資訊服務永遠是一項重要的課題，infometro 雖然正值beta階段，但我們也非常注重用戶的隱私與安全，避免資料遭到入侵與外洩。在登入方面，目前我們只使用facebook帳號做登入，所以請您確保facebook的帳號的安全性，例如：設定兩階段驗證是非常重要的。</p>
+         <p class="transition hidden">另外，我們的資料庫目前使用的是google的firebase，並在權限方面設定了控管，讓資料僅限制給本人使用，別人無法透過其他方式讀取您的資料。</p>
       </div>
     </div>
   </div>

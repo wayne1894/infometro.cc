@@ -17,7 +17,7 @@
 	<div class="line_text">
        <span>一般支線：</span>
        <transition name="fade">
-       <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="一般支線" data-content="一般支線可以有無數條，您可以點擊下方『新增支線』，來新增一條支線，做為您分類資訊的依據。另外您也可以拖曳支線移動順序，或者拖曳到下方的地鐵去，籍此移動支線。"></i>
+       <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="一般支線" data-content="一般支線可以有無數條，您可以點擊下方『新增支線』來新增一條支線，做為您分類資訊的依據。另外您也可以拖曳支線移動順序，或者拖曳到下方的地鐵去，籍此移動支線。"></i>
       </transition>
       <transition name="fade">
         <div v-show="is_nav" style="position: absolute; top: 2px; right: -25px; z-index:55;">
@@ -41,7 +41,7 @@
 	<div>
 	  <a id="new_line" class="default_a" @click="new_line()">新增支線</a>
 	  <transition name="fade">
-       <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="新增支線" data-content="新增一條支線，在色彩的地方『點擊兩下』可以更換顏色，名字點擊兩下也可以更換名字。"></i>
+       <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="新增支線" data-content="新增一條支線，在色塊的地方『點擊兩下』可以更換顏色，名字處點擊兩下也可以更換名字。"></i>
       </transition>
 	</div>
 	
