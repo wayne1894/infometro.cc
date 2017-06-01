@@ -265,275 +265,332 @@
     $(textarea).height(_height);
   }
 
+	//導覽區程式
+	function remove_start(n){
+		$.removeCookie("start");
+		if(n==1){
+			$("#edit_parent .navOne").remove();
+		}else if(n==2){
+			$("#board_send_parent .navOne").remove();
+		}else if(n==3){
+			$("#new_line_parent .navOne").remove();
+		}else if(n==4){
+			$("#top_tag_parent .navOne").remove();
+		}else{
+			$(".navOne").remove();
+		}
+	}
+	function start_set(){
+		if($.cookie("start")=="Y"){//代表第一次進來
+			$("#edit_parent").append("<div class='navOne ui left pointing basic label'>第一次進來嗎？點擊這裡開始導覽。<i class='delete icon' style='float:right'></i></div>");
+
+			$("#board_send_parent").append("<div class='navOne ui top pointing basic label'>這個區塊可以新增資訊<i class='delete icon' style='float:right'></i></div>");
+
+			$("#new_line_parent").append("<div class='navOne ui top pointing basic label'>這裡可以新增支線<i class='delete icon' style='float:right'></i></div>");
+
+			$("#top_tag_parent").append("<div class='navOne ui right pointing basic label'>這裡可以新增站點<i class='delete icon' style='float:right'></i></div>");
+
+			$("#edit_parent .navigation").one("click",remove_start);
+
+			 $("#edit_parent .navOne i").one("click",function(){
+				 remove_start(1);
+			 });
+			 setTimeout(function(){
+				 $("#edit_parent .navOne").transition("flash");
+			 },600);
+
+			 $("#board_send_parent .navOne i").one("click",function(){
+				 remove_start(2);
+			 });
+			 setTimeout(function(){
+				 $("#board_send_parent .navOne").transition("flash");
+			 },1400);
+
+			 $("#new_line_parent .navOne i").one("click",function(){
+				 remove_start(3);
+			 });
+			 setTimeout(function(){
+				 $("#new_line_parent .navOne").transition("flash");
+			 },2200);
+
+			$("#top_tag_parent .navOne i").one("click",function(){
+				 remove_start(4);
+			 });
+			 setTimeout(function(){
+				 $("#top_tag_parent .navOne").transition("flash");
+			 },3000);
+		}
+
+	}
 
 //----------------------分塊程式碼------------------
 
-//top
- function move_center(is_move) {
-   var total_width = 0;
-   var tog_width = $("#top_tag").width();
-   $("#top_tag li").each(function () {
-     total_width = total_width + $(this).width();
-   })
-   if (tog_width > total_width) {
-     $("#top_tag").css("left", (((tog_width - total_width) / 2) + 15) + "px");
-   } else {
-     $("#top_tag").css("left", 0);
-   }
-   $("#top_tag").stop().fadeIn(350);
- }
- function top_tag_scroll() {
-   var scroll_val = 0;
-   var container = $("#top_tag"),
-     slide = !container.find(">li.active").length ? 0 : container.find(">li.active").index(),
-     direct = $(this).hasClass("right") ? 1 : -1,
-     target = slide + direct < 0 ? [] : container.find(">li").eq(slide + direct);
-   if (target.length) {
-     scroll_val = $("#top_tag").scrollLeft();
-     target.addClass("active").velocity("stop", true).velocity("scroll", {
-       axis: "x",
-       duration: 150,
-       offset: -42,
-       easing: "ease",
-       container: container,
-       complete: function () {
-         if (direct) {
-           if ($("#top_tag").scrollLeft() == scroll_val) {
-             target.removeClass("active").prev().addClass("active");
-           }
-         }
-       }
-     }).siblings().removeClass("active");
-   }
- }
+	//top
+	 function move_center(is_move) {
+		 var total_width = 0;
+		 var tog_width = $("#top_tag").width();
+		 $("#top_tag li").each(function () {
+			 total_width = total_width + $(this).width();
+		 })
+		 if (tog_width > total_width) {
+			 $("#top_tag").css("left", (((tog_width - total_width) / 2) + 15) + "px");
+		 } else {
+			 $("#top_tag").css("left", 0);
+		 }
+		 $("#top_tag").stop().fadeIn(350);
+	 }
+	 function top_tag_scroll() {
+		 var scroll_val = 0;
+		 var container = $("#top_tag"),
+			 slide = !container.find(">li.active").length ? 0 : container.find(">li.active").index(),
+			 direct = $(this).hasClass("right") ? 1 : -1,
+			 target = slide + direct < 0 ? [] : container.find(">li").eq(slide + direct);
+		 if (target.length) {
+			 scroll_val = $("#top_tag").scrollLeft();
+			 target.addClass("active").velocity("stop", true).velocity("scroll", {
+				 axis: "x",
+				 duration: 150,
+				 offset: -42,
+				 easing: "ease",
+				 container: container,
+				 complete: function () {
+					 if (direct) {
+						 if ($("#top_tag").scrollLeft() == scroll_val) {
+							 target.removeClass("active").prev().addClass("active");
+						 }
+					 }
+				 }
+			 }).siblings().removeClass("active");
+		 }
+	 }
 
- $(function () {
-   //http://velocityjs.org/#scroll
-   $(".triangle").click(top_tag_scroll);
- })
-//top
+	 $(function () {
+		 //http://velocityjs.org/#scroll
+		 $(".triangle").click(top_tag_scroll);
+	 })
+	//top
 
-//bottom
-function drop_blueprint(event,key){
-  var line_key = event.dataTransfer.getData("line_key");
-  if(line_key=="")return;
-  if(key==vm.blueprint[vm.index_blueprint].key){
-    print("相同的blueprint");
-    return;
-  }
-  var _line=vm.move_line(line_key);
-  _line=_line[0];
-  for(var i=0;i<vm.blueprint.length;i++){
-    if(vm.blueprint[i].key==key){
-      vm.blueprint[i].line.push(_line);
-      vm.index[i].push([]);
-      vm.index[i][vm.index[i].length - 1].check = false;
-      vm.action="drop_blueprint";
-      vm.更新藍圖(key,vm.blueprint[i]);
-      vm.index_update();
-      break;
-    }
-  }
-  
-}
-$(function(){
-  $("#blueprint").on("click",function(event){	
-    if($(event.target).hasClass("blueprint_i")){
-        $(event.target).closest(".blueprint_list").trigger("customClick");
-    }
-  })
-})
+	//bottom
+	function drop_blueprint(event,key){
+		var line_key = event.dataTransfer.getData("line_key");
+		if(line_key=="")return;
+		if(key==vm.blueprint[vm.index_blueprint].key){
+			print("相同的blueprint");
+			return;
+		}
+		var _line=vm.move_line(line_key);
+		_line=_line[0];
+		for(var i=0;i<vm.blueprint.length;i++){
+			if(vm.blueprint[i].key==key){
+				vm.blueprint[i].line.push(_line);
+				vm.index[i].push([]);
+				vm.index[i][vm.index[i].length - 1].check = false;
+				vm.action="drop_blueprint";
+				vm.更新藍圖(key,vm.blueprint[i]);
+				vm.index_update();
+				break;
+			}
+		}
 
-//var export_json={};
-//function load_info(key){
-//  DB.ref("info/"+key+"/metro").once("value",function(data){
-//    export_json.info[key]=data.val();
-//  })
-//}
-//function 匯出藍圖(key){
-//  for(var i=0;i<vm.blueprint.length;i++){
-//    if(vm.blueprint[i].key==key){
-//      export_json.name=vm.blueprint[i].name;
-//      export_json.line=vm.blueprint[i].line;
-//      export_json.info={};
-//      for(var j=0;j<export_json.line.length;j++){
-//         var key=export_json.line[j]._key;
-//         export_json.info[key]="";
-//         load_info(key);
-//      }
-//      return
-//    }
-//  }
-//}
+	}
+	$(function(){
+		$("#blueprint").on("click",function(event){	
+			if($(event.target).hasClass("blueprint_i")){
+					$(event.target).closest(".blueprint_list").trigger("customClick");
+			}
+		})
+	})
 
-//bottom
+	//var export_json={};
+	//function load_info(key){
+	//  DB.ref("info/"+key+"/metro").once("value",function(data){
+	//    export_json.info[key]=data.val();
+	//  })
+	//}
+	//function 匯出藍圖(key){
+	//  for(var i=0;i<vm.blueprint.length;i++){
+	//    if(vm.blueprint[i].key==key){
+	//      export_json.name=vm.blueprint[i].name;
+	//      export_json.line=vm.blueprint[i].line;
+	//      export_json.info={};
+	//      for(var j=0;j<export_json.line.length;j++){
+	//         var key=export_json.line[j]._key;
+	//         export_json.info[key]="";
+	//         load_info(key);
+	//      }
+	//      return
+	//    }
+	//  }
+	//}
 
-//left
- function drop_line(event,index){
-  if(vm.index_line==index)return;
+	//bottom
 
-  var metro_key = event.dataTransfer.getData("key");
-  if(metro_key=="")return;
-  var _metro=vm.move_metro(metro_key,index);
-  if(_metro==undefined)return
-  _metro=_metro[0];
-  var data = JSON.parse(JSON.stringify(vm.get_blueprint())); //將傳址改為傳值
-  data.line[index].metro.push(_metro);
-  vm.action="drop_line";
-  vm.更新藍圖(data.key,data);
-}  
-$(function(){
-  //晃動 https://jackrugile.com/jrumble/
-  $(".logo").jrumble({
-    x: 2,
-    y: 2,
-    opacity: true,
-    opacityMin: .5
-  }).hover(function () {
-    $(this).trigger('startRumble');
-  }, function () {
-    $(this).trigger('stopRumble');
-  });
-  
-  $(document.body).append("<div id='left_color' style='position: absolute;left:0;top:0'></div>");
-  $('#left_color').colpick({
-    layout:'hex',
-    onHide:function(){
-      vm.pick_master=undefined;
-      vm.pick_color=undefined;
-    },
-    onChange:function(hsb,hex,rgb,el,bySetColor){
-      vm.pick_color="#"+hex;
-    },
-    onSubmit:function(hsb,hex,rgb,el,bySetColor){
-      $(el).val(hex);
-      $(el).colpickHide();
-    }
-  }).colpickHide();
-})
-//left
+	//left
+	 function drop_line(event,index){
+		if(vm.index_line==index)return;
 
-//right
-$(function(){
-   //perfectScrollbar
-    $("#right .r_content").perfectScrollbar();
+		var metro_key = event.dataTransfer.getData("key");
+		if(metro_key=="")return;
+		var _metro=vm.move_metro(metro_key,index);
+		if(_metro==undefined)return
+		_metro=_metro[0];
+		var data = JSON.parse(JSON.stringify(vm.get_blueprint())); //將傳址改為傳值
+		data.line[index].metro.push(_metro);
+		vm.action="drop_line";
+		vm.更新藍圖(data.key,data);
+	}  
+	$(function(){
+		//晃動 https://jackrugile.com/jrumble/
+		$(".logo").jrumble({
+			x: 2,
+			y: 2,
+			opacity: true,
+			opacityMin: .5
+		}).hover(function () {
+			$(this).trigger('startRumble');
+		}, function () {
+			$(this).trigger('stopRumble');
+		});
 
-  
-   $("#right .r_button").on("click",function(){
-    var _index=$(this).index()-1;
-    $(this).addClass("active").siblings().removeClass("active");
-    $("#right .r_content:eq("+_index+")").addClass("active").siblings().removeClass("active");
-  })
+		$(document.body).append("<div id='left_color' style='position: absolute;left:0;top:0'></div>");
+		$('#left_color').colpick({
+			layout:'hex',
+			onHide:function(){
+				vm.pick_master=undefined;
+				vm.pick_color=undefined;
+			},
+			onChange:function(hsb,hex,rgb,el,bySetColor){
+				vm.pick_color="#"+hex;
+			},
+			onSubmit:function(hsb,hex,rgb,el,bySetColor){
+				$(el).val(hex);
+				$(el).colpickHide();
+			}
+		}).colpickHide();
+	})
+	//left
 
-  $("#right .right_tool").on("click",function(event){
-    if($("#right").height()<400){
-      if($(event.target).closest(".r_button").length==0){
-        $("#right").toggleClass("down");
-        $.cookie('right_tool',$("#right").attr('class'));
-      }
-    }
-  })
-  if($.cookie('right_tool')){
-    if($.cookie('right_tool').indexOf("down")>-1){
-      $(".right_tool").click();
-    }
-  }
+	//right
+	$(function(){
+		 //perfectScrollbar
+			$("#right .r_content").perfectScrollbar();
 
-  //拖動拉Bar
- $("#right .right_line").on('mousedown',function(event){
-    $(document).on('selectstart',function(){return false;})
-    $(document).on('dragstart',function(){return false;})
-      var max_width=$(window).width()-120;
-      var gX=($("#right").width()-($(window).width()-event.pageX));
-      $(document).on('mousemove.line',function(event){
-        var _w=($(window).width()-event.pageX) -gX;
-        //if(_w<270)_w=270;//最小寬度
-        if(_w>max_width)_w=max_width;
-        $("#right").css("width",_w)
-      });
-      $(document).on('mouseup.line',function(event){
-        $(document).off('mouseup.line');
-        $(document).off('mousemove.line');
-        $(document).off('selectstart');
-        $(document).off('dragstart');
-      });
-    })
 
-  // https://semantic-ui.com/modules/accordion.html#/definition
-  $('#right .ui.accordion').accordion();//折疊菜單
-})
-function send_feedback(){
-  var a=$.trim($("#feedback1").val());
-  var b="///"+user_uid;
-  var c="";
-  if($("#feedback2").is( ":checked" ))c="////請回信"
-  if(a!=""){
-    a=a+b+c;
-    var newRef=DB.ref("feedback/").push()
-    newRef.set(a);
-  }
-  $("#feedback_modal").modal("hide")
-}
+		 $("#right .r_button").on("click",function(){
+			var _index=$(this).index()-1;
+			$(this).addClass("active").siblings().removeClass("active");
+			$("#right .r_content:eq("+_index+")").addClass("active").siblings().removeClass("active");
+		})
 
-function info_search_db(line_key,_val){
-  DB.ref("info/"+line_key+"/metro/").once("value",function(data){
-    data.forEach(function (childData) {
-      for(var info_key in childData.val()) {
-        if(childData.val()[info_key].message.indexOf(_val)>-1){
-           vm.search_info.push({
-             line_key : line_key ,
-             metro_key: childData.key,
-             message : childData.val()[info_key].message
-           })
-        }
-      }
-    });
-  })
-}
-function info_search(){//搜尋地鐵功能
-  //先從藍圖資訊找到
-  return false
-  var _val=$.trim($("#right_search input").val());
-  vm.search_metro=[];
-  vm.search_info=[];
-  if(_val=="")return
+		$("#right .right_tool").on("click",function(event){
+			if($("#right").height()<400){
+				if($(event.target).closest(".r_button").length==0){
+					$("#right").toggleClass("down");
+					$.cookie('right_tool',$("#right").attr('class'));
+				}
+			}
+		})
+		if($.cookie('right_tool')){
+			if($.cookie('right_tool').indexOf("down")>-1){
+				$(".right_tool").click();
+			}
+		}
 
-  var _blueprint=vm.get_blueprint();
-  for(var i=0;i<_blueprint.line.length;i++){
-    var _key=_blueprint.line[i]._key;
-    var _name=_blueprint.line[i].name;
-    var _m=_blueprint.line[i].metro;
-    for(var j=0;j<_m.length;j++){
-      if(_m[j].name.indexOf(_val)>-1){
-        vm.search_metro.push({
-          line_name: _name,
-          line_id:i ,
-          metro_name:_m[j].name ,
-          metro_id : j
-        });
-      }
-    }
-    info_search_db(_key,_val);
-  }
+		//拖動拉Bar
+	 $("#right .right_line").on('mousedown',function(event){
+			$(document).on('selectstart',function(){return false;})
+			$(document).on('dragstart',function(){return false;})
+				var max_width=$(window).width()-120;
+				var gX=($("#right").width()-($(window).width()-event.pageX));
+				$(document).on('mousemove.line',function(event){
+					var _w=($(window).width()-event.pageX) -gX;
+					//if(_w<270)_w=270;//最小寬度
+					if(_w>max_width)_w=max_width;
+					$("#right").css("width",_w)
+				});
+				$(document).on('mouseup.line',function(event){
+					$(document).off('mouseup.line');
+					$(document).off('mousemove.line');
+					$(document).off('selectstart');
+					$(document).off('dragstart');
+				});
+			})
 
-}
-//right
+		// https://semantic-ui.com/modules/accordion.html#/definition
+		$('#right .ui.accordion').accordion();//折疊菜單
+	})
+	function send_feedback(){
+		var a=$.trim($("#feedback1").val());
+		var b="///"+user_uid;
+		var c="";
+		if($("#feedback2").is( ":checked" ))c="////請回信"
+		if(a!=""){
+			a=a+b+c;
+			var newRef=DB.ref("feedback/").push()
+			newRef.set(a);
+		}
+		$("#feedback_modal").modal("hide")
+	}
 
-//center
-function drop(event){
-  var key = event.dataTransfer.getData("key");
-  if(key)vm.delete_metro(key);
-  var line_key=event.dataTransfer.getData("line_key");
-  if(line_key)vm.delete_line(line_key);
-}
-function allowDrop(event) { //拖曳的物件移到上面
-  //print("拖曳的物件移到上面")
-  event.preventDefault();
-}
-$(function(){
-    $("#board_textarea").keyup(function(e) {	
-      auto_height(this)
-    });
-    $("#board_textarea").on('paste', textarea_paste);
-})
-//center
+	function info_search_db(line_key,_val){
+		DB.ref("info/"+line_key+"/metro/").once("value",function(data){
+			data.forEach(function (childData) {
+				for(var info_key in childData.val()) {
+					if(childData.val()[info_key].message.indexOf(_val)>-1){
+						 vm.search_info.push({
+							 line_key : line_key ,
+							 metro_key: childData.key,
+							 message : childData.val()[info_key].message
+						 })
+					}
+				}
+			});
+		})
+	}
+	function info_search(){//搜尋地鐵功能
+		//先從藍圖資訊找到
+		return false
+		var _val=$.trim($("#right_search input").val());
+		vm.search_metro=[];
+		vm.search_info=[];
+		if(_val=="")return
+
+		var _blueprint=vm.get_blueprint();
+		for(var i=0;i<_blueprint.line.length;i++){
+			var _key=_blueprint.line[i]._key;
+			var _name=_blueprint.line[i].name;
+			var _m=_blueprint.line[i].metro;
+			for(var j=0;j<_m.length;j++){
+				if(_m[j].name.indexOf(_val)>-1){
+					vm.search_metro.push({
+						line_name: _name,
+						line_id:i ,
+						metro_name:_m[j].name ,
+						metro_id : j
+					});
+				}
+			}
+			info_search_db(_key,_val);
+		}
+
+	}
+	//right
+
+	//center
+	function drop(event){
+		var key = event.dataTransfer.getData("key");
+		if(key)vm.delete_metro(key);
+		var line_key=event.dataTransfer.getData("line_key");
+		if(line_key)vm.delete_line(line_key);
+	}
+	function allowDrop(event) { //拖曳的物件移到上面
+		//print("拖曳的物件移到上面")
+		event.preventDefault();
+	}
+	$(function(){
+			$("#board_textarea").keyup(function(e) {	
+				auto_height(this)
+			});
+			$("#board_textarea").on('paste', textarea_paste);
+	})
+	//center

@@ -425,7 +425,8 @@ var vm = new Vue({
     new_line: function () {
       if(vm.action=="load")return;
       var data = this.get_blueprint();
-      var get_index = vm.get_index_blueprint()
+      var get_index = vm.get_index_blueprint();
+			remove_start();
       if (!data.line) data.line = []; //如果沒有line就新增一個空陣列
       var get_color = vm.get_default_color(data.line.length);
       var _j = line_json("未命名", get_color);
@@ -496,6 +497,7 @@ var vm = new Vue({
       var data = JSON.parse(JSON.stringify(this.get_blueprint())); //將傳址改為傳值
       data.line[vm.index_line].metro.splice(order, 0, _metro);
       vm.action = "new_metro";
+			remove_start();
       this.更新藍圖(data.key, data);
       setTimeout(move_center, 0);
     },
@@ -573,12 +575,12 @@ var vm = new Vue({
         message: board_textarea,
         favorite: false,
         url_info: "",
-		update_timestamp: firebase.database.ServerValue.TIMESTAMP,
+				update_timestamp: firebase.database.ServerValue.TIMESTAMP,
         timestamp: firebase.database.ServerValue.TIMESTAMP,
         users: user_uid
       }
       if (vm.url_info) _data.url_info = vm.url_info;
-      
+      remove_start();
       if($("#top_tag").find("[data-key='"+vm.key_metro+"']").length==0){
         vm.exchange_line(0);
         vm.exchange_line(1);

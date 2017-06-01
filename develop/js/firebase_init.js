@@ -264,21 +264,8 @@ function blueprint_set(){
 
       }
 }
-function start_set(){
-  if($.cookie("start")=="Y"){//代表第一次進來
-    $("#edit_parent").append("<div class='navOne ui left pointing red basic label'>第一次進來嗎？點擊這裡開始導覽。<i class='delete icon' style='float:right'></i></div>");
-     $("#edit_parent .navigation").one("click",_fn);
-     $("#edit_parent .navOne i").one("click",_fn);
-     setTimeout(function(){
-       $("#edit_parent .navOne").transition("flash");
-     },700);
-  }
-  function _fn(){
-    $.removeCookie("start");
-    $("#edit_parent .navOne").remove();
-    $("#edit_parent .navigation").off("click");
-  }
-}
+
+
 function _is_login() { //程式進入點
   DB.ref('users/' + user_uid).once('value', function (data) { //載入使用者基本資料
     if (data.val()) {

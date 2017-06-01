@@ -17,7 +17,7 @@
 
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.16/css/perfect-scrollbar.min.css" type="text/css" />
-<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css" />
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.js"></script>
@@ -39,7 +39,8 @@
 <!-- jquery-color-pick -->
 
 <script src="src/build/js/public.js"></script>
-<script src="src/build/js/firebase_init.js"></script>
+<script src="src/build/js/firebase_init.js?v=20170601"></script>
+<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=20170601" />
 
 </head>
 <body>
@@ -85,7 +86,7 @@
         </li>
       </ul>
 	</div>
-	<div>
+	<div id="new_line_parent">
 	  <a id="new_line" class="default_a" @click="new_line()">新增支線</a>
 	  <transition name="fade">
        <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="新增支線" data-content="新增一條支線，在色塊的地方『點擊兩下』可以更換顏色，名字處點擊兩下也可以更換名字。"></i>
@@ -517,8 +518,8 @@
 </div>
 
 </div>
-<script src="src/build/js/main.js?v=20170528"></script>
-<script src="src/build/js/vm.js?v=20170528"></script>
+<script src="src/build/js/main.js?v=20170601"></script>
+<script src="src/build/js/vm.js?v=20170601"></script>
  <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

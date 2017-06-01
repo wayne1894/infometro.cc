@@ -203,6 +203,17 @@ textarea:focus {
       }
     }
   }
+	#new_line_parent{
+		position: relative;
+		.navOne{
+      position: absolute;
+      top: 23px;
+			width: 140px;
+			left: 5px;
+      color: #ff6900!important;
+      border-color: #ff6900!important;
+    }
+	}
   #new_line { 
     margin-left: @left_pl;
   }
@@ -268,6 +279,17 @@ textarea:focus {
     height: 100%;
     width: 87%;
     margin: 0 auto;
+		position: relative;
+		.navOne{
+			position: absolute;
+			top: 20px;
+			left: 50%;
+			margin-left: -194px;
+			color: #ff6900!important;
+			border-color: #ff6900!important;
+			width: 140px;
+			z-index: 0;
+		}
   }
   #top_tag {
     width: 100%;
@@ -677,6 +699,14 @@ textarea:focus {
         padding: 0.6em 1.2em;
         font-size: .8rem;
       }
+			.navOne{
+				position: absolute;
+				top: 49px;
+				color: #ff6900!important;
+				border-color: #ff6900!important;
+				width: 200px;
+				z-index: 0;
+			}
     }
     #board_info {
       
@@ -1306,7 +1336,6 @@ i.orange.icon {
   cursor: pointer;
   font-size: 1.1em!important;
 }
-
 
 #board2 .ui.items>.item>.content>a.header:hover{
   color: black;
