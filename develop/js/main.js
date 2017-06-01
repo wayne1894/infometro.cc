@@ -288,7 +288,7 @@
 
 			$("#new_line_parent").append("<div class='navOne ui top pointing basic label'>這裡可以新增支線<i class='delete icon' style='float:right'></i></div>");
 
-			$("#top_tag_parent").append("<div class='navOne ui right pointing basic label'>這裡可以新增站點<i class='delete icon' style='float:right'></i></div>");
+			$("#top").append("<div class='navOne ui right pointing basic label'>這裡可以新增站點<i class='delete icon' style='float:right'></i></div>");
 
 			$("#edit_parent .navigation").one("click",remove_start);
 
@@ -313,11 +313,11 @@
 				 $("#new_line_parent .navOne").transition("flash");
 			 },2200);
 
-			$("#top_tag_parent .navOne i").one("click",function(){
+			$("#top .navOne i").one("click",function(){
 				 remove_start(4);
 			 });
 			 setTimeout(function(){
-				 $("#top_tag_parent .navOne").transition("flash");
+				 $("#top .navOne").transition("flash");
 			 },3000);
 		}
 
