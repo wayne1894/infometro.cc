@@ -84,7 +84,8 @@ function location_fn(){
 function fb_login() {
 	if(DB==undefined) return setTimeout(fb_login,500);
   if (user_uid != undefined && !isAnonymous) return location_fn();
-	
+	if(login_wait)return;
+	login_wait=true
 	//firebase to fb login
 	provider = new firebase.auth.FacebookAuthProvider()
 
@@ -101,6 +102,8 @@ function fb_login() {
   })
 }
 function anonymous_login() {
+	if(login_wait)return;
+	login_wait=true
   if(DB==undefined) return setTimeout(anonymous_login,500);
   if (user_uid != undefined) location_fn();
   firebase.auth().signInAnonymously();

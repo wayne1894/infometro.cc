@@ -436,7 +436,7 @@ var vm = new Vue({
       vm.action = "new_line";
       vm.更新藍圖(data.key, data);
     },
-	find_line_index: function(key, data){
+		find_line_index: function(key, data){
 			for (var i = 0; i < data.line.length; i++) {
         if (data.line[i]._key == key) {
           return i;
