@@ -288,7 +288,7 @@
 
           $("#new_line_parent").append("<div class='navOne ui top pointing basic label'>這裡是支線區<i class='delete icon' style='float:right'></i></div>");
 
-          $("#top").append("<div class='navOne ui right pointing basic label'>這個區塊是站點<i class='delete icon' style='float:right'></i></div>");
+          $("#top").append("<div class='navOne ui right pointing basic label'>這個區塊是地鐵站<i class='delete icon' style='float:right'></i></div>");
 
           $("#edit_parent .navigation").one("click",remove_start);
 

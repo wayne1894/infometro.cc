@@ -251,15 +251,15 @@ function blueprint_init(blueprint_fn,load_fn) {
       show_event_fn("新增成功","您新增了一個地鐵計畫");
       blueprint_fn();
     } else if(_action=="swap_metro"){
-      show_event_fn(undefined,"您交換了站點的位置");
+      show_event_fn(undefined,"您交換了地鐵站的位置");
     } else if(_action=="delete_metro"){
-      show_event_fn("刪除成功","您刪除了一個站點");
+      show_event_fn("刪除成功","您刪除了一個地鐵站點");
     } else if(_action=="new_metro"){
-      show_event_fn("新增成功","您新增了一個站點");
+      show_event_fn("新增成功","您新增了一個地鐵站");
     } else if(_action=="drop_blueprint"){
       show_event_fn("移動成功","您將支線移到其他地鐵計畫裡頭");
     } else if(_action=="drop_line"){
-      show_event_fn("移動成功","您將站點移到其他支線裡頭");
+      show_event_fn("移動成功","您將地鐵站移到其他支線裡頭");
     } else if(_action=="re_name"){
       show_event_fn("名字更改成功","");
     } else if(_action=="edit_color"){
