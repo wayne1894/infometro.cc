@@ -191,11 +191,13 @@ var vm = new Vue({
       if (this.mode == 0) { //一般模式
         setTimeout(function () {
           sortable["metro"].option("disabled", true);
+          sortable["line"].option("disabled", true);
         }, 5)
         return "一般模式"
       } else if (this.mode == 1) { //編輯模式
         setTimeout(function () {
           sortable["metro"].option("disabled", false);
+          sortable["line"].option("disabled", false);
         }, 5)
         return "編輯模式"
       } else if (this.mode == 1.5) {

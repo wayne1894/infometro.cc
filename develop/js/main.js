@@ -50,12 +50,12 @@
       forceFallback: false,
       filter: ".add",
       setData: function (dataTransfer, dragEl) {
-				dataTransfer.setData('key', $(dragEl).data("key")); 
+		dataTransfer.setData('key', $(dragEl).data("key")); 
       },
       onStart: function (evt) {
         var $top_tag = $("#top_tag");
-       $("#top_tag_parent").css("left",$top_tag.css("left"));
-       $top_tag.addClass("left_inherit");
+        $("#top_tag_parent").css("left",$top_tag.css("left"));
+        $top_tag.addClass("left_inherit");
         $top_tag.find(".add").hide();
         if (evt.oldIndex == 0) {
           $top_tag.addClass("first_drag");
