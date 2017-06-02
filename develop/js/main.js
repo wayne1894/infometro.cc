@@ -281,7 +281,7 @@
       }
   }
   function start_set(){
-      if($.cookie("start")=="Y" || 1==2){//代表第一次進來
+      if($.cookie("start")=="Y" || 1==1){//代表第一次進來
           $("#edit_parent").append("<div class='navOne ui left pointing basic label'>第一次進來嗎？點擊這裡開始導覽。<i class='delete icon' style='float:right'></i></div>");
 
           $("#board_send_parent").append("<div class='navOne ui top pointing basic label'>這個區塊可以新增資訊<i class='delete icon' style='float:right'></i></div>");
