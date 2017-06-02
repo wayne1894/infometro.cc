@@ -40,7 +40,7 @@
       },
       onEnd: function (evt) {
         setTimeout(function(){
-          vm.swap_list(evt.oldIndex, evt.newIndex);
+          vm.swap_line(evt.oldIndex, evt.newIndex);
 		  vm.mode = 1;
         },5)
       }
@@ -265,63 +265,63 @@
     $(textarea).height(_height);
   }
 
-	//導覽區程式
-	function remove_start(n){
-		$.removeCookie("start");
-		if(n==1){
-			$("#edit_parent .navOne").remove();
-		}else if(n==2){
-			$("#board_send_parent .navOne").remove();
-		}else if(n==3){
-			$("#new_line_parent .navOne").remove();
-		}else if(n==4){
-			$("#top_tag_parent .navOne").remove();
-		}else{
-			$(".navOne").remove();
-		}
-	}
-	function start_set(){
-		if($.cookie("start")=="Y"){//代表第一次進來
-			$("#edit_parent").append("<div class='navOne ui left pointing basic label'>第一次進來嗎？點擊這裡開始導覽。<i class='delete icon' style='float:right'></i></div>");
+  //導覽區程式
+  function remove_start(n){
+      $.removeCookie("start");
+      if(n==1){
+          $("#edit_parent .navOne").remove();
+      }else if(n==2){
+          $("#board_send_parent .navOne").remove();
+      }else if(n==3){
+          $("#new_line_parent .navOne").remove();
+      }else if(n==4){
+          $("#top .navOne").remove();
+      }else{
+          $(".navOne").remove();
+      }
+  }
+  function start_set(){
+      if($.cookie("start")=="Y" || 1==2){//代表第一次進來
+          $("#edit_parent").append("<div class='navOne ui left pointing basic label'>第一次進來嗎？點擊這裡開始導覽。<i class='delete icon' style='float:right'></i></div>");
 
-			$("#board_send_parent").append("<div class='navOne ui top pointing basic label'>這個區塊可以新增資訊<i class='delete icon' style='float:right'></i></div>");
+          $("#board_send_parent").append("<div class='navOne ui top pointing basic label'>這個區塊可以新增資訊<i class='delete icon' style='float:right'></i></div>");
 
-			$("#new_line_parent").append("<div class='navOne ui top pointing basic label'>這裡可以新增支線<i class='delete icon' style='float:right'></i></div>");
+          $("#new_line_parent").append("<div class='navOne ui top pointing basic label'>這裡是支線區<i class='delete icon' style='float:right'></i></div>");
 
-			$("#top").append("<div class='navOne ui right pointing basic label'>這裡可以新增站點<i class='delete icon' style='float:right'></i></div>");
+          $("#top").append("<div class='navOne ui right pointing basic label'>這個區塊是站點<i class='delete icon' style='float:right'></i></div>");
 
-			$("#edit_parent .navigation").one("click",remove_start);
+          $("#edit_parent .navigation").one("click",remove_start);
 
-			 $("#edit_parent .navOne i").one("click",function(){
-				 remove_start(1);
-			 });
-			 setTimeout(function(){
-				 $("#edit_parent .navOne").transition("flash");
-			 },600);
+           $("#edit_parent .navOne i").one("click",function(){
+               remove_start(1);
+           });
+           setTimeout(function(){
+               $("#edit_parent .navOne").transition("flash");
+           },600);
 
-			 $("#board_send_parent .navOne i").one("click",function(){
-				 remove_start(2);
-			 });
-			 setTimeout(function(){
-				 $("#board_send_parent .navOne").transition("flash");
-			 },1400);
+           $("#board_send_parent .navOne i").one("click",function(){
+               remove_start(2);
+           });
+           setTimeout(function(){
+               $("#board_send_parent .navOne").transition("flash");
+           },1400);
 
-			 $("#new_line_parent .navOne i").one("click",function(){
-				 remove_start(3);
-			 });
-			 setTimeout(function(){
-				 $("#new_line_parent .navOne").transition("flash");
-			 },2200);
+           $("#new_line_parent .navOne i").one("click",function(){
+               remove_start(3);
+           });
+           setTimeout(function(){
+               $("#new_line_parent .navOne").transition("flash");
+           },2200);
 
-			$("#top .navOne i").one("click",function(){
-				 remove_start(4);
-			 });
-			 setTimeout(function(){
-				 $("#top .navOne").transition("flash");
-			 },3000);
-		}
+          $("#top .navOne i").one("click",function(){
+               remove_start(4);
+           });
+           setTimeout(function(){
+               $("#top .navOne").transition("flash");
+           },3000);
+      }
 
-	}
+  }
 
 //----------------------分塊程式碼------------------
 
