@@ -17,7 +17,9 @@ var vm = new Vue({
     filter_search: "",
     is_nav: false ,
     search_info : [],
-    search_metro : []
+    search_metro : [],
+    drag_line_key : "",
+    drag_metro_key : ""
   },
   mounted: function () {
     $("#main").css("visibility", "visible");

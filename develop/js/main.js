@@ -32,16 +32,16 @@
       animation: 150,
       forceFallback: false,
       setData: function (dataTransfer, dragEl) {
-		dataTransfer.setData('line_key', $(dragEl).data("key")); //設定要傳送的資料
-        dataTransfer.setData('line_key', $(dragEl).data("key")); //設定要傳送的資料
+        vm.drag_line_key=$(dragEl).data("key"); //正在脫亦的line key
       },
-      onStart: function(){
+      onStart: function(evt){
         vm.mode = 1.5;
       },
       onEnd: function (evt) {
         setTimeout(function(){
           vm.swap_line(evt.oldIndex, evt.newIndex);
 		  vm.mode = 1;
+          vm.drag_line_key="";
         },5)
       }
     });
@@ -50,7 +50,7 @@
       forceFallback: false,
       filter: ".add",
       setData: function (dataTransfer, dragEl) {
-		dataTransfer.setData('key', $(dragEl).data("key")); 
+        vm.drag_metro_key=$(dragEl).data("key"); //正在脫亦的metro key
       },
       onStart: function (evt) {
         var $top_tag = $("#top_tag");
@@ -70,11 +70,11 @@
         setTimeout(function(){
           $top_tag.removeClass("left_inherit");
         },100)
-
         $top_tag.removeClass("first_drag").removeClass("last_drag");
         setTimeout(function(){
           vm.swap_metro(evt.oldIndex, evt.newIndex);
           vm.mode = 1;
+          vm.drag_metro_key="";
         },5)
       }
     });
@@ -372,7 +372,7 @@
 
 	//bottom
 	function drop_blueprint(event,key){
-		var line_key = event.dataTransfer.getData("line_key");
+		var line_key = vm.drag_line_key;
 		if(line_key=="")return;
 		if(key==vm.blueprint[vm.index_blueprint].key){
 			print("相同的blueprint");
@@ -428,8 +428,8 @@
 	//left
 	 function drop_line(event,index){
 		if(vm.index_line==index)return;
-
-		var metro_key = event.dataTransfer.getData("key");
+		var metro_key = vm.drag_metro_key;
+       
 		if(metro_key=="")return;
 		var _metro=vm.move_metro(metro_key,index);
 		if(_metro==undefined)return
@@ -572,25 +572,24 @@
 			}
 			info_search_db(_key,_val);
 		}
-
 	}
 	//right
 
 	//center
 	function drop(event){
-		var key = event.dataTransfer.getData("key");
-		if(key)vm.delete_metro(key);
-		var line_key=event.dataTransfer.getData("line_key");
-		if(line_key)vm.delete_line(line_key);
+      var key = vm.drag_metro_key;
+      if(key)vm.delete_metro(key);
+      var line_key=vm.drag_line_key;
+      if(line_key)vm.delete_line(line_key);
 	}
 	function allowDrop(event) { //拖曳的物件移到上面
-		//print("拖曳的物件移到上面")
-		event.preventDefault();
+      //print("拖曳的物件移到上面")
+      event.preventDefault();//必要不能刪
 	}
 	$(function(){
-			$("#board_textarea").keyup(function(e) {	
-				auto_height(this)
-			});
-			$("#board_textarea").on('paste', textarea_paste);
+      $("#board_textarea").keyup(function(e) {	
+          auto_height(this)
+      });
+      $("#board_textarea").on('paste', textarea_paste);
 	})
 	//center
