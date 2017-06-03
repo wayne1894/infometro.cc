@@ -39,8 +39,8 @@
 <!-- jquery-color-pick -->
 
 <script src="src/build/js/public.js"></script>
-<script src="src/build/js/firebase_init.js?v=20170601"></script>
-<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=20170601" />
+<script src="src/build/js/firebase_init.js?v=20170602"></script>
+<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=20170602" />
 
 </head>
 <body>
@@ -92,7 +92,6 @@
        <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="新增支線" data-content="新增一條支線，在色塊的地方『點擊兩下』可以更換顏色，名字處點擊兩下也可以更換名字。"></i>
       </transition>
 	</div>
-	
 </div>
 <div id="edit_parent">
   <a :class="{ active: is_nav }" onclick="vm.is_nav=!vm.is_nav" class="left_icon navigation" data-tooltip="切換導覽" data-position="right center"><i class="help circle icon"></i></a>
@@ -115,7 +114,7 @@
       </li>
     </ul>
     <transition name="fade">
-    <i v-show="is_nav" v-show="is_nav" style="position: absolute; left:15px; margin-left:0px; top:6px;z-index:55" class="nav_i ui orange help circle icon" data-title="站點" data-content="站點是infometro資料儲存的節點，您可以透過適當的命名來讓資料更容易被識別，在全站搜尋也更容易被找到，在編輯模式下，您可以透過拖曳來安排位置，您也可以把站點拖曳到左邊的支線去，以移動它的位置。"></i>
+    <i v-show="is_nav" v-show="is_nav" style="position: absolute; left:15px; margin-left:0px; top:6px;z-index:55" class="nav_i ui orange help circle icon" data-title="地鐵站點" data-content="地鐵站點是infometro資料儲存的節點，您可以透過適當的命名來讓資料更容易被識別，在全站搜尋也更容易被找到，在編輯模式下，您可以透過拖曳來安排位置，您也可以把站點拖曳到左邊的支線去，以移動它的位置。"></i>
     </transition>
     <transition name="fade">
       <div v-show="is_nav" style="position: absolute; left:37px; top:6px; margin-left:0px; z-index:55" >
@@ -151,7 +150,7 @@
       <i v-show="is_nav && mode==1" style="position: absolute; bottom:7px; right:113px;" class="nav_i ui orange help circle icon" data-title="修改支線名" data-content="目前在編輯模式下，點擊文字兩下可以修改名稱。"></i>
     </transition>
     <transition name="fade">
-        <i v-show="is_nav" style="position: absolute; bottom:8px; right:0;" class="nav_i ui orange help circle icon" data-title="切換操作模式" data-content="操作模式目前有『一般模式』及『編輯模式』，在編輯模式下，可以彈性操作大部份的編輯動作，例如，您可以將『站點』拖曳到其他支線來更換位置。在文字資訊的地方，點擊兩下也可快速修改文字。"></i>
+        <i v-show="is_nav" style="position: absolute; bottom:8px; right:0;" class="nav_i ui orange help circle icon" data-title="切換操作模式" data-content="操作模式目前有『一般模式』及『編輯模式』，在編輯模式下，可以彈性操作大部份的編輯動作，例如，您可以將『地鐵站點』拖曳到其他支線來更換位置。在文字資訊的地方，點擊兩下也可快速修改文字。"></i>
     </transition>
 
   </div>
@@ -222,7 +221,7 @@
 		</div>
 		<!--包成vue組件1 輸入-->
 		<transition name="fade">
-  		<i v-show="is_nav" style="position: absolute; right:0%; top:6px;z-index:55" class="nav_i ui orange help circle icon" data-title="新增資訊" data-content="在任何一個站點底下，你可以在這裡新增資訊。貼上網址後，會為您擷取網站的文字資料，請稍待片刻。"></i>
+  		<i v-show="is_nav" style="position: absolute; right:0%; top:6px;z-index:55" class="nav_i ui orange help circle icon" data-title="新增資訊" data-content="在任何一個地鐵站點底下，你可以在這裡新增資訊。貼上網址後，會為您擷取網站的文字資料，請稍待片刻。"></i>
         </transition>
 
 	</div>
@@ -320,6 +319,9 @@
     margin-top: -6%; width: 100%;">
       <img style="width:50%;" src="src/static/images/logo_big.svg" alt="">
     </div>
+    
+    <div id="show_event"></div>
+    
   </div>
   <div id="bottom">
     <div id="blueprint">
@@ -343,7 +345,7 @@
       <i class="add icon"></i>
     </div>
   <transition name="fade">
-    <i v-show="is_nav" style=" position: absolute; top:-38px; left:163px" class="nav_i ui orange help circle icon" data-title="地鐵計畫" data-content="『地鐵計畫』為infometro 儲存資料最底層單位，其下可以新增無數條『支線』(在左邊新增支線的地方)，每條支線下有『站點』，站點下則可以新增資訊。"></i>
+    <i v-show="is_nav" style=" position: absolute; top:-38px; left:163px" class="nav_i ui orange help circle icon" data-title="地鐵計畫" data-content="『地鐵計畫』為infometro 儲存資料最底層單位，其下可以新增無數條『支線』(在左邊新增支線的地方)，每條支線下有『地鐵站點』，站點下則可以新增資訊。"></i>
   </transition>
   <transition name="fade">
     <i v-show="is_nav" style=" position: absolute; top:-38px; left:183px" class="nav_i ui orange help circle icon" data-title="新增一個地鐵計畫" data-content="點擊『+號』可以新增一個地鐵計畫，通常地鐵計畫是管理不同領域的資訊，相同領域的資訊我們可以用支線來管理。"></i>
@@ -519,8 +521,8 @@
 </div>
 
 </div>
-<script src="src/build/js/main.js?v=20170601"></script>
-<script src="src/build/js/vm.js?v=20170601"></script>
+<script src="src/build/js/main.js?v=20170602"></script>
+<script src="src/build/js/vm.js?v=20170602"></script>
  <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

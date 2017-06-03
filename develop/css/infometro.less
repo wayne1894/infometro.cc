@@ -208,7 +208,7 @@ textarea:focus {
 		.navOne{
       position: absolute;
       top: 23px;
-			width: 140px;
+			width: 130px;
 			left: 5px;
       color: #ff6900!important;
       border-color: #ff6900!important;
@@ -698,14 +698,14 @@ textarea:focus {
         padding: 0.6em 1.2em;
         font-size: .8rem;
       }
-			.navOne{
-				position: absolute;
-				top: 49px;
-				color: #ff6900!important;
-				border-color: #ff6900!important;
-				width: 200px;
-				z-index: 0;
-			}
+      .navOne{
+          position: absolute;
+          top: 49px;
+          color: #ff6900!important;
+          border-color: #ff6900!important;
+          width: 190px;
+          z-index: 0;
+      }
     }
     #board_info {
       
@@ -1354,4 +1354,20 @@ i.orange.icon {
 
 #feedback_modal textarea:focus{
   border-color: #ff6900;
+}
+
+#show_event{
+  position: fixed;
+  bottom: 61px;
+  left: 140px;
+  .ui.steps{
+    border-radius: .1rem;
+    .icon:before{
+      color: inherit!important
+    }
+    .description{
+      position: relative;
+      bottom: -1px;
+    }
+  }
 }

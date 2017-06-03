@@ -32,16 +32,16 @@
       animation: 150,
       forceFallback: false,
       setData: function (dataTransfer, dragEl) {
-		dataTransfer.setData('line_key', $(dragEl).data("key")); //設定要傳送的資料
-        dataTransfer.setData('line_key', $(dragEl).data("key")); //設定要傳送的資料
+        vm.drag_line_key=$(dragEl).data("key"); //正在脫亦的line key
       },
-      onStart: function(){
+      onStart: function(evt){
         vm.mode = 1.5;
       },
       onEnd: function (evt) {
         setTimeout(function(){
-          vm.swap_list(evt.oldIndex, evt.newIndex);
+          vm.swap_line(evt.oldIndex, evt.newIndex);
 		  vm.mode = 1;
+          vm.drag_line_key="";
         },5)
       }
     });
@@ -50,12 +50,12 @@
       forceFallback: false,
       filter: ".add",
       setData: function (dataTransfer, dragEl) {
-				dataTransfer.setData('key', $(dragEl).data("key")); 
+        vm.drag_metro_key=$(dragEl).data("key"); //正在脫亦的metro key
       },
       onStart: function (evt) {
         var $top_tag = $("#top_tag");
-       $("#top_tag_parent").css("left",$top_tag.css("left"));
-       $top_tag.addClass("left_inherit");
+        $("#top_tag_parent").css("left",$top_tag.css("left"));
+        $top_tag.addClass("left_inherit");
         $top_tag.find(".add").hide();
         if (evt.oldIndex == 0) {
           $top_tag.addClass("first_drag");
@@ -70,11 +70,11 @@
         setTimeout(function(){
           $top_tag.removeClass("left_inherit");
         },100)
-
         $top_tag.removeClass("first_drag").removeClass("last_drag");
         setTimeout(function(){
           vm.swap_metro(evt.oldIndex, evt.newIndex);
           vm.mode = 1;
+          vm.drag_metro_key="";
         },5)
       }
     });
@@ -265,63 +265,63 @@
     $(textarea).height(_height);
   }
 
-	//導覽區程式
-	function remove_start(n){
-		$.removeCookie("start");
-		if(n==1){
-			$("#edit_parent .navOne").remove();
-		}else if(n==2){
-			$("#board_send_parent .navOne").remove();
-		}else if(n==3){
-			$("#new_line_parent .navOne").remove();
-		}else if(n==4){
-			$("#top_tag_parent .navOne").remove();
-		}else{
-			$(".navOne").remove();
-		}
-	}
-	function start_set(){
-		if($.cookie("start")=="Y"){//代表第一次進來
-			$("#edit_parent").append("<div class='navOne ui left pointing basic label'>第一次進來嗎？點擊這裡開始導覽。<i class='delete icon' style='float:right'></i></div>");
+  //導覽區程式
+  function remove_start(n){
+      $.removeCookie("start");
+      if(n==1){
+          $("#edit_parent .navOne").remove();
+      }else if(n==2){
+          $("#board_send_parent .navOne").remove();
+      }else if(n==3){
+          $("#new_line_parent .navOne").remove();
+      }else if(n==4){
+          $("#top .navOne").remove();
+      }else{
+          $(".navOne").remove();
+      }
+  }
+  function start_set(){
+      if($.cookie("start")=="Y" || 1==2){//代表第一次進來
+          $("#edit_parent").append("<div class='navOne ui left pointing basic label'>第一次進來嗎？點擊這裡開始導覽。<i class='delete icon' style='float:right'></i></div>");
 
-			$("#board_send_parent").append("<div class='navOne ui top pointing basic label'>這個區塊可以新增資訊<i class='delete icon' style='float:right'></i></div>");
+          $("#board_send_parent").append("<div class='navOne ui top pointing basic label'>這個區塊可以新增資訊<i class='delete icon' style='float:right'></i></div>");
 
-			$("#new_line_parent").append("<div class='navOne ui top pointing basic label'>這裡可以新增支線<i class='delete icon' style='float:right'></i></div>");
+          $("#new_line_parent").append("<div class='navOne ui top pointing basic label'>這裡是支線區<i class='delete icon' style='float:right'></i></div>");
 
-			$("#top").append("<div class='navOne ui right pointing basic label'>這裡可以新增站點<i class='delete icon' style='float:right'></i></div>");
+          $("#top").append("<div class='navOne ui right pointing basic label'>這個區塊是地鐵站<i class='delete icon' style='float:right'></i></div>");
 
-			$("#edit_parent .navigation").one("click",remove_start);
+          $("#edit_parent .navigation").one("click",remove_start);
 
-			 $("#edit_parent .navOne i").one("click",function(){
-				 remove_start(1);
-			 });
-			 setTimeout(function(){
-				 $("#edit_parent .navOne").transition("flash");
-			 },600);
+           $("#edit_parent .navOne i").one("click",function(){
+               remove_start(1);
+           });
+           setTimeout(function(){
+               $("#edit_parent .navOne").transition("flash");
+           },600);
 
-			 $("#board_send_parent .navOne i").one("click",function(){
-				 remove_start(2);
-			 });
-			 setTimeout(function(){
-				 $("#board_send_parent .navOne").transition("flash");
-			 },1400);
+           $("#board_send_parent .navOne i").one("click",function(){
+               remove_start(2);
+           });
+           setTimeout(function(){
+               $("#board_send_parent .navOne").transition("flash");
+           },1400);
 
-			 $("#new_line_parent .navOne i").one("click",function(){
-				 remove_start(3);
-			 });
-			 setTimeout(function(){
-				 $("#new_line_parent .navOne").transition("flash");
-			 },2200);
+           $("#new_line_parent .navOne i").one("click",function(){
+               remove_start(3);
+           });
+           setTimeout(function(){
+               $("#new_line_parent .navOne").transition("flash");
+           },2200);
 
-			$("#top .navOne i").one("click",function(){
-				 remove_start(4);
-			 });
-			 setTimeout(function(){
-				 $("#top .navOne").transition("flash");
-			 },3000);
-		}
+          $("#top .navOne i").one("click",function(){
+               remove_start(4);
+           });
+           setTimeout(function(){
+               $("#top .navOne").transition("flash");
+           },3000);
+      }
 
-	}
+  }
 
 //----------------------分塊程式碼------------------
 
@@ -372,7 +372,7 @@
 
 	//bottom
 	function drop_blueprint(event,key){
-		var line_key = event.dataTransfer.getData("line_key");
+		var line_key = vm.drag_line_key;
 		if(line_key=="")return;
 		if(key==vm.blueprint[vm.index_blueprint].key){
 			print("相同的blueprint");
@@ -428,8 +428,8 @@
 	//left
 	 function drop_line(event,index){
 		if(vm.index_line==index)return;
-
-		var metro_key = event.dataTransfer.getData("key");
+		var metro_key = vm.drag_metro_key;
+       
 		if(metro_key=="")return;
 		var _metro=vm.move_metro(metro_key,index);
 		if(_metro==undefined)return
@@ -572,25 +572,24 @@
 			}
 			info_search_db(_key,_val);
 		}
-
 	}
 	//right
 
 	//center
 	function drop(event){
-		var key = event.dataTransfer.getData("key");
-		if(key)vm.delete_metro(key);
-		var line_key=event.dataTransfer.getData("line_key");
-		if(line_key)vm.delete_line(line_key);
+      var key = vm.drag_metro_key;
+      if(key)vm.delete_metro(key);
+      var line_key=vm.drag_line_key;
+      if(line_key)vm.delete_line(line_key);
 	}
 	function allowDrop(event) { //拖曳的物件移到上面
-		//print("拖曳的物件移到上面")
-		event.preventDefault();
+      //print("拖曳的物件移到上面")
+      event.preventDefault();//必要不能刪
 	}
 	$(function(){
-			$("#board_textarea").keyup(function(e) {	
-				auto_height(this)
-			});
-			$("#board_textarea").on('paste', textarea_paste);
+      $("#board_textarea").keyup(function(e) {	
+          auto_height(this)
+      });
+      $("#board_textarea").on('paste', textarea_paste);
 	})
 	//center

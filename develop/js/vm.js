@@ -17,7 +17,9 @@ var vm = new Vue({
     filter_search: "",
     is_nav: false ,
     search_info : [],
-    search_metro : []
+    search_metro : [],
+    drag_line_key : "",
+    drag_metro_key : ""
   },
   mounted: function () {
     $("#main").css("visibility", "visible");
@@ -191,11 +193,13 @@ var vm = new Vue({
       if (this.mode == 0) { //一般模式
         setTimeout(function () {
           sortable["metro"].option("disabled", true);
+          sortable["line"].option("disabled", true);
         }, 5)
         return "一般模式"
       } else if (this.mode == 1) { //編輯模式
         setTimeout(function () {
           sortable["metro"].option("disabled", false);
+          sortable["line"].option("disabled", false);
         }, 5)
         return "編輯模式"
       } else if (this.mode == 1.5) {
@@ -436,7 +440,7 @@ var vm = new Vue({
       vm.action = "new_line";
       vm.更新藍圖(data.key, data);
     },
-		find_line_index: function(key, data){
+	find_line_index: function(key, data){
 			for (var i = 0; i < data.line.length; i++) {
         if (data.line[i]._key == key) {
           return i;
@@ -455,14 +459,13 @@ var vm = new Vue({
         vm.index_line = new_index; //重新安排
       }
       vm.update_metro_key(vm.get_index_line());
-      vm.action = "move_line";
       vm.更新藍圖(data.key, data);
       return _line
     },
     delete_line: function (key) {
-			var data = vm.get_blueprint();
-			var index= vm.find_line_index(key,data);
-			if (index == undefined) return
+      var data = vm.get_blueprint();
+      var index= vm.find_line_index(key,data);
+      if (index == undefined) return
       $('.ui.modal').modal("refresh");
       setTimeout(function () {
         $('#line_delete_modal').modal({
@@ -470,9 +473,9 @@ var vm = new Vue({
           closable: false
         }).modal('show');
       }, 0)
-			var _color = data.line[index].color;
-			$('#line_delete_modal').css("borderTopColor", _color);
-			$("#line_delete_button").css("backgroundColor", _color);
+      var _color = data.line[index].color;
+      $('#line_delete_modal').css("borderTopColor", _color);
+      $("#line_delete_button").css("backgroundColor", _color);
       $("#line_delete_button").off("click").on("click", function () {
         data.line.splice(index, 1); //移除line
         vm.get_index_blueprint().splice(index, 1); //移除line的index索引陣列
@@ -482,7 +485,7 @@ var vm = new Vue({
           vm.index_line = new_index; //重新安排
         }
         vm.update_metro_key(vm.get_index_line());
-        vm.action = "delete_list";
+        vm.action = "delete_line";
         vm.更新藍圖(data.key, data);
         vm.delete_info_line(key);
         $("#line_delete_button").off("click");
@@ -497,7 +500,7 @@ var vm = new Vue({
       var data = JSON.parse(JSON.stringify(this.get_blueprint())); //將傳址改為傳值
       data.line[vm.index_line].metro.splice(order, 0, _metro);
       vm.action = "new_metro";
-			remove_start();
+      remove_start();
       this.更新藍圖(data.key, data);
       setTimeout(move_center, 0);
     },
@@ -785,7 +788,7 @@ var vm = new Vue({
       }).colpickSetColor(color).colpickShow();
       $(".colpick_submit").off("click.op").on("click.op", function () {
         vm.get_blueprint().line[index].color = "#" + $("#left_color").val();
-        vm.action = "open_color";
+        vm.action = "edit_color";
         vm.更新藍圖();
         $(this).off("click.op");
       });
@@ -793,7 +796,7 @@ var vm = new Vue({
     swap_blueprint: function (oldIndex, newIndex) {
 
     },
-    swap_list: function (oldIndex, newIndex) {
+    swap_line: function (oldIndex, newIndex) {
       if (oldIndex == newIndex) return;
       var data = JSON.parse(JSON.stringify(this.get_blueprint())); //將傳址改為傳值
       var new_line = [];
@@ -806,7 +809,7 @@ var vm = new Vue({
       data.line = new_line;
       vm.index[vm.index_blueprint] = new_index;
       vm.update_index_line(new_index);
-      vm.action = "swap_list";
+      vm.action = "swap_line";
       vm.更新藍圖(data.key, data);
 
       function get_key(key) {
