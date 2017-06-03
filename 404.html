@@ -391,7 +391,7 @@
     <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
       <div class="clearfix" style="margin-top:5px;">
         <a href="https://goo.gl/forms/p464Om8G1yszy0ji1" target="_blank"><div class="text_b"><i class="write icon"></i>網站使用滿意度調查</div></a>
-        <a onclick="$('#feedback_modal').modal({closable: false}).modal('show')" target="_blank"><div class="text_b"><i class="comment icon"></i>提供建議</div></a>
+        <a href="https://goo.gl/forms/QYfCfG5vZF9CyNP03" target="_blank"><div class="text_b"><i class="comment icon"></i>提供建議</div></a>
       </div>
     
     <div style="font-size: 1rem; margin-top:1.5rem">關注我們：</div>
@@ -440,13 +440,13 @@
 <!--     https://semantic-ui.com/modules/accordion.html#/definition-->
       <div class="title active"><i class="dropdown icon"></i> 如何使用？</div>
       <div class="content active">
-        <p class="transition visible">目前infometro 的操作說明，位在左邊的導覽功能上(點擊<i class="help circle icon"></i>切換)，若還有疑問，歡迎<a class="default_a" href="javascript:$('#feedback_modal').modal({closable: false}).modal('show')">留言</a>詢問讓我們知道。</p>
+        <p class="transition visible">目前infometro 的操作說明，位在左邊的導覽功能上(點擊<i class="help circle icon"></i>切換)，若還有疑問，歡迎<a class="default_a" href="https://goo.gl/forms/IcgpVR6znGZQEDls2" target="_blank">留言</a>詢問讓我們知道。</p>
       </div>
       <div class="title"><i class="dropdown icon"></i> 如何刪除我的帳號 </div>
       <div class="content">
         <p class="transition hidden">infometro 目前登入的方式使用facebook帳號進行綁定，您可以在facebook上解除與我們的關係。</p>
         <p class="transition visible">
-          如果您想完全刪除帳號不留下任何記錄，請<a class="default_a" href="javascript:$('#feedback_modal').modal({closable: false}).modal('show')">留言</a>給我們，我們將手動為您刪除。
+          如果您想完全刪除帳號不留下任何記錄，請<a class="default_a" href="https://goo.gl/forms/IcgpVR6znGZQEDls2" target="_blank">留言</a>給我們，我們將手動為您刪除。
         </p>
       </div>
       <div class="title"><i class="dropdown icon"></i> 目前支援的平台/瀏覽器 </div>
@@ -497,42 +497,17 @@
     </div>
   </div>
 
-  
-<div id="feedback_modal" style="padding: 0;" class="ui small modal ">
- <i class="close icon" style="top: 1.0535rem;right: 1rem; color: rgba(0,0,0,.87);"></i>
- <div class="header" style="letter-spacing: 2px;"><i class="comment icon"></i>提供建議</div>
-  <div class="content">
-      <div class="ui form">
-        <div class="field">
-<!--          <label style="letter-spacing: 2px;">建議或bug回報</label>-->
-          <textarea id="feedback1" style="letter-spacing: 2px;font-weight: normal;" placeholder="建議或bug回報"></textarea>
-        </div>
-        <div class="field">
-          <div class="ui checkbox" onclick="if($('#feedback2').is(':checked')){$('#feedback2').prop('checked', false)}else{$('#feedback2').prop('checked', true);}">
-            <input id="feedback2" type="checkbox" tabindex="0" class="hidden">
-            <label><span style="letter-spacing: 1px;">回信給我 (請留下您的email或聯絡方式)</span></label>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="actions">
-      <div class="ui cancel button">Cancel</div>
-      <div class="ui orange button" onclick="send_feedback()">Send</div>
-    </div>
-</div>
-
-
-<div class="ui page dimmer">
-	<div class="content">
-	  <div class="center">
-		  <h2 class="ui inverted icon header">
-		  	<i class="power icon" style="cursor: pointer" onclick="logout()"></i>
-				<div style="margin-bottom:5px;">感謝您使用 infometro </div>
-				<div class="sub header" style="letter-spacing: 1px;">再次按下power鈕登出</div>
-		  </h2>
-	  </div>
-  </div>
-</div>
+	<div class="ui page dimmer">
+		<div class="content">
+			<div class="center">
+				<h2 class="ui inverted icon header">
+					<i class="power icon" style="cursor: pointer;font-size: 4em;" onclick="logout()"></i>
+					<div style="margin-bottom:13px;font-size: 2.2rem;letter-spacing: 1px;">感謝您使用 infometro </div>
+					<div class="sub header" style="letter-spacing: 1px;">再次按下power鈕登出</div>
+				</h2>
+			</div>
+		</div>
+	</div>
 </div>
 <script src="src/build/js/main.js?v=20170602"></script>
 <script src="src/build/js/vm.js?v=20170602"></script>

@@ -519,19 +519,6 @@
 		// https://semantic-ui.com/modules/accordion.html#/definition
 		$('#right .ui.accordion').accordion();//折疊菜單
 	})
-	function send_feedback(){
-		var a=$.trim($("#feedback1").val());
-		var b="///"+user_uid;
-		var c="";
-		if($("#feedback2").is( ":checked" ))c="////請回信"
-		if(a!=""){
-			a=a+b+c;
-			var newRef=DB.ref("feedback/").push()
-			newRef.set(a);
-		}
-		$("#feedback_modal").modal("hide")
-	}
-
 	function info_search_db(line_key,_val){
 		DB.ref("info/"+line_key+"/metro/").once("value",function(data){
 			data.forEach(function (childData) {
