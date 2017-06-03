@@ -73,8 +73,13 @@ function get_page() {
     return "main";
   }
 }
-function location_fn(){
+function get_test(){
 	if(location.href.indexOf("localhost:1313")>-1){//代表測試環境
+		return "test"
+	}
+}
+function location_fn(){
+	if(get_test()=="test"){//代表測試環境
 		location.href = "404.html";
 	}else{
 		location.href = "/:-D";
