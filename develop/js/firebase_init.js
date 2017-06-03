@@ -188,13 +188,14 @@ function show_event_fn(title,text){
   if(title==undefined)title="儲存成功";
   text='<div class="description">'+text+'</div>'
   if(text==undefined)text="";
-   clearTimeout(window.show_event_setTimeout);
+  clearTimeout(window.show_setTimeout);
   $("#show_event").html('<div style="display:none" class="ui steps"><div class="completed step"><i class="payment icon" style="color:'+_color+'"></i><div class="content"><div class="title">'+title+'</div>'+text+'</div></div></div>');
+
   $("#show_event .ui").transition({
     animation : 'fade up',
     duration  : 800
   });
-  window.show_event_setTimeout=setTimeout(function(){
+  window.show_setTimeout=setTimeout(function(){
     $("#show_event .ui").transition({
       animation : 'fade down',
       duration  : 1200
@@ -250,37 +251,38 @@ function blueprint_init(blueprint_fn,load_fn) {
         vm.檢查更新錯誤索引(i,_vm_blueprint);
       }
     }
+		print(_action)
     if (_action == "new_blueprint") { //判斷動作
       var _index = vm.index.length - 1; //移到最後一個
       vm.exchange_blueprint(_index, true); //切換藍圖
-      show_event_fn("新增成功","您新增了一個地鐵計畫");
+      show_event_fn("新增成功","你新增了一個地鐵計畫");
       blueprint_fn();
     } else if(_action=="swap_metro"){
-      show_event_fn(undefined,"您交換了地鐵站的位置");
+      show_event_fn(undefined,"你交換了地鐵站的位置");
     } else if(_action=="delete_metro"){
-      show_event_fn("刪除成功","您刪除了一個地鐵站點");
+      show_event_fn("刪除成功","你刪除了一個地鐵站");
     } else if(_action=="new_metro"){
-      show_event_fn("新增成功","您新增了一個地鐵站");
+      show_event_fn("新增成功","你新增了一個地鐵站");
     } else if(_action=="drop_blueprint"){
-      show_event_fn("移動成功","您將支線移到其他地鐵計畫裡頭");
+      show_event_fn("移動成功","你將支線移到其他地鐵計畫裡頭");
     } else if(_action=="drop_line"){
-      show_event_fn("移動成功","您將地鐵站移到其他支線裡頭");
+      show_event_fn("移動成功","你將地鐵站移到其他支線裡頭");
     } else if(_action=="re_name"){
       show_event_fn("名字更改成功","");
     } else if(_action=="edit_color"){
-      show_event_fn(undefined,"您更改了支線的顏色");
+      show_event_fn(undefined,"你更改了支線的顏色");
     } else if (_action == "new_line") {
       vm.index_update();
-      show_event_fn("新增成功","您新增了一條支線");
+      show_event_fn("新增成功","你新增了一條支線");
       vm.exchange_line(vm.index[vm.index_blueprint].length - 1);
     } else if(_action=="delete_line"){
-      show_event_fn("刪除成功","您刪除了一條支線");
+      show_event_fn("刪除成功","你刪除了一條支線");
     } else if (_action == "swap_line") {
       vm.index_update();
-      show_event_fn(undefined,"您交換了支線的位置");
+      show_event_fn(undefined,"你交換了支線的位置");
     } else if (_action == "delete_blueprint") {
       blueprint_fn();
-      show_event_fn("刪除成功","您刪除了一個地鐵計畫");
+      show_event_fn("刪除成功","你刪除了一個地鐵計畫");
       vm.exchange_blueprint(vm.index_blueprint, true); //切換藍圖
     } else if (_action == "load") {
       vm.exchange_blueprint(vm.index_blueprint, true); //切換藍圖

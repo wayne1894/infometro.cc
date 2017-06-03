@@ -440,7 +440,7 @@ var vm = new Vue({
       vm.action = "new_line";
       vm.更新藍圖(data.key, data);
     },
-	find_line_index: function(key, data){
+		find_line_index: function(key, data){
 			for (var i = 0; i < data.line.length; i++) {
         if (data.line[i]._key == key) {
           return i;
@@ -543,20 +543,68 @@ var vm = new Vue({
       var data = JSON.parse(JSON.stringify(this.get_blueprint())); //將傳址改為傳值
       if (data.line[this.index_line].metro.length <= 1) {
         //在這裡要把line也刪除
-        return
+        return;
       }
       var index = vm.find_metro_index(delete_key, data);
       if (index == undefined) return;
-      data.line[this.index_line].metro.splice(index, 1);
-      if (this.key_metro == delete_key) { //代表刪到選取的站,要重新更換key_metro
-        var _index = index - 1;
-        if (_index < 0) _index = 0;
-        var new_metro_key = data.line[this.index_line].metro[_index]._key;
-        this.key_metro = new_metro_key;
-      }
-      vm.action = "delete_metro"
-      this.更新藍圖(data.key, data);
-      DB.ref("info/" + data.line[this.index_line]._key + "/metro").child(delete_key).remove();
+			var is_delete=false;
+			vm.action = "_wait";//先寫入一個等待，避免其他程式先行
+			DB.ref("info/" + data.line[vm.index_line]._key + "/metro").child(delete_key).once("value",function(data){
+				if(data.val()==null){
+					_del_metro();
+					is_delete=true;
+				}
+			}).then(function(){
+				if(!is_delete){
+					$('.ui.modal').modal("refresh");
+					setTimeout(function () {
+						vm.action="";//取消等待
+						$('#metro_delete_modal').modal({
+							inverted: true,
+							closable: false
+						}).modal('show');
+					}, 0);
+					var _color = vm.line_color;
+					$('#metro_delete_modal').css("borderTopColor", _color);
+					$("#metro_delete_button").css("backgroundColor", _color);
+					$("#metro_delete_button").off("click").on("click", function () {
+						_del_metro();
+						$("#metro_delete_button").off("click");
+						$("#metro_delete_modal").modal("hide");
+					})
+				}
+			})
+			function _del_metro(){
+				data.line[vm.index_line].metro.splice(index, 1);
+				if (vm.key_metro == delete_key) { //代表刪到選取的站,要重新更換key_metro
+					var _index = index - 1;
+					if (_index < 0) _index = 0;
+					var new_metro_key = data.line[vm.index_line].metro[_index]._key;
+					vm.key_metro = new_metro_key;
+				}
+				vm.action = "delete_metro";
+				vm.更新藍圖(data.key, data);
+				DB.ref("info/" + data.line[vm.index_line]._key + "/metro").child(delete_key).remove();
+			}	
+    },
+		swap_metro: function (oldIndex, newIndex) {
+      if (oldIndex == newIndex) return;
+      var data = JSON.parse(JSON.stringify(this.get_blueprint())); //將傳址改為傳值
+      var data_metro = data.line[this.index_line].metro
+
+      function get_key(key) {
+        for (var i = 0; i < data_metro.length; i++) {
+          if (data_metro[i]._key == key) return i;
+        }
+      };
+      var new_metro = [];
+      $("#top_tag li").each(function () {
+        var index_key = get_key($(this).data("key"));
+        new_metro.push(data_metro[index_key]);
+      });
+      data.line[this.index_line].metro = new_metro;
+      vm.action = "swap_metro";
+      vm.更新藍圖(data.key, data);
     },
     get_metro: function () {
       var _line = this.get_line();
@@ -818,26 +866,6 @@ var vm = new Vue({
           if (data.line[i]._key == key) return i;
         }
       }
-    },
-    swap_metro: function (oldIndex, newIndex) {
-      if (oldIndex == newIndex) return;
-
-      var data = JSON.parse(JSON.stringify(this.get_blueprint())); //將傳址改為傳值
-      var data_metro = data.line[this.index_line].metro
-
-      function get_key(key) {
-        for (var i = 0; i < data_metro.length; i++) {
-          if (data_metro[i]._key == key) return i;
-        }
-      };
-      var new_metro = [];
-      $("#top_tag li").each(function () {
-        var index_key = get_key($(this).data("key"));
-        new_metro.push(data_metro[index_key]);
-      });
-      data.line[this.index_line].metro = new_metro;
-      vm.action = "swap_metro";
-      vm.更新藍圖(data.key, data);
     }
   }
 })

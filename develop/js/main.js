@@ -40,7 +40,7 @@
       onEnd: function (evt) {
         setTimeout(function(){
           vm.swap_line(evt.oldIndex, evt.newIndex);
-		  vm.mode = 1;
+		  		vm.mode = 1;
           vm.drag_line_key="";
         },5)
       }
@@ -72,6 +72,7 @@
         },100)
         $top_tag.removeClass("first_drag").removeClass("last_drag");
         setTimeout(function(){
+					if(vm.action=="_wait")return
           vm.swap_metro(evt.oldIndex, evt.newIndex);
           vm.mode = 1;
           vm.drag_metro_key="";
@@ -91,7 +92,6 @@
               _html="<img style='width: 100%;' src='"+_img+"'>";
               $(this).html(_html);
             }
-            
           }
         })
     }, 5);
