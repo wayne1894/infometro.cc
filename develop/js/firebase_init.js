@@ -251,7 +251,7 @@ function blueprint_init(blueprint_fn,load_fn) {
         vm.檢查更新錯誤索引(i,_vm_blueprint);
       }
     }
-		print(_action)
+		//print(_action)
     if (_action == "new_blueprint") { //判斷動作
       var _index = vm.index.length - 1; //移到最後一個
       vm.exchange_blueprint(_index, true); //切換藍圖

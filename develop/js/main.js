@@ -72,7 +72,6 @@
         },100)
         $top_tag.removeClass("first_drag").removeClass("last_drag");
         setTimeout(function(){
-					if(vm.action=="_wait")return
           vm.swap_metro(evt.oldIndex, evt.newIndex);
           vm.mode = 1;
           vm.drag_metro_key="";

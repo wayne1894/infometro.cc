@@ -547,45 +547,33 @@ var vm = new Vue({
       }
       var index = vm.find_metro_index(delete_key, data);
       if (index == undefined) return;
-			var is_delete=false;
-			vm.action = "_wait";//先寫入一個等待，避免其他程式先行
-			DB.ref("info/" + data.line[vm.index_line]._key + "/metro").child(delete_key).once("value",function(data){
-				if(data.val()==null){
-					_del_metro();
-					is_delete=true;
-				}
-			}).then(function(){
-				if(!is_delete){
-					$('.ui.modal').modal("refresh");
-					setTimeout(function () {
-						vm.action="";//取消等待
-						$('#metro_delete_modal').modal({
-							inverted: true,
-							closable: false
-						}).modal('show');
-					}, 0);
-					var _color = vm.line_color;
-					$('#metro_delete_modal').css("borderTopColor", _color);
-					$("#metro_delete_button").css("backgroundColor", _color);
-					$("#metro_delete_button").off("click").on("click", function () {
-						_del_metro();
-						$("#metro_delete_button").off("click");
-						$("#metro_delete_modal").modal("hide");
-					})
-				}
-			})
-			function _del_metro(){
-				data.line[vm.index_line].metro.splice(index, 1);
-				if (vm.key_metro == delete_key) { //代表刪到選取的站,要重新更換key_metro
-					var _index = index - 1;
-					if (_index < 0) _index = 0;
-					var new_metro_key = data.line[vm.index_line].metro[_index]._key;
-					vm.key_metro = new_metro_key;
-				}
-				vm.action = "delete_metro";
-				vm.更新藍圖(data.key, data);
-				DB.ref("info/" + data.line[vm.index_line]._key + "/metro").child(delete_key).remove();
-			}	
+      $('.ui.modal').modal("refresh");
+      setTimeout(function () {
+        $('#metro_delete_modal').modal({
+            inverted: true,
+            closable: false
+        }).modal('show');
+      }, 0);
+      var _color = vm.line_color;
+      $('#metro_delete_modal').css("borderTopColor", _color);
+      $("#metro_delete_button").css("backgroundColor", _color);
+      $("#metro_delete_button").off("click").on("click", function () {
+          _del_metro();
+          $("#metro_delete_button").off("click");
+          $("#metro_delete_modal").modal("hide");
+      })
+      function _del_metro(){
+          data.line[vm.index_line].metro.splice(index, 1);
+          if (vm.key_metro == delete_key) { //代表刪到選取的站,要重新更換key_metro
+              var _index = index - 1;
+              if (_index < 0) _index = 0;
+              var new_metro_key = data.line[vm.index_line].metro[_index]._key;
+              vm.key_metro = new_metro_key;
+          }
+          vm.action = "delete_metro";
+          vm.更新藍圖(data.key, data);
+          DB.ref("info/" + data.line[vm.index_line]._key + "/metro").child(delete_key).remove();
+      }	
     },
 		swap_metro: function (oldIndex, newIndex) {
       if (oldIndex == newIndex) return;
