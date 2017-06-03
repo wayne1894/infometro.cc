@@ -83,8 +83,8 @@
 				</span>
 
 				<!--包成vue組件2 顯示-->
-				<div v-if="item.url_info" class="ui items" style="background-color: whitesmoke;width: 98%;padding: 0; display:inline-block; margin:0;border: 1px solid #cdcdcd;border-radius: 4px;">
-					<div class="item" :style="get_youtube_embed(item)">
+				<div v-if="item.url_info" class="ui items" :class="get_youtube_embed(item)" style="background-color: whitesmoke;width: 98%;padding: 0; display:inline-block; margin:0;border: 1px solid #cdcdcd;border-radius: 4px;">
+					<div class="item">
 						<div v-if="item.url_info && item.url_info.youtube" class="ui embed" data-source="youtube" :data-id="item.url_info.youtube"></div>
 						<div v-else-if="item.url_info.image" class="ui small image" style="padding-left: 9px; padding-top: 9px;padding-bottom: 9px;">
 							<img :src="item.url_info.image">

@@ -165,7 +165,7 @@ var vm = new Vue({
           //autoplay: true
           $("#" + item['.key']).find(".ui.embed:not(.active)").embed();
         }, 5);
-        return "flex-direction: column"; //順便傳回style
+        return "flex_youtube"; //順便傳回class
       }
       return "";
     },
@@ -699,10 +699,11 @@ var vm = new Vue({
       }
       $textarea.val(get_level.name);
       auto_height2($textarea[0]);
-      $textarea.on("keyup",function(event){
+      $textarea.on("keydown",function(event){
         auto_height2($textarea[0]);
         if (event.which == 13 || (event.shiftKey && event.which == 13)) { //enter
-          get_level.name=$.trim($textarea.val());
+					event.preventDefault();
+          get_level.name=$.trim($textarea.val().replace(/  +/g, ' ')); 
           vm.action = "re_name";
           vm.更新藍圖();
           edit_set();

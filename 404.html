@@ -95,7 +95,7 @@
 </div>
 <div id="edit_parent">
   <a :class="{ active: is_nav }" onclick="vm.is_nav=!vm.is_nav" class="left_icon navigation" data-tooltip="切換導覽" data-position="right center"><i class="help circle icon"></i></a>
-  <a class="left_icon" data-tooltip="登出"  data-position="right center" onclick="logout()"><i class="power icon"></i></a>
+  <a class="left_icon" data-tooltip="登出"  data-position="right center" onclick="$('.page.dimmer:first').dimmer('toggle');"><i class="power icon"></i></a>
 </div>
   </div>
   <div id="top">
@@ -176,7 +176,8 @@
       <div class="favorites_list" v-for="(item, index) in info_favorites">
         <a :href="item.url_info.url" :title="item.url_info.title" target="_blank"  v-once>
           <span><img :src="'https://www.google.com/s2/favicons?domain_url='+item.url_info.url"  v-once></span>
-          <span v-once>{{item.url_info.title}}</span>
+          <span v-once>{{item.url_info.title}}</span> 
+          <div class="os card" os-tooltip="some text that hover to be seen" options="ctrl.topPosition" style="padding: 10px">top</div>
         </a>
       </div>
     </div>
@@ -278,8 +279,8 @@
 				</span>
 
 				<!--包成vue組件2 顯示-->
-				<div v-if="item.url_info" class="ui items" style="background-color: whitesmoke;width: 98%;padding: 0; display:inline-block; margin:0;border: 1px solid #cdcdcd;border-radius: 4px;">
-					<div class="item" :style="get_youtube_embed(item)">
+				<div v-if="item.url_info" class="ui items" :class="get_youtube_embed(item)" style="background-color: whitesmoke;width: 98%;padding: 0; display:inline-block; margin:0;border: 1px solid #cdcdcd;border-radius: 4px;">
+					<div class="item">
 						<div v-if="item.url_info && item.url_info.youtube" class="ui embed" data-source="youtube" :data-id="item.url_info.youtube"></div>
 						<div v-else-if="item.url_info.image" class="ui small image" style="padding-left: 9px; padding-top: 9px;padding-bottom: 9px;">
 							<img :src="item.url_info.image">
@@ -520,6 +521,18 @@
     </div>
 </div>
 
+
+<div class="ui page dimmer">
+	<div class="content">
+	  <div class="center">
+		  <h2 class="ui inverted icon header">
+		  	<i class="power icon" style="cursor: pointer" onclick="logout()"></i>
+				<div style="margin-bottom:5px;">感謝您使用 infometro </div>
+				<div class="sub header" style="letter-spacing: 1px;">再次按下power鈕登出</div>
+		  </h2>
+	  </div>
+  </div>
+</div>
 </div>
 <script src="src/build/js/main.js?v=20170602"></script>
 <script src="src/build/js/vm.js?v=20170602"></script>
