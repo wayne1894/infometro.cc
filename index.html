@@ -250,12 +250,12 @@
   #bottom_bbb a{
     
   }
-  #bottom_bbb a:hover{
+  #bottom_bbb a:not(#mail):hover{
    text-decoration: underline;
   }
-	#bottom_bbb .column{
-		display:block;
-	}
+  #bottom_bbb .column{
+      display:block;
+  }
   
  @media only screen and (max-width: 600px) {
     .fast.button{
@@ -263,9 +263,29 @@
       margin-bottom: 12px;
     }
   }
-	#top .column{
-		display: block;
-	}
+  #top .column{
+      display: block;
+  }
+  #space_column_one{
+    display: none!important;
+  }
+  #space_column_two{
+      display: block!important;
+   }
+  @media only screen and (max-width: 992px) {
+     #space_column_one{
+       display: block!important;
+    }
+    #space_column_two{
+      display: none!important;
+    }
+  }
+  @media only screen and (max-width: 767px) {
+    #space_column_one{
+      display: none!important;
+    }
+  }
+  
 </style>
 
 <div id="fb-root"></div>
@@ -347,7 +367,7 @@
   <div class="ui vertical stripe segment" style="padding-top:0!important;">
     <div class="ui text container">
       <h3 class="ui horizontal header divider" style="margin: 2em 0em;">infometro 介面展示</h3>
-      <iframe id="youtube" width="100%" src="https://www.youtube.com/embed/g5K6pqfq2ws" frameborder="0" allowfullscreen></iframe>
+      <iframe id="youtube" width="100%" src="https://www.youtube.com/embed/R2Hkp2GV3tQ" frameborder="0" allowfullscreen></iframe>
     </div>
   </div>
   
@@ -387,29 +407,33 @@
    <div class="bottom_line" style="top:0px;"></div>
     <div class="ui container">
       <div class="ui stackable inverted divided equal height stackable grid">
+        <div id="space_column_two" class="three wide column"></div>
+        <div id="space_column_one" class="one wide column"></div>
         <div class="three wide column">
-         
-        </div>
-        <div class="three wide column">
-          <h4 class="ui inverted header">關注我們</h4>
+          <h4 class="ui inverted header">聯絡我們</h4>
           <div class="ui inverted link list">
-          <a target="_blank" href="https://www.facebook.com/infometro.cc/" >
-            <button class="ui circular facebook icon button">
-              <i class="facebook icon"></i>
-            </button>
-          </a>
+            <a id="mail" href="mailto:mose286778@gmail.com">
+              <i class="circular large mail icon"></i>
+            </a>
           </div>
         </div>
+        
         <div class="three wide column">
           <h4 class="ui inverted header">給我們建議</h4>
           <div class="ui inverted link list">
             <a href="https://goo.gl/forms/p464Om8G1yszy0ji1" target="_blank" class="item">網站使用滿意度調查</a>
-            <a href="https://goo.gl/forms/QYfCfG5vZF9CyNP03" target="_blank" class="item">聯絡我們</a>
+            <a href="https://goo.gl/forms/QYfCfG5vZF9CyNP03" target="_blank" class="item">提供建議</a>
           </div>
         </div>
         <div class="seven wide column">
-          <h4 class="ui inverted header">© 2017 infometro 資訊地鐵站</h4>
-<!--          <p>更快速、有效的保存你的資訊</p>-->
+          <h4 class="ui inverted header">facebook粉絲專頁</h4>
+          <div class="fb-page" 
+            data-href="https://www.facebook.com/infometro.cc"
+            data-width="380" 
+            data-hide-cover="false"
+            data-show-facepile="false" 
+            data-show-posts="false"></div>
+            <h4 class="ui inverted header">© 2017 infometro 資訊地鐵站</h4>
         </div>
       </div>
     </div>
