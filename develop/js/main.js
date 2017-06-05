@@ -495,6 +495,7 @@
                   $("#center").css("margin-left",_w);
                   $("#top").css("left",_w+1);
                   $("#top").css("width", $("#center").width());
+                $("#edit_parent a").css("width",_w)
               });
               $(document).on('mouseup.line',function(event){
                   $(document).off('mouseup.line');
