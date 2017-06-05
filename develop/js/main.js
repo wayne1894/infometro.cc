@@ -7,6 +7,7 @@
     if ($("#main").width() < 1260) {
       $("#board3").addClass("board3_left");
       var _move = ($("#center").width() - 860) / 2;
+      if(_move<0)return
       $("#board1").css("left", b1_left + _move);
       $("#board2").css("left", b2_left + _move);
     } else {
@@ -473,6 +474,36 @@
 				$(el).colpickHide();
 			}
 		}).colpickHide();
+      
+       $("#left .left_line").on('mousedown',function(event){
+          $(document).on('selectstart',function(){return false;})
+          $(document).on('dragstart',function(){return false;})
+             // var max_width=$(window).width()-120;
+              var gX=($("#left").width()-event.pageX);
+              var b_left=event.pageX-parseInt($("#board1").css("left"));
+              $(document).on('mousemove.line',function(event){
+                  var _w=(event.pageX) -gX;
+                  if(_w<=120){
+                    _w=120;//最小寬度
+                  }else{
+                    var _w2=(event.pageX)-b_left
+                    $("#board1").css("left",_w2)
+                  }
+                  //if(_w>max_width)_w=max_width;
+                  $("#left").css("width",_w);
+                  $("#line_parent").css("width",_w)
+                  $("#center").css("margin-left",_w);
+                  $("#top").css("left",_w+1);
+                  $("#top").css("width", $("#center").width());
+              });
+              $(document).on('mouseup.line',function(event){
+                  $(document).off('mouseup.line');
+                  $(document).off('mousemove.line');
+                  $(document).off('selectstart');
+                  $(document).off('dragstart');
+              });
+          })
+
 	})
 	//left
 
