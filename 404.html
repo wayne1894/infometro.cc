@@ -99,8 +99,9 @@
 </div>
 <div class="left_line"></div>
   </div>
-  <div id="top">
-    <div class="triangle left"></div>
+  <div id="center">
+		<div id="top">
+			<div class="triangle left"></div>
   <div id="top_tag_parent">
     <ul id="top_tag">
       <li v-for="(item, index) in metro" class="metro_list" :data-key="item._key" :data-index="index" :key="item._key">
@@ -126,10 +127,10 @@
     </transition>
   </div>
 <div class="triangle right"></div>
-  </div>
-  <div id="center">
-    <div v-show="action!='load'">
-    <div id="board1" :style="{borderTopColor:master_line_color}">
+		</div>
+    <div class="board_parent" v-show="action!='load'">
+    	<div id="board2" :style="{borderTopColor:master_line_color}">
+				<div id="board1" :style="{borderTopColor:master_line_color}">
   <div id="board_line_parent">
     <div id="board_line">
       <i v-show="!is_master()" :style="{backgroundColor:line_color}"></i>
@@ -195,7 +196,7 @@
     </div>
   </div>
 </div>
-    <div id="board2" :style="{borderTopColor:master_line_color}">
+				
 	<!--資訊輸入-->
 	<div id="board_enter_parent">
 		<div id="board_img"><img v-if="users.photo" :src="users.photo"></div>
@@ -315,11 +316,12 @@
 		</div>
 	</div>
 	<!--資訊列表-->
-</div>
+
+			</div>
     </div>
     <div v-show="action=='load'" style="position: absolute;top: 50%;left: 50%;margin-left:-25%;
-    margin-top: -6%; width: 100%;">
-      <img style="width:50%;" src="src/static/images/logo_big.svg" alt="">
+    margin-top: -6%; width: 50%;">
+      <img style="width:100%;" src="src/static/images/logo_big.svg" alt="">
     </div>
     
     <div id="show_event"></div>

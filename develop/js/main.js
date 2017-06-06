@@ -2,6 +2,7 @@
   var b2_left = parseInt($("#board2").css("left"));
   var b3_left = parseInt($("#board3").css("left"));
   $(window).resize(function () {
+		return
     var window_width = $(window).width();
     $("#top").css("width", $("#center").width());
     if ($("#main").width() < 1260) {
