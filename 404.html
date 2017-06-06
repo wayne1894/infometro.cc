@@ -39,8 +39,8 @@
 <!-- jquery-color-pick -->
 
 <script src="src/build/js/public.js"></script>
-<script src="src/build/js/firebase_init.js?v=20170603"></script>
-<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=20170603" />
+<script src="src/build/js/firebase_init.js?v=20170607"></script>
+<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=20170607" />
 
 </head>
 <body>
@@ -96,6 +96,13 @@
 <div id="edit_parent">
   <a :class="{ active: is_nav }" onclick="vm.is_nav=!vm.is_nav" class="left_icon navigation" data-tooltip="切換導覽" data-position="right center"><i class="help circle icon"></i></a>
   <a class="left_icon" data-tooltip="登出"  data-position="right center" onclick="$('.page.dimmer:first').dimmer('toggle');"><i class="power icon"></i></a>
+  
+    <transition name="fade">
+    <i v-show="is_nav" style=" position: absolute; bottom:9px; right:-42px" class="nav_i ui orange help circle icon" data-title="地鐵計畫" data-content="『地鐵計畫』為infometro 儲存資料最底層單位，其下可以新增無數條『支線』(在左邊新增支線的地方)，每條支線下有『地鐵站點』，站點下則可以新增資訊。"></i>
+  </transition>
+  <transition name="fade">
+    <i v-show="is_nav" style=" position: absolute; bottom:9px; right:-63px" class="nav_i ui orange help circle icon" data-title="新增一個地鐵計畫" data-content="點擊『+號』可以新增一個地鐵計畫，通常地鐵計畫是管理不同領域的資訊，相同領域的資訊我們可以用支線來管理。"></i>
+  </transition>
 </div>
 <div class="left_line"></div>
   </div>
@@ -104,10 +111,10 @@
 			<div class="triangle left"></div>
   <div id="top_tag_parent">
     <ul id="top_tag">
-      <li v-for="(item, index) in metro" class="metro_list" :data-key="item._key" :data-index="index" :key="item._key">
+      <li v-for="(item, index) in metro" :class="{ active: key_metro == item._key }"  class="metro_list" :data-key="item._key" :data-index="index" :key="item._key">
         <span v-if="index==0" class="add a_first" @click="new_metro(0)"><img src="src/static/images/+.png"></span>
         
-        <i class="top_metro" @click="exchange_metro(item._key)" :style="check_metro(item._key)"></i>
+        <i class="top_metro" :style="{color:line_color}" @click="exchange_metro(item._key)"></i>
         <span class="top_name" @dblclick="re_name(index,'metro',$event)">{{item.name}}</span>
         <input class="metro_input" type="text" v-model="item.name">
         <span v-if="metro.length>1" class="top_join"><span v-if="mode == 1 && index>0" class="add" @click="new_metro(index)"><img src="src/static/images/+.png"></span></span>
@@ -196,9 +203,8 @@
 	</div>
 </div>
 </div>
-				
-	<!--資訊輸入-->
-	<div id="board_enter_parent">
+					<!--資訊輸入-->
+	<div id="board_enter_parent" :style="{borderTopColor:master_line_color}">
 		<div id="board_img"><img v-if="users.photo" :src="users.photo"></div>
 		<div id="board_enter">
 		  <i style="display:none;" class="idea icon"></i>
@@ -348,12 +354,6 @@
     <div id="blueprint_new" class="ui icon button" data-tooltip="新增一個地鐵計畫" data-inverted="" @click="new_blueprint()">
       <i class="add icon"></i>
     </div>
-  <transition name="fade">
-    <i v-show="is_nav" style=" position: absolute; top:-38px; left:163px" class="nav_i ui orange help circle icon" data-title="地鐵計畫" data-content="『地鐵計畫』為infometro 儲存資料最底層單位，其下可以新增無數條『支線』(在左邊新增支線的地方)，每條支線下有『地鐵站點』，站點下則可以新增資訊。"></i>
-  </transition>
-  <transition name="fade">
-    <i v-show="is_nav" style=" position: absolute; top:-38px; left:183px" class="nav_i ui orange help circle icon" data-title="新增一個地鐵計畫" data-content="點擊『+號』可以新增一個地鐵計畫，通常地鐵計畫是管理不同領域的資訊，相同領域的資訊我們可以用支線來管理。"></i>
-  </transition>
 </div>
 <div id="copyright">© 2017 資訊地鐵站 版權所有</div>
 
@@ -527,8 +527,8 @@
 		</div>
 	</div>
 </div>
-<script src="src/build/js/main.js?v=20170603"></script>
-<script src="src/build/js/vm.js?v=20170603"></script>
+<script src="src/build/js/main.js?v=20170607"></script>
+<script src="src/build/js/vm.js?v=20170607"></script>
  <script>
 	 if(get_test()!="test"){
 

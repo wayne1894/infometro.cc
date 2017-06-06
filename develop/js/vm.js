@@ -8,6 +8,7 @@ var vm = new Vue({
     info_active: "",
     key_metro: "",
     action: "load",
+    action_move: 0,
     info: [],
     users: [],
     mode: 1,
@@ -23,12 +24,14 @@ var vm = new Vue({
   },
   mounted: function () {
     $("#main").css("visibility", "visible");
+    
   },
   updated: function () {
     setTimeout(function () {
       $(window).resize();
     }, 0);
     $("#board_info .ui.active").show();
+    if(vm.action_move==1)setTimeout(move_center, 0);
   },
   firebase: {
     //watch:key_metro
@@ -398,7 +401,9 @@ var vm = new Vue({
         vm.update_selection_color();
         vm.update_metro_key(vm.index[index][vm.index_line]);
       }
+      vm.action_move=1;
       setTimeout(move_center, 0);
+      
     },
     exchange_line: function (index) {
       if (vm.index_line == index) return; //重覆就離開
@@ -416,7 +421,8 @@ var vm = new Vue({
         vm.update_index_line_check();
         vm.update_selection_color();
         vm.update_metro_key(vm.get_index_blueprint()[index]);
-        setTimeout(move_center, 0);
+        vm.action_move=1;
+        setTimeout(move_center,0);
       }
     },
     replace_index: function () { //修補程式(不常發生)
@@ -440,13 +446,13 @@ var vm = new Vue({
       vm.action = "new_line";
       vm.更新藍圖(data.key, data);
     },
-		find_line_index: function(key, data){
-			for (var i = 0; i < data.line.length; i++) {
+	find_line_index: function(key, data){
+	  for (var i = 0; i < data.line.length; i++) {
         if (data.line[i]._key == key) {
           return i;
         }
       }
-		},
+	},
     move_line: function (key) {
       var data = vm.get_blueprint();
       var index= vm.find_line_index(key,data);
@@ -502,12 +508,12 @@ var vm = new Vue({
       vm.action = "new_metro";
       remove_start();
       this.更新藍圖(data.key, data);
-      setTimeout(move_center, 0);
     },
     check_metro: function (key) {
       if (vm.key_metro == key) {
-        var _color = this.get_line().color;
-        return "background-color: " + _color;
+        //var _color = this.get_line().color;
+        //return "background-color: " + _color;
+        return "active"
       }
     },
     exchange_metro: function (key) {
@@ -575,7 +581,7 @@ var vm = new Vue({
           DB.ref("info/" + data.line[vm.index_line]._key + "/metro").child(delete_key).remove();
       }	
     },
-		swap_metro: function (oldIndex, newIndex) {
+	swap_metro: function (oldIndex, newIndex) {
       if (oldIndex == newIndex) return;
       var data = JSON.parse(JSON.stringify(this.get_blueprint())); //將傳址改為傳值
       var data_metro = data.line[this.index_line].metro

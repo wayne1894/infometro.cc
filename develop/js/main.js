@@ -10,12 +10,11 @@
 			$("#board_parent").removeClass("adj");
 			
 		}
-		if(window_width<991){
+		if(window_width<(961-30)){
 			$("#top").css("width", window_width-$("#left").width());
 		}else{
 			$("#top").css("width", $("#center").width());
 		}
-    setTimeout(move_center, 0);
   }).resize();
 
 
@@ -330,52 +329,36 @@
 //----------------------分塊程式碼------------------
 
 	//top
-	 function move_center(is_move) {
-		 var total_width = 0;
-		 var top_width = $("#top_tag").width();
-		 $("#top_tag li").each(function () {
-			 total_width = total_width + $(this).width();
-		 })
-		 if (total_width >top_width ) {
-			 $("#top_tag").css("left", (((top_width - total_width) / 2) + 15) + "px");
-		 } else {
-			 $("#top_tag").css("left", 0);
-		 }
-//		 if (top_width > total_width) {
-//			 $("#top_tag").css("left", (((top_width - total_width) / 2) + 15) + "px");
-//		 } else {
-//			 $("#top_tag").css("left", 0);
-//		 }
-		 $("#top_tag").stop().fadeIn(350);
+	 function move_center() {
+        $("#top_tag li.active").velocity("scroll", { 
+           axis: "x",
+           duration: 0,
+           container: $("#top_tag"),
+           complete: function(){
+             $("#top_tag").show();
+           }
+         });
+       $("#top_tag").velocity("stop").velocity("fadeIn",{ duration: 350 })
+       vm.action_move=0;
 	 }
-	 function top_tag_scroll() {
-		 var scroll_val = 0;
-		 var container = $("#top_tag"),
-			 slide = !container.find(">li.active").length ? 0 : container.find(">li.active").index(),
-			 direct = $(this).hasClass("right") ? 1 : -1,
-			 target = slide + direct < 0 ? [] : container.find(">li").eq(slide + direct);
-		 if (target.length) {
-			 scroll_val = $("#top_tag").scrollLeft();
-			 target.addClass("active").velocity("stop", true).velocity("scroll", {
-				 axis: "x",
-				 duration: 150,
-				 offset: -42,
-				 easing: "ease",
-				 container: container,
-				 complete: function () {
-					 if (direct) {
-						 if ($("#top_tag").scrollLeft() == scroll_val) {
-							 target.removeClass("active").prev().addClass("active");
-						 }
-					 }
-				 }
-			 }).siblings().removeClass("active");
-		 }
-	 }
-
 	 $(function () {
 		 //http://velocityjs.org/#scroll
-		 $(".triangle").click(top_tag_scroll);
+		 $(".triangle.left").click(function(){
+            $("#top_tag").velocity("stop").velocity('scroll', {
+                container: $("#top_tag"),
+                offset: -200,
+                duration: 250,
+                axis: 'x'
+            });
+         });
+       	 $(".triangle.right").click(function(){
+            $("#top_tag").velocity("stop").velocity('scroll', {
+                container: $("#top_tag"),
+                offset: 70,
+                duration: 250,
+                axis: 'x'
+            });
+         });
 	 })
 	//top
 
