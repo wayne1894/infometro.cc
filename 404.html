@@ -128,7 +128,7 @@
   </div>
 <div class="triangle right"></div>
 		</div>
-    <div class="board_parent" v-show="action!='load'">
+    <div id="board_parent" v-show="action!='load'">
     	<div id="board2" :style="{borderTopColor:master_line_color}">
 				<div id="board1" :style="{borderTopColor:master_line_color}">
   <div id="board_line_parent">
@@ -171,30 +171,30 @@
       <i v-show="is_nav && mode==1" style="position: absolute; bottom:7px; right:0;" class="nav_i ui orange help circle icon" data-title="修改站名" data-content="目前在編輯模式下，點擊文字兩下可以修改名稱。"></i>
     </transition>
   </div>
-  <div id="board3" style="color:#FF6900" :style="{borderTopColor:master_line_color}">
-    <div id="board3_header" :style="{color:line_color}"><i class="heart icon"></i><span class="text">最愛連結</span>
-    </div>
-    <div id="board_favorites">
-      <div class="favorites_list" v-for="(item, index) in info_favorites">
-        <a :href="item.url_info.url" :title="item.url_info.title" target="_blank"  v-once>
-          <span><img :src="'https://www.google.com/s2/favicons?domain_url='+item.url_info.url"  v-once></span>
-          <span v-once>{{item.url_info.title}}</span> 
-          <div class="os card" os-tooltip="some text that hover to be seen" options="ctrl.topPosition" style="padding: 10px">top</div>
-        </a>
-      </div>
-    </div>
-    <div id="board_search">
-      <div class="ui mini action input" :style="{borderColor:line_color}">
-        <input v-model.trim="filter_search" type="text" placeholder="Filter...">
-        <button v-if="filter_search" class="ui mini icon button" :style="{backgroundColor:line_color}" >
-          <i class="filter icon"></i>
-        </button>
-        <button v-else class="ui mini icon button" >
-          <i class="filter icon"></i>
-        </button>
-      </div>
-    </div>
-  </div>
+	<div id="board3" style="color:#FF6900" :style="{borderTopColor:master_line_color}">
+	<div id="board3_header" :style="{color:line_color}"><i class="heart icon"></i><span class="text">最愛連結</span>
+	</div>
+	<div id="board_favorites">
+		<div class="favorites_list" v-for="(item, index) in info_favorites">
+			<a :href="item.url_info.url" :title="item.url_info.title" target="_blank"  v-once>
+				<span><img :src="'https://www.google.com/s2/favicons?domain_url='+item.url_info.url"  v-once></span>
+				<span v-once>{{item.url_info.title}}</span> 
+				<div class="os card" os-tooltip="some text that hover to be seen" options="ctrl.topPosition" style="padding: 10px">top</div>
+			</a>
+		</div>
+	</div>
+	<div id="board_search">
+		<div class="ui mini action input" :style="{borderColor:line_color}">
+			<input v-model.trim="filter_search" type="text" placeholder="Filter...">
+			<button v-if="filter_search" class="ui mini icon button" :style="{backgroundColor:line_color}" >
+				<i class="filter icon"></i>
+			</button>
+			<button v-else class="ui mini icon button" >
+				<i class="filter icon"></i>
+			</button>
+		</div>
+	</div>
+</div>
 </div>
 				
 	<!--資訊輸入-->

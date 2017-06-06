@@ -2,23 +2,19 @@
   var b2_left = parseInt($("#board2").css("left"));
   var b3_left = parseInt($("#board3").css("left"));
   $(window).resize(function () {
-		return
-    var window_width = $(window).width();
-    $("#top").css("width", $("#center").width());
-    if ($("#main").width() < 1260) {
-      $("#board3").addClass("board3_left");
-      var _move = ($("#center").width() - 860) / 2;
-      if(_move<0)return
-      $("#board1").css("left", b1_left + _move);
-      $("#board2").css("left", b2_left + _move);
-    } else {
-      $("#board3").removeClass("board3_left");
-      var _move = ($("#center").width() - 1175) / 2;
-      if (_move < 0) _move = 0;
-      $("#board1").css("left", b1_left + _move);
-      $("#board2").css("left", b2_left + _move);
-      $("#board3").css("left", b3_left + _move);
-    }
+		var center_width=$("#center").width();
+		var window_width = $(window).width();
+		if(center_width<=1165){
+			$("#board_parent").addClass("adj");
+		}else{
+			$("#board_parent").removeClass("adj");
+			
+		}
+		if(window_width<991){
+			$("#top").css("width", window_width-$("#left").width());
+		}else{
+			$("#top").css("width", $("#center").width());
+		}
     setTimeout(move_center, 0);
   }).resize();
 
@@ -336,15 +332,20 @@
 	//top
 	 function move_center(is_move) {
 		 var total_width = 0;
-		 var tog_width = $("#top_tag").width();
+		 var top_width = $("#top_tag").width();
 		 $("#top_tag li").each(function () {
 			 total_width = total_width + $(this).width();
 		 })
-		 if (tog_width > total_width) {
-			 $("#top_tag").css("left", (((tog_width - total_width) / 2) + 15) + "px");
+		 if (total_width >top_width ) {
+			 $("#top_tag").css("left", (((top_width - total_width) / 2) + 15) + "px");
 		 } else {
 			 $("#top_tag").css("left", 0);
 		 }
+//		 if (top_width > total_width) {
+//			 $("#top_tag").css("left", (((top_width - total_width) / 2) + 15) + "px");
+//		 } else {
+//			 $("#top_tag").css("left", 0);
+//		 }
 		 $("#top_tag").stop().fadeIn(350);
 	 }
 	 function top_tag_scroll() {
@@ -484,19 +485,13 @@
               var b_left=event.pageX-parseInt($("#board1").css("left"));
               $(document).on('mousemove.line',function(event){
                   var _w=(event.pageX) -gX;
-                  if(_w<=120){
-                    _w=120;//最小寬度
-                  }else{
-                    var _w2=(event.pageX)-b_left
-                    $("#board1").css("left",_w2)
-                  }
+                  if(_w<=120)_w=120;//最小寬度
                   //if(_w>max_width)_w=max_width;
                   $("#left").css("width",_w);
                   $("#line_parent").css("width",_w)
                   $("#center").css("margin-left",_w);
-                  $("#top").css("left",_w+1);
                   $("#top").css("width", $("#center").width());
-                $("#edit_parent a").css("width",_w)
+                	$("#edit_parent a").css("width",_w)
               });
               $(document).on('mouseup.line',function(event){
                   $(document).off('mouseup.line');

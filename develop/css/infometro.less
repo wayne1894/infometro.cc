@@ -42,11 +42,11 @@ html.re_name{
 body {
   font-family: Microsoft JhengHei;
 }
-@media screen and (max-width:767px) {
-	body{
-		overflow-x: visible;
-	}
-}
+//@media screen and (max-width:1000px) {
+//	body{
+//		overflow-x: visible;
+//	}
+//}
 
 .ui.page{
   font-family: 'Noto Sans TC', sans-serif;
@@ -267,9 +267,9 @@ textarea:focus {
   @li_width: 90px;
   height: @top_height;
   top: 0;
-  width: inherit;
-	min-width: inherit;
-  left: @left_width+1;
+//  width: inherit;
+//	min-width: inherit;
+//  left: @left_width+1;
   background-color: #DEDEDE;
   background: -webkit-gradient(linear, 0 0, 0 bottom, from(#DEDEDE), to(#F1F1F2));
   background: -webkit-linear-gradient(#DEDEDE, #F1F1F2);
@@ -466,9 +466,8 @@ textarea:focus {
     }
   }
   .triangle.left {
-    width: 20px;
     height: 20px;
-    left: 35px;
+    left: 1.5%;
     top: 27px;
     position: absolute;
     cursor: pointer;
@@ -483,9 +482,8 @@ textarea:focus {
     }
   }
   .triangle.right {
-    width: 20px;
     height: 20px;
-    right: 30px;
+    right: 4%;
     top: 25px;
     position: absolute;
     cursor: pointer;
@@ -502,23 +500,15 @@ textarea:focus {
 }
 #center {
   background-color: #F7F7F7;
-	width: 86%;
+	width: 87%;
   max-width: 1500px;
-  min-width: 1000px;
+//  min-width: 1000px;
 	min-height: 100%;
   margin-left: @left_width;
   border: 1px solid #CDCDCD;
   padding-top: @top_height - 2;
   position: relative;
 	text-align: center;
-	.board_parent{
-		&::before{
-			content: "";
-			position: relative;
-			display: inline-block;
-			width: 280px;
-		}
-	}
   #board1,
   #board2,
   #board3 {
@@ -530,7 +520,11 @@ textarea:focus {
   #board1 {
     width: 280px;
     position: fixed;
+		-ms-transform: translateX(-110%);
+		-webkit-transform: translateX(-110%);
     transform: translateX(-110%);
+		-webkit-filter: blur(0px);
+		filter: blur(0px);
 		margin-top: -7px;
     z-index: 50;
     #board_line_parent {
@@ -866,10 +860,6 @@ textarea:focus {
     }
   }
   #board3 {
-    width: 260px;
-    top: @top_height;
-    position: fixed;
-    left: 972px;
     #board3_header {
       font-size: 15px;
       font-weight: bold;
@@ -928,23 +918,76 @@ textarea:focus {
         border-color: inherit!important;
       }
     }
-    &.board3_left {
-      border-top: 1px dashed #cdcdcd!important;
-      border-bottom: 0;
-      position: relative;
-      left: -1px!important;
-      width: 280px;
-      top: 0;
-      #board_favorites {
-        >div {
-          margin-left: 13px;
-        }
-      }
-      #board_search {
-        padding-left: 13px;
-      }
-    }
   }
+	#board_parent{
+		&.adj::before{
+			content: "";
+			position: relative;
+			display: inline-block;
+			width: 280px;
+		}
+		&not(.adj)::after{
+			content: "";
+			position: relative;
+			display: inline-block;
+			width: 260px;
+		}
+		&:not(.adj) #board3{
+			width: 260px;
+			position: fixed;
+			-ms-transform: translateX(318%);
+			-webkit-transform: translateX(318%);
+			transform: translateX(318%);
+			-webkit-filter: blur(0px);
+			margin-top: -7px;
+			top: 0;
+		}
+		&.adj #board2{
+			left: 15px;
+		}
+		&.adj #board3{
+			border-top: 1px dashed #cdcdcd!important;
+			border-bottom: 0;
+			position: relative;
+			left: -1px!important;
+			width: 280px;
+			top: 0;
+			#board_favorites {
+				>div {
+					margin-left: 13px;
+				}
+			}
+			#board_search {
+				padding-left: 13px;
+			}
+		}
+	}
+	@media screen and (max-width:991px) {
+		#board1 {
+		 	width: 100%;
+		 	position: relative;
+		 	border-left: 0;
+		 	border-right: 0;
+		 	-ms-transform: none;
+		 	-webkit-transform: none;
+		 	transform: none;
+			border-bottom: 3px dashed #cdcdcd;
+		}
+		#board_parent{
+			&.adj::before{
+				width: 0px;
+			}
+			&.adj #board2{
+				left: 0;
+			}
+			&.adj #board3 {
+				width: 100%;
+				left: 0!important;
+				border-left: 0;
+				border-right: 0;
+			}
+		}
+	}
   .right_line_2 {
     position: absolute;
     width: 4px;
@@ -1174,7 +1217,6 @@ textarea:focus {
     background-image: url(../../static/images/index_5.png);
     width:164px;
     height:36px;
-    float:left;
     margin-left:4px;
     margin-top:4px;
     text-align:center;
@@ -1182,6 +1224,9 @@ textarea:focus {
     font-size:13px;
     cursor:pointer;
     color: black;
+		i.icon{
+			height : inherit;
+		}
   }
   .text_b:hover{
       background-position:0px 36px;

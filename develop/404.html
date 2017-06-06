@@ -12,7 +12,7 @@
 		<div id="top">
 			@@include('include/top.html')
 		</div>
-    <div class="board_parent" v-show="action!='load'">
+    <div id="board_parent" v-show="action!='load'">
     	<div id="board2" :style="{borderTopColor:master_line_color}">
 				@@include('include/conter_board1.html')
 				@@include('include/conter_board2.html')
