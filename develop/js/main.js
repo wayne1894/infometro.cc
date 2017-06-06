@@ -8,13 +8,18 @@
 			$("#board_parent").addClass("adj");
 		}else{
 			$("#board_parent").removeClass("adj");
-			
 		}
-		if(window_width<(961-30)){
-			$("#top").css("width", window_width-$("#left").width());
-		}else{
-			$("#top").css("width", $("#center").width());
-		}
+        if(window_width<650){
+          $("#center").css("width","650px");
+          $("#top").css("width", $("#center").width());
+        }else{
+          $("#center").css("width","87%");
+          if(window_width<(961-30)){
+              $("#top").css("width", window_width-$("#left").width());
+          }else{
+              $("#top").css("width", $("#center").width());
+          }
+        }
   }).resize();
 
 
