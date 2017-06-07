@@ -22,8 +22,8 @@
         }
   }).resize();
 
-
-  var sortable = [];
+var aaa
+ var sortable = [];
   $(function () {
     //拖亦的部份 https://github.com/RubaXa/Sortable
     sortable["line_master"] = new Sortable(id("line_drag_master"), {
@@ -35,6 +35,10 @@
       forceFallback: false,
       setData: function (dataTransfer, dragEl) {
         vm.drag_line_key=$(dragEl).data("key"); //正在脫亦的line key
+        if(navigator.userAgent.match("Firefox")){
+          print(0)
+          dataTransfer.setData('line_key', $(dragEl).data("key")); //設定要傳送的資料
+         }
       },
       onStart: function(evt){
         vm.mode = 1.5;
@@ -42,7 +46,7 @@
       onEnd: function (evt) {
         setTimeout(function(){
           vm.swap_line(evt.oldIndex, evt.newIndex);
-		  		vm.mode = 1;
+		  vm.mode = 1;
           vm.drag_line_key="";
         },5)
       }
@@ -53,6 +57,9 @@
       filter: ".add",
       setData: function (dataTransfer, dragEl) {
         vm.drag_metro_key=$(dragEl).data("key"); //正在脫亦的metro key
+        if(navigator.userAgent.match("Firefox")){
+		  dataTransfer.setData('key', $(dragEl).data("key")); 
+        }
       },
       onStart: function (evt) {
         var $top_tag = $("#top_tag");
@@ -93,6 +100,7 @@
               _html="<img style='width: 100%;' src='"+_img+"'>";
               $(this).html(_html);
             }
+            
           }
         })
     }, 5);
@@ -102,6 +110,7 @@
       })
     }, 5);
   })
+
 
   function urlify(text) {
     //http://stackoverflow.com/questions/1500260/detect-urls-in-text-with-javascript
@@ -486,6 +495,7 @@
                   $(document).off('mousemove.line');
                   $(document).off('selectstart');
                   $(document).off('dragstart');
+                  $("#show_event").css("left",$("#left").width() + 20);
               });
           })
 

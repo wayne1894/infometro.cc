@@ -504,6 +504,7 @@ textarea:focus {
   width: 87%;
   max-width: 1500px;
 //    min-width: 524px;
+  height: 100%;
   min-height: 100%;
   margin-left: @left_width;
   border: 1px solid #CDCDCD;
@@ -521,11 +522,7 @@ textarea:focus {
   #board1 {
     width: 280px;
     position: fixed;
-    -ms-transform: translateX(-110%);
-    -webkit-transform: translateX(-110%);
-    transform: translateX(-110%);
-    -webkit-filter: blur(0px);
-    filter: blur(0px);
+    margin-left: -308px;
     margin-top: -7px;
     z-index: 50;
     #board_line_parent {
@@ -935,7 +932,7 @@ textarea:focus {
 		}
 		&:not(.adj) #board3{
 			width: 260px;
-			position: fixed;
+			position: absolute;
 			right: -291%;
 			margin-top: -7px;
 			top: 0;
@@ -966,9 +963,7 @@ textarea:focus {
           position: relative;
           border-left: 0;
           border-right: 0;
-          -ms-transform: none;
-          -webkit-transform: none;
-          transform: none;
+          margin-left: 0;
 		}
         #board_enter_parent{
            border-top: 5px solid;
@@ -1421,6 +1416,7 @@ i.orange.icon {
   position: fixed;
   bottom: 61px;
   left: 140px;
+  text-align: left;
   .ui.steps{
     border-radius: .1rem;
     .icon:before{
