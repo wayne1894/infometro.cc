@@ -602,9 +602,7 @@
       //print("拖曳的物件移到上面")
       event.preventDefault();//必要不能刪
 	}
-    function allowDrop_line(event){
-    event.preventDefault();//必要不能刪
-    }
+
 	$(function(){
       $("#board_textarea").keyup(function(e) {	
           auto_height(this)
