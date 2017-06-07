@@ -77,7 +77,7 @@
       </transition>
     </div>
       <ul id="line_drag">
-        <li v-for="(item, index) in line" v-show="!item.master" :class="{check:index_line==index}" class="line_list" @drop="drop_line($event,index)" :data-key="item._key" :key="item._key">
+        <li v-for="(item, index) in line" v-show="!item.master" :class="{check:index_line==index}" class="line_list" @drop="drop_line($event,index)" @dragover="allowDrop_line($event)"  :data-key="item._key" :key="item._key">
           <div v-if="!item.master" class="tool" @click="delete_line(item._key)">
             <i class="trash outline mini small icon"></i>
           </div>
@@ -114,11 +114,11 @@
     <ul id="top_tag">
       <li v-for="(item, index) in metro" :class="{ active: key_metro == item._key }"  class="metro_list" :data-key="item._key" :data-index="index" :key="item._key">
         <span v-if="index==0" class="add a_first" @click="new_metro(0)"><img src="src/static/images/+.png"></span>
-        
+        <span v-if="metro.length>1" class="top_join"><span v-if="mode == 1 && index>0" class="add" @click="new_metro(index)"><img src="src/static/images/+.png"></span></span>
         <i class="top_metro" :style="{color:line_color}" @click="exchange_metro(item._key)"></i>
         <span class="top_name" @dblclick="re_name(index,'metro',$event)">{{item.name}}</span>
         <input class="metro_input" type="text" v-model="item.name">
-        <span v-if="metro.length>1" class="top_join"><span v-if="mode == 1 && index>0" class="add" @click="new_metro(index)"><img src="src/static/images/+.png"></span></span>
+        
         
         <span v-if="metro.length==index+1" class="add a_last" @click="new_metro(metro.length)"><img src="src/static/images/+.png"></span>
       </li>

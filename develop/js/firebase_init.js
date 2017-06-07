@@ -306,6 +306,7 @@ function blueprint_set(){
 
       if (!sortable["blueprint"]) {
         sortable["blueprint"] = new Sortable(id("blueprint_drag"), {
+          scroll: false,
           animation: 150,
           forceFallback: false
         });

@@ -311,6 +311,7 @@ textarea:focus {
       position: relative;
       color: #B3B3B3;
       width: @li_width;
+      height: 100%;
       font-size: 12px;
       margin-top: 27px;
       transition: opacity 1s ease;
@@ -462,6 +463,11 @@ textarea:focus {
     }
     .sortable-chosen{
       .add{
+        display: none!important;
+      }
+    }
+    .sortable-chosen+li{
+      .add:not(.a_last){
         display: none!important;
       }
     }

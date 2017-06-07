@@ -22,7 +22,6 @@
         }
   }).resize();
 
-var aaa
  var sortable = [];
   $(function () {
     //拖亦的部份 https://github.com/RubaXa/Sortable
@@ -36,7 +35,6 @@ var aaa
       setData: function (dataTransfer, dragEl) {
         vm.drag_line_key=$(dragEl).data("key"); //正在脫亦的line key
         if(navigator.userAgent.match("Firefox")){
-          print(0)
           dataTransfer.setData('line_key', $(dragEl).data("key")); //設定要傳送的資料
          }
       },
@@ -55,6 +53,7 @@ var aaa
       animation: 50,
       forceFallback: false,
       filter: ".add",
+      scroll: false,
       setData: function (dataTransfer, dragEl) {
         vm.drag_metro_key=$(dragEl).data("key"); //正在脫亦的metro key
         if(navigator.userAgent.match("Firefox")){
@@ -505,9 +504,7 @@ var aaa
 	//right
 	$(function(){
 		 //perfectScrollbar
-			$("#right .r_content").perfectScrollbar();
-
-
+		 $("#right .r_content").perfectScrollbar();
 		 $("#right .r_button").on("click",function(){
 			var _index=$(this).index()-1;
 			$(this).addClass("active").siblings().removeClass("active");
@@ -605,6 +602,9 @@ var aaa
       //print("拖曳的物件移到上面")
       event.preventDefault();//必要不能刪
 	}
+    function allowDrop_line(event){
+    event.preventDefault();//必要不能刪
+    }
 	$(function(){
       $("#board_textarea").keyup(function(e) {	
           auto_height(this)
