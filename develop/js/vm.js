@@ -24,7 +24,6 @@ var vm = new Vue({
   },
   mounted: function () {
     $("#main").css("visibility", "visible");
-    
   },
   updated: function () {
     setTimeout(function () {
@@ -733,7 +732,6 @@ var vm = new Vue({
       var $textarea=$("#board_"+_level+"_textarea");
       $textarea.show();
       $textarea.focus();
-      
       if(_level=="line"){
         var get_level=vm.get_line();
       }else if(_level=="metro"){
@@ -753,22 +751,24 @@ var vm = new Vue({
           edit_set();
         }
       })
-      $(document).on("click.edit_"+_level, function (event) {
+      $(document).on("click."+_level+"_board", function (event) {
         if (event.target.id!="board_"+_level+"_textarea") edit_set();
       })
       function edit_set(){
-        $(document).off("click.edit_"+_level);
-        $textarea.off("keyup");
+        $(document).off("click."+_level+"_board");
+        $textarea.off("keydown");
         $("#border_"+_level+"_name").show();
         $textarea.hide();
       }
     },
-    re_name: function (index, _level, event) { //重新命名(共用)
+    re_name: function (index, _level, event ,other) { //重新命名(共用)
       if ($(event.target).hasClass("blueprint_i")) return;
       $("html").addClass("re_name");
       var $level_list = $(event.target).closest("." + _level + "_list");
       $level_list.addClass("edit");
-      if (sortable[_level]) sortable[_level].option("disabled", true);
+			var sort_level=_level;
+			if(other=="master")sort_level="line_master";
+      if (sortable[sort_level]) sortable[sort_level].option("disabled", true);
       var _name = get_level().name;
       var $level_list_input = $level_list.find("." + _level + "_input");
       $level_list_input.select().on("keyup." + _level + "_input", function (event) {

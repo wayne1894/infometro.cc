@@ -452,6 +452,7 @@ textarea:focus {
     }
     &.last_drag{
       li:nth-last-of-type(2){
+				width: 40px!important;
         .top_join{
            width: 45px;
            left: -38px;
@@ -550,6 +551,8 @@ textarea:focus {
       width: 100%;
       border: 0;
       overflow: hidden;
+			background-color: #f7f7f7;
+			letter-spacing: 1px;
       &.board_master{
         font-size: 37px;
         line-height: 42px;
@@ -563,7 +566,7 @@ textarea:focus {
       width: 100%;
       border: 0;
       overflow: hidden;
-      
+      background-color: #f7f7f7;
       font-size: 18px;
       font-weight: 700;
     }
@@ -964,15 +967,25 @@ textarea:focus {
 	}
 	@media screen and (max-width:961px) {
 		#board1 {
-          width: 100%;
-          position: relative;
-          border-left: 0;
-          border-right: 0;
-          margin-left: 0;
+			width: 100%;
+			position: relative;
+			border-left: 0;
+			border-right: 0;
+			margin-left: 0;
+			#board_line{
+				width: 368px;
+			}
+			#board_line_parent{
+				&::before{
+					left: 368px;
+				}
+			}
 		}
-        #board_enter_parent{
-           border-top: 5px solid;
-        }
+
+		
+		#board_enter_parent{
+			 border-top: 5px solid;
+		}
 		#board_parent{
 			&.adj::before{
 				width: 0px;

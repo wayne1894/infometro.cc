@@ -26,8 +26,7 @@
   $(function () {
     //拖亦的部份 https://github.com/RubaXa/Sortable
     sortable["line_master"] = new Sortable(id("line_drag_master"), {
-      animation: 150,
-      forceFallback: false
+      animation: 0
     });
     sortable["line"] = new Sortable(id("line_drag"), {
       animation: 150,
@@ -44,7 +43,7 @@
       onEnd: function (evt) {
         setTimeout(function(){
           vm.swap_line(evt.oldIndex, evt.newIndex);
-		  vm.mode = 1;
+		  		vm.mode = 1;
           vm.drag_line_key="";
         },5)
       }
