@@ -1,9 +1,9 @@
 <div class="triangle left"></div>
   <div id="top_tag_parent">
-    <ul id="top_tag">
-      <li v-for="(item, index) in metro" :class="{ active: key_metro == item._key }"  class="metro_list" :data-key="item._key" :data-index="index" :key="item._key">
+    <ul id="top_tag" :class="{eqonly2 : metro.length<=2 }">
+      <li v-for="(item, index) in metro" :class="{ active: key_metro == item._key }" class="metro_list" :data-key="item._key" :data-index="index" :key="item._key">
         <span v-if="index==0" class="add a_first" @click="new_metro(0)"><img src="src/static/images/+.png"></span>
-        <span v-if="metro.length>1" :class="{eq0 : index==0}" class="top_join"><span v-if="mode == 1 && index>0" class="add" @click="new_metro(index)"><img src="src/static/images/+.png"></span></span>
+        <span v-if="metro.length>1" :class="{eqfirst : index==0}"  class="top_join"><span v-if="mode == 1 && index>0" class="add" @click="new_metro(index)"><img src="src/static/images/+.png"></span></span>
         <i class="top_metro" :style="{color:line_color}" @click="exchange_metro(item._key)"></i>
         <span class="top_name" @dblclick="re_name(index,'metro',$event)">{{item.name}}</span>
         <input class="metro_input" type="text" v-model="item.name">

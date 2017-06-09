@@ -480,15 +480,16 @@ var vm = new Vue({
       var _color = data.line[index].color;
       $('#line_delete_modal').css("borderTopColor", _color);
       $("#line_delete_button").css("backgroundColor", _color);
-			$(document).one("keydown",function(event){
+			$(document).on("keydown.line_delete",function(event){
         if (event.which == 13 ) { //enter
 					_fn();
         } else if (event.which == 27) { //esc
           $('#line_delete_modal').modal("hide");
 					$("#line_delete_button").off("click");
+					$(document).off("keydown.line_delete");
         }
       })
-      $("#line_delete_button").on("click",_fn);
+      $("#line_delete_button").off("click").on("click",_fn);
 			function _fn(){
 				data.line.splice(index, 1); //移除line
         vm.get_index_blueprint().splice(index, 1); //移除line的index索引陣列
@@ -503,6 +504,7 @@ var vm = new Vue({
         vm.delete_info_line(key);
         $("#line_delete_button").off("click");
         $("#line_delete_modal").modal("hide");
+				$(document).off("keydown.line_delete");
 			}
     },
     get_line_key: function () {
@@ -566,16 +568,12 @@ var vm = new Vue({
       var _color = vm.line_color;
       $('#metro_delete_modal').css("borderTopColor", _color);
       $("#metro_delete_button").css("backgroundColor", _color);
-			$(document).one("keydown",function(event){
-        if (event.which == 13 ) { //enter
-					_fn();
-        } else if (event.which == 27) { //esc
+      $("#metro_delete_button").off("click").on("click", function () {
+          _del_metro();
+          $("#metro_delete_button").off("click");
           $("#metro_delete_modal").modal("hide");
-					$("#metro_delete_button").off("click");
-        }
       })
-      $("#metro_delete_button").on("click", _fn)
-      function _fn(){
+      function _del_metro(){
           data.line[vm.index_line].metro.splice(index, 1);
           if (vm.key_metro == delete_key) { //代表刪到選取的站,要重新更換key_metro
               var _index = index - 1;
@@ -586,8 +584,6 @@ var vm = new Vue({
           vm.action = "delete_metro";
           vm.更新藍圖(data.key, data);
           DB.ref("info/" + data.line[vm.index_line]._key + "/metro").child(delete_key).remove();
-				 $("#metro_delete_modal").modal("hide");
-         $("#metro_delete_button").off("click");
       }	
     },
 		swap_metro: function (oldIndex, newIndex) {
