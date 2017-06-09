@@ -311,7 +311,7 @@ textarea:focus {
       position: relative;
       color: #B3B3B3;
       width: @li_width;
-      height: 100%;
+      height: 33px;
       font-size: 12px;
       margin-top: 27px;
       transition: opacity 1s ease;
@@ -412,6 +412,7 @@ textarea:focus {
           }
         }
       }
+			
       &:last-child{
         width: 40px;
         .top_join{
@@ -462,6 +463,18 @@ textarea:focus {
     .sortable-ghost {
       opacity: 0.7;
     }
+		.sortable-chosen{
+			&:nth-of-type(2){
+				.top_join{
+					width: 45px;
+					left: 10px;
+				}
+				.top_join:not(.eq0){//vue 有綁定的
+					width: 90px!important;
+					left: -37px!important;
+				}
+			}
+		}
     .sortable-chosen{
       .add{
         display: none!important;
@@ -1435,6 +1448,7 @@ i.orange.icon {
   bottom: 61px;
   left: 140px;
   text-align: left;
+	z-index: 3000;
   .ui.steps{
     border-radius: .1rem;
     .icon:before{
