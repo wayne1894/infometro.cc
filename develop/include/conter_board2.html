@@ -34,11 +34,42 @@
 	<!--資訊送出-->
 	<div id="board_send_parent">
 		<div class="ui icon menu">
+<!--
+			<div class="left item">
+				<input id="uploadFileInput" type="file" accept="image/*">
+			</div>
+-->
 			<div class="right item">
 				<div id="board_send" :style="{backgroundColor:line_color}" onclick="vm.new_info()" class="ui mini orange button">送出</div>
 			</div>
 		</div>
 	</div>
+	
+	<script>
+		//https://firebase.google.com/docs/storage/web/upload-files
+		function upload_file(file){
+			var storageRef = firebase.storage().ref();
+			var uploadTask = storageRef.child(user_uid+"/file/"+vm.get_line_key()+"/"+vm.get_metro()._key+"/"+file.name).put(file);
+			uploadTask.on('state_changed', function(snapshot){
+			var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+			console.log('Upload is ' + progress + '% done');
+			},function(error) {
+							// Handle unsuccessful uploads
+				}, function() {
+						var downloadURL = uploadTask.snapshot.downloadURL;
+						print(downloadURL)
+				})
+			}
+
+			$(function(){
+//			var uploadFileInput = document.getElementById("uploadFileInput");
+//			uploadFileInput.addEventListener("change", function(){
+//			var file = this.files[0];
+//			upload_file(file);
+//			},false);
+			})
+	</script>
+	
 	<!--資訊送出-->
 	
 	<!--資訊列表-->
