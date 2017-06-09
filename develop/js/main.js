@@ -52,11 +52,10 @@
       animation: 50,
       forceFallback: false,
       filter: ".add",
-      scroll: false,
       setData: function (dataTransfer, dragEl) {
         vm.drag_metro_key=$(dragEl).data("key"); //正在脫亦的metro key
         if(navigator.userAgent.match("Firefox")){
-		  dataTransfer.setData('key', $(dragEl).data("key")); 
+		  		dataTransfer.setData('key', $(dragEl).data("key")); 
         }
       },
       onStart: function (evt) {

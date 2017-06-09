@@ -324,7 +324,6 @@ var vm = new Vue({
           closable: false
         }).modal('show');
       })
-
       $("#blueprint_delete_name").html(vm.get_blueprint().name);
       $("#blueprint_delete_button").off("dblclick").on("dblclick", function () {
         var index; //從刪除KEY找到他排在陣列的第幾個
@@ -445,13 +444,13 @@ var vm = new Vue({
       vm.action = "new_line";
       vm.更新藍圖(data.key, data);
     },
-	find_line_index: function(key, data){
-	  for (var i = 0; i < data.line.length; i++) {
-        if (data.line[i]._key == key) {
-          return i;
-        }
-      }
-	},
+		find_line_index: function(key, data){
+			for (var i = 0; i < data.line.length; i++) {
+					if (data.line[i]._key == key) {
+						return i;
+					}
+				}
+		},
     move_line: function (key) {
       var data = vm.get_blueprint();
       var index= vm.find_line_index(key,data);
@@ -481,8 +480,18 @@ var vm = new Vue({
       var _color = data.line[index].color;
       $('#line_delete_modal').css("borderTopColor", _color);
       $("#line_delete_button").css("backgroundColor", _color);
-      $("#line_delete_button").off("click").on("click", function () {
-        data.line.splice(index, 1); //移除line
+			$(document).on("keydown.line_delete",function(event){
+        if (event.which == 13 ) { //enter
+					_fn();
+        } else if (event.which == 27) { //esc
+          $('#line_delete_modal').modal("hide");
+					$("#line_delete_button").off("click");
+					$(document).off("keydown.line_delete");
+        }
+      })
+      $("#line_delete_button").off("click").on("click",_fn);
+			function _fn(){
+				data.line.splice(index, 1); //移除line
         vm.get_index_blueprint().splice(index, 1); //移除line的index索引陣列
         if (vm.index_line >= index) { //刪除到自已或小於自已-就往前倒退索引(同刪除藍圖)
           var new_index = vm.index_line - 1;
@@ -495,7 +504,8 @@ var vm = new Vue({
         vm.delete_info_line(key);
         $("#line_delete_button").off("click");
         $("#line_delete_modal").modal("hide");
-      });
+				$(document).off("keydown.line_delete");
+			}
     },
     get_line_key: function () {
       return vm.get_line()._key;
@@ -509,11 +519,7 @@ var vm = new Vue({
       this.更新藍圖(data.key, data);
     },
     check_metro: function (key) {
-      if (vm.key_metro == key) {
-        //var _color = this.get_line().color;
-        //return "background-color: " + _color;
-        return "active"
-      }
+      if (vm.key_metro == key) return "active"
     },
     exchange_metro: function (key) {
       this.key_metro = key;
@@ -580,7 +586,7 @@ var vm = new Vue({
           DB.ref("info/" + data.line[vm.index_line]._key + "/metro").child(delete_key).remove();
       }	
     },
-	swap_metro: function (oldIndex, newIndex) {
+		swap_metro: function (oldIndex, newIndex) {
       if (oldIndex == newIndex) return;
       var data = JSON.parse(JSON.stringify(this.get_blueprint())); //將傳址改為傳值
       var data_metro = data.line[this.index_line].metro

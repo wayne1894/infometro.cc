@@ -27,7 +27,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vuefire/1.3.1/vuefire.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/Sortable/1.5.1/Sortable.min.js"></script>
 
-<script src="https://www.gstatic.com/firebasejs/4.0.0/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.1.2/firebase.js"></script>
 <script src="src/static/js/jquery.jrumble.1.3.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.5.0/velocity.min.js"></script>
@@ -40,8 +40,8 @@
 <!-- jquery-color-pick -->
 
 <script src="src/build/js/public.js"></script>
-<script src="src/build/js/firebase_init.js?v=201706077"></script>
-<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=201706077" />
+<script src="src/build/js/firebase_init.js?v=20170609"></script>
+<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=20170609" />
 
 </head>
 <body>
@@ -60,7 +60,7 @@
       <li v-for="(item, index) in line" v-if="item.master" :class="{check:index_line==index}" class="line_list" @drop="drop_line($event,index)">
        <input class="line_input" type="text" v-model="item.name">
          <i class="line_i" :style="{backgroundColor:item.color}" @click="exchange_line(index)" @dblclick="open_color(index,item.color,'master')" ></i>
-         <a class="line_a" @dblclick="re_name(index,'line',$event)"  @click="exchange_line(index)">{{item.name}}</a>
+         <a class="line_a" @dblclick="re_name(index,'line',$event,'master')"  @click="exchange_line(index)">{{item.name}}</a>
       </li>
     </ul>
 	<div class="line_text">
@@ -111,10 +111,10 @@
 		<div id="top">
 			<div class="triangle left"></div>
   <div id="top_tag_parent">
-    <ul id="top_tag">
-      <li v-for="(item, index) in metro" :class="{ active: key_metro == item._key }"  class="metro_list" :data-key="item._key" :data-index="index" :key="item._key">
+    <ul id="top_tag" :class="{eqonly2 : metro.length<=2 }">
+      <li v-for="(item, index) in metro" :class="{ active: key_metro == item._key }" class="metro_list" :data-key="item._key" :data-index="index" :key="item._key">
         <span v-if="index==0" class="add a_first" @click="new_metro(0)"><img src="src/static/images/+.png"></span>
-        <span v-if="metro.length>1" class="top_join"><span v-if="mode == 1 && index>0" class="add" @click="new_metro(index)"><img src="src/static/images/+.png"></span></span>
+        <span v-if="metro.length>1" :class="{eqfirst : index==0}"  class="top_join"><span v-if="mode == 1 && index>0" class="add" @click="new_metro(index)"><img src="src/static/images/+.png"></span></span>
         <i class="top_metro" :style="{color:line_color}" @click="exchange_metro(item._key)"></i>
         <span class="top_name" @dblclick="re_name(index,'metro',$event)">{{item.name}}</span>
         <input class="metro_input" type="text" v-model="item.name">
@@ -238,11 +238,42 @@
 	<!--資訊送出-->
 	<div id="board_send_parent">
 		<div class="ui icon menu">
+<!--
+			<div class="left item">
+				<input id="uploadFileInput" type="file" accept="image/*">
+			</div>
+-->
 			<div class="right item">
 				<div id="board_send" :style="{backgroundColor:line_color}" onclick="vm.new_info()" class="ui mini orange button">送出</div>
 			</div>
 		</div>
 	</div>
+	
+	<script>
+		//https://firebase.google.com/docs/storage/web/upload-files
+		function upload_file(file){
+			var storageRef = firebase.storage().ref();
+			var uploadTask = storageRef.child(user_uid+"/file/"+vm.get_line_key()+"/"+vm.get_metro()._key+"/"+file.name).put(file);
+			uploadTask.on('state_changed', function(snapshot){
+			var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+			console.log('Upload is ' + progress + '% done');
+			},function(error) {
+							// Handle unsuccessful uploads
+				}, function() {
+						var downloadURL = uploadTask.snapshot.downloadURL;
+						print(downloadURL)
+				})
+			}
+
+			$(function(){
+//			var uploadFileInput = document.getElementById("uploadFileInput");
+//			uploadFileInput.addEventListener("change", function(){
+//			var file = this.files[0];
+//			upload_file(file);
+//			},false);
+			})
+	</script>
+	
 	<!--資訊送出-->
 	
 	<!--資訊列表-->
@@ -530,8 +561,8 @@
 		</div>
 	</div>
 </div>
-<script src="src/build/js/main.js?v=201706077"></script>
-<script src="src/build/js/vm.js?v=201706077"></script>
+<script src="src/build/js/main.js?v=20170609"></script>
+<script src="src/build/js/vm.js?v=20170609"></script>
  <script>
 	 if(get_test()!="test"){
 
