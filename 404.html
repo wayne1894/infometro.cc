@@ -57,7 +57,7 @@
     </transition>
   </div>
     <ul id="line_drag_master">
-      <li v-for="(item, index) in line" v-if="item.master" :class="{check:index_line==index}" class="line_list" @drop="drop_line($event,index)">
+      <li v-for="(item, index) in line" v-if="item.master" :class="{check:index_line==index}" class="line_list" @drop="drop_line($event,index)" @dragleave="allowDropLeave_line($event)" @dragover="allowDrop_line($event)">
        <input class="line_input" type="text" v-model="item.name">
          <i class="line_i" :style="{backgroundColor:item.color}"  @click="open_color(index,item.color,'master')" ></i>
          <a class="line_a" @dblclick="re_name(index,'line',$event,'master')"  @click="exchange_line(index)">{{item.name}}</a>
@@ -77,7 +77,7 @@
       </transition>
     </div>
       <ul id="line_drag">
-        <li v-for="(item, index) in line" v-show="!item.master" :class="{check:index_line==index}" class="line_list" @drop="drop_line($event,index)" :data-key="item._key" :key="item._key">
+        <li v-for="(item, index) in line" v-show="!item.master" :class="{check:index_line==index}" class="line_list" @drop="drop_line($event,index)" @dragleave="allowDropLeave_line($event)" @dragover="allowDrop_line($event)" :data-key="item._key" :key="item._key">
           <div v-if="!item.master" class="tool" @click="delete_line(item._key)">
             <i class="trash outline mini small icon"></i>
           </div>
@@ -156,7 +156,7 @@
     <transition name="fade">
       <i v-show="is_nav && mode==1" style="position: absolute; bottom:7px; left:4px;" class="nav_i ui orange help circle icon" data-title="修改支線名" data-content="目前在編輯模式下，點擊文字兩下可以修改名稱。"></i>
     </transition>
-    <div id="board_edit" onclick="vm.mode_click()" @dragover="allowDrop($event)" @drop="drop($event)"><div class="border_area" :data-tooltip="mode_txt()" data-position="right center"><i :class="mode_class()" class=" icon"></i></div></div>
+    <div id="board_edit" onclick="vm.mode_click()" @dragleave="allowDropLeave($event)" @dragover="allowDrop($event)" @drop="drop($event)"><div class="border_area" :data-tooltip="mode_txt()" data-position="right center"><i :class="mode_class()" class=" icon"></i></div></div>
     <transition name="fade">
         <i v-show="is_nav" style="position: absolute; bottom:8px; right:0;" class="nav_i ui orange help circle icon" data-title="切換操作模式" data-content="操作模式目前有『一般模式』及『編輯模式』，在編輯模式下，可以彈性操作大部份的編輯動作，例如，您可以將『地鐵站點』拖曳到其他支線來更換位置。在文字資訊的地方，點擊兩下也可快速修改文字。"></i>
     </transition>
@@ -301,7 +301,7 @@
                 $("#progress .bar").css("min-width" ,"0%" );
                 $('#uploadFileInput').val("");
                 $('#uploadFileParent').attr("data-tooltip","重新上傳");
-                $("#uploadName").html("<span style='color:#ffffff;margin-left:5px;'>"+name+"</span><i class='delete icon' style='position: relative;left:5px;cursor:pointer;color:#ffffff' onclick='clear_uploadFile()'></i>");
+                $("#uploadName").html("<span style='color:#ffffff;margin-left:5px;white-space: nowrap;'>"+name+"</span><i class='delete icon' style='position: relative;left:5px;cursor:pointer;color:#ffffff' onclick='clear_uploadFile()'></i>");
                 var downloadURL = uploadTask.snapshot.downloadURL;
                 $('#uploadFileInput').val("");
                 $("#uploadFileParent").data({
@@ -408,7 +408,7 @@
     <div id="blueprint">
  <div class="bottom_line" :style="{background:color_gradient(master_line_color)}"></div>
   <div id="blueprint_drag">
-    <div v-for="(item, index) in blueprint" class="blueprint_list ui top left pointing dropdown icon" @drop="drop_blueprint($event,item.key)"  @click="exchange_blueprint(index,undefined,$event)" @dblclick="re_name(index,'blueprint',$event)" :data-key="item.key" >
+    <div v-for="(item, index) in blueprint" class="blueprint_list ui top left pointing dropdown icon" @drop="drop_blueprint($event,item.key)" @dragleave="allowDropLeave_blueprint($event)" @dragover="allowDrop_blueprint($event)" @click="exchange_blueprint(index,undefined,$event)" @dblclick="re_name(index,'blueprint',$event)" :data-key="item.key" >
       <a class="blueprint_a" :class="{check:index_blueprint==index}"> {{item.name}}
       </a>
       <input class="blueprint_input" type="text" v-model="item.name">

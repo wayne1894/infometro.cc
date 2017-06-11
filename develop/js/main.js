@@ -403,6 +403,7 @@
 
 	//bottom
 	function drop_blueprint(event,key){
+      $(event.target).closest(".blueprint_list").jrumble().trigger('stopRumble');
 		var line_key = vm.drag_line_key;
 		if(line_key=="")return;
 		if(key==vm.blueprint[vm.index_blueprint].key){
@@ -423,6 +424,20 @@
 			}
 		}
 
+	}
+
+    function allowDrop_blueprint(event) { //拖曳的物件移到上面
+      if(vm.drag_line_key){
+        $(event.target).closest(".blueprint_list").jrumble().trigger('startRumble');
+      }
+      
+      event.preventDefault();//必要不能刪
+	}
+    function allowDropLeave_blueprint(event) { //拖曳的物件移出
+      if(vm.drag_line_key){
+        $(event.target).closest(".blueprint_list").jrumble().trigger('stopRumble');
+      }
+      event.preventDefault();//必要不能刪
 	}
 
 
@@ -452,9 +467,9 @@
 
 	//left
 	 function drop_line(event,index){
+        $(event.target).closest("li").jrumble().trigger('stopRumble');
 		if(vm.index_line==index)return;
 		var metro_key = vm.drag_metro_key;
-       
 		if(metro_key=="")return;
 		var _metro=vm.move_metro(metro_key,index);
 		if(_metro==undefined)return
@@ -463,7 +478,7 @@
 		data.line[index].metro.push(_metro);
 		vm.action="drop_line";
 		vm.更新藍圖(data.key,data);
-	}  
+	}
 	$(function(){
 		//晃動 https://jackrugile.com/jrumble/
 		$(".logo").jrumble({
@@ -519,6 +534,20 @@
           })
 
 	})
+    function allowDrop_line(event) { //拖曳的物件移到上面
+      if(vm.drag_metro_key){
+        $(event.target).closest("li").jrumble().trigger('startRumble');
+      }
+      
+      event.preventDefault();//必要不能刪
+	}
+    function allowDropLeave_line(event) { //拖曳的物件移出
+      if(vm.drag_metro_key){
+        $(event.target).closest("li").jrumble().trigger('stopRumble');
+      }
+      event.preventDefault();//必要不能刪
+	}
+
 	//left
 
 	//right
@@ -613,15 +642,21 @@
 
 	//center
 	function drop(event){
+      $("#board_edit>div>i").jrumble().trigger('stopRumble');
       var key = vm.drag_metro_key;
       if(key)vm.delete_metro(key);
       var line_key=vm.drag_line_key;
       if(line_key)vm.delete_line(line_key);
 	}
 	function allowDrop(event) { //拖曳的物件移到上面
-      //print("拖曳的物件移到上面")
+      $("#board_edit>div>i").jrumble().trigger('startRumble');
       event.preventDefault();//必要不能刪
 	}
+    function allowDropLeave(event) { //拖曳的物件移出
+      $("#board_edit>div>i").jrumble().trigger('stopRumble');
+      event.preventDefault();//必要不能刪
+	}
+
 
 	$(function(){
       $("#board_textarea").keyup(function(e) {	

@@ -96,7 +96,7 @@
                 $("#progress .bar").css("min-width" ,"0%" );
                 $('#uploadFileInput').val("");
                 $('#uploadFileParent').attr("data-tooltip","重新上傳");
-                $("#uploadName").html("<span style='color:#ffffff;margin-left:5px;'>"+name+"</span><i class='delete icon' style='position: relative;left:5px;cursor:pointer;color:#ffffff' onclick='clear_uploadFile()'></i>");
+                $("#uploadName").html("<span style='color:#ffffff;margin-left:5px;white-space: nowrap;'>"+name+"</span><i class='delete icon' style='position: relative;left:5px;cursor:pointer;color:#ffffff' onclick='clear_uploadFile()'></i>");
                 var downloadURL = uploadTask.snapshot.downloadURL;
                 $('#uploadFileInput').val("");
                 $("#uploadFileParent").data({
