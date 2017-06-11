@@ -32,6 +32,7 @@
         <div>資訊共 {{info_count}} 筆</div>
         <div>建立時間：<span>{{metro_create}}</span></div>
       </div>
+      <div id="tag_delete_metro"><a @click="delete_metro(key_metro)" class="default_a">刪除</a></div>
     </div>
     <transition name="fade">
       <i v-show="is_nav && mode==1" style="position: absolute; bottom:7px; right:0;" class="nav_i ui orange help circle icon" data-title="修改站名" data-content="目前在編輯模式下，點擊文字兩下可以修改名稱。"></i>

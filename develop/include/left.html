@@ -10,7 +10,7 @@
     <ul id="line_drag_master">
       <li v-for="(item, index) in line" v-if="item.master" :class="{check:index_line==index}" class="line_list" @drop="drop_line($event,index)">
        <input class="line_input" type="text" v-model="item.name">
-         <i class="line_i" :style="{backgroundColor:item.color}" @click="exchange_line(index)" @dblclick="open_color(index,item.color,'master')" ></i>
+         <i class="line_i" :style="{backgroundColor:item.color}"  @click="open_color(index,item.color,'master')" ></i>
          <a class="line_a" @dblclick="re_name(index,'line',$event,'master')"  @click="exchange_line(index)">{{item.name}}</a>
       </li>
     </ul>
@@ -28,12 +28,12 @@
       </transition>
     </div>
       <ul id="line_drag">
-        <li v-for="(item, index) in line" v-show="!item.master" :class="{check:index_line==index}" class="line_list" @drop="drop_line($event,index)"   :data-key="item._key" :key="item._key">
+        <li v-for="(item, index) in line" v-show="!item.master" :class="{check:index_line==index}" class="line_list" @drop="drop_line($event,index)" :data-key="item._key" :key="item._key">
           <div v-if="!item.master" class="tool" @click="delete_line(item._key)">
             <i class="trash outline mini small icon"></i>
           </div>
           <input v-if="!item.master" class="line_input" type="text" v-model="item.name">
-          <i v-if="!item.master" class="line_i" @dblclick="open_color(index,item.color)" @click="exchange_line(index)" :style="{backgroundColor:item.color}" ></i>
+          <i v-if="!item.master" class="line_i" @click="open_color(index,item.color)" :style="{backgroundColor:item.color}" ></i>
           <a v-if="!item.master" class="line_a" @dblclick="re_name(index,'line',$event)" @click="exchange_line(index)">{{item.name}}</a>
         </li>
       </ul>
@@ -50,7 +50,7 @@
   <a class="left_icon" data-tooltip="登出"  data-position="right center" onclick="$('.page.dimmer:first').dimmer('toggle');"><i class="power icon"></i></a>
   
     <transition name="fade">
-    <i v-show="is_nav" style=" position: absolute; bottom:9px; right:-42px" class="nav_i ui orange help circle icon" data-title="地鐵計畫" data-content="『地鐵計畫』為infometro 儲存資料最底層單位，其下可以新增無數條『支線』(在左邊新增支線的地方)，每條支線下有『地鐵站點』，站點下則可以新增資訊。"></i>
+    <i v-show="is_nav" style=" position: absolute; bottom:9px; right:-42px" class="nav_i ui orange help circle icon" data-title="地鐵計畫" data-content="『地鐵計畫』為infometro 儲存資料最底層單位，其下可以新增無數條『支線』(在左邊新增支線的地方)，每條支線下有『地鐵站點』，站點下則可以新增資訊。按滑鼠右鍵可以有細節的選項(刪除)。"></i>
   </transition>
   <transition name="fade">
     <i v-show="is_nav" style=" position: absolute; bottom:9px; right:-63px" class="nav_i ui orange help circle icon" data-title="新增一個地鐵計畫" data-content="點擊『+號』可以新增一個地鐵計畫，通常地鐵計畫是管理不同領域的資訊，相同領域的資訊我們可以用支線來管理。"></i>

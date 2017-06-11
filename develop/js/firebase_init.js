@@ -312,8 +312,8 @@ function blueprint_set(){
         });
 
       }
-}
 
+}
 
 function _is_login() { //程式進入點
   DB.ref('users/' + user_uid).once('value', function (data) { //載入使用者基本資料

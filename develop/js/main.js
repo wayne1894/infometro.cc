@@ -107,7 +107,12 @@
       })
     }, 5);
   })
-
+  
+  function is_mobile(){
+    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+      return true
+    }
+  }
 
   function urlify(text) {
     //http://stackoverflow.com/questions/1500260/detect-urls-in-text-with-javascript
@@ -397,11 +402,13 @@
 
 	}
 	$(function(){
+      if(is_mobile()){
 		$("#blueprint").on("click",function(event){	
 			if($(event.target).hasClass("blueprint_i")){
 					$(event.target).closest(".blueprint_list").trigger("customClick");
 			}
 		})
+      }
 	})
 
 	//var export_json={};

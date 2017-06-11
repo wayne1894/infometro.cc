@@ -241,6 +241,10 @@ var vm = new Vue({
       }, 0)
 
     },
+    openMenu : function(index,event){
+      event.preventDefault();
+      $(event.target).trigger("customClick");
+    },
     get_blueprint: function (index) { //得到藍圖(傳入index為其他藍圖)
       if (index != undefined) return this.blueprint[index];
       return this.blueprint[this.index_blueprint];
@@ -380,7 +384,7 @@ var vm = new Vue({
     },
     exchange_blueprint: function (index, target, event) { //切換藍圖
       if (vm.action != "load" && vm.index_blueprint == index) return; //重覆就離開
-      if (event && $(event.target).hasClass("blueprint_i")) return;
+//      if (event && $(event.target).hasClass("blueprint_i")) return;
       vm.檢查更新錯誤索引(index,vm.blueprint);
       if (index >= vm.blueprint.length) index = 0;
       $("#top_tag").stop().fadeOut(0);
@@ -625,10 +629,14 @@ var vm = new Vue({
         message: board_textarea,
         favorite: false,
         url_info: "",
-				update_timestamp: firebase.database.ServerValue.TIMESTAMP,
+		update_timestamp: firebase.database.ServerValue.TIMESTAMP,
         timestamp: firebase.database.ServerValue.TIMESTAMP,
-        users: user_uid
+        users: user_uid,
+        file_id : $("#uploadFileParent").data("file_id") || "",
+        file_url : $("#uploadFileParent").data("file_url") || "",
+        file_name : $("#uploadFileParent").data("file_name") || ""
       }
+      clear_uploadFile();
       if (vm.url_info) _data.url_info = vm.url_info;
       remove_start();
       if($("#top_tag").find("[data-key='"+vm.key_metro+"']").length==0){
@@ -681,7 +689,7 @@ var vm = new Vue({
     favorite_info: function (item) {
       DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).child(item[".key"]).update({
         favorite: !item.favorite,
-				update_timestamp: firebase.database.ServerValue.TIMESTAMP
+		update_timestamp: firebase.database.ServerValue.TIMESTAMP
       });
     },
     edit_info: function (item, dbl, event) {
@@ -748,7 +756,7 @@ var vm = new Vue({
       $textarea.on("keydown",function(event){
         auto_height2($textarea[0]);
         if (event.which == 13 || (event.shiftKey && event.which == 13)) { //enter
-					event.preventDefault();
+		  event.preventDefault();
           get_level.name=$.trim($textarea.val().replace(/  +/g, ' ')); 
           vm.action = "re_name";
           vm.更新藍圖();
