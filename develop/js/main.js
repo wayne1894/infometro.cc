@@ -10,7 +10,7 @@
 			$("#board_parent").removeClass("adj");
 		}
        if(is_mobile()){
-         $("#board_parent").css("min-height",(getViewportSize().h-90)+"px");
+         $("#board_parent").css("min-height",(getViewportSize().h)+"px");
        }
     
         if(window_width<650){
