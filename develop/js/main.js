@@ -9,6 +9,8 @@
 		}else{
 			$("#board_parent").removeClass("adj");
 		}
+       if(is_mobile())$("#board_parent").css("min-height",$(window).height()-74);
+    
         if(window_width<650){
           $("#center").css("width","650px");
           $("#top").css("width", $("#center").width());
