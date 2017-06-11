@@ -241,10 +241,6 @@ var vm = new Vue({
       }, 0)
 
     },
-    openMenu : function(index,event){
-      event.preventDefault();
-      $(event.target).trigger("customClick");
-    },
     get_blueprint: function (index) { //得到藍圖(傳入index為其他藍圖)
       if (index != undefined) return this.blueprint[index];
       return this.blueprint[this.index_blueprint];
@@ -383,8 +379,12 @@ var vm = new Vue({
       }
     },
     exchange_blueprint: function (index, target, event) { //切換藍圖
-      if (vm.action != "load" && vm.index_blueprint == index) return; //重覆就離開
-//      if (event && $(event.target).hasClass("blueprint_i")) return;
+      if (vm.action != "load" && vm.index_blueprint == index) {
+        if (event && $(event.target).hasClass("blueprint_i")) {
+          $(event.target).trigger("customClick");
+        };
+        return; //重覆就離開
+      }    
       vm.檢查更新錯誤索引(index,vm.blueprint);
       if (index >= vm.blueprint.length) index = 0;
       $("#top_tag").stop().fadeOut(0);

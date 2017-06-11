@@ -401,15 +401,7 @@
 		}
 
 	}
-	$(function(){
-      if(is_mobile()){
-		$("#blueprint").on("click",function(event){	
-			if($(event.target).hasClass("blueprint_i")){
-					$(event.target).closest(".blueprint_list").trigger("customClick");
-			}
-		})
-      }
-	})
+
 
 	//var export_json={};
 	//function load_info(key){
