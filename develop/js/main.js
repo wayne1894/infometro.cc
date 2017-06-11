@@ -10,8 +10,7 @@
 			$("#board_parent").removeClass("adj");
 		}
        if(is_mobile()){
-         alert("手機測試")
-         $("#board_parent").css("min-height",$(window).height()-74);
+         
        }
     
         if(window_width<650){
