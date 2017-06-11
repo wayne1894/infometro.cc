@@ -10,7 +10,7 @@
 			$("#board_parent").removeClass("adj");
 		}
        if(is_mobile()){
-         
+         $("#board_parent").css("min-height",(getViewportSize().h-90)+"px");
        }
     
         if(window_width<650){
@@ -116,6 +116,25 @@
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
       return true
     }
+  }
+  function getViewportSize(w) {
+    //https://stackoverflow.com/questions/1248081/get-the-browser-viewport-dimensions-with-javascript
+
+      // Use the specified window or the current window if no argument
+      w = w || window;
+
+      // This works for all browsers except IE8 and before
+      if (w.innerWidth != null) return { w: w.innerWidth, h: w.innerHeight };
+
+      // For IE (or any browser) in Standards mode
+      var d = w.document;
+      if (document.compatMode == "CSS1Compat")
+          return { w: d.documentElement.clientWidth,
+             h: d.documentElement.clientHeight };
+
+      // For browsers in Quirks mode
+      return { w: d.body.clientWidth, h: d.body.clientHeight };
+
   }
 
   function urlify(text) {
