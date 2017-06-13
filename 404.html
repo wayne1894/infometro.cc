@@ -417,8 +417,10 @@
           <div class="item" @click="re_name(index,'blueprint',$event)"><i class="edit icon"></i>重新命名</div>
            <div v-show="index_blueprint!=index" class="item" @click="exchange_blueprint(index,true,$event)"><i class="exchange icon"></i>切換</div>
           <div v-if="index_blueprint==index" class="item" @click="delete_blueprint(item.key)"><i class="delete icon"></i>移除</div>
-<!--          <div class="item" @click="匯出藍圖(item.key)"><i class="external icon"></i>匯出(備份)</div>-->
+<!--
+          <div class="item" @click="匯出藍圖(item.key)"><i class="external icon"></i>備份</div>
           
+-->
       </div>
     </div>
   </div>

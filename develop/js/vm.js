@@ -629,7 +629,7 @@ var vm = new Vue({
         message: board_textarea,
         favorite: false,
         url_info: "",
-		update_timestamp: firebase.database.ServerValue.TIMESTAMP,
+				update_timestamp: firebase.database.ServerValue.TIMESTAMP,
         timestamp: firebase.database.ServerValue.TIMESTAMP,
         users: user_uid,
         file_id : $("#uploadFileParent").data("file_id") || "",
