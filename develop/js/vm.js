@@ -11,7 +11,7 @@ var vm = new Vue({
     action_move: 0,
     info: [],
     users: [],
-    mode: 1,
+    mode: 0,
     pick_master: undefined,
     pick_color: undefined,
     url_info: undefined,
