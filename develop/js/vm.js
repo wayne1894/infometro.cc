@@ -313,7 +313,7 @@ var vm = new Vue({
       newRef.set({ //將他存到藍圖
         name: "我的地鐵計畫",
         line: newLine,
-        timestamp: firebase.database.ServerValue.TIMESTAMP,
+        timestamp: firebase.database.ServerValue.TIMESTAMP
       })
     },
     delete_blueprint: function (key) { //刪除藍圖
@@ -689,7 +689,7 @@ var vm = new Vue({
     favorite_info: function (item) {
       DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).child(item[".key"]).update({
         favorite: !item.favorite,
-		update_timestamp: firebase.database.ServerValue.TIMESTAMP
+				update_timestamp: firebase.database.ServerValue.TIMESTAMP
       });
     },
     edit_info: function (item, dbl, event) {
@@ -834,6 +834,16 @@ var vm = new Vue({
       return c;
     },
     open_color: function (index, color, master) { //打開色票選擇器(line)
+			if(vm.mode==0){
+				vm.exchange_line(index)
+				return
+			}
+			if($("#left_color").attr("show")=="Y"){
+				$(".colpick_submit").off("click.op");
+				$("#left_color").attr("show","");
+				return;
+			}
+
       color = color.split("#")[1];
       var $et = $(event.target);
       var _left = $et.offset().left;
@@ -843,10 +853,12 @@ var vm = new Vue({
         "left": _left,
         "top": _top
       }).colpickSetColor(color).colpickShow();
+			$("#left_color").attr("show","Y")
       $(".colpick_submit").off("click.op").on("click.op", function () {
         vm.get_blueprint().line[index].color = "#" + $("#left_color").val();
         vm.action = "edit_color";
         vm.更新藍圖();
+				$("#left_color").attr("show","");
         $(this).off("click.op");
       });
     },

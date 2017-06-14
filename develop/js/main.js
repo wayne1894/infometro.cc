@@ -441,33 +441,95 @@
 	}
 
 
-	//var export_json={};
-	//function load_info(key){
-	//  DB.ref("info/"+key+"/metro").once("value",function(data){
-	//    export_json.info[key]=data.val();
-	//  })
-	//}
-	//function 匯出藍圖(key){
-	//  for(var i=0;i<vm.blueprint.length;i++){
-	//    if(vm.blueprint[i].key==key){
-	//      export_json.name=vm.blueprint[i].name;
-	//      export_json.line=vm.blueprint[i].line;
-	//      export_json.info={};
-	//      for(var j=0;j<export_json.line.length;j++){
-	//         var key=export_json.line[j]._key;
-	//         export_json.info[key]="";
-	//         load_info(key);
-	//      }
-	//      return
-	//    }
-	//  }
-	//}
+	var export_json={};
+	var export_num =0;
+	var export_num_use=0;
+	
+	function load_info(key){
+	  DB.ref("info/"+key+"/metro").once("value",function(data){
+	    export_json.info[key]=data.val();
+			export_num_use=export_num_use+1;
+			if(export_num_use==export_num){//代表載入完成
+				var _json=JSON.stringify(export_json);
+				$('#export_modal textarea').val(_json);
+				$('#export_modal').modal({
+            inverted: true,
+            closable: false
+        }).modal('show');
+			}
+	  })
+	}
+	function 匯出藍圖(key){
+		export_num=0;
+		export_num_use=0;
+		var _color = vm.master_line_color;
+		$('#export_modal').css("borderTopColor", _color);
+		$('#export_modal').modal('hide');
+		$("#export_modal_button").css("backgroundColor", _color);
+	  for(var i=0;i<vm.blueprint.length;i++){
+	    if(vm.blueprint[i].key==key){
+	      export_json.name=vm.blueprint[i].name;
+				
+				$("#export_modal_name").html("infometro 地鐵計畫：" +  export_json.name);
+				$("#export_modal_name").css("color",_color);
+				
+	      export_json.line=vm.blueprint[i].line;
+	      export_json.info={};
+	      for(var j=0;j<export_json.line.length;j++){
+	         var key=export_json.line[j]._key;
+	         export_json.info[key]="";
+	         load_info(key);
+					 export_num=export_num+1
+	      }
+	      return
+	    }
+	  }
+	}
+  function 匯入藍圖(){
+		var _color = vm.master_line_color;
+    $('#import_modal').css("borderTopColor", _color);
+    $("#import_modal_button").css("backgroundColor", _color);
+		$('#import_modal').modal({
+       inverted: true
+    }).modal('show');
+		$("#import_modal_button").one("click",function(){
+			var export_json=JSON.parse($("#import_modal textarea").val());
+			var json_info_str=JSON.stringify(export_json.info);
+			var newRef = DB.ref('blueprint/' + user_uid).push();
+			var newLine = [];
+			for(var j=0;j<export_json.line.length;j++){
+				//要把metro的key換成新的
+				for(var k=0;k<export_json.line[j].metro.length;k++){
+					var _metro_key= DB.ref('blueprint/' + user_uid).push().key;
+					json_info_str=json_info_str.replace(export_json.line[j].metro[k]._key,_metro_key);//並且將info裡的替換掉
+					export_json.line[j].metro[k]._key=_metro_key;
+				}
+				var _line_key = DB.ref('blueprint/' + user_uid).push().key;//新的line
 
+				set_line_root(_line_key, user_uid );//新增info的line
+
+				var json_info=JSON.parse(json_info_str);
+				DB.ref('info/' + _line_key + "/metro").set(json_info[export_json.line[j]._key]);
+				export_json.line[j]._key = _line_key;
+			}
+			newRef.set({ //將他存到藍圖
+					name: export_json.name,
+					line: export_json.line,
+					timestamp: firebase.database.ServerValue.TIMESTAMP
+			})
+			$('#import_modal').modal('hide');
+			$.cookie('index_blueprint',vm.blueprint.length-1);
+			setTimeout(function(){
+				location.reload();
+			},1000)
+			
+		})
+	}
 	//bottom
 
 	//left
 	 function drop_line(event,index){
-        $(event.target).closest("li").jrumble().trigger('stopRumble');
+    $(event.target).closest("li").jrumble().trigger('stopRumble');
 		if(vm.index_line==index)return;
 		var metro_key = vm.drag_metro_key;
 		if(metro_key=="")return;
@@ -652,15 +714,14 @@
       $("#board_edit>div>i").jrumble().trigger('startRumble');
       event.preventDefault();//必要不能刪
 	}
-    function allowDropLeave(event) { //拖曳的物件移出
+  function allowDropLeave(event) { //拖曳的物件移出
       $("#board_edit>div>i").jrumble().trigger('stopRumble');
       event.preventDefault();//必要不能刪
 	}
 
-
 	$(function(){
       $("#board_textarea").keyup(function(e) {	
-          auto_height(this)
+        auto_height(this)
       });
       $("#board_textarea").on('paste', textarea_paste);
 	})

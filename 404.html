@@ -7,7 +7,7 @@
 <!--<meta http-equiv="X-UA-Compatible" content="IE=edge">-->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="infometro 是一款利用地鐵圖來組織資訊的網站，用來保存創意和想法。">
-<meta name="keywords" content="雲端儲存,雲端記事本,雲端筆記,note,evernote,oneNote,keep">
+<meta name="keywords" content="線上記事本,網路記事本,資訊收藏,雲端記事本,雲端筆記">
 
 <meta property="fb:app_id" content="438516566511315">
 <meta property="og:type" content="website">
@@ -40,8 +40,8 @@
 <!-- jquery-color-pick -->
 
 <script src="src/build/js/public.js"></script>
-<script src="src/build/js/firebase_init.js?v=201706111"></script>
-<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=201706111" />
+<script src="src/build/js/firebase_init.js?v=201706114"></script>
+<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=201706114" />
 
 </head>
 <body>
@@ -91,7 +91,7 @@
 	  <a id="new_line" class="default_a" @click="new_line()">新增支線</a>
 	  <transition name="fade">
        <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="新增支線" data-content="新增一條支線，在色塊的地方『點擊兩下』可以更換顏色，名字處點擊兩下也可以更換名字。"></i>
-      </transition>
+    </transition>
 	</div>
 </div>
 <div id="edit_parent">
@@ -417,15 +417,15 @@
           <div class="item" @click="re_name(index,'blueprint',$event)"><i class="edit icon"></i>重新命名</div>
            <div v-show="index_blueprint!=index" class="item" @click="exchange_blueprint(index,true,$event)"><i class="exchange icon"></i>切換</div>
           <div v-if="index_blueprint==index" class="item" @click="delete_blueprint(item.key)"><i class="delete icon"></i>移除</div>
-<!--
-          <div class="item" @click="匯出藍圖(item.key)"><i class="external icon"></i>備份</div>
-          
--->
+          <div class="item" @click="匯出藍圖(item.key)"><i class="external icon"></i>匯出</div>
       </div>
     </div>
   </div>
     <div id="blueprint_new" class="ui icon button" data-tooltip="新增一個地鐵計畫" data-inverted="" @click="new_blueprint()">
       <i class="add icon"></i>
+    </div>
+     <div id="blueprint_import" class="ui icon button" data-tooltip="匯入地鐵計畫" data-inverted="" @click="匯入藍圖()">
+      <i class="lightning icon"></i>
     </div>
 </div>
 <div id="copyright">© 2017 資訊地鐵站 版權所有</div>
@@ -553,7 +553,7 @@
     <div class="image content">
 
       <div class="description">
-        <p style="line-height: 1em;font-size: 15px;letter-spacing: 1px;">這個動作將會刪除整個地鐵的資料，且無法復原。</p>
+        <p style="line-height: 1em;font-size: 15px;letter-spacing: 1px;">這個動作將會刪除整個地鐵的資料，且無法復原。(建議先透過匯出功能來備份)</p>
         <p style="line-height: 1em;font-size: 15px;letter-spacing: 1px;">連續『點擊按鈕兩下』刪除。</p>
       </div>
     </div>
@@ -591,6 +591,36 @@
     </div>
   </div>
   
+    <div id="export_modal" style="padding: 0;" class="ui small modal orange segment">
+    <div class="image content">
+      <div class="description">
+        <p style="line-height: 1em;font-size: 15px;letter-spacing: 1px;">將文字儲存起來，日後你可以透過這一串文字來回復地鐵計畫(你也可以分享此段文字給你的好友。)</p>
+        <p id="export_modal_name" style="line-height: 1em;font-size: 15px;letter-spacing: 1px;"></p>
+        <div>
+        <textarea style="width:100%; height:130px; border: 1px solid #e2e2e2;color:#5a5a5a;padding: 5px 10px;"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+    	<div style="color:#ffffff;" id="export_modal_button" class="ui cancel button">關閉</div>
+    </div>
+  </div>
+  
+  <div id="import_modal" style="padding: 0;" class="ui small modal orange segment">
+    <div class="image content">
+      <div class="description">
+        <p style="line-height: 1em;font-size: 15px;letter-spacing: 1px;">請貼上你之前匯出的文字資料</p>
+        <div>
+        <textarea style="width:100%; height:130px; border: 1px solid #e2e2e2;color:#5a5a5a;padding: 5px 10px;"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+			<div id="import_modal_button" class="ui button" style="color:#ffffff;margin-right: -5px;">確定</div>
+			<div class="ui cancel button">取消</div>
+    </div>
+  </div>
+  
 
 	<div class="ui page dimmer">
 		<div class="content">
@@ -604,8 +634,8 @@
 		</div>
 	</div>
 </div>
-<script src="src/build/js/main.js?v=201706111"></script>
-<script src="src/build/js/vm.js?v=201706111"></script>
+<script src="src/build/js/main.js?v=201706114"></script>
+<script src="src/build/js/vm.js?v=201706114"></script>
  <script>
 	 if(get_test()!="test"){
 
