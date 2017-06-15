@@ -40,8 +40,8 @@
 <!-- jquery-color-pick -->
 
 <script src="src/build/js/public.js"></script>
-<script src="src/build/js/firebase_init.js?v=201706114"></script>
-<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=201706114" />
+<script src="src/build/js/firebase_init.js?v=201706115"></script>
+<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=201706115" />
 
 </head>
 <body>
@@ -50,23 +50,10 @@
     <div id="line_parent">
 	<div id="logo"><a href="/"><img class="logo" src="src/static/images/logo_200.png"></a></div>
 	<div id="left_line">
-  <div class="line_text ">
-    <span>主線：</span>
-    <transition name="fade">
-      <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="主線" data-content="主線在一個『地鐵計畫』裡只有一條，它能夠『串聯支線』(此功能尚未推出)，做為您主要分類資訊的依據。"></i>
-    </transition>
-  </div>
-    <ul id="line_drag_master">
-      <li v-for="(item, index) in line" v-if="item.master" :class="{check:index_line==index}" class="line_list" @drop="drop_line($event,index)" @dragleave="allowDropLeave_line($event)" @dragover="allowDrop_line($event)">
-       <input class="line_input" type="text" v-model="item.name">
-         <i class="line_i" :style="{backgroundColor:item.color}"  @click="open_color(index,item.color,'master')" ></i>
-         <a class="line_a" @dblclick="re_name(index,'line',$event,'master')"  @click="exchange_line(index)">{{item.name}}</a>
-      </li>
-    </ul>
 	<div class="line_text">
-       <span>一般支線：</span>
+       <span>所有支線：</span>
        <transition name="fade">
-       <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="一般支線" data-content="一般支線可以有無數條，您可以點擊『新增支線』來新增一條新的支線，做為您分類資訊的依據。另外您也可以拖曳移動它的順序，或者拖曳到下方的地鐵去，藉此移動支線。"></i>
+       <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="一般支線" data-content="您可以點擊『新增支線』來新增一條新的支線，做為您分類資訊的依據。另外您也可以拖曳移動它的順序，或者拖曳到下方的地鐵去，藉此移動支線。"></i>
       </transition>
       <transition name="fade">
         <div v-show="is_nav" style="position: absolute; top: 2px; right: -25px; z-index:55;">
@@ -77,13 +64,13 @@
       </transition>
     </div>
       <ul id="line_drag">
-        <li v-for="(item, index) in line" v-show="!item.master" :class="{check:index_line==index}" class="line_list" @drop="drop_line($event,index)" @dragleave="allowDropLeave_line($event)" @dragover="allowDrop_line($event)" :data-key="item._key" :key="item._key">
-          <div v-if="!item.master" class="tool" @click="delete_line(item._key)">
+        <li v-for="(item, index) in line" :class="{check:index_line==index}" class="line_list" @drop="drop_line($event,index)" @dragleave="allowDropLeave_line($event)" @dragover="allowDrop_line($event)" :data-key="item._key" :key="item._key">
+          <div class="tool" @click="delete_line(item._key)">
             <i class="trash outline mini small icon"></i>
           </div>
-          <input v-if="!item.master" class="line_input" type="text" v-model="item.name">
-          <i v-if="!item.master" class="line_i" @click="open_color(index,item.color)" :style="{backgroundColor:item.color}" ></i>
-          <a v-if="!item.master" class="line_a" @dblclick="re_name(index,'line',$event)" @click="exchange_line(index)">{{item.name}}</a>
+          <input class="line_input" type="text" v-model="item.name">
+          <i class="line_i" @click="open_color(index,item.color)" :style="{backgroundColor:item.color}" ></i>
+          <a class="line_a" @dblclick="re_name(index,'line',$event)" @click="exchange_line(index)">{{item.name}}</a>
         </li>
       </ul>
 	</div>
@@ -137,17 +124,12 @@
 <div class="triangle right"></div>
 		</div>
     <div id="board_parent" v-show="action!='load'">
-    	<div id="board2" :style="{borderTopColor:master_line_color}">
-				<div id="board1" :style="{borderTopColor:master_line_color}">
+    	<div id="board2">
+				<div id="board1">
   <div id="board_line_parent">
     <div id="board_line">
-      <i v-show="!is_master()" :style="{backgroundColor:line_color}"></i>
-      <div v-if="is_master()" >
-         <div v-if="mode==1" id="border_line_name" class="board_name master_big" @mousedown="edit_name($event,'line')">{{ line_name }}</div>
-         <div v-else class="board_name master_big">{{ line_name }}</div>
-         <textarea id="board_line_textarea" class="edit_textarea board_master">{{ line_name }}</textarea>
-      </div>
-      <div v-else class="board_name">
+      <i :style="{backgroundColor:line_color}"></i>
+      <div class="board_name">
         <div v-if="mode==1" id="border_line_name" @mousedown="edit_name($event,'line')">{{ line_name }}</div>
         <div v-else>{{ line_name }}</div>
         <textarea id="board_line_textarea" class="edit_textarea">{{ line_name }}</textarea>
@@ -172,13 +154,13 @@
         <div>資訊共 {{info_count}} 筆</div>
         <div>建立時間：<span>{{metro_create}}</span></div>
       </div>
-      <div id="tag_delete_metro"><a @click="delete_metro(key_metro)" class="default_a">刪除</a></div>
+      <div v-if="vm.mode==1" id="tag_delete_metro"><a @click="delete_metro(key_metro)" class="default_a">刪除</a></div>
     </div>
     <transition name="fade">
       <i v-show="is_nav && mode==1" style="position: absolute; bottom:7px; right:0;" class="nav_i ui orange help circle icon" data-title="修改站名" data-content="目前在編輯模式下，點擊文字兩下可以修改名稱。"></i>
     </transition>
   </div>
-	<div id="board3" style="color:#FF6900" :style="{borderTopColor:master_line_color}">
+	<div id="board3" style="color:#FF6900">
 	<div id="board3_header" :style="{color:line_color}"><i class="heart icon"></i><span class="text">最愛連結</span>
 	</div>
 	<div id="board_favorites">
@@ -204,7 +186,7 @@
 </div>
 </div>
 					<!--資訊輸入-->
-	<div id="board_enter_parent" :style="{borderTopColor:master_line_color}">
+	<div id="board_enter_parent" :style="{borderTopColor:line_color}">
 		<div id="board_img"><img v-if="users.photo" :src="users.photo"></div>
 		<div id="board_enter">
 		  <i style="display:none;" class="idea icon"></i>
@@ -328,6 +310,9 @@
 			    <div :style="{color : line_color}" class="active_left" v-show="info_active==item['.key']"></div>
 				<img v-if="users.photo" class="ui left floated image transition mini" :src="users.photo">
 				<div class="info_message" @dblclick="edit_info(item,'dbl',$event)">
+					<p v-if="img_file(item.file_name)">
+						<a :href="item.file_url" target="_blank"><img style="width:100%;" :src="item.file_url" ></a>
+					</p>
 					<p class="content" v-html="$options.filters.message_filter(item.message)"></p>
 					<p class="content textarea ui form" :style="{borderColor:line_color}">
 						<textarea></textarea>
@@ -351,8 +336,8 @@
 						</div>
 					</span>
 					<a v-if="item.file_id" :href="item.file_url" target="_blank" style="    position: absolute; bottom: 5px;right: 9px;">
-                      <span class="ui pointing" data-inverted="" :data-tooltip="item.file_name">
-                         <i class="attach icon"></i>
+						<span class="ui pointing" data-inverted="" :data-tooltip="item.file_name">
+							<i class="attach icon"></i>
 					  </span>
 					</a>
 				</span>
@@ -406,7 +391,7 @@
   </div>
   <div id="bottom">
     <div id="blueprint">
- <div class="bottom_line" :style="{background:color_gradient(master_line_color)}"></div>
+ <div class="bottom_line"></div>
   <div id="blueprint_drag">
     <div v-for="(item, index) in blueprint" class="blueprint_list ui top left pointing dropdown icon" @drop="drop_blueprint($event,item.key)" @dragleave="allowDropLeave_blueprint($event)" @dragover="allowDrop_blueprint($event)" @click="exchange_blueprint(index,undefined,$event)" @dblclick="re_name(index,'blueprint',$event)" :data-key="item.key" >
       <a class="blueprint_a" :class="{check:index_blueprint==index}"> {{item.name}}
@@ -432,27 +417,27 @@
 
   </div>
   <div id="right">
-    <div class="right_header_line" :style="{borderTopColor:master_line_color}"></div>
+    <div class="right_header_line" ></div>
 <div class="right_tool">
   <div class="over"></div>
   
-  <div class="r_button active" :style="{backgroundColor:master_line_color}">
+  <div class="r_button active" >
     <i class="svg home"><img src="src/static/images/home.svg"></i>
   </div>
 <!--
-  <div class="r_button" :style="{backgroundColor:master_line_color}">
+  <div class="r_button" :style="{backgroundColor:line_color}">
     <i class="youtube play icon"></i>
   </div>
 -->
-  <div class="r_button" :style="{backgroundColor:master_line_color}">
+  <div class="r_button" >
     <i class="svg search"><img src="src/static/images/search.svg"></i>
   </div>
 <!--
-  <div class="r_button" :style="{backgroundColor:master_line_color}">
+  <div class="r_button" :style="{backgroundColor:line_color}">
     <i class="comment icon"></i>
   </div>
 -->
-  <div class="r_button" :style="{backgroundColor:master_line_color}">
+  <div class="r_button">
     <i class="svg question"><img src="src/static/images/question.svg"></i>
   </div>
 
@@ -545,10 +530,10 @@
 </div>
 <div class="right_line"></div>
   </div>
-     <div id="blueprint_delete_modal" style="padding: 0;" :style="{borderTopColor:master_line_color}" class="ui small modal orange segment">
+     <div id="blueprint_delete_modal" style="padding: 0;" :style="{borderTopColor:line_color}" class="ui small modal orange segment">
     <div class="header">
 <!--      <img id="blueprint_delete_button" class="logo" src="src/static/images/logo.svg" style="width: 29px;float: right;letter-spacing: 1px;">-->
-      刪除 <span :style="{color:master_line_color}" id="blueprint_delete_name"></span>
+      刪除 <span :style="{color:line_color}" id="blueprint_delete_name"></span>
     </div>
     <div class="image content">
 
@@ -558,7 +543,7 @@
       </div>
     </div>
     <div class="actions">
-      <div id="blueprint_delete_button" class="ui button" :style="{backgroundColor:master_line_color}" style="color:#ffffff;margin-right: -5px;">確定</div>
+      <div id="blueprint_delete_button" class="ui button" :style="{backgroundColor:line_color}" style="color:#ffffff;margin-right: -5px;">確定</div>
       <div class="ui cancel button">取消</div>
     </div>
   </div>
@@ -634,8 +619,8 @@
 		</div>
 	</div>
 </div>
-<script src="src/build/js/main.js?v=201706114"></script>
-<script src="src/build/js/vm.js?v=201706114"></script>
+<script src="src/build/js/main.js?v=201706115"></script>
+<script src="src/build/js/vm.js?v=201706115"></script>
  <script>
 	 if(get_test()!="test"){
 

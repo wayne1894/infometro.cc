@@ -154,14 +154,12 @@ function set_line_root(_line_key, user_uid) { //設定支線擁有者
   DB.ref('info/' + _line_key + "/root").set(user_uid);
 }
 
-function line_json(name, color, master) {
+function line_json(name, color) {
   var _line_key = DB.ref('blueprint/' + user_uid).push().key;
   set_line_root(_line_key, user_uid );
-  if (!master) master = false
   return {
     _key: _line_key,
     name: name,
-    master: master,
     color: color,
     metro: [],
     timestamp: firebase.database.ServerValue.TIMESTAMP

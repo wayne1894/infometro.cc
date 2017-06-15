@@ -12,7 +12,6 @@ var vm = new Vue({
     info: [],
     users: [],
     mode: 0,
-    pick_master: undefined,
     pick_color: undefined,
     url_info: undefined,
     filter_search: "",
@@ -36,9 +35,9 @@ var vm = new Vue({
     //watch:key_metro
   },
   computed: {
-    master_line_color: function () { //主線目前一律是line 0
+    line_color: function () { //主線目前一律是line 0
       if (this.blueprint.length == 0) return "";
-      if (this.pick_color && this.pick_master) return this.pick_color;
+      if (this.pick_color) return this.pick_color;
       return this.get_blueprint().line[0].color;
     },
     line: function () { //載入line
@@ -47,7 +46,7 @@ var vm = new Vue({
     },
     line_color: function (index) {
       if (this.blueprint.length == 0) return "";
-      if (this.pick_color && !this.pick_master) return this.pick_color
+      if (this.pick_color) return this.pick_color
       return this.get_line().color;
     },
     metro: function () { //載入metro
@@ -160,6 +159,13 @@ var vm = new Vue({
     }
   },
   methods: {
+		img_file : function(name){
+			if(name=="" || name==undefined)return
+			name=name.toLowerCase()
+			if(name.indexOf("png")>-1 || name.indexOf("gif")>-1 || name.indexOf("jpg")>-1 || name.indexOf("jpeg")>-1){
+				return true
+			}
+		},
     get_youtube_embed: function (item) {
       if (item.url_info && item.url_info.youtube) {
         setTimeout(function () {
@@ -178,11 +184,6 @@ var vm = new Vue({
         }
       }
       return {}
-    },
-    is_master: function () {
-      if (this.blueprint.length == 0) return "";
-      if (vm.index_line == 0) return true;
-      return false
     },
     color_gradient: function (color) {
       return "linear-gradient(to right, #000 50%, " + color + " 0%)";
@@ -756,7 +757,7 @@ var vm = new Vue({
       $textarea.on("keydown",function(event){
         auto_height2($textarea[0]);
         if (event.which == 13 || (event.shiftKey && event.which == 13)) { //enter
-		  event.preventDefault();
+		  		event.preventDefault();
           get_level.name=$.trim($textarea.val().replace(/  +/g, ' ')); 
           vm.action = "re_name";
           vm.更新藍圖();
@@ -775,13 +776,12 @@ var vm = new Vue({
         $textarea.hide();
       }
     },
-    re_name: function (index, _level, event ,other) { //重新命名(共用)
+    re_name: function (index, _level, event) { //重新命名(共用)
       if ($(event.target).hasClass("blueprint_i")) return;
       $("html").addClass("re_name");
       var $level_list = $(event.target).closest("." + _level + "_list");
       $level_list.addClass("edit");
 			var sort_level=_level;
-			if(other=="master")sort_level="line_master";
       if (sortable[sort_level]) sortable[sort_level].option("disabled", true);
       var _name = get_level().name;
       var $level_list_input = $level_list.find("." + _level + "_input");
@@ -833,7 +833,7 @@ var vm = new Vue({
       if (!c) return "#000000";
       return c;
     },
-    open_color: function (index, color, master) { //打開色票選擇器(line)
+    open_color: function (index, color) { //打開色票選擇器(line)
 			if(vm.mode==0){
 				vm.exchange_line(index)
 				return
@@ -848,7 +848,6 @@ var vm = new Vue({
       var $et = $(event.target);
       var _left = $et.offset().left;
       var _top = $et.offset().top + $et.height() + 2;
-      vm.pick_master = master;
       $("#left_color").css({
         "left": _left,
         "top": _top

@@ -1,5 +1,5 @@
 	<!--資訊輸入-->
-	<div id="board_enter_parent" :style="{borderTopColor:master_line_color}">
+	<div id="board_enter_parent" :style="{borderTopColor:line_color}">
 		<div id="board_img"><img v-if="users.photo" :src="users.photo"></div>
 		<div id="board_enter">
 		  <i style="display:none;" class="idea icon"></i>
@@ -123,6 +123,9 @@
 			    <div :style="{color : line_color}" class="active_left" v-show="info_active==item['.key']"></div>
 				<img v-if="users.photo" class="ui left floated image transition mini" :src="users.photo">
 				<div class="info_message" @dblclick="edit_info(item,'dbl',$event)">
+					<p v-if="img_file(item.file_name)">
+						<a :href="item.file_url" target="_blank"><img style="width:100%;" :src="item.file_url" ></a>
+					</p>
 					<p class="content" v-html="$options.filters.message_filter(item.message)"></p>
 					<p class="content textarea ui form" :style="{borderColor:line_color}">
 						<textarea></textarea>
@@ -146,8 +149,8 @@
 						</div>
 					</span>
 					<a v-if="item.file_id" :href="item.file_url" target="_blank" style="    position: absolute; bottom: 5px;right: 9px;">
-                      <span class="ui pointing" data-inverted="" :data-tooltip="item.file_name">
-                         <i class="attach icon"></i>
+						<span class="ui pointing" data-inverted="" :data-tooltip="item.file_name">
+							<i class="attach icon"></i>
 					  </span>
 					</a>
 				</span>

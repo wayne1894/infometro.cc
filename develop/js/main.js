@@ -29,9 +29,6 @@
  var sortable = [];
   $(function () {
     //拖亦的部份 https://github.com/RubaXa/Sortable
-    sortable["line_master"] = new Sortable(id("line_drag_master"), {
-      animation: 0
-    });
     sortable["line"] = new Sortable(id("line_drag"), {
       animation: 150,
       forceFallback: false,
@@ -462,7 +459,7 @@
 	function 匯出藍圖(key){
 		export_num=0;
 		export_num_use=0;
-		var _color = vm.master_line_color;
+		var _color = vm.line_color;
 		$('#export_modal').css("borderTopColor", _color);
 		$('#export_modal').modal('hide');
 		$("#export_modal_button").css("backgroundColor", _color);
@@ -486,7 +483,7 @@
 	  }
 	}
   function 匯入藍圖(){
-		var _color = vm.master_line_color;
+		var _color = vm.line_color;
     $('#import_modal').css("borderTopColor", _color);
     $("#import_modal_button").css("backgroundColor", _color);
 		$('#import_modal').modal({
@@ -558,7 +555,6 @@
 		$('#left_color').colpick({
 			layout:'hex',
 			onHide:function(){
-				vm.pick_master=undefined;
 				vm.pick_color=undefined;
 			},
 			onChange:function(hsb,hex,rgb,el,bySetColor){
