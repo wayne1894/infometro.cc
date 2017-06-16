@@ -472,22 +472,18 @@
 			if(email=="")return;
 			var subject=$("#export_modal_name").html();
 			var attachments=$("#modal_textarea").val();
-			$.ajax({
-				type: "POST",
-				url: "https://us-central1-infometro-cc.cloudfunctions.net/mail",
-				data: {
-					"email" : email,
-					"subject": subject,
-					"html" : "檔案存於附件",
-					"attachments" : attachments
-				},
-				dataType: 'json',
-				success: function(text){
-					$("#send_modal_button").removeClass("loading");
-					$('#export_modal').modal('hide');
-				}
-			});
-			
+
+            $.post("https://us-central1-infometro-cc.cloudfunctions.net/mail",{
+              "email" : email,
+              "subject": subject,
+              "html" : "檔案存於附件",
+              "attachments" : attachments
+            }).done(function() {
+              $("#send_modal_button").removeClass("loading");
+              $('#export_modal').modal('hide');
+              show_event_fn("寄送成功","檔案已寄到您指定的信箱");
+            })
+          
 		})
 		
 	  for(var i=0;i<vm.blueprint.length;i++){
