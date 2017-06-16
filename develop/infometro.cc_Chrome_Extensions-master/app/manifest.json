@@ -1,0 +1,73 @@
+{
+    "manifest_version": 2,
+    "name": "infometro",
+    "description": "infometro Bookmarks Manager.",
+    "version": "1.2",
+
+    // https://developer.chrome.com/extensions/declare_permissions
+    "permissions": [
+        "tabs",
+        "bookmarks",
+        "background"
+    ],
+    "browser_action": {
+        "default_title": "infometro",
+        "default_icon": "icon.png", //Used as the icon in the Chrome toolbar
+        "default_popup": "popup.html"
+    },
+    // "icons": {
+    //     "16": "icon16.png", //Used as the favicon for an extension's pages
+    //     "48": "icon46.png", //Used on the extension management page
+    //     "128": "icon124.png" //Used during installation & in the Chrome Web Store
+    // },
+    "content_security_policy": "script-src 'self' https://ajax.googleapis.com https://*.firebaseio.com https://*.gstatic.com/; object-src 'self'",
+    
+    // https://developer.chrome.com/extensions/background_pages
+    // https://developer.chrome.com/extensions/event_pages
+    // 背景執行緒方法：
+    // 1.指定為 HTML 格式檔案 background.html , 在從 background.html 檔案載入 scripts。
+    //  "page" : "background.html"
+    // 2.Scripts 腳本
+    // "scripts" : ["background-1.js", "background-2.js"]
+    // 後台網頁： 需要有一個長時間運行的 scripts 來管理一些任務或狀態。
+    // 事件頁面： 事件頁面與後台網頁很像，但是事件頁面只在需要時加載，當事件頁面當前不活動時將會卸載，釋放內存及其他系統資源。
+    // persistent 設定為 false 時，就是事件頁面。預設為 true (後台網頁)。
+    "background": {
+        // "scripts": [
+        //     // "event_script.js"
+        //     // "another_event_script.js"
+        // ],
+        "page": "/background/background.html",
+        "persistent": true
+    },
+    "commands": {
+        "reload_extension": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+Q",
+                "windows": "Ctrl+Shift+Q",
+                "mac": "MacCtrl+Shift+Q",
+                "chromeos": "Ctrl+Shift+Q",
+                "linux": "Ctrl+Shift+Q"
+            },
+            "description": "shortcut for reloading extensions"
+        }
+    }
+
+    // http://jzlin-blog.logdown.com/posts/147142-introduction-to-chrome-extension-pt-thread
+    // https://developer.chrome.com/extensions/content_scripts
+    // 需要更動當前頁面的 DOM 時，就須以內文執行緒來達成：
+    // 1.在網頁中找出未鏈接的 URL，並將他們轉換為超鏈接。
+    // 2.增加字體大小，使文本更具有可讀性。
+    // 內文執行緒有一些限制：
+    // 1.調用 chrome.* API (除了 chrome.extension 中的一部分) https://developer.chrome.com/extensions/extension
+    // 2.使用所屬擴充工具頁面中定義的變數或函數
+    // 3.使用網頁或其他內文執行緒中定義的變數或函數
+
+    // "content_scripts" : [
+    //     {
+    //         "matches" : ["*://stackoverflow.com/*"],
+    //         "css" : [""],
+    //         "js" : ["content_script.js"]
+    //     }
+    // ]
+}

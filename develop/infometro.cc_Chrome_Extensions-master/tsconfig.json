@@ -1,0 +1,14 @@
+{
+  
+  "compilerOptions": {
+    "module": "system",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "sourceMap": true
+    //"outDir": "./src/" //javascipt檔的輸出路徑
+  },
+  "types" : [
+    "jquery"
+  ]
+}
