@@ -449,6 +449,7 @@
 			if(export_num_use==export_num){//代表載入完成
 				var _json=JSON.stringify(export_json);
 				$('#export_modal textarea').val(_json);
+				$('#modal_send').val(user_email);
 				$('#export_modal').modal({
             inverted: true,
             closable: false
@@ -462,7 +463,33 @@
 		var _color = vm.line_color;
 		$('#export_modal').css("borderTopColor", _color);
 		$('#export_modal').modal('hide');
-		$("#export_modal_button").css("backgroundColor", _color);
+		//$("#export_modal_button").css("backgroundColor", _color);
+		$("#send_modal_button").css("backgroundColor", _color);
+		$("#send_modal_button").removeClass("loading");
+		$("#send_modal_button").off("click").one("click",function(){
+			$(this).addClass("loading");
+			var email=$.trim($("#modal_send").val());
+			if(email=="")return;
+			var subject=$("#export_modal_name").html();
+			var attachments=$("#modal_textarea").val();
+			$.ajax({
+				type: "POST",
+				url: "https://us-central1-infometro-cc.cloudfunctions.net/mail",
+				data: {
+					"email" : email,
+					"subject": subject,
+					"html" : "檔案存於附件",
+					"attachments" : attachments
+				},
+				dataType: 'json',
+				success: function(text){
+					$("#send_modal_button").removeClass("loading");
+					$('#export_modal').modal('hide');
+				}
+			});
+			
+		})
+		
 	  for(var i=0;i<vm.blueprint.length;i++){
 	    if(vm.blueprint[i].key==key){
 	      export_json.name=vm.blueprint[i].name;

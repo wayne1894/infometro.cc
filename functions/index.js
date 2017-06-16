@@ -1,3 +1,4 @@
+var cors = require('cors');
 const functions = require('firebase-functions');
 
 // // Create and Deploy Your First Cloud Functions
@@ -8,32 +9,44 @@ const functions = require('firebase-functions');
 // });
 
 var nodemailer = require('nodemailer');
-
+//https://firebase.google.com/docs/functions/http-events
 exports.mail = functions.https.onRequest((req, res) => {
-	var url=req.query.url; //接收參數
+	var corsFn = cors();
+	corsFn(req, res, function() {
+		var email=req.body.email; //接收參數
+		var subject =req.body.subject;
+		var html=req.body.html;
+		var attachments= req.body.attachments
 
-	var transporter = nodemailer.createTransport({
-		service: 'Gmail',
-		auth: {
-			user: 'infometro.cc@gmail.com',
-			pass: 'm14911491'
-		}
+		var transporter = nodemailer.createTransport({
+			service: 'Gmail',
+			auth: {
+				user: 'infometro.cc@gmail.com',
+				pass: 'm14911491'
+			}
+		});
+
+		var mailOptions = {
+			from: 'infometro 資訊地鐵站', //收件者
+	//	cc: 'mose286778@gmail.com', //副本
+	//  bcc: 'mose286778@gmail.com',//密件副本
+			to: email, 
+			subject: subject, //主旨
+	//		text: text,
+			html: html,
+	    attachments: [ {
+	      filename: 'file.txt',
+	      content: attachments
+	    }]
+		};
+
+		transporter.sendMail(mailOptions, function(error, info){
+			if (error) {
+				console.log(error);
+			} else {
+				console.log('Email sent: ' + info.response);
+				res.status(200).send('Email sent: ' + info.response);
+			}
+		});
 	});
-
-	var mailOptions = {
-		from: 'infometro 資訊地鐵站',
-		to: 'mose286778@gmail.com',
-		subject: 'firebase實測',
-		text: 'That was easy!'
-	};
-
-	transporter.sendMail(mailOptions, function(error, info){
-		if (error) {
-			console.log(error);
-		} else {
-			console.log('Email sent: ' + info.response);
-			res.status(200).send('Email sent: ' + info.response);
-		}
-	});
-
 });

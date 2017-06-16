@@ -19,6 +19,7 @@
 
 var DB
 var user_uid;
+var user_email
 var provider;
 var isAnonymous;
 
@@ -36,8 +37,10 @@ $(function(){
 	//[全域]監聽狀態改變
 	firebase.auth().onAuthStateChanged(function (data) {
 		var page=get_page();
+		
 		if (data) { //使用者已登入
 			user_uid = data.uid;
+			user_email = data.email
 			if (data.isAnonymous) { //匿名使用者
 				isAnonymous=true;
 				DB.ref('users/' + data.uid).once('value', function (data) {
@@ -57,9 +60,7 @@ $(function(){
 			if ( page == "main") location.replace("/"); //登出
 		}
 	});
-
-})	
-
+})
 
 function logout() {
   firebase.auth().signOut().then(function () {
@@ -108,7 +109,7 @@ function fb_login() {
 }
 function anonymous_login() {
 	if(login_wait)return;
-	login_wait=true
+	login_wait=true;
   if(DB==undefined) return setTimeout(anonymous_login,500);
   if (user_uid != undefined) location_fn();
   firebase.auth().signInAnonymously();
@@ -272,7 +273,7 @@ function blueprint_init(blueprint_fn,load_fn) {
     } else if (_action == "new_line") {
       vm.index_update();
       show_event_fn("新增成功","你新增了一條支線");
-      vm.exchange_line(vm.index[vm.index_blueprint].length - 1);
+     vm.exchange_line(vm.index[vm.index_blueprint].length - 1);
     } else if(_action=="delete_line"){
       show_event_fn("刪除成功","你刪除了一條支線");
     } else if (_action == "swap_line") {
