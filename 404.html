@@ -316,12 +316,12 @@
 					<p class="content" v-html="$options.filters.message_filter(item.message)"></p>
 					<p class="content textarea ui form" :style="{borderColor:line_color}">
 						<textarea></textarea>
-						<span class="textarea_prompt" >
-								<span class="esc">
-								<i class="ui info circle icon" ></i>按Esc離開編輯
-								</span>
-								<button class="send mini ui button" :style="{backgroundColor:line_color}">送出</button>
-								<button class="cancel mini ui button">取消</button>
+						<span class="textarea_prompt">
+                          <span class="esc">
+                          <i class="ui info circle icon" ></i>按Esc離開編輯
+                          </span>
+                          <button class="send mini ui button" :style="{backgroundColor:line_color}">送出</button>
+                          <button class="cancel mini ui button">取消</button>
 						</span>
 					</p>
 				</div>
@@ -365,16 +365,6 @@
 				</div>
 				<!--包成vue組件2 顯示-->
 			</div>
-			<div class="_delete_info ui inverted dimmer">
-				<div class="content">
-					<div class="center">
-						<i class="trash outline icon" style="font-size: 1.8em;margin-bottom: 13px;color:#000;cursor: default"></i>
-						<div style="margin-bottom:20px;color:#000;">確定要刪除資料？</div>
-						<button class="send mini ui button" :style="{backgroundColor:line_color}">刪除</button>
-						<button class="cancel mini ui button">取消</button>
-					</div>
-				</div>
-			</div>
 		</div>
 	</div>
 	<!--資訊列表-->
@@ -410,40 +400,64 @@
       <i class="add icon"></i>
     </div>
      <div id="blueprint_import" class="ui icon button" data-tooltip="匯入地鐵計畫" data-inverted="" @click="匯入藍圖()">
-      <i class="lightning icon"></i>
+      <i class="reply icon"></i>
     </div>
 </div>
-<div id="copyright">© 2017 資訊地鐵站 版權所有</div>
+<div id="copyright">
+  <div style="display:inline-block;">
+  © 2017 資訊地鐵站 版權所有
+  </div>
+  <span class="ui top right pointing dropdown">
+    <i class="blueprint_i dropdown icon"></i>
+    <div class="menu" style="bottom: 68%;">
+      <div class="item"><i class="write icon"></i><a style="color:#000000" href="https://goo.gl/forms/p464Om8G1yszy0ji1" target="_blank">網站使用滿意度調查</a></div>
+      <div class="item"><i class="comment icon"></i><a style="color:#000000" href="https://goo.gl/forms/QYfCfG5vZF9CyNP03" target="_blank">提供建議</a></div>
+      <div class="item"><i class="facebook f icon"></i><a style="color:#000000" href="https://www.facebook.com/infometro.cc/" target="_blank">關注我們</a></div>
+    </div>
+  </span>
+</div>
 
   </div>
   <div id="right">
     <div class="right_header_line" ></div>
-<div class="right_tool">
-  <div class="over"></div>
-  
-  <div class="r_button active" >
-    <i class="svg home"><img src="src/static/images/home.svg"></i>
-  </div>
-<!--
-  <div class="r_button" :style="{backgroundColor:line_color}">
-    <i class="youtube play icon"></i>
-  </div>
--->
-  <div class="r_button" >
-    <i class="svg search"><img src="src/static/images/search.svg"></i>
-  </div>
-<!--
-  <div class="r_button" :style="{backgroundColor:line_color}">
-    <i class="comment icon"></i>
-  </div>
--->
-  <div class="r_button">
-    <i class="svg question"><img src="src/static/images/question.svg"></i>
-  </div>
+<div class="right_tool_parent">
+  <div class="right_tool">
+    <div class="over"></div>
 
+<!--
+    <div class="r_button active" >
+      <i class="svg home"><img src="src/static/images/home.svg"></i>
+    </div>
+-->
+    <div class="r_button active">
+      <i class="lightning icon"></i>
+    </div>
+    <div class="r_button" >
+      <i class="svg search"><img src="src/static/images/search.svg"></i>
+    </div>
+  <!--
+    <div class="r_button" :style="{backgroundColor:line_color}">
+      <i class="comment icon"></i>
+    </div>
+  -->
+    <div class="r_button">
+      <i class="svg question"><img src="src/static/images/question.svg"></i>
+    </div>
+  </div>
+  <div id="right_lightning">
+    <div class="ui from">
+      <div class="field">
+        <textarea rows="5" placeholder="即時資訊"></textarea>
+      </div>
+      <div class="clearfix">
+        <img style="float:right;position: relative; top: -3px; left: 3px; cursor:pointer;" src="src/static/images/send.png" onclick="lightning_send()" >
+      </div>
+    </div>
+    <div class="right_info_line"></div>
+  </div>
 </div>
-
 <div class="right_main">
+<!--
   <div class="r_content active">
     <div style="font-size: 1rem;">重要公告：</div>
       <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
@@ -465,15 +479,17 @@
     <div style="margin-bottom:20px;"></div>
     
   </div>
-<!--
-  <div class="r_content">
-    <div style="font-size: 1rem;">youtube播放列表：</div>
-    <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
-    <div style="color:#757575;font-size: 1rem;">
-      即將推出的功能，您可將youtube影片置放於此。
+-->
+  <div class="r_content" style="padding:0;height: calc( 100% - 157px);">
+    <div @click="lightning_click(event)" class="lightning_item" v-for="(item, index) in lightning_sort">
+       <div class="lightning_active" style="position: absolute; left: 0px; top: 0px; width: 5px; height: 100%; background-image: none; background-color: rgb(255, 105, 0);"></div>
+       <div style="min-height:70px;">
+         <div style=";margin-right:50px; ">{{item.message}}</div>
+         <div style="position:absolute;right:11px;top:6px; width:50px;text-align:right;letter-spacing:-1px; color:#CCCCCC;">{{lightning_create(item.timestamp)}}</div>
+       </div>
+       <div class="lightning_a"><a class="default_a block" @click="delete_lightning(item['.key'],event)">刪除</a></div>
     </div>
   </div>
--->
   <div class="r_content">
     <div style="font-size: 1rem;">搜尋結果：</div>
     <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>

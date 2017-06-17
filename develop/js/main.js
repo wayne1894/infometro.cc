@@ -361,7 +361,20 @@
       }
 
   }
-
+  
+  function delete_modal_html(button_color){
+    if(button_color==undefined)button_color="#FF6900";
+    return '<div class="_modal_info ui inverted dimmer">'+
+          '<div class="content">'+
+              '<div class="center">'+
+                  '<i class="trash outline icon" style="font-size: 1.8em;margin-bottom: 13px;color:#000;cursor: default"></i>'+
+                  '<div class="_modal_but" style="margin-bottom:20px;color:#000;">確定要刪除資料？</div>'+
+                  '<button class="send mini ui button" style="background-color:'+button_color+'">刪除</button>'+
+                  '<button class="cancel mini ui button">取消</button>'+
+             '</div>'+
+         '</div>'+
+       '</div>'
+  }
 //----------------------分塊程式碼------------------
 
 	//top
@@ -436,8 +449,10 @@
       }
       event.preventDefault();//必要不能刪
 	}
-
-
+    $(function(){
+      $('#copyright .ui.dropdown').dropdown();
+    })
+    
 	var export_json={};
 	var export_num =0;
 	var export_num_use=0;
@@ -457,94 +472,94 @@
 			}
 	  })
 	}
-	function 匯出藍圖(key){
-		export_num=0;
-		export_num_use=0;
-		var _color = vm.line_color;
-		$('#export_modal').css("borderTopColor", _color);
-		$('#export_modal').modal('hide');
-		//$("#export_modal_button").css("backgroundColor", _color);
-		$("#send_modal_button").css("backgroundColor", _color);
-		$("#send_modal_button").removeClass("loading");
-		$("#send_modal_button").off("click").one("click",function(){
-			$(this).addClass("loading");
-			var email=$.trim($("#modal_send").val());
-			if(email=="")return;
-			var subject=$("#export_modal_name").html();
-			var attachments=$("#modal_textarea").val();
+    function 匯出藍圖(key){
+          export_num=0;
+          export_num_use=0;
+          var _color = vm.line_color;
+          $('#export_modal').css("borderTopColor", _color);
+          $('#export_modal').modal('hide');
+          //$("#export_modal_button").css("backgroundColor", _color);
+          $("#send_modal_button").css("backgroundColor", _color);
+          $("#send_modal_button").removeClass("loading");
+          $("#send_modal_button").off("click").one("click",function(){
+              $(this).addClass("loading");
+              var email=$.trim($("#modal_send").val());
+              if(email=="")return;
+              var subject=$("#export_modal_name").html();
+              var attachments=$("#modal_textarea").val();
 
-            $.post("https://us-central1-infometro-cc.cloudfunctions.net/mail",{
-              "email" : email,
-              "subject": subject,
-              "html" : "檔案存於附件",
-              "attachments" : attachments
-            }).done(function() {
-              $("#send_modal_button").removeClass("loading");
-              $('#export_modal').modal('hide');
-              show_event_fn("寄送成功","檔案已寄到您指定的信箱");
-            })
-          
-		})
-		
-	  for(var i=0;i<vm.blueprint.length;i++){
-	    if(vm.blueprint[i].key==key){
-	      export_json.name=vm.blueprint[i].name;
-				
-				$("#export_modal_name").html("infometro 地鐵計畫：" +  export_json.name);
-				$("#export_modal_name").css("color",_color);
-				
-	      export_json.line=vm.blueprint[i].line;
-	      export_json.info={};
-	      for(var j=0;j<export_json.line.length;j++){
-	         var key=export_json.line[j]._key;
-	         export_json.info[key]="";
-	         load_info(key);
-					 export_num=export_num+1
-	      }
-	      return
-	    }
-	  }
-	}
-  function 匯入藍圖(){
-		var _color = vm.line_color;
-    $('#import_modal').css("borderTopColor", _color);
-    $("#import_modal_button").css("backgroundColor", _color);
-		$('#import_modal').modal({
-       inverted: true
-    }).modal('show');
-		$("#import_modal_button").one("click",function(){
-			var export_json=JSON.parse($("#import_modal textarea").val());
-			var json_info_str=JSON.stringify(export_json.info);
-			var newRef = DB.ref('blueprint/' + user_uid).push();
-			var newLine = [];
-			for(var j=0;j<export_json.line.length;j++){
-				//要把metro的key換成新的
-				for(var k=0;k<export_json.line[j].metro.length;k++){
-					var _metro_key= DB.ref('blueprint/' + user_uid).push().key;
-					json_info_str=json_info_str.replace(export_json.line[j].metro[k]._key,_metro_key);//並且將info裡的替換掉
-					export_json.line[j].metro[k]._key=_metro_key;
-				}
-				var _line_key = DB.ref('blueprint/' + user_uid).push().key;//新的line
+              $.post("https://us-central1-infometro-cc.cloudfunctions.net/mail",{
+                "email" : email,
+                "subject": subject,
+                "html" : "檔案存於附件",
+                "attachments" : attachments
+              }).done(function() {
+                $("#send_modal_button").removeClass("loading");
+                $('#export_modal').modal('hide');
+                show_event_fn("寄送成功","檔案已寄到您指定的信箱");
+              })
 
-				set_line_root(_line_key, user_uid );//新增info的line
+          })
 
-				var json_info=JSON.parse(json_info_str);
-				DB.ref('info/' + _line_key + "/metro").set(json_info[export_json.line[j]._key]);
-				export_json.line[j]._key = _line_key;
-			}
-			newRef.set({ //將他存到藍圖
-					name: export_json.name,
-					line: export_json.line,
-					timestamp: firebase.database.ServerValue.TIMESTAMP
-			})
-			$('#import_modal').modal('hide');
-			$.cookie('index_blueprint',vm.blueprint.length-1);
-			setTimeout(function(){
-				location.reload();
-			},1000)
-			
-		})
-	}
+        for(var i=0;i<vm.blueprint.length;i++){
+          if(vm.blueprint[i].key==key){
+            export_json.name=vm.blueprint[i].name;
+
+                  $("#export_modal_name").html("infometro 地鐵計畫：" +  export_json.name);
+                  $("#export_modal_name").css("color",_color);
+
+            export_json.line=vm.blueprint[i].line;
+            export_json.info={};
+            for(var j=0;j<export_json.line.length;j++){
+               var key=export_json.line[j]._key;
+               export_json.info[key]="";
+               load_info(key);
+                       export_num=export_num+1
+            }
+            return
+          }
+        }
+      }
+    function 匯入藍圖(){
+      var _color = vm.line_color;
+      $('#import_modal').css("borderTopColor", _color);
+      $("#import_modal_button").css("backgroundColor", _color);
+          $('#import_modal').modal({
+         inverted: true
+      }).modal('show');
+          $("#import_modal_button").one("click",function(){
+              var export_json=JSON.parse($("#import_modal textarea").val());
+              var json_info_str=JSON.stringify(export_json.info);
+              var newRef = DB.ref('blueprint/' + user_uid).push();
+              var newLine = [];
+              for(var j=0;j<export_json.line.length;j++){
+                  //要把metro的key換成新的
+                  for(var k=0;k<export_json.line[j].metro.length;k++){
+                      var _metro_key= DB.ref('blueprint/' + user_uid).push().key;
+                      json_info_str=json_info_str.replace(export_json.line[j].metro[k]._key,_metro_key);//並且將info裡的替換掉
+                      export_json.line[j].metro[k]._key=_metro_key;
+                  }
+                  var _line_key = DB.ref('blueprint/' + user_uid).push().key;//新的line
+
+                  set_line_root(_line_key, user_uid );//新增info的line
+
+                  var json_info=JSON.parse(json_info_str);
+                  DB.ref('info/' + _line_key + "/metro").set(json_info[export_json.line[j]._key]);
+                  export_json.line[j]._key = _line_key;
+              }
+              newRef.set({ //將他存到藍圖
+                      name: export_json.name,
+                      line: export_json.line,
+                      timestamp: firebase.database.ServerValue.TIMESTAMP
+              })
+              $('#import_modal').modal('hide');
+              $.cookie('index_blueprint',vm.blueprint.length-1);
+              setTimeout(function(){
+                  location.reload();
+              },1000)
+
+          })
+      }
 	//bottom
 
 	//left
@@ -637,6 +652,11 @@
 		 $("#right .r_content").perfectScrollbar();
 		 $("#right .r_button").on("click",function(){
 			var _index=$(this).index()-1;
+           if(_index==0){
+             $("#right_lightning").show();
+           }else{
+             $("#right_lightning").hide();
+           }
 			$(this).addClass("active").siblings().removeClass("active");
 			$("#right .r_content:eq("+_index+")").addClass("active").siblings().removeClass("active");
 		})
@@ -719,6 +739,16 @@
 			info_search_db(_key,_val);
 		}
 	}
+    function lightning_send(){
+      var _textarea=$.trim($("#right_lightning textarea").val());
+      if(_textarea=="")return
+      var data={
+        message : _textarea,
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+      }
+      DB.ref('users_data/' + user_uid + "/lightning").push().set(data);
+      $("#right_lightning textarea").val("");
+    }
 	//right
 
 	//center

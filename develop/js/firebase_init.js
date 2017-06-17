@@ -1,22 +1,3 @@
-// Firebase 管理使用者資訊
-//https://firebase.google.com/docs/auth/web/manage-users
-//http://sj82516-blog.logdown.com/posts/1050619
-//https://firebase.google.com/docs/auth/web/manage-users  管理使用者帳戶
-
-//https://phpwolf.blogspot.tw/2017/01/firebase-facebook.html   FB	login教學
-
-//重新驗証用戶 (參考：http://sj82516-blog.logdown.com/posts/1050619)
-
-//firebase CRUD 操作 
-//http://sj82516-blog.logdown.com/posts/1061094
-//https://howtofirebase.com/firebase-data-structures-pagination-96c16ffdb5ca#.2aiv4i4pd   分頁
-
-//http://sj82516-blog.logdown.com/posts/1064788/teaching-firebase-page-four-rest-and-storage  firebase 檔案
-
-//https://firebase.google.com/docs/database/web/offline-capabilities#server-timestamps  firebase 離線功能
-
-//https://firebase.google.com/docs/reference/security/database/    rules進階
-
 var DB
 var user_uid;
 var user_email
@@ -322,13 +303,11 @@ function _is_login() { //程式進入點
       初始化使用者資訊();
     }
   });
-  DB.ref('users_data/' + user_uid).once('value', function (data) { //載入user_data
-    if (data.val()) {
-      if (data.val().index) { //初始化vm.index
-        vm.index = data.val().index;
-        delete data.val().index;
-      }
-    }
+  var _ref=DB.ref('users_data/' + user_uid +"/lightning").limitToFirst(50);
+  vm.$bindAsArray('lightning', _ref);
+  
+  DB.ref('users_data/' + user_uid +"/index" ).once('value', function (data) { //載入user_data
+    if (data.val()) vm.index = data.val();
   }).then(function () {
     if ($.cookie('index_blueprint') != undefined) { //預設要載入的藍圖索引
       vm.index_blueprint = $.cookie('index_blueprint');

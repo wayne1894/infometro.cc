@@ -741,7 +741,7 @@ textarea:focus {
       .board_list {
         min-height: 115px;
         border-bottom: 1px dashed #cdcdcd;
-				transition: background-color 0.2s ease-out;
+		transition: background-color 0.2s ease-out;
         position: relative;
         &:hover{
           background-color: #F3F4F4;
@@ -824,14 +824,6 @@ textarea:focus {
             }
           }
         }
-        button{
-            padding: .6em 1.2em;
-            font-size: .8rem;
-            font-weight: normal;
-            &.send{
-              color: white;
-            }
-         }
         .url_remove{
             display: none;
         }
@@ -1059,64 +1051,62 @@ textarea:focus {
       position: relative;
       top: 1px;
     }
-    .blueprint_a {
-      color: black;
-      &.check {
-        border-bottom: 1px solid black;
-      }
-      &::before{
-        content: '';
-        position: absolute;
-        top: -10px;
-        right: -10px;
-        bottom: -10px;
-        left: -10px;
-      }
-    }
-    .blueprint_i{
-      &:hover{
-          color: rgba(0, 0, 0, 0.5);
-      }
-       &::after{
-          content: '';
-          position: absolute;
-          top: -10px;
-          right: -10px;
-          bottom: -10px;
-          left: -10px;
-        }
-    }
-    .blueprint_i,
-    .blueprint_input {
-      margin-left: 2px;
-      margin-right: 10px;
-    }
-    .blueprint_input {
-      display: none;
-      width: 98px;
-      .public_input();
-    }
-    .blueprint_list {
-      display: inline-block;
-			margin-right: 3px;
-      &.edit {
-        .blueprint_a,
-        .blueprint_i {
-          display: none;
-        }
-        .blueprint_input {
-          display: block;
-        }
-      }
-      .menu {
-        bottom: 68%;
-//          &::after{
-//            left: 50%;
-//            margin-left: -3px;
-//          }
-      }
-    }
     .clearfix();
+  }
+  .blueprint_a {
+    color: black;
+    &.check {
+      border-bottom: 1px solid black;
+    }
+    &::before{
+      content: '';
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      bottom: -10px;
+      left: -10px;
+    }
+  }
+  .blueprint_i {
+    position: relative;
+    &:hover {
+      color: rgba(0, 0, 0, 0.5);
+    }
+    &::after {
+      content: '';
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      bottom: -10px;
+      left: -10px;
+    }
+  }
+  .blueprint_i,
+  .blueprint_input {
+    margin-left: 2px;
+    margin-right: 10px;
+  }
+  .blueprint_input {
+    display: none;
+    width: 98px;
+    .public_input();
+  }
+  .blueprint_list {
+    display: inline-block;
+    margin-right: 3px;
+    
+    &.edit {
+      .blueprint_a,
+      .blueprint_i {
+        display: none;
+      }
+      .blueprint_input {
+        display: block;
+      }
+    }
+    .menu {
+      bottom: 68%;
+    }
   }
   #copyright {
     position: absolute;
@@ -1167,8 +1157,10 @@ textarea:focus {
     position: relative;
     top: -8px;
   }
-  .right_tool {
+  .right_tool_parent{
     background-color: #CCCCCC;
+  }
+  .right_tool {
     cursor: pointer;
     .r_button {
       float: left;
@@ -1193,7 +1185,7 @@ textarea:focus {
         left: 2px;
       }
     }
-    i.icon.youtube{
+    i.icon.lightning{
       &:before {
         top: 9px;
       }
@@ -1257,11 +1249,62 @@ textarea:focus {
 			height : inherit;
 		}
   }
-  .text_b:hover{
+  .text_b:hover{f
       background-position:0px 36px;
       color:#FFFFFF;
   }
-  
+  #right_lightning{
+    padding: 10px;
+    padding-bottom: 3px;
+//    display: none;
+    position: relative;
+    textarea {
+      border-width: 1px;
+      border-style: solid;
+      border-color: #ccc;
+      height: 90px;
+      width: 100%;
+      font-weight: bold;
+      border-bottom: 1px solid #d0d0d1;
+      border-radius: 0;
+      padding: 5px;
+      font-family: Microsoft JhengHei;
+      font-size: 10px;
+    }
+    textarea:focus{
+      border-color: #ff6900;
+    }
+    .right_info_line{
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width:100%;
+      height:5px;
+      background-image:url(../../static/images/right_1.png);
+    }
+  }
+  .lightning_item{
+    background-color: #eeefef;
+    padding: 5px 10px;
+    position: relative;
+//    border-bottom: 1px solid #d6d6d6;
+    font-size: 10px;
+    font-family: Microsoft JhengHei;
+    &:nth-of-type(odd){
+      background-color: #ffffff;
+    }
+    .lightning_a{
+      text-align: right;
+    }
+    .lightning_active{
+      display: none;
+    }
+    &.active{
+      .lightning_active{
+        display: block;
+      }
+    }
+  }
 }
 #right_search{
   height: 30px;
@@ -1422,6 +1465,27 @@ i.orange.icon {
     width: 100%;
   }
 }
+.default_a.block{
+  color: #000000;
+  &:hover{
+    color: #000000;
+    &::after {
+      border-bottom: 1px solid #000000;
+    }
+  }
+}
+._modal_info{
+  button{
+    padding: .6em 1.2em!important;
+    font-size: .8rem!important;
+    font-weight: normal!important;
+    &.send{
+      color: white!important;
+    }
+ }
+}
+
+
 .left_inherit{
   left: inherit!important
 }
@@ -1437,7 +1501,9 @@ i.orange.icon {
   word-wrap: break-word;
   word-break: break-all;
 }
-
+.ps-scrollbar-y-rail{
+  z-index: 5;
+}
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s!important;
 }

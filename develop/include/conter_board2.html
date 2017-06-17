@@ -129,12 +129,12 @@
 					<p class="content" v-html="$options.filters.message_filter(item.message)"></p>
 					<p class="content textarea ui form" :style="{borderColor:line_color}">
 						<textarea></textarea>
-						<span class="textarea_prompt" >
-								<span class="esc">
-								<i class="ui info circle icon" ></i>按Esc離開編輯
-								</span>
-								<button class="send mini ui button" :style="{backgroundColor:line_color}">送出</button>
-								<button class="cancel mini ui button">取消</button>
+						<span class="textarea_prompt">
+                          <span class="esc">
+                          <i class="ui info circle icon" ></i>按Esc離開編輯
+                          </span>
+                          <button class="send mini ui button" :style="{backgroundColor:line_color}">送出</button>
+                          <button class="cancel mini ui button">取消</button>
 						</span>
 					</p>
 				</div>
@@ -177,16 +177,6 @@
 					</div>
 				</div>
 				<!--包成vue組件2 顯示-->
-			</div>
-			<div class="_delete_info ui inverted dimmer">
-				<div class="content">
-					<div class="center">
-						<i class="trash outline icon" style="font-size: 1.8em;margin-bottom: 13px;color:#000;cursor: default"></i>
-						<div style="margin-bottom:20px;color:#000;">確定要刪除資料？</div>
-						<button class="send mini ui button" :style="{backgroundColor:line_color}">刪除</button>
-						<button class="cancel mini ui button">取消</button>
-					</div>
-				</div>
 			</div>
 		</div>
 	</div>

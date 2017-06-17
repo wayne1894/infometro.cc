@@ -1,30 +1,42 @@
 <div class="right_header_line" ></div>
-<div class="right_tool">
-  <div class="over"></div>
-  
-  <div class="r_button active" >
-    <i class="svg home"><img src="src/static/images/home.svg"></i>
-  </div>
-<!--
-  <div class="r_button" :style="{backgroundColor:line_color}">
-    <i class="youtube play icon"></i>
-  </div>
--->
-  <div class="r_button" >
-    <i class="svg search"><img src="src/static/images/search.svg"></i>
-  </div>
-<!--
-  <div class="r_button" :style="{backgroundColor:line_color}">
-    <i class="comment icon"></i>
-  </div>
--->
-  <div class="r_button">
-    <i class="svg question"><img src="src/static/images/question.svg"></i>
-  </div>
+<div class="right_tool_parent">
+  <div class="right_tool">
+    <div class="over"></div>
 
+<!--
+    <div class="r_button active" >
+      <i class="svg home"><img src="src/static/images/home.svg"></i>
+    </div>
+-->
+    <div class="r_button active">
+      <i class="lightning icon"></i>
+    </div>
+    <div class="r_button" >
+      <i class="svg search"><img src="src/static/images/search.svg"></i>
+    </div>
+  <!--
+    <div class="r_button" :style="{backgroundColor:line_color}">
+      <i class="comment icon"></i>
+    </div>
+  -->
+    <div class="r_button">
+      <i class="svg question"><img src="src/static/images/question.svg"></i>
+    </div>
+  </div>
+  <div id="right_lightning">
+    <div class="ui from">
+      <div class="field">
+        <textarea rows="5" placeholder="即時資訊"></textarea>
+      </div>
+      <div class="clearfix">
+        <img style="float:right;position: relative; top: -3px; left: 3px; cursor:pointer;" src="src/static/images/send.png" onclick="lightning_send()" >
+      </div>
+    </div>
+    <div class="right_info_line"></div>
+  </div>
 </div>
-
 <div class="right_main">
+<!--
   <div class="r_content active">
     <div style="font-size: 1rem;">重要公告：</div>
       <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
@@ -46,15 +58,17 @@
     <div style="margin-bottom:20px;"></div>
     
   </div>
-<!--
-  <div class="r_content">
-    <div style="font-size: 1rem;">youtube播放列表：</div>
-    <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
-    <div style="color:#757575;font-size: 1rem;">
-      即將推出的功能，您可將youtube影片置放於此。
+-->
+  <div class="r_content" style="padding:0;height: calc( 100% - 157px);">
+    <div @click="lightning_click(event)" class="lightning_item" v-for="(item, index) in lightning_sort">
+       <div class="lightning_active" style="position: absolute; left: 0px; top: 0px; width: 5px; height: 100%; background-image: none; background-color: rgb(255, 105, 0);"></div>
+       <div style="min-height:70px;">
+         <div style=";margin-right:50px; ">{{item.message}}</div>
+         <div style="position:absolute;right:11px;top:6px; width:50px;text-align:right;letter-spacing:-1px; color:#CCCCCC;">{{lightning_create(item.timestamp)}}</div>
+       </div>
+       <div class="lightning_a"><a class="default_a block" @click="delete_lightning(item['.key'],event)">刪除</a></div>
     </div>
   </div>
--->
   <div class="r_content">
     <div style="font-size: 1rem;">搜尋結果：</div>
     <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>

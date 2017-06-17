@@ -19,7 +19,8 @@ var vm = new Vue({
     search_info : [],
     search_metro : [],
     drag_line_key : "",
-    drag_metro_key : ""
+    drag_metro_key : "",
+    lightning : []
   },
   mounted: function () {
     $("#main").css("visibility", "visible");
@@ -32,7 +33,8 @@ var vm = new Vue({
     if(vm.action_move==1)setTimeout(move_center, 0);
   },
   firebase: {
-    //watch:key_metro
+    //watch:key_metros
+    //lightning
   },
   computed: {
     line_color: function () { //主線目前一律是line 0
@@ -111,6 +113,14 @@ var vm = new Vue({
 //      });
 			return [].concat(new_sort,favorites_sort);
 
+    },
+    lightning_sort:function(){
+      var _sort=this.lightning;
+      _sort = _sort.sort(function (a, b) {
+        if (a.timestamp > b.timestamp) return -1; //照timestamp
+        return 1;
+      });
+      return _sort;
     }
   },
   filters: {
@@ -159,13 +169,44 @@ var vm = new Vue({
     }
   },
   methods: {
-		img_file : function(name){
-			if(name=="" || name==undefined)return
-			name=name.toLowerCase()
-			if(name.indexOf("png")>-1 || name.indexOf("gif")>-1 || name.indexOf("jpg")>-1 || name.indexOf("jpeg")>-1){
-				return true
-			}
-		},
+    lightning_create : function (timestamp){
+      //http://momentjs.com/
+      return moment(timestamp).startOf('hour').fromNow();
+    },
+    delete_lightning: function (key,event) {
+      var $target_parent = $(event.target).closest(".lightning_item");
+      var $delete_info = $target_parent.find("._modal_info");
+      if(!$delete_info.length){
+        $delete_info=$target_parent.append(delete_modal_html());
+      }
+      $target_parent.find("._modal_but").css("margin-bottom","10px");
+      //https://semantic-ui.com/modules/dimmer.html
+      //opacity : 0.7,
+      $delete_info.dimmer({
+        duration: {
+          show: 400,
+          hide: 0
+        }
+      }).dimmer('show');
+      $delete_info.find(".send").off("click").on("click", function () {
+        DB.ref('users_data/' + user_uid +"/lightning/"+key).remove();
+        $delete_info.dimmer('hide');
+      });
+      $delete_info.find(".cancel").off("click").on("click", function () {
+        $delete_info.dimmer('hide');
+      })
+    },
+    lightning_click : function(event){
+      var $target=$(event.target).closest(".lightning_item");
+      $target.addClass("active").siblings().removeClass("active");
+    },
+    img_file : function(name){
+      if(name=="" || name==undefined)return
+      name=name.toLowerCase()
+      if(name.indexOf("png")>-1 || name.indexOf("gif")>-1 || name.indexOf("jpg")>-1 || name.indexOf("jpeg")>-1){
+        return true
+      }
+    },
     get_youtube_embed: function (item) {
       if (item.url_info && item.url_info.youtube) {
         setTimeout(function () {
@@ -227,10 +268,7 @@ var vm = new Vue({
       }
     },
     index_update: function () {
-      var data = JSON.parse(JSON.stringify(vm.index)); //將傳址改為傳值
-      setTimeout(function(){
-        DB.ref('users_data/' + user_uid + "/index").set(data);
-      },0)
+      DB.ref("users_data/" + user_uid + "/index").set(vm.index);
     },
     更新藍圖: function (key, data) {
       if (key == undefined || data == undefined) {
@@ -253,7 +291,16 @@ var vm = new Vue({
       return this.get_blueprint().line[this.index_line]
     },
     get_index_line: function () { //得到當前支線索引資料
-      return vm.index[vm.index_blueprint][vm.index_line];
+      var _index=vm.index[vm.index_blueprint][vm.index_line];
+      if(typeof _index!="object"){
+         print("索引變字串");
+         vm.index[vm.index_blueprint][vm.index_line]={}
+         vm.index[vm.index_blueprint][vm.index_line].check=false;
+        return vm.index[vm.index_blueprint][vm.index_line]
+      }else{
+        return _index;
+      }
+      
     },
     update_index_line: function (index_array) {
       var _index = 0;
@@ -591,7 +638,7 @@ var vm = new Vue({
           DB.ref("info/" + data.line[vm.index_line]._key + "/metro").child(delete_key).remove();
       }	
     },
-		swap_metro: function (oldIndex, newIndex) {
+	swap_metro: function (oldIndex, newIndex) {
       if (oldIndex == newIndex) return;
       var data = JSON.parse(JSON.stringify(this.get_blueprint())); //將傳址改為傳值
       var data_metro = data.line[this.index_line].metro
@@ -666,7 +713,10 @@ var vm = new Vue({
     delete_info: function (key, event) { //刪除資訊
       var $target_parent = $(event.target).closest(".board_list");
       if ($target_parent.hasClass("edit")) return;
-      $delete_info = $target_parent.find("._delete_info");
+      var $delete_info = $target_parent.find("._modal_info");
+      if(!$delete_info.length){
+        $delete_info=$target_parent.append(delete_modal_html(vm.line_color));
+      }
       //https://semantic-ui.com/modules/dimmer.html
       //opacity : 0.7,
       $delete_info.dimmer({
