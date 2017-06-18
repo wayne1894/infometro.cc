@@ -86,7 +86,7 @@
   <a class="left_icon" data-tooltip="登出"  data-position="right center" onclick="$('.page.dimmer:first').dimmer('toggle');"><i class="power icon"></i></a>
   
     <transition name="fade">
-    <i v-show="is_nav" style=" position: absolute; bottom:9px; right:-42px" class="nav_i ui orange help circle icon" data-title="地鐵計畫" data-content="『地鐵計畫』為infometro 儲存資料最底層單位，其下可以新增無數條『支線』(在左邊新增支線的地方)，每條支線下有『地鐵站點』，站點下則可以新增資訊。按滑鼠右鍵可以有細節的選項(刪除)。"></i>
+    <i v-show="is_nav" style=" position: absolute; bottom:9px; right:-42px" class="nav_i ui orange help circle icon" data-title="地鐵計畫" data-content="『地鐵計畫』為infometro 儲存資料的底層單位，其下可以新增無數條『支線』，每條支線下可以新增『地鐵站』。"></i>
   </transition>
   <transition name="fade">
     <i v-show="is_nav" style=" position: absolute; bottom:9px; right:-63px" class="nav_i ui orange help circle icon" data-title="新增一個地鐵計畫" data-content="點擊『+號』可以新增一個地鐵計畫，通常地鐵計畫是管理不同領域的資訊，相同領域的資訊我們可以用支線來管理。"></i>
@@ -320,7 +320,7 @@
                           <span class="esc">
                           <i class="ui info circle icon" ></i>按Esc離開編輯
                           </span>
-                          <button class="send mini ui button" :style="{backgroundColor:line_color}">送出</button>
+                          <button class="send mini ui button" style="color:#ffffff" :style="{backgroundColor:line_color}">送出</button>
                           <button class="cancel mini ui button">取消</button>
 						</span>
 					</p>
@@ -481,13 +481,13 @@
   </div>
 -->
   <div class="r_content active" style="padding:0;height: calc( 100% - 157px);">
-    <div @click="lightning_click(event)" class="lightning_item" v-for="(item, index) in lightning_sort">
+    <div @click="lightning_click($event)" class="lightning_item" v-for="(item, index) in lightning_sort">
        <div class="lightning_active" style="position: absolute; left: 0px; top: 0px; width: 5px; height: 100%; background-image: none; background-color: rgb(255, 105, 0);"></div>
        <div style="min-height:70px;">
          <div style=";margin-right:50px; ">{{item.message}}</div>
          <div style="position:absolute;right:11px;top:6px; width:50px;text-align:right;letter-spacing:-1px; color:#CCCCCC;">{{lightning_create(item.timestamp)}}</div>
        </div>
-       <div class="lightning_a"><a class="default_a block" @click="delete_lightning(item['.key'],event)">刪除</a></div>
+       <div class="lightning_a"><a class="default_a block" @click="delete_lightning(item['.key'],$event)">刪除</a></div>
     </div>
   </div>
   <div class="r_content">

@@ -26,7 +26,7 @@
         }
   }).resize();
 
- var sortable = [];
+  var sortable = [];
   $(function () {
     //拖亦的部份 https://github.com/RubaXa/Sortable
     sortable["line"] = new Sortable(id("line_drag"), {
@@ -763,7 +763,7 @@
       $("#board_edit>div>i").jrumble().trigger('startRumble');
       event.preventDefault();//必要不能刪
 	}
-  function allowDropLeave(event) { //拖曳的物件移出
+    function allowDropLeave(event) { //拖曳的物件移出
       $("#board_edit>div>i").jrumble().trigger('stopRumble');
       event.preventDefault();//必要不能刪
 	}

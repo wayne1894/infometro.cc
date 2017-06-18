@@ -1,17 +1,20 @@
 {
-  "manifest_version": 1,
+  "manifest_version": 2,
   "name": "infometro.cc 資訊地鐵站",
-  "description": "infometro 是一款利用地鐵圖來整理資訊的網站，用來保存創意和想法。",
-  "version": "1.0",
-  "default_locale": "zh_TW",
   "icons": {
     "16": "icon_16.png",
     "48": "icon_48.png",
     "128": "icon_128.png"
   },
   "browser_action": {
-    "default_icon": "icon_19.png",
-	"default_title": "infometro.cc 資訊地鐵站",
-    "default_popup": "metro.html"
-  }
+    "default_icon": "icon_48.png",
+    "default_title": "infometro.cc 資訊地鐵站",
+    "default_popup": "main.html"
+  },
+  "content_security_policy": "script-src 'self' https://ajax.googleapis.com https://*.firebaseio.com https://*.gstatic.com/; object-src 'self'",
+  "background": {
+    "page": "background.html",
+    "persistent": true
+  },
+  "version": "1.0"
 }

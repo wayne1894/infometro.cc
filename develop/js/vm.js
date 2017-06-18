@@ -171,7 +171,7 @@ var vm = new Vue({
   methods: {
     lightning_create : function (timestamp){
       //http://momentjs.com/
-      return moment(timestamp).startOf('hour').fromNow();
+      return moment(timestamp).endOf('hour').fromNow();
     },
     delete_lightning: function (key,event) {
       var $target_parent = $(event.target).closest(".lightning_item");
