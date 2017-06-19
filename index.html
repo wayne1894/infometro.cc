@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
 <title>infometro.cc | 資訊地鐵站</title>
 <meta charset="UTF-8">
 <!--<meta http-equiv="X-UA-Compatible" content="IE=edge">-->
@@ -42,6 +41,9 @@
 <script src="src/build/js/public.js"></script>
 <script src="src/build/js/firebase_init.js?v=20170607"></script>
 <link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=20170607" />
+
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+
 
   <style type="text/css">
     .hidden.menu {
@@ -263,6 +265,12 @@
       width: 244px;
       margin-bottom: 12px;
     }
+   .facebook.button{
+     margin-bottom: 12px;
+   }
+   .google.button{
+     width: 244px;
+   }
   }
   #top .column{
       display: block;
@@ -336,6 +344,9 @@
       <div style="margin-bottom:25px;">
         <button class="big ui button orange fast" onclick="anonymous_login()"><i class="rocket icon"></i>快速試用</button>
         <button class="big ui facebook button" onclick="fb_login()"><i class="facebook f icon"></i>使用 Facebook 登入</button>
+        <button class="big ui google plus icon button" onclick="google_login()">
+          <i class="google plus icon"></i>&nbsp;&nbsp;使用 Google 登入
+         </button>
       </div>
     </div>
    <div class="bottom_line"></div>

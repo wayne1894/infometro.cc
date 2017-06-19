@@ -96,7 +96,7 @@
   </div>
   <div id="center">
 		<div id="top">
-			<div class="triangle left"></div>
+		  <div class="triangle left"></div>
   <div id="top_tag_parent">
     <ul id="top_tag" :class="{eqonly2 : metro.length<=2 }">
       <li v-for="(item, index) in metro" :class="{ active: key_metro == item._key }" class="metro_list" :data-key="item._key" :data-index="index" :key="item._key">
@@ -125,7 +125,7 @@
 		</div>
     <div id="board_parent" v-show="action!='load'">
     	<div id="board2">
-				<div id="board1">
+          <div id="board1">
   <div id="board_line_parent">
     <div id="board_line">
       <i :style="{backgroundColor:line_color}"></i>
@@ -185,7 +185,7 @@
 	</div>
 </div>
 </div>
-					<!--資訊輸入-->
+          	<!--資訊輸入-->
 	<div id="board_enter_parent" :style="{borderTopColor:line_color}">
 		<div id="board_img"><img v-if="users.photo" :src="users.photo"></div>
 		<div id="board_enter">
@@ -369,7 +369,7 @@
 	</div>
 	<!--資訊列表-->
 
-			</div>
+		</div>
     </div>
     <div v-show="action=='load'" style="position: absolute;top: 50%;left: 50%;margin-left:-25%;
     margin-top: -6%; width: 50%;">

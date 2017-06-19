@@ -1,7 +1,6 @@
 var DB
 var user_uid;
 var user_email
-var provider;
 var isAnonymous;
 
 $(function(){
@@ -67,14 +66,30 @@ function location_fn(){
 		location.href = "/:-D";
 	}
 }
+function google_login() {
+  if(DB==undefined) return setTimeout(fb_login,500);
+  if (user_uid != undefined && !isAnonymous) return location_fn();
+  var provider = new firebase.auth.GoogleAuthProvider();
+
+  firebase.auth().signInWithPopup(provider).then(function(result) {
+     var user = result.user;
+     DB.ref('users/' + user.uid).once('value', function (data) {
+        if (!data.val()) {
+          初始化使用者資訊(location_fn);
+        } else {
+          location_fn();
+        }
+      })
+  })
+}
 
 function fb_login() {
-	if(DB==undefined) return setTimeout(fb_login,500);
+  if(DB==undefined) return setTimeout(fb_login,500);
   if (user_uid != undefined && !isAnonymous) return location_fn();
 	if(login_wait)return;
 	login_wait=true
 	//firebase to fb login
-	provider = new firebase.auth.FacebookAuthProvider()
+	var provider = new firebase.auth.FacebookAuthProvider();
 
   //signInWithPopup signInWithRedirect
   firebase.auth().signInWithPopup(provider).then(function (result) {
@@ -86,7 +101,12 @@ function fb_login() {
         location_fn();
       }
     })
-  })
+  }).catch(function(error) {
+    // Handle Errors here.
+    if(error.code=="auth/account-exists-with-different-credential"){
+      google_login()
+    }
+  });
 }
 function anonymous_login() {
 	if(login_wait)return;

@@ -10,13 +10,13 @@
   </div>
   <div id="center">
 		<div id="top">
-			@@include('include/top.html')
+		  @@include('include/top.html')
 		</div>
     <div id="board_parent" v-show="action!='load'">
     	<div id="board2">
-				@@include('include/conter_board1.html')
-				@@include('include/conter_board2.html')
-			</div>
+          @@include('include/conter_board1.html')
+          @@include('include/conter_board2.html')
+		</div>
     </div>
     <div v-show="action=='load'" style="position: absolute;top: 50%;left: 50%;margin-left:-25%;
     margin-top: -6%; width: 50%;">
