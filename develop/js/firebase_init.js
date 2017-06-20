@@ -67,7 +67,7 @@ function location_fn(){
 	}
 }
 function google_login() {
-  if(DB==undefined) return setTimeout(fb_login,500);
+  if(DB==undefined) return setTimeout(google_login,500);
   if (user_uid != undefined && !isAnonymous) return location_fn();
   var provider = new firebase.auth.GoogleAuthProvider();
 
@@ -104,7 +104,7 @@ function fb_login() {
   }).catch(function(error) {
     // Handle Errors here.
     if(error.code=="auth/account-exists-with-different-credential"){
-      google_login()
+      google_login();
     }
   });
 }

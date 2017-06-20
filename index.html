@@ -250,17 +250,13 @@
   #bottom_bbb{
     background-color: #d4d4d4;
   }
-  #bottom_bbb a{
-    
-  }
   #bottom_bbb a:not(#mail):hover{
    text-decoration: underline;
   }
   #bottom_bbb .column{
       display:block;
   }
-  
- @media only screen and (max-width: 600px) {
+ @media only screen and (max-width: 668px) {
     .fast.button{
       width: 244px;
       margin-bottom: 12px;
@@ -271,6 +267,9 @@
    .google.button{
      width: 244px;
    }
+		.logo2{
+			width: 95%!important;
+		}
   }
   #top .column{
       display: block;
@@ -295,6 +294,14 @@
     }
   }
   
+	@media only screen and (min-width: 767px) {
+		#left_img{
+			width: 48%!important;
+			position: absolute;
+			top: 0;
+			right: 0;
+		}
+	}
 </style>
 
 <div id="fb-root"></div>
@@ -334,7 +341,7 @@
 <!--          <div class="fb-like" data-href="https://www.facebook.com/infometro.cc" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="false"></div>-->
       
        <a class="ui black version label" href="#">
-        Beta 1.31
+        Beta 版
       </a>
         </div>
         <img class="logo2" src="src/static/images/logo_big.svg">
@@ -361,7 +368,7 @@
           <h3 class="ui header">資訊地鐵站，是您大腦記憶的延伸工具</h3>
           <p>把你容易忘記得事情先記在地鐵站上，透過有效的分類與管理，就能從容不迫的去處理其他更重要的事。</p>
         </div>
-        <div class="six wide right floated column" style="width: 48%!important;">
+        <div id="left_img" class="six wide right floated column">
           <img style="width:100%!important;" src="https://s3-ap-northeast-1.amazonaws.com/infometro.cc/nav/LHXNGI0XjP.gif" class="ui large bordered rounded image">
         </div>
       </div>
