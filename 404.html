@@ -40,8 +40,8 @@
 <!-- jquery-color-pick -->
 
 <script src="src/build/js/public.js"></script>
-<script src="src/build/js/firebase_init.js?v=201706120"></script>
-<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=201706120" />
+<script src="src/build/js/firebase_init.js?v=20170621"></script>
+<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=20170621" />
 
 </head>
 <body>
@@ -186,7 +186,7 @@
 </div>
 </div>
           	<!--資訊輸入-->
-	<div id="board_enter_parent" :style="{borderTopColor:line_color}">
+	<div id="board_enter_parent">
 		<div id="board_img"><img v-if="users.photo" :src="users.photo"></div>
 		<div id="board_enter">
 		  <i style="display:none;" class="idea icon"></i>
@@ -225,7 +225,7 @@
             <div class="bar" style="min-width: 0%;" :style="{background:line_color}"></div>
           </div>
           <div class="item" :style="{color:line_color}">
-            <div id="uploadFileParent" class="ui action input" data-inverted="" data-tooltip="上傳檔案" :style="{borderColor:line_color}">
+            <div id="uploadFileParent" class="ui action input" data-inverted="" data-tooltip="上傳檔案-拖曳或點擊" :style="{borderColor:line_color}">
               <input id="uploadFileInput" type="file">
               <div id="uploadButton" class="ui icon">
                 <i class="attach icon"></i>
@@ -240,6 +240,40 @@
 	</div>
 	
 	<script>
+      $(function(){
+      var obj = $("#board_enter_parent,#board_send_parent");
+      obj.on('dragenter', function (e) 
+      {
+          e.stopPropagation();
+          e.preventDefault();
+        
+          //$(this).css('border', '2px solid #0B85A1');
+      });
+      obj.on('dragover', function (e) 
+      {
+        $("#board_send_parent>.ui.icon").css("background-color","#f7f7f7")
+           e.stopPropagation();
+           e.preventDefault();
+      });
+        
+      obj.on('dragleave', function (e) 
+      {
+          $("#board_send_parent>.ui.icon").css("background-color","");
+        e.stopPropagation();
+        e.preventDefault();
+      });
+        
+      obj.on('drop', function (e) 
+      {
+
+           //$(this).css('border', '2px dotted #0B85A1');
+           e.preventDefault();
+           var files = e.originalEvent.dataTransfer.files;
+           upload_file(files[0])
+           //We need to send dropped files to Server
+          // handleFileUpload(files,obj);
+      });
+       })
       function clear_uploadFile(){
         $("#progress .bar").css("min-width" ,"0%" );
         $("#uploadFileParent").parent().css("background-color","");
@@ -252,6 +286,46 @@
         $("#uploadName").html("");
         $('#uploadFileParent').attr("data-tooltip","上傳檔案")
       }
+      function upload_file(file){
+        var name = file.name;
+        //var ext= name.split(".")[1];//可以在這邊檢查不合適的副檔名
+
+        var newfile = DB.ref("file/"+ vm.get_line_key() +"/"+ vm.get_metro()._key).push();
+        newfile.set({
+          name : name,
+          timestamp: firebase.database.ServerValue.TIMESTAMP
+        })
+        //https://firebase.google.com/docs/storage/web/upload-files
+        var storageRef = firebase.storage().ref();
+        var uploadTask = storageRef.child("file/"+vm.get_line_key()+"/"+vm.get_metro()._key+"/"+newfile.key+"/"+name).put(file);
+        clear_uploadFile();
+        uploadTask.on('state_changed', function(snapshot){
+        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          $("#progress .bar").css("min-width" ,progress + "%" );
+          //console.log('Upload is ' + progress + '% done');
+        },function(error) {
+          // Handle unsuccessful uploads
+        }, function() {
+          $("#uploadFileParent").parent().css("background-color","currentColor");
+          $("#progress .bar").css("min-width" ,"0%" );
+          $('#uploadFileInput').val("");
+          $('#uploadFileParent').attr("data-tooltip","重新上傳");
+          $("#uploadName").html("<span style='color:#ffffff;margin-left:5px;white-space: nowrap;'>"+name+"</span><i class='delete icon' style='position: relative;left:5px;cursor:pointer;color:#ffffff' onclick='clear_uploadFile()'></i>");
+          var downloadURL = uploadTask.snapshot.downloadURL;
+          $('#uploadFileInput').val("");
+          $("#uploadFileParent").data({
+            file_id : newfile.key,
+            file_url : downloadURL,
+            file_name : name
+          });
+          var board_textarea=$.trim($("#board_textarea").val());
+          if(board_textarea==""){
+            $("#board_textarea").val($("#board_textarea").val()+name);
+          }else{
+            $("#board_textarea").val($("#board_textarea").val()+"\n"+name);
+          }
+        })
+      }
       $(function(){
         //https://firebase.google.com/docs/storage/web/upload-files
         $("#uploadButton").click(function() {
@@ -259,40 +333,8 @@
         });
         $('#uploadFileInput').on('change', function(e) {
             if(e.target.files.length>0){
-              var file = e.target.files[0]
-              var name = file.name;
-              //var ext= name.split(".")[1];//可以在這邊檢查不合適的副檔名
-              
-              var newfile = DB.ref("file/"+ vm.get_line_key() +"/"+ vm.get_metro()._key).push();
-              newfile.set({
-                name : name,
-                timestamp: firebase.database.ServerValue.TIMESTAMP
-              })
-              //https://firebase.google.com/docs/storage/web/upload-files
-              var storageRef = firebase.storage().ref();
-              var uploadTask = storageRef.child("file/"+vm.get_line_key()+"/"+vm.get_metro()._key+"/"+newfile.key+"/"+name).put(file);
-              clear_uploadFile()
-              uploadTask.on('state_changed', function(snapshot){
-              var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                $("#progress .bar").css("min-width" ,progress + "%" );
-                //console.log('Upload is ' + progress + '% done');
-              },function(error) {
-                // Handle unsuccessful uploads
-              }, function() {
-                $("#uploadFileParent").parent().css("background-color","currentColor");
-                $("#progress .bar").css("min-width" ,"0%" );
-                $('#uploadFileInput').val("");
-                $('#uploadFileParent').attr("data-tooltip","重新上傳");
-                $("#uploadName").html("<span style='color:#ffffff;margin-left:5px;white-space: nowrap;'>"+name+"</span><i class='delete icon' style='position: relative;left:5px;cursor:pointer;color:#ffffff' onclick='clear_uploadFile()'></i>");
-                var downloadURL = uploadTask.snapshot.downloadURL;
-                $('#uploadFileInput').val("");
-                $("#uploadFileParent").data({
-                  file_id : newfile.key,
-                  file_url : downloadURL,
-                  file_name : name
-                });
-              })
-
+              var file = e.target.files[0];
+              upload_file(file);
             }
         });
       })
@@ -641,8 +683,8 @@
 		</div>
 	</div>
 </div>
-<script src="src/build/js/main.js?v=201706120"></script>
-<script src="src/build/js/vm.js?v=201706120"></script>
+<script src="src/build/js/main.js?v=20170621"></script>
+<script src="src/build/js/vm.js?v=20170621"></script>
  <script>
 	 if(get_test()!="test"){
 
