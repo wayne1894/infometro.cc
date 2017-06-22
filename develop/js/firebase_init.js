@@ -137,18 +137,16 @@ function 初始化藍圖資料(fn) {
   var newLine = [];
   newLine.push(line_json("橘線", "#FF6900", true)); //新增第一條線
   newLine[newLine.length - 1].metro.push(metro_json("總站")); //第一條線下面的站
-  newRef.set({ //將他存到藍圖
-    name: "我的地鐵計畫",
-    line: newLine
-  },function(error){
+  newRef.set(blueprint_json("我的地鐵計畫",newLine),function(error){
 	if (typeof fn == "function") fn()
   })
 }
 
-function blueprint_json(name) {
+function blueprint_json(name,line) {
   return {
     name: name,
-    line: []
+    line: line,
+		timestamp: firebase.database.ServerValue.TIMESTAMP
   }
 }
 
@@ -251,7 +249,6 @@ function blueprint_init(blueprint_fn,load_fn) {
         vm.檢查更新錯誤索引(i,_vm_blueprint);
       }
     }
-		//print(_action)
     if (_action == "new_blueprint") { //判斷動作
       var _index = vm.index.length - 1; //移到最後一個
       vm.exchange_blueprint(_index, true); //切換藍圖
@@ -308,7 +305,23 @@ function blueprint_set(){
         sortable["blueprint"] = new Sortable(id("blueprint_drag"), {
           scroll: false,
           animation: 150,
-          forceFallback: false
+          forceFallback: false,
+					onEnd: function (evt) {
+
+//						var _init=vm.blueprint;
+//						var blueprint_list=$("#blueprint_drag>.blueprint_list");
+//						for(var i=0;i<blueprint_list.length;i++){
+//							var _key=blueprint_list.eq(i).data("key");
+//							for(var j=0;j<_init.length;j++){
+//								if(_key==_init[j].key){
+//									vm.blueprint[j].sort=i;
+//									//DB.ref('blueprint/' + user_uid)
+//									break;
+//								}
+//							}
+//						}
+
+					}
         });
 
       }
