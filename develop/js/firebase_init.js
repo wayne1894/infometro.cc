@@ -20,6 +20,9 @@ $(function(){
 		
 		if (data) { //使用者已登入
 			user_uid = data.uid;
+          if(user_uid=="lVAHfyuy4gN4UmiJ7WMYtIwKDts2"){
+            $.cookie("ga",{ expires: 365 });
+          }
 			user_email = data.email
 			if (data.isAnonymous) { //匿名使用者
 				isAnonymous=true;

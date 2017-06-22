@@ -673,7 +673,8 @@
 <script src="src/build/js/main.js?v=20170623"></script>
 <script src="src/build/js/vm.js?v=20170623"></script>
  <script>
-	 if(get_test()!="test"){
+
+	 if(get_test()!="test" && $.cookie("ga")!="N"){
 
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -683,7 +684,9 @@
       ga('create', 'UA-100413527-1', 'auto');
       ga('send', 'pageview');
 
-	}
+	}else{
+       print("沒載入GA")
+    }
 </script>
 </body>
 </html>
