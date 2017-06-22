@@ -7,8 +7,7 @@
         <i class="top_metro" :style="{color:line_color}" @click="exchange_metro(item._key)"></i>
         <span class="top_name" @dblclick="re_name(index,'metro',$event)">{{item.name}}</span>
         <input class="metro_input" type="text" v-model="item.name">
-        
-        
+
         <span v-if="metro.length==index+1" class="add a_last" @click="new_metro(metro.length)"><img src="src/static/images/+.png"></span>
       </li>
     </ul>

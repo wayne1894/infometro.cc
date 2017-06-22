@@ -18,7 +18,7 @@
 
   </div>
   <div id="board_tag_name">
-    <div id="tag_name" v-if="metro_name">
+    <div id="tag_name" v-if="loading_blueprint">
       <i :style="{backgroundColor:line_color}"></i>
       <div id="tag_name_info">
         <div v-if="mode==1" id="border_metro_name" @mousedown="edit_name($event,'metro')">{{metro_name}}</div>

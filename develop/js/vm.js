@@ -37,6 +37,9 @@ var vm = new Vue({
     //lightning
   },
   computed: {
+    loading_blueprint :function(){
+       if (this.blueprint.length >0) return true;
+    },
     line_color: function () { //主線目前一律是line 0
       if (this.blueprint.length == 0) return "";
       if (this.pick_color) return this.pick_color;
@@ -62,7 +65,6 @@ var vm = new Vue({
       return this.get_line().name;
     },
     metro_name: function () {
-      if (this.blueprint.length == 0) return "";
       return this.get_metro().name;
     },
     metro_create: function () {
@@ -230,10 +232,7 @@ var vm = new Vue({
       return "linear-gradient(to right, #000 50%, " + color + " 0%)";
     },
     mode_txt: function () {
-      if (!sortable['blueprint']){
-        if(this.mode==0)return "一般模式";
-        if(this.mode==1)return "編輯模式";
-      } 
+      if (this.blueprint.length == 0) return "";
       if (this.mode == 0) { //一般模式
         setTimeout(function () {
           sortable["metro"].option("disabled", true);
@@ -360,60 +359,59 @@ var vm = new Vue({
       newRef.set(blueprint_json("我的地鐵計畫",newLine))
     },
     delete_blueprint: function (key,_status) { //刪除藍圖
-			if(_status=="move"){
-				_delete();
-			}else{
-				$('.ui.modal').modal("refresh");
-				setTimeout(function () {
-					$("#blueprint_delete_modal").modal({
-						inverted: true,
-						closable: false
-					}).modal('show');
-				})
-				$("#blueprint_delete_name").html(vm.get_blueprint().name);
-				$("#blueprint_delete_button").off("dblclick").on("dblclick",_delete)
-			}
-			function _delete(){
-				var index; //從刪除KEY找到他排在陣列的第幾個
-        for (var i = 0; i < vm.blueprint.length; i++) { //找到刪除的index
-          if (vm.blueprint[i].key == key) {
-            index = i;
-            break;
-          }
-        }
-        vm.action = "delete_blueprint";
-				if(_status=="move"){
-				
-				}else{//非移動狀態把資訊也清掉
-					var _line = vm.blueprint[index].line;
-					for (var i = 0; i < _line.length; i++){
-						vm.delete_info_line(_line[i]._key); //刪除info
-					}
-				}
-				
-        if (vm.blueprint.length > 1) {
-          vm.index.splice(index, 1); //刪除索引
-          vm.index_update(); //更新index
-          vm.index_line = 0;
-          vm.index_blueprint = 0;
-          vm.update_index_line(vm.index[vm.index_blueprint]);
-          vm.update_index_line_check();
-          vm.update_selection_color();
+      if(_status=="move_delete" || _status=="line_one_delete"){
+          _delete();
+      }else{
+          $('.ui.modal').modal("refresh");
           setTimeout(function () {
-            vm.update_metro_key(vm.index[vm.index_blueprint][vm.index_line]);
-          }, 0)
-
-          DB.ref('blueprint/' + user_uid + "/" + key).remove();
-        } else {
-          DB.ref('blueprint/' + user_uid + "/" + key).remove().then(function () {
-            vm.index.splice(index, 1); //刪除索引
-            vm.index_update(); //更新index
-            location.reload();
+              $("#blueprint_delete_modal").modal({
+                  inverted: true,
+                  closable: false
+              }).modal('show');
           })
-        }
-        $("#blueprint_delete_button").off("click");
-        $("#blueprint_delete_modal").modal("hide");
-			}
+          $("#blueprint_delete_name").html(vm.get_blueprint().name);
+          $("#blueprint_delete_button").off("dblclick").on("dblclick",_delete)
+      }
+      function _delete(){
+          var index; //從刪除KEY找到他排在陣列的第幾個
+  for (var i = 0; i < vm.blueprint.length; i++) { //找到刪除的index
+    if (vm.blueprint[i].key == key) {
+      index = i;
+      break;
+    }
+  }
+  vm.action = "delete_blueprint";
+  if(_status=="move_delete"){
+
+  }else{//非移動狀態把資訊也清掉
+    var _line = vm.blueprint[index].line;
+    for (var i = 0; i < _line.length; i++){
+        vm.delete_info_line(_line[i]._key); //刪除info
+    }
+  }
+  if (vm.blueprint.length > 1) {
+    vm.index.splice(index, 1); //刪除索引
+    vm.index_update(); //更新index
+    vm.index_line = 0;
+    vm.index_blueprint = 0;
+    vm.update_index_line(vm.index[vm.index_blueprint]);
+    vm.update_index_line_check();
+    vm.update_selection_color();
+    setTimeout(function () {
+      vm.update_metro_key(vm.index[vm.index_blueprint][vm.index_line]);
+    }, 0)
+
+    DB.ref('blueprint/' + user_uid + "/" + key).remove();
+  } else {
+    DB.ref('blueprint/' + user_uid + "/" + key).remove().then(function () {
+      vm.index.splice(index, 1); //刪除索引
+      vm.index_update(); //更新index
+      location.reload();
+    })
+  }
+  $("#blueprint_delete_button").off("click");
+  $("#blueprint_delete_modal").modal("hide");
+      }
     },
     檢查更新錯誤索引: function (index,_vm_blueprint) { //修補程式(不常發生)
       if (!_vm_blueprint[index]) return ;
@@ -502,71 +500,84 @@ var vm = new Vue({
       vm.action = "new_line";
       vm.更新藍圖(data.key, data);
     },
-		find_line_index: function(key, data){
-			for (var i = 0; i < data.line.length; i++) {
-				if (data.line[i]._key == key) return i;
-			}
-		},
+    find_line_index: function(key, data){
+        for (var i = 0; i < data.line.length; i++) {
+            if (data.line[i]._key == key) return i;
+        }
+    },
     move_line: function (key) {
       var data = vm.get_blueprint();
       var index= vm.find_line_index(key,data);
       if (index == undefined) return
-			if(index==0){//代表只有一筆，刪除整個藍圖
-				var _line = data.line;
-				vm.delete_blueprint(data.key,"move");
-			}else{
-				var _line = data.line.splice(index, 1);
-				vm.get_index_blueprint().splice(index, 1); //移除line的index索引陣列
-				if (vm.index_line >= index) { //刪除到小於自已-就往前倒退索引(同刪除藍圖)
-					var new_index = vm.index_line - 1;
-					if (new_index < 0) new_index = 0;
-					vm.index_line = new_index; //重新安排
-				}
-				vm.update_metro_key(vm.get_index_line());
-      	vm.更新藍圖(data.key, data);
-			}
+      if(index==0){//代表只有一筆，刪除整個藍圖
+        var _line = data.line;
+        vm.delete_blueprint(data.key,"move_delete");
+      }else{
+        var _line = data.line.splice(index, 1);
+        vm.get_index_blueprint().splice(index, 1); //移除line的index索引陣列
+        if (vm.index_line >= index) { //刪除到小於自已-就往前倒退索引(同刪除藍圖)
+            var new_index = vm.index_line - 1;
+            if (new_index < 0) new_index = 0;
+            vm.index_line = new_index; //重新安排
+        }
+        vm.update_metro_key(vm.get_index_line());
+        vm.更新藍圖(data.key, data);
+      }
       return _line
     },
-    delete_line: function (key) {
+    delete_line: function (key,_status) {
       var data = vm.get_blueprint();
       var index= vm.find_line_index(key,data);
       if (index == undefined) return
-      $('.ui.modal').modal("refresh");
-      setTimeout(function () {
-        $('#line_delete_modal').modal({
-          inverted: true,
-          closable: false
-        }).modal('show');
-      }, 0)
-      var _color = data.line[index].color;
-      $('#line_delete_modal').css("borderTopColor", _color);
-      $("#line_delete_button").css("backgroundColor", _color);
-			$(document).on("keydown.line_delete",function(event){
-        if (event.which == 13 ) { //enter
-					_fn();
-        } else if (event.which == 27) { //esc
-          $('#line_delete_modal').modal("hide");
-					$("#line_delete_button").off("click");
-					$(document).off("keydown.line_delete");
-        }
-      })
-      $("#line_delete_button").off("click").on("click",_fn);
-			function _fn(){
-				data.line.splice(index, 1); //移除line
-        vm.get_index_blueprint().splice(index, 1); //移除line的index索引陣列
-        if (vm.index_line >= index) { //刪除到自已或小於自已-就往前倒退索引(同刪除藍圖)
-          var new_index = vm.index_line - 1;
-          if (new_index < 0) new_index = 0;
-          vm.index_line = new_index; //重新安排
-        }
-        vm.update_metro_key(vm.get_index_line());
-        vm.action = "delete_line";
-        vm.更新藍圖(data.key, data);
-        vm.delete_info_line(key);
-        $("#line_delete_button").off("click");
-        $("#line_delete_modal").modal("hide");
-				$(document).off("keydown.line_delete");
-			}
+      if(_status=="move_delete" || _status=="metro_one_delete"){
+        _fn();
+      }else{
+        $('.ui.modal').modal("refresh");
+        setTimeout(function () {
+          $('#line_delete_modal').modal({
+            inverted: true,
+            closable: false
+          }).modal('show');
+        }, 0)
+        var _color = data.line[index].color;
+        $('#line_delete_modal').css("borderTopColor", _color);
+        $("#line_delete_button").css("backgroundColor", _color);
+//        $(document).on("keydown.line_delete",function(event){
+//          if (event.which == 13 ) { //enter
+//            _fn();
+//          } else if (event.which == 27) { //esc
+//            $('#line_delete_modal').modal("hide");
+//            $("#line_delete_button").off("click");
+//            $(document).off("keydown.line_delete");
+//          }
+//        })
+        $("#line_delete_button").off("click").on("click",_fn);
+      }
+	  function _fn() {
+          if(data.line.length==1){//只勝下一筆就把藍圖也刪了
+            vm.delete_blueprint(data.key,"line_one_delete");
+          }else{
+            data.line.splice(index, 1); //移除line
+            vm.get_index_blueprint().splice(index, 1); //移除line的index索引陣列
+            if (vm.index_line >= index) { //刪除到自已或小於自已-就往前倒退索引(同刪除藍圖)
+              var new_index = vm.index_line - 1;
+              if (new_index < 0) new_index = 0;
+              vm.index_line = new_index; //重新安排
+            }
+            vm.update_metro_key(vm.get_index_line());
+            vm.action = "delete_line";
+            vm.更新藍圖(data.key, data);
+            if(_status=="move_delete"){
+              
+            }else{
+              vm.delete_info_line(key);
+            }
+            
+          }
+		  $("#line_delete_button").off("click");
+		  $("#line_delete_modal").modal("hide");
+		  $(document).off("keydown.line_delete");
+		}
     },
     get_line_key: function () {
       return vm.get_line()._key;
@@ -595,28 +606,30 @@ var vm = new Vue({
     },
     move_metro: function (move_key, _line_index) {
       var data = this.get_blueprint();
-      if (data.line[this.index_line].metro.length <= 1) return
-      var index = vm.find_metro_index(move_key, data);
-      if (index == undefined) return;
-      var _metro = data.line[this.index_line].metro.splice(index, 1);
-      if (this.key_metro == move_key) { //代表刪到選取的站,要重新更換key_metro
-        var _index = index - 1;
-        if (_index < 0) _index = 0;
-        var new_metro_key = data.line[this.index_line].metro[_index]._key;
-        this.key_metro = new_metro_key;
+      var _metro = data.line[this.index_line].metro;
+      if (_metro.length <= 1) {
+        setTimeout(function(){
+          vm.delete_line(data.line[vm.index_line]._key, "move_delete");
+        },5)
+      } else {
+        var index = vm.find_metro_index(move_key, data);
+        if (index == undefined) return;
+        var _metro = _metro.splice(index, 1);
+        if (this.key_metro == move_key) { //代表刪到選取的站,要重新更換key_metro 
+          var _index = index - 1;
+          if (_index < 0) _index = 0;
+          var new_metro_key = data.line[this.index_line].metro[_index]._key;
+          this.key_metro = new_metro_key;
+        }
       }
       DB.ref("info/" + data.line[this.index_line]._key + "/metro").child(move_key).once("value", function (old_data) {
         DB.ref('info/' + vm.get_blueprint().line[_line_index]._key + "/metro/" + move_key).set(old_data.val());
         DB.ref("info/" + data.line[vm.index_line]._key + "/metro").child(move_key).remove();
-      })
+      }) 
       return _metro
     },
     delete_metro: function (delete_key) { //與move_metro雷同
       var data = JSON.parse(JSON.stringify(this.get_blueprint())); //將傳址改為傳值
-      if (data.line[this.index_line].metro.length <= 1) {
-        //在這裡要把line也刪除
-        return;
-      }
       var index = vm.find_metro_index(delete_key, data);
       if (index == undefined) return;
       $('.ui.modal').modal("refresh");
@@ -635,6 +648,9 @@ var vm = new Vue({
           $("#metro_delete_modal").modal("hide");
       })
       function _del_metro(){
+        if (data.line[vm.index_line].metro.length <= 1) {//將整條線也刪除
+          vm.delete_line(data.line[vm.index_line]._key,"metro_one_delete");
+        }else{
           data.line[vm.index_line].metro.splice(index, 1);
           if (vm.key_metro == delete_key) { //代表刪到選取的站,要重新更換key_metro
               var _index = index - 1;
@@ -645,9 +661,10 @@ var vm = new Vue({
           vm.action = "delete_metro";
           vm.更新藍圖(data.key, data);
           DB.ref("info/" + data.line[vm.index_line]._key + "/metro").child(delete_key).remove();
+        }
       }	
     },
-		swap_metro: function (oldIndex, newIndex) {
+	swap_metro: function (oldIndex, newIndex) {
       if (oldIndex == newIndex) return;
       var data = JSON.parse(JSON.stringify(this.get_blueprint())); //將傳址改為傳值
       var data_metro = data.line[this.index_line].metro

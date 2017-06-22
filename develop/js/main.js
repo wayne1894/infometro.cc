@@ -56,7 +56,7 @@
       setData: function (dataTransfer, dragEl) {
         vm.drag_metro_key=$(dragEl).data("key"); //正在脫亦的metro key
         if(navigator.userAgent.match("Firefox")){
-		  		dataTransfer.setData('key', $(dragEl).data("key")); 
+		  dataTransfer.setData('key', $(dragEl).data("key")); 
         }
       },
       onStart: function (evt) {
@@ -301,7 +301,7 @@
   function auto_height2(textarea){
     $(textarea).height(0);
     var _height=textarea.scrollHeight + parseFloat($(textarea).css("borderTopWidth")) + parseFloat($(textarea).css("borderBottomWidth"));
-    $(textarea).height(_height);
+    $(textarea).height(_height-1);
   }
 
   //導覽區程式
@@ -473,54 +473,54 @@
 			}
 	  })
 	}
-	function 匯出藍圖(key){
-				export_num=0;
-				export_num_use=0;
-				var _color = vm.line_color;
-				$('#export_modal').css("borderTopColor", _color);
-				$('#export_modal').modal('hide');
-				//$("#export_modal_button").css("backgroundColor", _color);
-				$("#send_modal_button").css("backgroundColor", _color);
-				$("#send_modal_button").removeClass("loading");
-				$("#send_modal_button").off("click").one("click",function(){
-						$(this).addClass("loading");
-						var email=$.trim($("#modal_send").val());
-						if(email=="")return;
-						var subject=$("#export_modal_name").html();
-						var attachments=$("#modal_textarea").val();
+	function 匯出藍圖(key) {
+	  export_num = 0;
+	  export_num_use = 0;
+	  var _color = vm.line_color;
+	  $('#export_modal').css("borderTopColor", _color);
+	  $('#export_modal').modal('hide');
+	  //$("#export_modal_button").css("backgroundColor", _color);
+	  $("#send_modal_button").css("backgroundColor", _color);
+	  $("#send_modal_button").removeClass("loading");
+	  $("#send_modal_button").off("click").one("click", function () {
+	    $(this).addClass("loading");
+	    var email = $.trim($("#modal_send").val());
+	    if (email == "") return;
+	    var subject = $("#export_modal_name").html();
+	    var attachments = $("#modal_textarea").val();
 
-						$.post("https://us-central1-infometro-cc.cloudfunctions.net/mail",{
-							"email" : email,
-							"subject": subject,
-							"html" : "檔案存於附件",
-							"attachments" : attachments
-						}).done(function() {
-							$("#send_modal_button").removeClass("loading");
-							$('#export_modal').modal('hide');
-							show_event_fn("寄送成功","檔案已寄到您指定的信箱");
-						})
+	    $.post("https://us-central1-infometro-cc.cloudfunctions.net/mail", {
+	      "email": email,
+	      "subject": subject,
+	      "html": "檔案存於附件",
+	      "attachments": attachments
+	    }).done(function () {
+	      $("#send_modal_button").removeClass("loading");
+	      $('#export_modal').modal('hide');
+	      show_event_fn("寄送成功", "檔案已寄到您指定的信箱");
+	    })
 
-				})
+	  })
 
-			for(var i=0;i<vm.blueprint.length;i++){
-				if(vm.blueprint[i].key==key){
-					export_json.name=vm.blueprint[i].name;
+	  for (var i = 0; i < vm.blueprint.length; i++) {
+	    if (vm.blueprint[i].key == key) {
+	      export_json.name = vm.blueprint[i].name;
 
-								$("#export_modal_name").html("infometro 地鐵計畫：" +  export_json.name);
-								$("#export_modal_name").css("color",_color);
+	      $("#export_modal_name").html("infometro 地鐵計畫：" + export_json.name);
+	      $("#export_modal_name").css("color", _color);
 
-					export_json.line=vm.blueprint[i].line;
-					export_json.info={};
-					for(var j=0;j<export_json.line.length;j++){
-						 var key=export_json.line[j]._key;
-						 export_json.info[key]="";
-						 load_info(key);
-										 export_num=export_num+1
-					}
-					return
-				}
-			}
-		}
+	      export_json.line = vm.blueprint[i].line;
+	      export_json.info = {};
+	      for (var j = 0; j < export_json.line.length; j++) {
+	        var key = export_json.line[j]._key;
+	        export_json.info[key] = "";
+	        load_info(key);
+	        export_num = export_num + 1
+	      }
+	      return
+	    }
+	  }
+	}
 	function 匯入藍圖(){
 		var _color = vm.line_color;
 		$('#import_modal').css("borderTopColor", _color);

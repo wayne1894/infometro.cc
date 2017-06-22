@@ -54,39 +54,34 @@
 	
 	<script>
       $(function(){
-      var obj = $("#board_enter_parent,#board_send_parent");
-      obj.on('dragenter', function (e) 
-      {
+        var obj = $("#board_enter_parent,#board_send_parent");
+        obj.on('dragenter', function (e){
           e.stopPropagation();
           e.preventDefault();
-        
-          //$(this).css('border', '2px solid #0B85A1');
-      });
-      obj.on('dragover', function (e) 
-      {
-        $("#board_send_parent>.ui.icon").css("background-color","#f7f7f7")
-           e.stopPropagation();
-           e.preventDefault();
-      });
-        
-      obj.on('dragleave', function (e) 
-      {
-          $("#board_send_parent>.ui.icon").css("background-color","");
-        e.stopPropagation();
-        e.preventDefault();
-      });
-        
-      obj.on('drop', function (e) 
-      {
+        });
+        obj.on('dragover', function (e){
+          var files = e.originalEvent.dataTransfer.files;
+          if(files.length==0)return;
+          $("#board_send_parent>.ui.icon").css("background-color","#f7f7f7");
+          e.stopPropagation();
+          e.preventDefault();
+        });
 
-           //$(this).css('border', '2px dotted #0B85A1');
-           e.preventDefault();
-           var files = e.originalEvent.dataTransfer.files;
-           upload_file(files[0])
-           //We need to send dropped files to Server
-          // handleFileUpload(files,obj);
-      });
-       })
+        obj.on('dragleave', function (e){
+          var files = e.originalEvent.dataTransfer.files;
+          if(files.length==0)return;
+          $("#board_send_parent>.ui.icon").css("background-color","");
+          e.stopPropagation();
+          e.preventDefault();
+        });
+        obj.on('drop', function (e){
+            e.preventDefault();
+            var files = e.originalEvent.dataTransfer.files;
+            if(files.length==0)return;
+            upload_file(files[0])
+
+        });
+      })
       function clear_uploadFile(){
         $("#progress .bar").css("min-width" ,"0%" );
         $("#uploadFileParent").parent().css("background-color","");

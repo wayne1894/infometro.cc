@@ -40,8 +40,8 @@
 <!-- jquery-color-pick -->
 
 <script src="src/build/js/public.js"></script>
-<script src="src/build/js/firebase_init.js?v=20170622"></script>
-<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=20170622" />
+<script src="src/build/js/firebase_init.js?v=20170623"></script>
+<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=20170623" />
 
 </head>
 <body>
@@ -105,8 +105,7 @@
         <i class="top_metro" :style="{color:line_color}" @click="exchange_metro(item._key)"></i>
         <span class="top_name" @dblclick="re_name(index,'metro',$event)">{{item.name}}</span>
         <input class="metro_input" type="text" v-model="item.name">
-        
-        
+
         <span v-if="metro.length==index+1" class="add a_last" @click="new_metro(metro.length)"><img src="src/static/images/+.png"></span>
       </li>
     </ul>
@@ -145,7 +144,7 @@
 
   </div>
   <div id="board_tag_name">
-    <div id="tag_name" v-if="metro_name">
+    <div id="tag_name" v-if="loading_blueprint">
       <i :style="{backgroundColor:line_color}"></i>
       <div id="tag_name_info">
         <div v-if="mode==1" id="border_metro_name" @mousedown="edit_name($event,'metro')">{{metro_name}}</div>
@@ -241,39 +240,34 @@
 	
 	<script>
       $(function(){
-      var obj = $("#board_enter_parent,#board_send_parent");
-      obj.on('dragenter', function (e) 
-      {
+        var obj = $("#board_enter_parent,#board_send_parent");
+        obj.on('dragenter', function (e){
           e.stopPropagation();
           e.preventDefault();
-        
-          //$(this).css('border', '2px solid #0B85A1');
-      });
-      obj.on('dragover', function (e) 
-      {
-        $("#board_send_parent>.ui.icon").css("background-color","#f7f7f7")
-           e.stopPropagation();
-           e.preventDefault();
-      });
-        
-      obj.on('dragleave', function (e) 
-      {
-          $("#board_send_parent>.ui.icon").css("background-color","");
-        e.stopPropagation();
-        e.preventDefault();
-      });
-        
-      obj.on('drop', function (e) 
-      {
+        });
+        obj.on('dragover', function (e){
+          var files = e.originalEvent.dataTransfer.files;
+          if(files.length==0)return;
+          $("#board_send_parent>.ui.icon").css("background-color","#f7f7f7");
+          e.stopPropagation();
+          e.preventDefault();
+        });
 
-           //$(this).css('border', '2px dotted #0B85A1');
-           e.preventDefault();
-           var files = e.originalEvent.dataTransfer.files;
-           upload_file(files[0])
-           //We need to send dropped files to Server
-          // handleFileUpload(files,obj);
-      });
-       })
+        obj.on('dragleave', function (e){
+          var files = e.originalEvent.dataTransfer.files;
+          if(files.length==0)return;
+          $("#board_send_parent>.ui.icon").css("background-color","");
+          e.stopPropagation();
+          e.preventDefault();
+        });
+        obj.on('drop', function (e){
+            e.preventDefault();
+            var files = e.originalEvent.dataTransfer.files;
+            if(files.length==0)return;
+            upload_file(files[0])
+
+        });
+      })
       function clear_uploadFile(){
         $("#progress .bar").css("min-width" ,"0%" );
         $("#uploadFileParent").parent().css("background-color","");
@@ -676,8 +670,8 @@
 		</div>
 	</div>
 </div>
-<script src="src/build/js/main.js?v=20170622"></script>
-<script src="src/build/js/vm.js?v=20170622"></script>
+<script src="src/build/js/main.js?v=20170623"></script>
+<script src="src/build/js/vm.js?v=20170623"></script>
  <script>
 	 if(get_test()!="test"){
 
