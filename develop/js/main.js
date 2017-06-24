@@ -198,101 +198,125 @@
     }, 0);
   }
 
+
   function parse_url(url, fn) {
     $.get("https://infometro.hopto.org/infometro.asp?url=" + url, function (html) {
+      var url_info = {}
 		try{
-				var iframe = document.createElement("iframe");
-				iframe.id = "iframe";
-				iframe.style.display = "none";
-				$(document.body).append(iframe);
-				var ifrm = document.getElementById('iframe');
-				ifrm = ifrm.contentWindow || ifrm.contentDocument.document || ifrm.contentDocument;
-				ifrm.document.open();
-				ifrm.document.write(html);
-				ifrm.document.close();
-				var url_info = {}
-				var metas = $("#iframe")[0].contentWindow.document.getElementsByTagName('meta');
-				for (var i = 0; i < metas.length; i++) {
-					if (metas[i].getAttribute("name") == "description") {
-						url_info.description = metas[i].getAttribute("content");
-					} else if (metas[i].getAttribute("property") == "og:description") {
-						url_info.og_description = metas[i].getAttribute("content");
-					} else if (metas[i].getAttribute("property") == "og:image") {
-						url_info.og_image = metas[i].getAttribute("content").split(",")[0];
-					} else if (metas[i].getAttribute("property") == "og:title") {
-						url_info.og_title = metas[i].getAttribute("content");
-					}
-				}
+          var iframe = document.createElement("iframe");
+          iframe.id = "iframe";
+          iframe.style.display = "none";
+          $(document.body).append(iframe);
+          var ifrm = document.getElementById('iframe');
+          ifrm = ifrm.contentWindow || ifrm.contentDocument.document || ifrm.contentDocument;
+          ifrm.document.open();
+          ifrm.document.write(html);
+          ifrm.document.close();
 
-				//字串手動劫取
-				if (url_info.og_image == undefined) { //取fb images
-					if (html.indexOf("og:image") > -1) {
-						var og_html = html.split("og:image")[1].split(">")[0];
-						og_html = og_html.replace(/\'/gi, "\"");
-						og_html = og_html.split("content=\"")[1].split('"')[0]
-						url_info.og_image = og_html;
-					}
-				}
-				if (url_info.og_description == undefined) {
-					if (html.indexOf("og:description") > -1) {
-						var og_html = html.split("og:description")[1].split(">")[0];
-						og_html = og_html.replace(/\'/gi, "\"");
-						og_html = og_html.split("content=\"")[1].split('"')[0]
-						url_info.og_description = og_html;
-					}
-				}
-				if (url_info.og_title == undefined) {
-					if (html.indexOf("og:title") > -1) {
-						var og_html = html.split("og:title")[1].split(">")[0];
-						og_html = og_html.replace(/\'/gi, "\"");
-						og_html = og_html.split("content=\"")[1].split('"')[0]
-						url_info.og_title = og_html;
-					}
-				}
+          var metas = $("#iframe")[0].contentWindow.document.getElementsByTagName('meta');
+          for (var i = 0; i < metas.length; i++) {
+              if (metas[i].getAttribute("name") == "description") {
+                  url_info.description = metas[i].getAttribute("content");
+              } else if (metas[i].getAttribute("property") == "og:description") {
+                  url_info.og_description = metas[i].getAttribute("content");
+              } else if (metas[i].getAttribute("property") == "og:image") {
+                  url_info.og_image = metas[i].getAttribute("content").split(",")[0];
+              } else if (metas[i].getAttribute("property") == "og:title") {
+                  url_info.og_title = metas[i].getAttribute("content");
+              }
+          }
 
+          //字串手動劫取
+          if (url_info.og_image == undefined){
+            url_info.og_image = capture_image(html); 
+          }
+          if (url_info.og_description == undefined && url_info.description==undefined) {
+            url_info.description=capture_description(html)
+          }
+        
+          if (url_info.og_title == undefined){
+            url_info.title=capture_title(html)
+          } 
+          if (url_info.og_title) {
+              url_info.title = url_info.og_title;
+          } else {
+              url_info.title = $(document.getElementById('iframe').contentWindow.document).find("title").html();
+              if (url_info.title == undefined) url_info.title = "";
+          }
+          if (url_info.og_description) {
+              url_info.description = url_info.og_description;
+          }
+          if (url_info.og_image) {
+              url_info.image = url_info.og_image;
+          }
 
-				//var $iframe_body=$(document.getElementById('iframe').contentWindow.document.body);
+          delete url_info.og_title
+          delete url_info.og_description
+          delete url_info.og_image
 
-				if (url_info.og_title) {
-					url_info.title = url_info.og_title;
-				} else {
-					url_info.title = $(document.getElementById('iframe').contentWindow.document).find("title").html();
-					if (url_info.title == undefined) url_info.title = "";
-				}
-				if (url_info.og_description) {
-					url_info.description = url_info.og_description;
-				}
-				if (url_info.og_image) {
-					url_info.image = url_info.og_image;
-				}
+          url_info.url = url; //這個url代表是連結的url
+          url_info.url_parent = url.split("://")[1].split("/")[0];
 
-				delete url_info.og_title
-				delete url_info.og_description
-				delete url_info.og_image
+          //判斷是不是youtube
+          if (url.indexOf(".youtube.") > -1) {
+              url_info.youtube = url.split("?v=")[1].split("&")[0];
+          } else if (url.indexOf("youtu.be/") > -1) {
+              url_info.youtube = url.split("be/")[1];
+          }
+          $("#iframe").remove();
+        if (typeof fn === "function") fn(url_info);
+      }catch(err) {
+        
+        url_info.url = url; //這個url代表是連結的url
+        url_info.url_parent = url.split("://")[1].split("/")[0];
 
-				url_info.url = url; //這個url代表是連結的url
-				url_info.url_parent = url.split("://")[1].split("/")[0];
-
-				//判斷是不是youtube
-				if (url.indexOf(".youtube.") > -1) {
-					url_info.youtube = url.split("?v=")[1].split("&")[0];
-				} else if (url.indexOf("youtu.be/") > -1) {
-					url_info.youtube = url.split("be/")[1];
-				}
-	//      url_info.ico = "https://www.google.com/s2/favicons?domain_url=" + url; 減少流量這個不存了
-
-
-				$("#iframe").remove();
-			  if (typeof fn === "function") fn(url_info);
-			}catch(err) {
-				print("網址解析有錯")
-				if (typeof fn === "function") fn();
-			}
-
-      //console.log(url_info);
+        if (typeof fn === "function") fn(url_info);
+      }
     }).fail(function(){
+      print("請求錯誤");
       if (typeof fn === "function") fn();
-		})
+	})
+    
+    function capture_image(html){
+       if (html.indexOf("og:image") > -1) {
+          var og_html = html.split("og:image")[1].split(">")[0];
+          if(og_html.indexOf("content=")==-1){
+            var _meta = html.split("og:image")[0].split("<meta");
+            og_html=_meta[_meta.length-1];
+          }
+          og_html = og_html.replace(/\'/gi, "\"");
+          og_html = og_html.split("content=\"")[1].split('"')[0];
+          return og_html;
+       }
+    }
+    
+    function capture_description(html){
+      if (html.indexOf("og:description") > -1) { 
+        var og_html = html.split("og:description")[1].split(">")[0];
+        if(og_html.indexOf("content=")==-1){
+          var _meta = html.split("og:description")[0].split("<meta");
+          og_html=_meta[_meta.length-1];
+        }
+        og_html = og_html.replace(/\'/gi, "\"");
+        og_html = og_html.split("content=\"")[1].split('"')[0]
+        return og_html;
+      }
+    }
+    
+    function capture_title(html){
+      if (html.indexOf("og:title") > -1) {
+        var og_html = html.split("og:title")[1].split(">")[0];
+        if(og_html.indexOf("content=")==-1){
+          var _meta = html.split("og:title")[0].split("<meta");
+          og_html=_meta[_meta.length-1];
+        }
+        og_html = og_html.replace(/\'/gi, "\"");
+        og_html = og_html.split("content=\"")[1].split('"')[0];
+        return og_html;
+       }
+    }
+    
+    
   }
   function auto_height(textarea){
     $(textarea).height(70);
