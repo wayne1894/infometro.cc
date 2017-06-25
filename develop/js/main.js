@@ -13,15 +13,15 @@
          $("#board_parent").css("min-height",(getViewportSize().h)+"px");
        }
     
-        if(window_width<650){
-          $("#center").css("width","650px");
+        if(window_width<700){
+          $("#center").css("width","700px");
           $("#top").css("width", $("#center").width());
         }else{
           $("#center").css("width","87%");
-          if(window_width<(961-30)){
+          if(window_width<(991-30)){
               $("#top").css("width", window_width-$("#left").width());
           }else{
-              $("#top").css("width", $("#center").width());
+              $("#top").css("width", "inherit");
           }
         }
   }).resize();
@@ -44,7 +44,7 @@
       onEnd: function (evt) {
         setTimeout(function(){
           vm.swap_line(evt.oldIndex, evt.newIndex);
-		  		vm.mode = 1;
+		  vm.mode = 1;
           vm.drag_line_key="";
         },5)
       }
@@ -225,18 +225,17 @@
                   url_info.og_title = metas[i].getAttribute("content");
               }
           }
-
           //字串手動劫取
           if (url_info.og_image == undefined){
             url_info.og_image = capture_image(html); 
           }
           if (url_info.og_description == undefined && url_info.description==undefined) {
-            url_info.description=capture_description(html)
+            url_info.og_description=capture_description(html);
           }
         
           if (url_info.og_title == undefined){
-            url_info.title=capture_title(html)
-          } 
+            url_info.og_title=capture_title(html);
+          }
           if (url_info.og_title) {
               url_info.title = url_info.og_title;
           } else {
@@ -256,7 +255,11 @@
 
           url_info.url = url; //這個url代表是連結的url
           url_info.url_parent = url.split("://")[1].split("/")[0];
-
+          print(url_info.url_parent)
+          if(url_info.image.indexOf("http://")==-1 && url_info.image.indexOf("https://")==-1){
+            url_info.image = "//"+url_info.url_parent + url_info.image;
+          }
+          
           //判斷是不是youtube
           if (url.indexOf(".youtube.") > -1) {
               url_info.youtube = url.split("?v=")[1].split("&")[0];
@@ -265,7 +268,11 @@
           }
           $("#iframe").remove();
         if (typeof fn === "function") fn(url_info);
+          
       }catch(err) {
+        url_info.image = capture_image(html); 
+        url_info.description=capture_description(html)
+        url_info.title=capture_title(html);
         
         url_info.url = url; //這個url代表是連結的url
         url_info.url_parent = url.split("://")[1].split("/")[0];
@@ -284,9 +291,18 @@
             var _meta = html.split("og:image")[0].split("<meta");
             og_html=_meta[_meta.length-1];
           }
-          og_html = og_html.replace(/\'/gi, "\"");
-          og_html = og_html.split("content=\"")[1].split('"')[0];
-          return og_html;
+         if(og_html.indexOf("content=")>-1){
+            og_html = og_html.replace(/\'/gi, "\"");
+            og_html = og_html.split("content=\"")[1].split('"')[0];
+            return og_html;
+         }
+       }
+      
+      if(html.indexOf("<link rel=\"image_src") > -1){
+         var og_html=html.split("<link rel=")[1].split(">")[0];
+         og_html = og_html.replace(/\'/gi, "\"");
+         og_html= og_html.split("href=\"")[1].split('"')[0];
+         return og_html;
        }
     }
     
@@ -314,9 +330,12 @@
         og_html = og_html.split("content=\"")[1].split('"')[0];
         return og_html;
        }
+      if(html.indexOf("<title") > -1){
+        var _title=html.split("<title")[1].split("</title>")[0].split(">")[1];
+        return _title
+      }
+     
     }
-    
-    
   }
   function auto_height(textarea){
     $(textarea).height(70);
@@ -643,8 +662,7 @@
                   $("#left").css("width",_w);
                   $("#line_parent").css("width",_w)
                   $("#center").css("margin-left",_w);
-                  $("#top").css("width", $("#center").width());
-                	$("#edit_parent a").css("width",_w)
+                  $("#edit_parent a").css("width",_w)
               });
               $(document).on('mouseup.line',function(event){
                   $(document).off('mouseup.line');

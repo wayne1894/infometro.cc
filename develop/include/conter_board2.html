@@ -9,12 +9,17 @@
 		<!--包成vue組件1 輸入-->
 		<div v-if="url_info" class="ui items" style="background-color: whitesmoke;width: 95%; margin: .5em 0;">
 			<div class="item">
-				<div v-if="url_info.image" class="ui small image" style="padding-left: 9px; padding-top: 9px;"><img :src="url_info.image"></div>
+				<div v-if="url_info.image" class="ui small image" style="padding-left: 9px; padding-top: 9px; padding-bottom:9px;">
+				  <img :src="url_info.image">
+				  <i v-if="url_info.youtube" class="video_icon video play icon"></i>
+				</div>
 				<div class="content" style=" position: relative;padding-left: 1em;padding-right: 1.6em; padding-bottom: 8px;">
 					<a :href="url_info.url" target="_blank" class="header" style="margin-top: 6px;color: #676868; font-size: 1.1em;">{{url_info.title}}</a>
 					<div class="meta"><span>{{url_info.url_parent}}</span></div>
 					<!-- v-html有風險要改掉，推社交前要拿掉 -->
-					<div v-if="url_info.description" class="extra" v-html="url_info.description"></div>
+					<div v-if="url_info.description" class="multiple-ellipsis" >
+					  <span class="multiple-ellipsis-text" v-html="url_info.description"></span>
+					</div>
 					<div>
 						<a class="ui right corner label" @click="vm.url_info=''" style="border-color: transparent" >
 							<i class="remove icon" style="color: rgb(1, 1, 1);cursor: pointer;"></i>
@@ -61,7 +66,7 @@
         });
         obj.on('dragover', function (e){
           var files = e.originalEvent.dataTransfer.files;
-          if(files.length==0)return;
+          if(vm.drag_line_key || vm.drag_metro_key)return
           $("#board_send_parent>.ui.icon").css("background-color","#f7f7f7");
           e.stopPropagation();
           e.preventDefault();
@@ -69,7 +74,7 @@
 
         obj.on('dragleave', function (e){
           var files = e.originalEvent.dataTransfer.files;
-          if(files.length==0)return;
+          if(vm.drag_line_key || vm.drag_metro_key)return
           $("#board_send_parent>.ui.icon").css("background-color","");
           e.stopPropagation();
           e.preventDefault();
@@ -77,6 +82,7 @@
         obj.on('drop', function (e){
             e.preventDefault();
             var files = e.originalEvent.dataTransfer.files;
+            $("#board_send_parent>.ui.icon").css("background-color","");
             if(files.length==0)return;
             upload_file(files[0])
 
@@ -118,7 +124,7 @@
           $("#progress .bar").css("min-width" ,"0%" );
           $('#uploadFileInput').val("");
           $('#uploadFileParent').attr("data-tooltip","重新上傳");
-          $("#uploadName").html("<span style='color:#ffffff;margin-left:5px;white-space: nowrap;'>"+name+"</span><i class='delete icon' style='position: relative;left:5px;cursor:pointer;color:#ffffff' onclick='clear_uploadFile()'></i>");
+          $("#uploadName").html("<span style='color:#ffffff;margin-left:5px;white-space: nowrap;'>"+name+"</span><i class='delete icon' style='position: relative;left:5px;cursor:pointer;color:#ffffff;display:inline' onclick='clear_uploadFile()'></i>");
           var downloadURL = uploadTask.snapshot.downloadURL;
           $('#uploadFileInput').val("");
           $("#uploadFileParent").data({
@@ -161,17 +167,18 @@
 				<img v-if="users.photo" class="ui left floated image transition mini" :src="users.photo">
 				<div class="info_message" @dblclick="edit_info(item,'dbl',$event)">
 					<p v-if="img_file(item.file_name)">
-						<a :href="item.file_url" target="_blank"><img style="width:100%;" :src="item.file_url" ></a>
+                      <a :href="item.file_url" target="_blank"><img style="width:100%;" :src="item.file_url" ></a>
 					</p>
 					<p class="content" v-html="$options.filters.message_filter(item.message)"></p>
 					<p class="content textarea ui form" :style="{borderColor:line_color}">
 						<textarea></textarea>
 						<span class="textarea_prompt">
                           <span class="esc">
-                          <i class="ui info circle icon" ></i>按Esc離開編輯
+                            <i class="ui attach icon" ></i>
+                            <span>按Esc離開編輯</span>
                           </span>
-                          <button class="send mini ui button" style="color:#ffffff" :style="{backgroundColor:line_color}">送出</button>
-                          <button class="cancel mini ui button">取消</button>
+                          <button class="send mini ui button" style="color:#ffffff; padding: .6em 1.2em;font-size: .8rem;" :style="{backgroundColor:line_color}">送出</button>
+                          <button style="padding: .6em 1.2em;font-size: .8rem;" class="cancel mini ui button">取消</button>
 						</span>
 					</p>
 				</div>
@@ -185,15 +192,15 @@
 							<a v-if="item.url_info" target="_black" :href="'https://www.facebook.com/sharer/sharer.php?u='+item.url_info.url" class="item" style="text-decoration: none;"><i class="facebook square icon"></i>分享</a>
 						</div>
 					</span>
-					<a v-if="item.file_id" :href="item.file_url" target="_blank" style="    position: absolute; bottom: 5px;right: 9px;">
-						<span class="ui pointing" data-inverted="" :data-tooltip="item.file_name">
-							<i class="attach icon"></i>
+					<a v-if="item.file_id" :href="item.file_url" target="_blank" style="position: absolute; top:14px; right: -27px;">
+					  <span class="ui pointing" data-position="left center" data-inverted="" :data-tooltip="item.file_name">
+						 <i class="attach icon"></i>
 					  </span>
 					</a>
 				</span>
 
 				<!--包成vue組件2 顯示-->
-				<div v-if="item.url_info" class="ui items" :class="get_youtube_embed(item)" style="background-color: whitesmoke;width: 98%;padding: 0; display:inline-block; margin:0;border: 1px solid #cdcdcd;border-radius: 4px;">
+				<div v-if="item.url_info" class="ui items" :class="get_youtube_embed(item)" style="background-color: whitesmoke;width: 98%;padding: 0; display:inline-block; margin:0;border: 1px solid #cdcdcd;border-radius: 3px;">
 					<div class="item">
 						<div v-if="item.url_info && item.url_info.youtube" class="ui embed" data-source="youtube" :data-id="item.url_info.youtube"></div>
 						<div v-else-if="item.url_info.image" class="ui small image" style="padding-left: 9px; padding-top: 9px;padding-bottom: 9px;">

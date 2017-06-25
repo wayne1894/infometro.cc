@@ -42,7 +42,7 @@ html.re_name{
 body {
   font-family: Microsoft JhengHei;
 }
-@media screen and (max-width:650px) {
+@media screen and (max-width:700px) {
 	body{
 		overflow-x: visible;
 	}
@@ -164,9 +164,9 @@ textarea:focus {
       &:hover .tool {
         display: block;
       }
-			.tool.t_check{
-				display: block;
-			}
+      .tool.t_check{
+          display: block;
+      }
 			
       &:hover::after,
       &.check::after {
@@ -522,6 +522,20 @@ textarea:focus {
       position: absolute;
     }
   }
+  .line_adj{
+    position: absolute;
+    height: 102%;
+    width: 2px;
+    right: 0px;
+    top: 0;
+    background-color: #cdcdcd;
+    border-right: 1px solid #ffffff;
+  }
+  @media screen and (max-width: 961px) {//991-30
+    .line_adj{
+     display: none; 
+    }
+  }
 }
 #center {
   background-color: #F7F7F7;
@@ -677,6 +691,18 @@ textarea:focus {
       padding-left: 27px;
       padding-bottom: 25px;
       position: relative;
+      
+//      transition: background-color 0.2s ease-out;
+//      textarea{
+//        transition: background-color 0.2s ease-out;
+//      }
+//      &:hover {
+//        background-color: #f7f7f7;
+//        textarea{
+//          background-color: #f7f7f7;
+//        }
+//      }
+
       a:not(.ui):hover{
         text-decoration: underline;
       }
@@ -812,7 +838,7 @@ textarea:focus {
           .clearfix();
           display: block;
           padding-top: 5px;
-		  		padding-bottom: 12px;
+		  padding-bottom: 12px;
           button{
             float: right;
             position: relative;
@@ -821,11 +847,7 @@ textarea:focus {
           .esc{
             float: left;
             position: relative;
-            top: -3px;
-            i{
-              color:rgba(34,36,38,.15);
-              cursor: default;
-            }
+            color: #d1d1d1;
           }
         }
         .url_remove{
@@ -953,7 +975,7 @@ textarea:focus {
           top: 0;
       }
       &.adj #board2{
-          left: 10px;
+          left: 13px;
       }
       &.adj #board3{
           border-top: 1px dashed #cdcdcd!important;
@@ -963,21 +985,21 @@ textarea:focus {
           width: 280px;
           top: 0;
           #board_favorites {
-              >div {
-                  margin-left: 13px;
-              }
+            >div {
+                margin-left: 13px;
+            }
           }
           #board_search {
               padding-left: 13px;
           }
       }
   }
-	#tag_delete_metro{
+  #tag_delete_metro{
 		display: inline-block;
 		float: right;
 		margin-right: 10px;
 	}
-  @media screen and (max-width:961px) {
+  @media screen and (max-width: 991px) {
       #board1 {
           width: 100%;
           position: relative;
@@ -1001,7 +1023,7 @@ textarea:focus {
               width: 0px;
           }
           &.adj #board2{
-              left: 0;
+              left: -20px;
           }
           &.adj #board3 {
               width: 100%;
@@ -1490,13 +1512,34 @@ i.orange.icon {
  }
 }
 
-
 .left_inherit{
   left: inherit!important
 }
 .nav_i{
   cursor: pointer;
   font-size: 1.1em!important;
+}
+
+.video_icon{
+  position: absolute;
+  top: 54px;
+  left: 0;
+  width: 106%!important;
+  z-index: 2;
+  &::before{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 4;
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    color: #fff;
+    font-size: 2.8rem;
+    text-shadow: 0 2px 10px rgba(34,36,38,.2);
+    -webkit-transition: opacity .5s ease,color .5s ease;
+    transition: opacity .5s ease,color .5s ease;
+    z-index: 10;
+  }
 }
 
 #board2 .ui.items>.item>.content>a.header:hover{
@@ -1506,6 +1549,44 @@ i.orange.icon {
   word-wrap: break-word;
   word-break: break-all;
 }
+/* multiple ellipsis */
+.multiple-ellipsis {
+  height: 2.8em;
+  line-height: 1.4;
+  overflow: hidden;
+  box-sizing: content-box;
+}
+ 
+.multiple-ellipsis::before {
+  content: "";
+  float: left;
+  height: 2.8em;
+  width: 5px;
+}
+ 
+.multiple-ellipsis::after {
+  background: -webkit-linear-gradient(left, rgba(255,255,255,0) 0, #f5f5f5 50%);
+  background: -moz-linear-gradient(left, rgba(255,255,255,0) 0, #f5f5f5 50%);
+  background: -o-linear-gradient(left, rgba(255,255,255,0) 0, #f5f5f5 50%);
+  background: -ms-linear-gradient(left, rgba(255,255,255,0) 0, #f5f5f5 50%);
+  background: linear-gradient(to right, rgba(255,255,255,0) 0, #f5f5f5 50%);
+  content: "...";
+  float: right;
+  left: 100%;
+  margin-left: -3em;
+  padding-right: 5px;
+  position: relative;
+  text-align: right;
+  top: -1.4em;
+  width: 3em;
+}
+ 
+.multiple-ellipsis-text {
+  float: right;
+  margin-left: -5px;
+  width: 100%;
+}
+ 
 .ps-scrollbar-y-rail{
   z-index: 5;
 }
