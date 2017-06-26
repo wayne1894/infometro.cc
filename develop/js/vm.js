@@ -670,7 +670,7 @@ var vm = new Vue({
         }
       }	
     },
-		swap_metro: function (oldIndex, newIndex) {
+	swap_metro: function (oldIndex, newIndex) {
       if (oldIndex == newIndex) return;
       var data = JSON.parse(JSON.stringify(this.get_blueprint())); //將傳址改為傳值
       var data_metro = data.line[this.index_line].metro
