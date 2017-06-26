@@ -173,12 +173,12 @@
 					<p class="content textarea ui form" :style="{borderColor:line_color}">
 						<textarea></textarea>
 						<span class="textarea_prompt">
-                          <span class="esc">
-                            <i class="ui attach icon" ></i>
-                            <span>按Esc離開編輯</span>
-                          </span>
-                          <button class="send mini ui button" style="color:#ffffff; padding: .6em 1.2em;font-size: .8rem;" :style="{backgroundColor:line_color}">送出</button>
-                          <button style="padding: .6em 1.2em;font-size: .8rem;" class="cancel mini ui button">取消</button>
+							<span class="esc">
+								<i class="ui attach icon" ></i>
+								<span>按Esc離開編輯</span>
+							</span>
+							<button class="send mini ui button" style="color:#ffffff; padding: .6em 1.2em;font-size: .8rem;" :style="{backgroundColor:line_color}">送出</button>
+							<button style="padding: .6em 1.2em;font-size: .8rem;" class="cancel mini ui button">取消</button>
 						</span>
 					</p>
 				</div>
@@ -192,7 +192,7 @@
 							<a v-if="item.url_info" target="_black" :href="'https://www.facebook.com/sharer/sharer.php?u='+item.url_info.url" class="item" style="text-decoration: none;"><i class="facebook square icon"></i>分享</a>
 						</div>
 					</span>
-					<a v-if="item.file_id" :href="item.file_url" target="_blank" style="position: absolute; top:14px; right: -27px;">
+					<a v-if="item.file_id" :href="item.file_url" target="_blank" style="position: absolute; top:15px; right: -25px;">
 					  <span class="ui pointing" data-position="left center" data-inverted="" :data-tooltip="item.file_name">
 						 <i class="attach icon"></i>
 					  </span>
@@ -203,15 +203,17 @@
 				<div v-if="item.url_info" class="ui items" :class="get_youtube_embed(item)" style="background-color: whitesmoke;width: 98%;padding: 0; display:inline-block; margin:0;border: 1px solid #cdcdcd;border-radius: 3px;">
 					<div class="item">
 						<div v-if="item.url_info && item.url_info.youtube" class="ui embed" data-source="youtube" :data-id="item.url_info.youtube"></div>
-						<div v-else-if="item.url_info.image" class="ui small image" style="padding-left: 9px; padding-top: 9px;padding-bottom: 9px;">
+						<div v-else-if="item.url_info.image" class="ui small image" >
 							<img :src="item.url_info.image">
 <!--							<i class="video play outline icon" style="position: absolute;top: 1em;left: 1em;font-size: 4em; color:rgb(247, 247, 247);"></i>-->
 						</div>
 						<div class="content" style=" position: relative;padding-left: 1em;padding-right: 1.6em; padding-bottom: 8px;">
-								<a :href="item.url_info.url" target="_blank" class="header" style="margin-top: 6px; font-size: 1.1em;color: #676868;">{{item.url_info.title}}</a>
+								<a :href="item.url_info.url" target="_blank" class="header" style="margin-top: 8px; font-size: 1.1em;color: #676868;">{{item.url_info.title}}</a>
 								<div class="meta"><span>{{item.url_info.url_parent}}</span></div>
 								<!-- v-html有風險要改掉，推社交前要拿掉 -->
-								<div v-if="item.url_info.description" class="extra" v-html="item.url_info.description"></div>
+								<div v-if="item.url_info.description" class="multiple-ellipsis">
+									<span class="multiple-ellipsis-text" v-html="item.url_info.description"></span>
+								</div>
 								<div class="url_remove">
 										<a class="ui right corner label" @click="item.url_info=''" style="border-color: transparent" >
 												<i class="remove icon" style="color: rgb(1, 1, 1);cursor: pointer;"></i>

@@ -722,19 +722,26 @@ var vm = new Vue({
       
       vm.url_info = undefined; //清掉
       $("#board_textarea").val("").keyup(); //清掉
-        DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).push(_data, function (error) {
-        if (error) { //修補程式(不常發生)
-          if (error.toString().indexOf("Permission denied") > -1) {
-            set_line_root(vm.get_line_key(), user_uid );
-            DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).push(_data)
-            setTimeout(function () {
-              print("未發現root，重新寫入root")
-              location.reload();
-            }, 0)
+			
+			for(var index in _data.url_info) { 
+				if (_data.url_info.hasOwnProperty(index)) {
+					if(_data.url_info[index]==undefined)_data.url_info[index]="";
+				}
+			}
 
-          }
-        }
-        });
+			DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).push(_data, function (error) {
+			if (error) { //修補程式(不常發生)
+				if (error.toString().indexOf("Permission denied") > -1) {
+					set_line_root(vm.get_line_key(), user_uid );
+					DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).push(_data)
+					setTimeout(function () {
+						print("未發現root，重新寫入root")
+						location.reload();
+					}, 0)
+
+				}
+			}
+			});
     },
     delete_info: function (key, event) { //刪除資訊
       var $target_parent = $(event.target).closest(".board_list");

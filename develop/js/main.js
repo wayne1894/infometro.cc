@@ -649,29 +649,29 @@
 			}
 		}).colpickHide();
       
-       $("#left .left_line").on('mousedown',function(event){
-          $(document).on('selectstart',function(){return false;})
-          $(document).on('dragstart',function(){return false;})
-             // var max_width=$(window).width()-120;
-              var gX=($("#left").width()-event.pageX);
-              var b_left=event.pageX-parseInt($("#board1").css("left"));
-              $(document).on('mousemove.line',function(event){
-                  var _w=(event.pageX) -gX;
-                  if(_w<=120)_w=120;//最小寬度
-                  //if(_w>max_width)_w=max_width;
-                  $("#left").css("width",_w);
-                  $("#line_parent").css("width",_w)
-                  $("#center").css("margin-left",_w);
-                  $("#edit_parent a").css("width",_w)
-              });
-              $(document).on('mouseup.line',function(event){
-                  $(document).off('mouseup.line');
-                  $(document).off('mousemove.line');
-                  $(document).off('selectstart');
-                  $(document).off('dragstart');
-                  $("#show_event").css("left",$("#left").width() + 20);
-              });
-          })
+		 $("#left .left_line").on('mousedown',function(event){
+				$(document).on('selectstart',function(){return false;})
+				$(document).on('dragstart',function(){return false;})
+				 // var max_width=$(window).width()-120;
+					var gX=($("#left").width()-event.pageX);
+					var b_left=event.pageX-parseInt($("#board1").css("left"));
+					$(document).on('mousemove.line',function(event){
+							var _w=(event.pageX) -gX;
+							if(_w<=120)_w=120;//最小寬度
+							//if(_w>max_width)_w=max_width;
+							$("#left").css("width",_w);
+							$("#line_parent").css("width",_w)
+							$("#center").css("margin-left",_w);
+							$("#edit_parent a").css("width",_w)
+					});
+					$(document).on('mouseup.line',function(event){
+							$(document).off('mouseup.line');
+							$(document).off('mousemove.line');
+							$(document).off('selectstart');
+							$(document).off('dragstart');
+							$("#show_event").css("left",$("#left").width() + 20);
+					});
+			})
 
 	})
 	function allowDrop_line(event) { //拖曳的物件移到上面
