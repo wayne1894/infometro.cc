@@ -373,44 +373,44 @@ var vm = new Vue({
           $("#blueprint_delete_button").off("dblclick").on("dblclick",_delete)
       }
       function _delete(){
-          var index; //從刪除KEY找到他排在陣列的第幾個
-  for (var i = 0; i < vm.blueprint.length; i++) { //找到刪除的index
-    if (vm.blueprint[i].key == key) {
-      index = i;
-      break;
-    }
-  }
-  vm.action = "delete_blueprint";
-  if(_status=="move_delete"){
+				var index; //從刪除KEY找到他排在陣列的第幾個
+				for (var i = 0; i < vm.blueprint.length; i++) { //找到刪除的index
+					if (vm.blueprint[i].key == key) {
+						index = i;
+						break;
+					}
+				}
+				vm.action = "delete_blueprint";
+				if(_status=="move_delete"){
 
-  }else{//非移動狀態把資訊也清掉
-    var _line = vm.blueprint[index].line;
-    for (var i = 0; i < _line.length; i++){
-        vm.delete_info_line(_line[i]._key); //刪除info
-    }
-  }
-  if (vm.blueprint.length > 1) {
-    vm.index.splice(index, 1); //刪除索引
-    vm.index_update(); //更新index
-    vm.index_line = 0;
-    vm.index_blueprint = 0;
-    vm.update_index_line(vm.index[vm.index_blueprint]);
-    vm.update_index_line_check();
-    vm.update_selection_color();
-    setTimeout(function () {
-      vm.update_metro_key(vm.index[vm.index_blueprint][vm.index_line]);
-    }, 0)
+				}else{//非移動狀態把資訊也清掉
+					var _line = vm.blueprint[index].line;
+					for (var i = 0; i < _line.length; i++){
+							vm.delete_info_line(_line[i]._key); //刪除info
+					}
+				}
+				if (vm.blueprint.length > 1) {
+					vm.index.splice(index, 1); //刪除索引
+					vm.index_update(); //更新index
+					vm.index_line = 0;
+					vm.index_blueprint = 0;
+					vm.update_index_line(vm.index[vm.index_blueprint]);
+					vm.update_index_line_check();
+					vm.update_selection_color();
+					setTimeout(function () {
+						vm.update_metro_key(vm.index[vm.index_blueprint][vm.index_line]);
+					}, 0)
 
-    DB.ref('blueprint/' + user_uid + "/" + key).remove();
-  } else {
-    DB.ref('blueprint/' + user_uid + "/" + key).remove().then(function () {
-      vm.index.splice(index, 1); //刪除索引
-      vm.index_update(); //更新index
-      location.reload();
-    })
-  }
-  $("#blueprint_delete_button").off("click");
-  $("#blueprint_delete_modal").modal("hide");
+					DB.ref('blueprint/' + user_uid + "/" + key).remove();
+				} else {
+					DB.ref('blueprint/' + user_uid + "/" + key).remove().then(function () {
+						vm.index.splice(index, 1); //刪除索引
+						vm.index_update(); //更新index
+						location.reload();
+					})
+				}
+				$("#blueprint_delete_button").off("click");
+				$("#blueprint_delete_modal").modal("hide");
       }
     },
     檢查更新錯誤索引: function (index,_vm_blueprint) { //修補程式(不常發生)
@@ -607,10 +607,11 @@ var vm = new Vue({
     move_metro: function (move_key, _line_index) {
       var data = this.get_blueprint();
       var _metro = data.line[this.index_line].metro;
+			var delete_fn;
       if (_metro.length <= 1) {
-        setTimeout(function(){
-          vm.delete_line(data.line[vm.index_line]._key, "move_delete");
-        },5)
+				delete_fn=function(){
+					vm.delete_line(data.line[vm.index_line]._key, "move_delete");
+				}
       } else {
         var index = vm.find_metro_index(move_key, data);
         if (index == undefined) return;
@@ -622,10 +623,15 @@ var vm = new Vue({
           this.key_metro = new_metro_key;
         }
       }
-      DB.ref("info/" + data.line[this.index_line]._key + "/metro").child(move_key).once("value", function (old_data) {
-        DB.ref('info/' + vm.get_blueprint().line[_line_index]._key + "/metro/" + move_key).set(old_data.val());
-        DB.ref("info/" + data.line[vm.index_line]._key + "/metro").child(move_key).remove();
-      }) 
+			DB.ref("info/" + data.line[this.index_line]._key + "/metro").child(move_key).once("value", function (old_data) {
+
+				DB.ref('info/' + vm.get_blueprint().line[_line_index]._key + "/metro/" + move_key).set(old_data.val());//移動
+
+				DB.ref("info/" + data.line[vm.index_line]._key + "/metro").child(move_key).remove();//移除(可以進行備份)
+
+				if(delete_fn)setTimeout(delete_fn,5);//刪除支線
+
+			}) 
       return _metro
     },
     delete_metro: function (delete_key) { //與move_metro雷同
@@ -664,7 +670,7 @@ var vm = new Vue({
         }
       }	
     },
-	swap_metro: function (oldIndex, newIndex) {
+		swap_metro: function (oldIndex, newIndex) {
       if (oldIndex == newIndex) return;
       var data = JSON.parse(JSON.stringify(this.get_blueprint())); //將傳址改為傳值
       var data_metro = data.line[this.index_line].metro

@@ -44,9 +44,9 @@
       onEnd: function (evt) {
         setTimeout(function(){
           vm.swap_line(evt.oldIndex, evt.newIndex);
-		  vm.mode = 1;
+		  		vm.mode = 1;
           vm.drag_line_key="";
-        },5)
+        },5);
       }
     });
     sortable["metro"] = new Sortable(id("top_tag"), {
@@ -696,11 +696,11 @@
 		 $("#right .r_content").perfectScrollbar();
 		 $("#right .r_button").on("click",function(){
 			var _index=$(this).index()-1;
-           if(_index==0){
-             $("#right_lightning").show();
-           }else{
-             $("#right_lightning").hide();
-           }
+		  if(_index==0){
+			  $("#right_lightning").show();
+		  }else{
+			  $("#right_lightning").hide();
+		  }
 			$(this).addClass("active").siblings().removeClass("active");
 			$("#right .r_content:eq("+_index+")").addClass("active").siblings().removeClass("active");
 		})
