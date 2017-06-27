@@ -4,7 +4,6 @@ var user_email
 var isAnonymous;
 
 $(function(){
-	// Initialize Firebase 初始化
 	var config = {
 		apiKey: "AIzaSyAalJEx21SpnVU5q5lW0eTSVPTz18s2Hy8",
 		authDomain: "infometro-cc.firebaseapp.com",
@@ -14,35 +13,24 @@ $(function(){
 	};
 	firebase.initializeApp(config);
 	DB = firebase.database();
-	//[全域]監聽狀態改變
-	firebase.auth().onAuthStateChanged(function (data) {
-		var page=get_page();
-		
-		if (data) { //使用者已登入
-			user_uid = data.uid;
-          if(user_uid=="lVAHfyuy4gN4UmiJ7WMYtIwKDts2"){
-            $.cookie("ga","N",{ expires: 365 });
-          }
-			user_email = data.email
-			if (data.isAnonymous) { //匿名使用者
-				isAnonymous=true;
-				DB.ref('users/' + data.uid).once('value', function (data) {
-					if (!data.val()) {
-						var fn = _is_login;
-						if (page == "index") fn = location_fn;
-						初始化使用者資訊(fn);
-					} else {
-						if ( page == "main") _is_login();
-					}
-				})
+	
+	if ( get_page()== "main"){
+		firebase.auth().onAuthStateChanged(function (data) {
+			if (data) { //使用者已登入
+				print("User is logined.");
+				user_uid = data.uid;
+				user_email = data.email;
+				if (data.isAnonymous) isAnonymous=true;
+				if(user_uid=="lVAHfyuy4gN4UmiJ7WMYtIwKDts2"){
+					$.cookie("ga","N",{ expires: 365 });
+				}
+				//user_uid="";
+				_is_login();
 			} else {
-				if ( page== "main") _is_login();
+				location.replace("/"); //登出
 			}
-		} else {
-			print("User is not logined yet.");
-			if ( page == "main") location.replace("/"); //登出
-		}
-	});
+		});
+	}
 })
 
 function logout() {
@@ -69,54 +57,65 @@ function location_fn(){
 		location.href = "/:-D";
 	}
 }
-function google_login() {
-  if(DB==undefined) return setTimeout(google_login,500);
-  if (user_uid != undefined && !isAnonymous) return location_fn();
-  var provider = new firebase.auth.GoogleAuthProvider();
-
-  firebase.auth().signInWithPopup(provider).then(function(result) {
-     var user = result.user;
-     DB.ref('users/' + user.uid).once('value', function (data) {
-        if (!data.val()) {
-          初始化使用者資訊(location_fn);
-        } else {
-          location_fn();
-        }
-      })
-  })
+function check_login_button(){
+	if($("#fb_button").hasClass("loading") || $("#google_button").hasClass("loading") || $("#anonymous_button").hasClass("loading"))return true;
+}
+function remove_login_button(){
+	$("#fb_button").removeClass("loading")
+	$("#google_button").removeClass("loading")
+	$("#anonymous_button").removeClass("loading")
 }
 
+function google_login(fb_login_before) {
+	if (user_uid != undefined) location_fn();
+	if(DB==undefined) return setTimeout(google_login,200);
+	if(fb_login_before=="fb_login_before"){
+		
+	}else{
+		if(check_login_button())return
+		$("#google_button").addClass("loading");
+		if (user_uid != undefined && !isAnonymous) return location_fn();
+	}
+  var provider = new firebase.auth.GoogleAuthProvider();
+//signInWithPopup signInWithRedirect
+  firebase.auth().signInWithPopup(provider).then(function(result){
+		location_fn();
+	}).catch(function(error) {
+		remove_login_button();
+	});
+}
 function fb_login() {
-  if(DB==undefined) return setTimeout(fb_login,500);
+	if (user_uid != undefined) location_fn();
+	if(DB==undefined) return setTimeout(fb_login,200);
+	if(check_login_button())return 
+	$("#fb_button").addClass("loading");
   if (user_uid != undefined && !isAnonymous) return location_fn();
-	if(login_wait)return;
-	login_wait=true
 	//firebase to fb login
 	var provider = new firebase.auth.FacebookAuthProvider();
-
   //signInWithPopup signInWithRedirect
-  firebase.auth().signInWithPopup(provider).then(function (result) {
-    var user = result.user;
-    DB.ref('users/' + user.uid).once('value', function (data) {
-      if (!data.val()) {
-        初始化使用者資訊(location_fn);
-      } else {
-        location_fn();
-      }
-    })
-  }).catch(function(error) {
+  firebase.auth().signInWithPopup(provider).then(function(result){
+		location_fn();
+	}).catch(function(error) {
     // Handle Errors here.
     if(error.code=="auth/account-exists-with-different-credential"){
-      google_login();
-    }
+			setTimeout(function(){
+				google_login("fb_login_before");
+			},0)
+    }else{
+			remove_login_button();
+		}
   });
 }
 function anonymous_login() {
-	if(login_wait)return;
-	login_wait=true;
-  if(DB==undefined) return setTimeout(anonymous_login,500);
-  if (user_uid != undefined) location_fn();
-  firebase.auth().signInAnonymously();
+	if (user_uid != undefined) location_fn();
+	if(DB==undefined) return setTimeout(anonymous_login,200);
+	if(check_login_button())return
+	$("#anonymous_button").addClass("loading");
+  firebase.auth().signInAnonymously().then(function(result){
+		location_fn();
+	}).catch(function(error) {
+		remove_login_button();
+	});
 }
 
 function 初始化使用者資訊(fn) {
@@ -331,24 +330,28 @@ function blueprint_set(){
 
 }
 
-function _is_login() { //程式進入點
+//程式進入點
+function _is_login() {
   DB.ref('users/' + user_uid).once('value', function (data) { //載入使用者基本資料
     if (data.val()) {
       vm.users = data.val();
-    } else {//沒有會員資料 
-      初始化使用者資訊();
+    } else {//沒有會員資料
+			初始化使用者資訊(_is_login);
+      return false;
     }
   });
+	
+	//代入即時資訊
   var _ref=DB.ref('users_data/' + user_uid +"/lightning").limitToFirst(50);
   vm.$bindAsArray('lightning', _ref);
   
-  DB.ref('users_data/' + user_uid +"/index" ).once('value', function (data) { //載入user_data
+  DB.ref('users_data/' + user_uid +"/index").once('value', function (data) { //載入user_data
     if (data.val()) vm.index = data.val();
   }).then(function () {
     if ($.cookie('index_blueprint') != undefined) { //預設要載入的藍圖索引
       vm.index_blueprint = $.cookie('index_blueprint');
     }
-    blueprint_init(function () {//這裡是變動藍圖資訊都會執行 
+    blueprint_init(function () {//這裡是變動藍圖資訊都會常態執行的fn
       setTimeout(blueprint_set, 5);
     },function(){//這裡只要vm.load會執行
       start_set();
