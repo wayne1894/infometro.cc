@@ -352,7 +352,7 @@
 			<div class="board_message">
 			    <div :style="{color : line_color}" class="active_left" v-show="info_active==item['.key']"></div>
 				<img v-if="users.photo" class="ui left floated image transition mini" :src="users.photo">
-				<div class="info_message" @dblclick="edit_info(item,'dbl',$event)">
+				<div :class="{mh_40 : item.url_info }" class="info_message" @dblclick="edit_info(item,'dbl',$event)">
 					<p v-if="img_file(item.file_name)">
                       <a :href="item.file_url" target="_blank"><img style="width:100%;" :src="item.file_url" ></a>
 					</p>
@@ -573,7 +573,7 @@
       </div>
       <div class="title"><i class="dropdown icon"></i> infometro裡的資料安全嗎？</div>
       <div class="content">
-        <p class="transition hidden">安全議題在資訊服務永遠是一項重要的課題，我們雖然正在初始上線階段，但也非常注重用戶的隱私與安全，避免資料遭到入侵與外洩。在登入方面，目前我們只使用facebook/google帳號做登入，也就是說您不會有密碼被外洩的疑慮，不過請您確保這些帳號的安全性，例如：設定兩階段驗證。</p>
+        <p class="transition hidden">安全議題在資訊服務永遠是一項重要的課題，我們雖然正在初始上線階段，但也非常注重用戶的隱私與安全，避免資料遭到入侵與外洩。在登入方面，目前我們只使用google帳號做登入，也就是說您不會有密碼被外洩的疑慮，不過請您確保這些帳號的安全性，例如：設定兩階段驗證。</p>
          <p class="transition hidden">另外，我們採用google的firebase做為核心資料庫，比起將資料架在伺服器上，增加了google技術的保帳性，並在權限方面設定了妥善的控管，讓資料僅限制給本人能夠讀取，也就是目前使用者只能存取自己地鐵裡的資料，別人無法透過其他方式讀取您的資料。</p>
 		  <p class="transition hidden">未來平台升級或開放分享社交功能後，我們也會特別注重資料的延續性，所以請放心使用。不過建議，敏感性的資料，還是不宜放在網路上。</p>
       </div>

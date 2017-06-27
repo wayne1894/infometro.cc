@@ -307,15 +307,19 @@
     }
     
     function capture_description(html){
-      if (html.indexOf("og:description") > -1) { 
-        var og_html = html.split("og:description")[1].split(">")[0];
-        if(og_html.indexOf("content=")==-1){
-          var _meta = html.split("og:description")[0].split("<meta");
-          og_html=_meta[_meta.length-1];
+      try{
+        if (html.indexOf("og:description") > -1) { 
+          var og_html = html.split("og:description")[1].split(">")[0];
+          if(og_html.indexOf("content=")==-1){
+            var _meta = html.split("og:description")[0].split("<meta");
+            og_html=_meta[_meta.length-1];
+          }
+          og_html = og_html.replace(/\'/gi, "\"");
+          og_html = og_html.split("content=\"")[1].split('"')[0]
+          return og_html;
         }
-        og_html = og_html.replace(/\'/gi, "\"");
-        og_html = og_html.split("content=\"")[1].split('"')[0]
-        return og_html;
+      }catch(err) {
+        
       }
     }
     
