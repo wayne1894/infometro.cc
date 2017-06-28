@@ -364,12 +364,13 @@
 		if(t!='') return t
 	}
 $(function(){
+  return
 	 var ctrlDown = false,
         ctrlKey = 17,
         cmdKey = 91,
         vKey = 86,
         cKey = 67,
-				xKey = 88;
+		xKey = 88;
 	var copy_flocus=false
 	$( document ).on( "focus", "input,textarea", function(){
 		vm.copy_info=[];
@@ -380,9 +381,7 @@ $(function(){
 	})
 
     $(document).keydown(function(e) {
-			//print(copy_flocus)
-				if(copy_flocus) return;
-			
+		if(copy_flocus) return;
         if (e.keyCode == ctrlKey || e.keyCode == cmdKey) ctrlDown = true;
 				if (ctrlDown && e.keyCode == cKey){//按下ctrl+c
 					if(getselecttext()!=undefined) return
