@@ -20,7 +20,8 @@ var vm = new Vue({
     search_metro : [],
     drag_line_key : "",
     drag_metro_key : "",
-    lightning : []
+    lightning : [],
+		copy_info : []
   },
   mounted: function () {
     $("#main").css("visibility", "visible");
@@ -155,9 +156,9 @@ var vm = new Vue({
       if (_index.info_active) { //等下會更新到，這邊就不用更新了
         var _active = _index.info_active[this.key_metro];
         this.info_active = _active;
-        //        setTimeout(function(){
-        //          $("#"+_active).velocity("scroll",{duration: 0,offset: -250});
-        //        },50);
+        // setTimeout(function(){
+        //   $("#"+_active).velocity("scroll",{duration: 0,offset: -250});
+        // },50);
 
       } else {
         vm.index_update();
@@ -166,7 +167,7 @@ var vm = new Vue({
       _ref.on("child_added", function (snapshot) { //元件載入後的動作
         setTimeout(function () {
           $("#board_info .dropdown").dropdown("destroy").dropdown();
-        }, 5)
+        }, 5);
       })
     }
   },
@@ -206,7 +207,7 @@ var vm = new Vue({
       if(name=="" || name==undefined)return
       name=name.toLowerCase()
       if(name.indexOf("png")>-1 || name.indexOf("gif")>-1 || name.indexOf("jpg")>-1 || name.indexOf("jpeg")>-1){
-        return true
+        return true;
       }
     },
     get_youtube_embed: function (item) {
@@ -234,16 +235,16 @@ var vm = new Vue({
     mode_txt: function () {
       if (this.blueprint.length == 0) return "";
       if (this.mode == 0) { //一般模式
-        setTimeout(function () {
-          sortable["metro"].option("disabled", true);
-          sortable["line"].option("disabled", true);
-        }, 5)
+//        setTimeout(function () {
+//          sortable["metro"].option("disabled", true);
+//          sortable["line"].option("disabled", true);
+//        }, 5)
         return "一般模式"
       } else if (this.mode == 1) { //編輯模式
-        setTimeout(function () {
-          sortable["metro"].option("disabled", false);
-          sortable["line"].option("disabled", false);
-        }, 5)
+//        setTimeout(function () {
+//          sortable["metro"].option("disabled", false);
+//          sortable["line"].option("disabled", false);
+//        }, 5)
         return "編輯模式"
       } else if (this.mode == 1.5) {
         return "編輯模式"
@@ -670,7 +671,7 @@ var vm = new Vue({
         }
       }	
     },
-	swap_metro: function (oldIndex, newIndex) {
+		swap_metro: function (oldIndex, newIndex) {
       if (oldIndex == newIndex) return;
       var data = JSON.parse(JSON.stringify(this.get_blueprint())); //將傳址改為傳值
       var data_metro = data.line[this.index_line].metro
@@ -702,6 +703,12 @@ var vm = new Vue({
       }
       return _line.metro[_index];
     },
+		paste_info: function(_data){
+			_data.update_timestamp = firebase.database.ServerValue.TIMESTAMP;
+			_data.timestamp = firebase.database.ServerValue.TIMESTAMP;
+			delete _data[".key"];
+			this.save_info(_data);
+		},
     new_info: function () { //新增資訊
       var board_textarea = $.trim($("#board_textarea").val());
       if (board_textarea == "") return;
@@ -725,21 +732,21 @@ var vm = new Vue({
         print("目前不在任何地鐵上");
         return
       }
-      
       vm.url_info = undefined; //清掉
       $("#board_textarea").val("").keyup(); //清掉
-			
 			for(var index in _data.url_info) { 
 				if (_data.url_info.hasOwnProperty(index)) {
 					if(_data.url_info[index]==undefined)_data.url_info[index]="";
 				}
 			}
-
+			this.save_info(_data);
+    },
+		save_info: function(_data){
 			DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).push(_data, function (error) {
 			if (error) { //修補程式(不常發生)
 				if (error.toString().indexOf("Permission denied") > -1) {
 					set_line_root(vm.get_line_key(), user_uid );
-					DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).push(_data)
+					DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).push(_data);
 					setTimeout(function () {
 						print("未發現root，重新寫入root")
 						location.reload();
@@ -748,7 +755,10 @@ var vm = new Vue({
 				}
 			}
 			});
-    },
+		},
+		delete_info_direct: function(key){
+			DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).child(key).remove();
+		},
     delete_info: function (key, event) { //刪除資訊
       var $target_parent = $(event.target).closest(".board_list");
       if ($target_parent.hasClass("edit")) return;
@@ -765,7 +775,7 @@ var vm = new Vue({
         }
       }).dimmer('show');
       $delete_info.find(".send").off("click").on("click", function () {
-        DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).child(key).remove();
+        DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).child(key).remove();//delete_info_direct相同
         $delete_info.dimmer('hide');
       });
       $delete_info.find(".cancel").off("click").on("click", function () {
@@ -841,13 +851,16 @@ var vm = new Vue({
       }else if(_level=="metro"){
         var get_level=vm.get_metro();
       }
+			var _name=get_level.name;
       $textarea.val(get_level.name);
       auto_height2($textarea[0]);
       $textarea.on("keydown",function(event){
         auto_height2($textarea[0]);
         if (event.which == 13 || (event.shiftKey && event.which == 13)) { //enter
 		  		event.preventDefault();
-          get_level.name=$.trim($textarea.val().replace(/  +/g, ' ')); 
+          get_level.name=$.trim($textarea.val().replace(/  +/g, ' '));
+					if(_name == get_level.name)return
+					if(_level == "line") vm.set_總站(get_level.name,_name);
           vm.action = "re_name";
           vm.更新藍圖();
           edit_set();
@@ -865,6 +878,12 @@ var vm = new Vue({
         $textarea.hide();
       }
     },
+		set_總站: function(edit_name,before_name){
+			var _get_metro=vm.get_line().metro;
+			if(_get_metro.length==1 && (_get_metro[0].name=="總站" || _get_metro[0].name==before_name)){
+				_get_metro[0].name=edit_name;
+			}
+		},
     re_name: function (index, _level, event) { //重新命名(共用)
       if ($(event.target).hasClass("blueprint_i")) return;
       $("html").addClass("re_name");
@@ -881,7 +900,9 @@ var vm = new Vue({
             get_level().name = _name;
             return
           }
-          vm.action = "re_name"
+					if(_name == get_level().name)return
+					if(_level == "line") vm.set_總站(get_level().name,_name);
+          vm.action = "re_name";
           vm.更新藍圖();
         } else if (event.which == 27) { //esc
           edit_set();

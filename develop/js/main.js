@@ -27,6 +27,7 @@
   }).resize();
 
   var sortable = [];
+	var mode_before ; //mode before 暫放
   $(function () {
     //拖亦的部份 https://github.com/RubaXa/Sortable
     sortable["line"] = new Sortable(id("line_drag"), {
@@ -36,15 +37,16 @@
         vm.drag_line_key=$(dragEl).data("key"); //正在脫亦的line key
         if(navigator.userAgent.match("Firefox")){
           dataTransfer.setData('line_key', $(dragEl).data("key")); //設定要傳送的資料
-         }
+        }
       },
       onStart: function(evt){
+				mode_before =vm.mode;
         vm.mode = 1.5;
       },
       onEnd: function (evt) {
         setTimeout(function(){
           vm.swap_line(evt.oldIndex, evt.newIndex);
-		  		vm.mode = 1;
+		  		vm.mode = mode_before;
           vm.drag_line_key="";
         },5);
       }
@@ -56,7 +58,7 @@
       setData: function (dataTransfer, dragEl) {
         vm.drag_metro_key=$(dragEl).data("key"); //正在脫亦的metro key
         if(navigator.userAgent.match("Firefox")){
-		  dataTransfer.setData('key', $(dragEl).data("key")); 
+		  		dataTransfer.setData('key', $(dragEl).data("key")); 
         }
       },
       onStart: function (evt) {
@@ -69,6 +71,7 @@
         } else if (evt.oldIndex == $("#top_tag li").length - 2) {
           $top_tag.addClass("last_drag");
         }
+				mode_before =vm.mode;
         vm.mode = 1.5;
       },
       onEnd: function (evt) {
@@ -80,7 +83,7 @@
         $top_tag.removeClass("first_drag").removeClass("last_drag");
         setTimeout(function(){
           vm.swap_metro(evt.oldIndex, evt.newIndex);
-          vm.mode = 1;
+          vm.mode = mode_before;
           vm.drag_metro_key="";
         },5)
       }
@@ -348,8 +351,79 @@
   function auto_height2(textarea){
     $(textarea).height(0);
     var _height=textarea.scrollHeight + parseFloat($(textarea).css("borderTopWidth")) + parseFloat($(textarea).css("borderBottomWidth"));
-    $(textarea).height(_height-1);
+    $(textarea).height(_height);
   }
+
+
+//剪下貼上資訊的部份
+	function getselecttext(){//抓取選取文字
+		var t='';
+		if(window.getSelection){t=window.getSelection();}
+		else if(document.getSelection){t=document.getSelection();}
+		else if(window.document.selection){t=window.document.selection.createRange().text;}
+		if(t!='') return t
+	}
+$(function(){
+	 var ctrlDown = false,
+        ctrlKey = 17,
+        cmdKey = 91,
+        vKey = 86,
+        cKey = 67,
+				xKey = 88;
+	var copy_flocus=false
+	$( document ).on( "focus", "input,textarea", function(){
+		vm.copy_info=[];
+		copy_flocus=true;
+		$(this).one("blur",function(){
+			copy_flocus=false;
+		})
+	})
+
+    $(document).keydown(function(e) {
+			//print(copy_flocus)
+				if(copy_flocus) return;
+			
+        if (e.keyCode == ctrlKey || e.keyCode == cmdKey) ctrlDown = true;
+				if (ctrlDown && e.keyCode == cKey){//按下ctrl+c
+					if(getselecttext()!=undefined) return
+					if(vm.info_active){
+						if($("#"+vm.info_active).find("textarea").is(":visible")) return
+						//從vm.info 複製一份資料出來
+						vm.copy_info[0]=JSON.parse(JSON.stringify(copy_info(vm.info_active)));//傳址轉傳值
+						vm.copy_info[1]="copy";
+						show_event_fn("複製成功","你複製了一個資訊");
+					}
+				}else if(ctrlDown && e.keyCode == xKey){//按下ctrl+x
+					if(getselecttext()!=undefined) return
+					if(vm.info_active){
+						//從vm.info 複製一份資料出來, 並新增等下要刪除的資訊
+						if($("#"+vm.info_active).find("textarea").is(":visible")) return
+						vm.copy_info[0]=JSON.parse(JSON.stringify(copy_info(vm.info_active)));//傳址轉傳值
+						vm.copy_info[1]="cut";
+						vm.copy_info[2]=vm.info_active;
+						show_event_fn("剪下成功","你剪下了一個資訊");
+					}
+				}else if(ctrlDown && e.keyCode == vKey){//按下ctrl+v
+					if(vm.copy_info.length==0)return
+					vm.paste_info(vm.copy_info[0]);
+					if(vm.copy_info[1]=="cut"){
+						vm.delete_info_direct(vm.copy_info[2]);
+						show_event_fn("貼上成功","你貼上了一個資訊");
+						
+					}
+				}
+    }).keyup(function(e) {
+      if (e.keyCode == ctrlKey || e.keyCode == cmdKey) ctrlDown = false;
+    });
+	function copy_info(_key){
+		for(var i=0;i<vm.info.length;i++){
+			if(vm.info[i][".key"]==_key){
+				return vm.info[i];
+			}
+		}
+	}
+})
+
 
   //導覽區程式
   function remove_start(n){

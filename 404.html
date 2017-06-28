@@ -40,8 +40,8 @@
 <!-- jquery-color-pick -->
 
 <script src="src/build/js/public.js"></script>
-<script src="src/build/js/firebase_init.js?v=20170628"></script>
-<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=20170628" />
+<script src="src/build/js/firebase_init.js?v=20170629"></script>
+<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=20170629" />
 
 </head>
 <body>
@@ -132,7 +132,7 @@
       <div class="board_name">
         <div v-if="mode==1" id="border_line_name" @mousedown="edit_name($event,'line')">{{ line_name }}</div>
         <div v-else>{{ line_name }}</div>
-        <textarea id="board_line_textarea" class="edit_textarea">{{ line_name }}</textarea>
+        <textarea id="board_line_textarea">{{ line_name }}</textarea>
       </div>
     </div>
     <transition name="fade">
@@ -140,9 +140,8 @@
     </transition>
     <div id="board_edit" onclick="vm.mode_click()" @dragleave="allowDropLeave($event)" @dragover="allowDrop($event)" @drop="drop($event)"><div class="border_area" :data-tooltip="mode_txt()" data-position="right center"><i :class="mode_class()" class=" icon"></i></div></div>
     <transition name="fade">
-        <i v-show="is_nav" style="position: absolute; bottom:8px; right:0;" class="nav_i ui orange help circle icon" data-title="切換操作模式" data-content="操作模式目前有『一般模式』及『編輯模式』，在編輯模式下，可以彈性操作大部份的編輯動作，例如，您可以將『地鐵站點』拖曳到其他支線來更換位置。在文字資訊的地方，點擊兩下也可快速修改文字。"></i>
+			<i v-show="is_nav" style="position: absolute; bottom:8px; right:0;" class="nav_i ui orange help circle icon" data-title="切換操作模式" data-content="操作模式目前有『一般模式』及『編輯模式』，在編輯模式下，可以彈性操作大部份的編輯動作，例如，您可以將『地鐵站點』拖曳到其他支線來更換位置。在文字資訊的地方，點擊兩下也可快速修改文字。"></i>
     </transition>
-
   </div>
   <div id="board_tag_name">
     <div id="tag_name" v-if="loading_blueprint">
@@ -150,7 +149,7 @@
       <div id="tag_name_info">
         <div v-if="mode==1" id="border_metro_name" @mousedown="edit_name($event,'metro')">{{metro_name}}</div>
         <div v-else>{{metro_name}}</div>
-        <textarea class="edit_textarea" id="board_metro_textarea">{{ metro_name }}</textarea>
+        <textarea id="board_metro_textarea">{{ metro_name }}</textarea>
         <div>資訊共 {{info_count}} 筆</div>
         <div>建立時間：<span>{{metro_create}}</span></div>
       </div>
@@ -354,7 +353,7 @@
 				<img v-if="users.photo" class="ui left floated image transition mini" :src="users.photo">
 				<div :class="{mh_40 : item.url_info }" class="info_message" @dblclick="edit_info(item,'dbl',$event)">
 					<p v-if="img_file(item.file_name)">
-                      <a :href="item.file_url" target="_blank"><img style="width:100%;" :src="item.file_url" ></a>
+						<a :href="item.file_url" target="_blank"><img style="width:100%;" :src="item.file_url" ></a>
 					</p>
 					<p class="content" v-html="$options.filters.message_filter(item.message)"></p>
 					<p class="content textarea ui form" :style="{borderColor:line_color}">
@@ -678,8 +677,8 @@
 		</div>
 	</div>
 </div>
-<script src="src/build/js/main.js?v=20170628"></script>
-<script src="src/build/js/vm.js?v=20170628"></script>
+<script src="src/build/js/main.js?v=20170629"></script>
+<script src="src/build/js/vm.js?v=20170629"></script>
  <script>
 
 	 if(get_test()!="test" && $.cookie("ga")!="N"){

@@ -167,7 +167,7 @@
 				<img v-if="users.photo" class="ui left floated image transition mini" :src="users.photo">
 				<div :class="{mh_40 : item.url_info }" class="info_message" @dblclick="edit_info(item,'dbl',$event)">
 					<p v-if="img_file(item.file_name)">
-                      <a :href="item.file_url" target="_blank"><img style="width:100%;" :src="item.file_url" ></a>
+						<a :href="item.file_url" target="_blank"><img style="width:100%;" :src="item.file_url" ></a>
 					</p>
 					<p class="content" v-html="$options.filters.message_filter(item.message)"></p>
 					<p class="content textarea ui form" :style="{borderColor:line_color}">
