@@ -426,7 +426,6 @@
 </div>
 <script>
 $(document).ready(function() {
-
 		// fix menu when passed
 		$('.masthead').visibility({
 				once: false,
@@ -446,12 +445,12 @@ $(document).ready(function() {
  <script>
 	
 	 function set_button(){
-		 $("#fb_button").click(fb_login);
+		 //$("#fb_button").click(fb_login);
 		 $("#google_button").click(google_login);
 		 $("#anonymous_button").click(anonymous_login);
 	 }
 	 function set_location_button(){
-		 $("#fb_button").off("click").click(location_fn);
+		 //$("#fb_button").off("click").click(location_fn);
 		 $("#google_button").off("click").click(location_fn);
 		 $("#anonymous_button").off("click").click(location_fn);
 	 }
@@ -461,6 +460,10 @@ $(document).ready(function() {
 			if (data) { //使用者已登入
 				print("User is logined.");
 				set_location_button();
+                if($.cookie("login")=="Y"){
+                  $.removeCookie("login");
+                  location_fn();
+                }
 			}
 		});
 	 })

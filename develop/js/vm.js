@@ -21,7 +21,7 @@ var vm = new Vue({
     drag_line_key : "",
     drag_metro_key : "",
     lightning : [],
-		copy_info : []
+	copy_info : []
   },
   mounted: function () {
     $("#main").css("visibility", "visible");

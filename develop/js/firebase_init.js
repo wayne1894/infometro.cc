@@ -78,7 +78,8 @@ function google_login(fb_login_before) {
 	}
   var provider = new firebase.auth.GoogleAuthProvider();
 //signInWithPopup signInWithRedirect
-  firebase.auth().signInWithPopup(provider).then(function(result){
+  $.cookie("login", "Y");
+  firebase.auth().signInWithRedirect(provider).then(function(result){
 		location_fn();
 	}).catch(function(error) {
 		remove_login_button();
