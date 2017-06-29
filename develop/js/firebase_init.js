@@ -3,44 +3,41 @@ var user_uid;
 var user_email
 var isAnonymous;
 
-$(function(){
-	var config = {
-		apiKey: "AIzaSyAalJEx21SpnVU5q5lW0eTSVPTz18s2Hy8",
-		authDomain: "infometro-cc.firebaseapp.com",
-		databaseURL: "https://infometro-cc.firebaseio.com",
-		storageBucket: "infometro-cc.appspot.com",
-		messagingSenderId: "358423331162"
-	};
-	firebase.initializeApp(config);
-	firebase.auth().onAuthStateChanged(function (data) {
-		DB = firebase.database();
-		if (data) { //使用者已登入
-			print("User is logined.");
-			user_uid = data.uid;
-			user_email = data.email;
-			if (data.isAnonymous) isAnonymous=true;
-			if(user_uid=="lVAHfyuy4gN4UmiJ7WMYtIwKDts2"){
-				$.cookie("ga","N",{ expires: 365 });
-			}
-			//user_uid="";
-			if ( get_page()== "main")_is_login();
-			if ( get_page()== "index"){
-				set_location_button();
-				$("#google_html").html("已登入Google 直接進入");
-				$("#google_button").css("background-color","#d14836").removeClass("loading");;
-		
-				if($.cookie("login")=="Y"){
-						remove_login_button();
-						$.removeCookie("login");
-						location_fn();
-				}
-			}
-		} else {
-			if ( get_page()== "main") location.replace("/"); //登出
+firebase.initializeApp({
+	apiKey: "AIzaSyAalJEx21SpnVU5q5lW0eTSVPTz18s2Hy8",
+	authDomain: "infometro-cc.firebaseapp.com",
+	databaseURL: "https://infometro-cc.firebaseio.com",
+	storageBucket: "infometro-cc.appspot.com",
+	messagingSenderId: "358423331162"
+});
+firebase.auth().onAuthStateChanged(function (data) {
+	DB = firebase.database();
+	if (data) { //使用者已登入
+		print("User is logined.");
+		user_uid = data.uid;
+		user_email = data.email;
+		if (data.isAnonymous) isAnonymous=true;
+		if(user_uid=="lVAHfyuy4gN4UmiJ7WMYtIwKDts2"){
+			$.cookie("ga","N",{ expires: 365 });
 		}
-	});
+		//user_uid="";
+		if ( get_page()== "main")_is_login();
+		if ( get_page()== "index"){
+			set_location_button();
+			if($.cookie("login")=="Y"){
+					remove_login_button();
+					$.removeCookie("login");
+					location_fn();
+			}else{
+				$("#google_html").html("已登入Google 直接進入");
+				$("#google_button").css("background-color","#d14836").removeClass("loading");
+			}
+		}
+	} else {
+		if ( get_page()== "main") location.replace("/"); //登出
+	}
+});
 
-})
 
 function logout() {
   firebase.auth().signOut().then(function () {
