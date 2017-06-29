@@ -2,6 +2,9 @@
 <html lang="zh-TW">
 <head>
 @@include('include/head.html')
+<script src="src/build/js/public.js?rev=@@include('include/v.html')"></script>
+<script src="src/build/js/firebase_init.js?rev=@@include('include/v.html')"></script>
+<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?rev=@@include('include/v.html')" />
 </head>
 <body>
 <div id="main">
@@ -32,8 +35,8 @@
   </div>
    @@include('include/modal.html')
 </div>
-<script src="src/build/js/main.js?v=20170629"></script>
-<script src="src/build/js/vm.js?v=20170629"></script>
+<script src="src/build/js/main.js?rev=@@include('include/v.html')"></script>
+<script src="src/build/js/vm.js?rev=@@include('include/v.html')"></script>
 @@include('include/footer.html')
 </body>
 </html>

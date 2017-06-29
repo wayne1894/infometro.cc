@@ -12,25 +12,31 @@ $(function(){
 		messagingSenderId: "358423331162"
 	};
 	firebase.initializeApp(config);
-	DB = firebase.database();
-	
-	if ( get_page()== "main"){
-		firebase.auth().onAuthStateChanged(function (data) {
-			if (data) { //使用者已登入
-				print("User is logined.");
-				user_uid = data.uid;
-				user_email = data.email;
-				if (data.isAnonymous) isAnonymous=true;
-				if(user_uid=="lVAHfyuy4gN4UmiJ7WMYtIwKDts2"){
-					$.cookie("ga","N",{ expires: 365 });
-				}
-				//user_uid="";
-				_is_login();
-			} else {
-				location.replace("/"); //登出
+	firebase.auth().onAuthStateChanged(function (data) {
+		DB = firebase.database();
+		if (data) { //使用者已登入
+			print("User is logined.");
+			user_uid = data.uid;
+			user_email = data.email;
+			if (data.isAnonymous) isAnonymous=true;
+			if(user_uid=="lVAHfyuy4gN4UmiJ7WMYtIwKDts2"){
+				$.cookie("ga","N",{ expires: 365 });
 			}
-		});
-	}
+			//user_uid="";
+			if ( get_page()== "main")_is_login();
+			if ( get_page()== "index"){
+				set_location_button();
+				if($.cookie("login")=="Y"){
+						remove_login_button();
+						$.removeCookie("login");
+						location_fn();
+				}
+			}
+		} else {
+			if ( get_page()== "main") location.replace("/"); //登出
+		}
+	});
+
 })
 
 function logout() {
@@ -67,14 +73,13 @@ function remove_login_button(){
 }
 
 function google_login(fb_login_before) {
-	if (user_uid != undefined) location_fn();
+	if (user_uid != undefined)return location_fn();
 	if(DB==undefined) return setTimeout(google_login,200);
 	if(fb_login_before=="fb_login_before"){
 		
 	}else{
 		if(check_login_button())return
 		$("#google_button").addClass("loading");
-		if (user_uid != undefined && !isAnonymous) return location_fn();
 	}
   var provider = new firebase.auth.GoogleAuthProvider();
 //signInWithPopup signInWithRedirect
@@ -85,8 +90,8 @@ function google_login(fb_login_before) {
 		remove_login_button();
 	});
 }
-function fb_login() {
-	if (user_uid != undefined) location_fn();
+function fb_login() {//已棄用
+	if (user_uid != undefined)return location_fn();
 	if(DB==undefined) return setTimeout(fb_login,200);
 	if(check_login_button())return 
 	$("#fb_button").addClass("loading");
@@ -108,7 +113,7 @@ function fb_login() {
   });
 }
 function anonymous_login() {
-	if (user_uid != undefined) location_fn();
+	if (user_uid != undefined)return  location_fn();
 	if(DB==undefined) return setTimeout(anonymous_login,200);
 	if(check_login_button())return
 	$("#anonymous_button").addClass("loading");

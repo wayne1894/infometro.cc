@@ -30,11 +30,11 @@ var fileinclude = require('gulp-file-include')
 gulp.task('fileinclude', function() {
   gulp.src(['develop/*.html'])
 	.pipe(gulpPlumber())
-    .pipe(fileinclude({
-      prefix: '@@',
-      basepath: '@file'
-    }))
-    .pipe(gulp.dest('./'));
+	.pipe(fileinclude({
+		prefix: '@@',
+		basepath: '@file'
+	}))
+	.pipe(gulp.dest('./'));
 });
 
 // gulp-uglify
@@ -47,8 +47,6 @@ gulp.task('script', function () {
 	.pipe(gulp.dest('src/build/js'));
 });
 
-
-
 //即時監控
 //develop watch下的檔案 新增資料夾重新命名會出錯 
 gulp.task('watch', function () {
@@ -60,4 +58,4 @@ gulp.task('watch', function () {
 
 
 //預設執行
-gulp.task('default', ['watch', 'fileinclude', 'less', 'webserver','script']);
+gulp.task('default', ['watch','fileinclude', 'less', 'webserver','script']);
