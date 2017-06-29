@@ -49,9 +49,9 @@
         <button id="google_button" style="box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12); background-color: #4285F4; color: #ffffff;" class="big ui button">
 <!--          <img style="width:18px;height:18px;display:inline-block;position:relative;top:2px;" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg">-->
 <!--         &nbsp;&nbsp;-->
-          <i class="google icon"></i>使用 Google 帳號登入
+          <i class="google icon"></i><span id="google_html">使用 Google 帳號登入</span>
          </button>
-<!--         <div class="login_link"><a href="#">一般登入</a></div>-->
+<!--         <div id="logout_link"><a onclick="logout()">登出</a></div>-->
       </div>
     </div>
 <!--   <div class="bottom_line"></div>-->
@@ -145,6 +145,7 @@
   </div>
 </div>
 <script>
+
 	 $(document).ready(function() {
 			// fix menu when passed
 			$('.masthead').visibility({

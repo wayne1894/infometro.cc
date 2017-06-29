@@ -26,6 +26,9 @@ $(function(){
 			if ( get_page()== "main")_is_login();
 			if ( get_page()== "index"){
 				set_location_button();
+				$("#google_html").html("已登入Google 直接進入");
+				$("#google_button").css("background-color","#d14836").removeClass("loading");;
+		
 				if($.cookie("login")=="Y"){
 						remove_login_button();
 						$.removeCookie("login");
