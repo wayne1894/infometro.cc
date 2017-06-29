@@ -29,8 +29,10 @@ firebase.auth().onAuthStateChanged(function (data) {
 					$.removeCookie("login");
 					location_fn();
 			}else{
-				$("#google_html").html("已登入Google 直接進入");
+              if(!isAnonymous){
+                $("#google_html").html("已登入Google 直接進入");
 				$("#google_button").css("background-color","#d14836").removeClass("loading");
+              }
 			}
 		}
 	} else {
