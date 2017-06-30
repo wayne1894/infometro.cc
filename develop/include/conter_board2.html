@@ -159,11 +159,11 @@
 	<!--資訊列表-->
 	<div id="board_info">
     <transition name="fade">
-	  <i v-show="is_nav && info.length" style="position: absolute; right:-5.5%; top:14px;z-index:55" class="nav_i ui orange help circle icon" data-title="資訊列表" data-content="infometro顯示資訊的地方，在編輯模式下，您可以對資訊快速按兩下，以修改資訊。"></i>
-      </transition>
+		  <i v-show="is_nav && info.length" style="position: absolute; right:-5.5%; top:14px;z-index:55" class="nav_i ui orange help circle icon" data-title="資訊列表" data-content="infometro顯示資訊的地方，在編輯模式下，您可以對資訊快速按兩下，以修改資訊。"></i>
+    </transition>
 		<div :id="item['.key']" v-for="(item, index) in info_sort_filter" :key="item['.key']"  @click="info_active=item['.key']" class="board_list ui vertical segment  clear">
 			<div class="board_message">
-			    <div :style="{color : line_color}" class="active_left" v-show="info_active==item['.key']"></div>
+			  <div :style="{color : line_color}" class="active_left" v-show="info_active==item['.key']"></div>
 				<img v-if="users.photo" class="ui left floated image transition mini" :src="users.photo">
 				<div :class="{mh_40 : item.url_info }" class="info_message" @dblclick="edit_info(item,'dbl',$event)">
 					<p v-if="img_file(item.file_name)">
@@ -188,7 +188,7 @@
 						<i class="setting icon"></i>
 						<div class="menu">
 							<div @click="edit_info(item,undefined,$event)" class="item"><i class="write icon"></i>編輯</div>
-							<div @click="delete_info(item['.key'],$event)"  class="item"><i class="trash icon"></i>刪除</div>
+							<div @click="delete_info(item['.key'],$event)"  class="item _info_delete"><i class="trash icon"></i>刪除</div>
 							<a v-if="item.url_info" target="_black" :href="'https://www.facebook.com/sharer/sharer.php?u='+item.url_info.url" class="item" style="text-decoration: none;"><i class="facebook square icon"></i>分享</a>
 						</div>
 					</span>

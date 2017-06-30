@@ -757,9 +757,6 @@ var vm = new Vue({
 			}
 			});
 		},
-		delete_info_direct: function(key){
-			DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).child(key).remove();
-		},
     delete_info: function (key, event) { //刪除資訊
       var $target_parent = $(event.target).closest(".board_list");
       if ($target_parent.hasClass("edit")) return;
@@ -775,13 +772,30 @@ var vm = new Vue({
           hide: 0
         }
       }).dimmer('show');
+			//要調整
       $delete_info.find(".send").off("click").on("click", function () {
-        DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).child(key).remove();//delete_info_direct相同
-        $delete_info.dimmer('hide');
+         _fn();
+				//$(document).off("keydown.info_delete");
       });
       $delete_info.find(".cancel").off("click").on("click", function () {
-        $delete_info.dimmer('hide');
+				$delete_info.dimmer('hide');
+				//$(document).off("keydown.info_delete");
       })
+			
+//			$(document).on("keydown.info_delete",function(event){
+//				if (event.which == 13 ) { //enter
+//					_fn();
+//					$(document).off("keydown.info_delete");
+//				} else if (event.which == 27) { //esc
+//					$delete_info.dimmer('hide');
+//					$(document).off("keydown.info_delete");
+//				}
+//			})
+			function _fn(){
+				DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).child(key).remove();//delete_info_direct相同
+        $delete_info.dimmer('hide');
+			}
+			
     },
     delete_info_line: function (_line_key) { //從info最上層的line刪除
       DB.ref("info/" + _line_key + "/metro").remove();

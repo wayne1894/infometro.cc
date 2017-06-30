@@ -766,6 +766,7 @@ textarea:focus {
       -webkit-flex-direction: column-reverse; /* Safari 6.1+ */
       display: flex;
       flex-direction: column-reverse;
+			z-index: 5;
       a:not(.ui):hover{
         text-decoration: underline;
       }
@@ -1635,9 +1636,20 @@ i.orange.icon {
       bottom: -1px;
     }
   }
+	.payment.icon{
+		margin: 0 1rem 0 0!important;
+	}
+	.title{
+		text-align: left;
+	}
 }
 
 @media only screen and (max-width: 767px){
+	#show_event{
+		.ui.steps .step {
+			flex-direction: initial!important	
+		}
+	}
 	.ui.items:not(.unstackable)>.item {
 		margin: 0;
 //		flex-direction: inherit;

@@ -201,6 +201,25 @@
     }, 0);
   }
 
+	function show_event_fn(title,text){
+		var _color=vm.line_color;
+		if(title==undefined)title="儲存成功";
+		text='<div class="description">'+text+'</div>'
+		if(text==undefined)text="";
+		clearTimeout(window.show_setTimeout);
+		$("#show_event").html('<div style="display:none" class="ui steps"><div class="completed step"><i class="payment icon" style="color:'+_color+'"></i><div class="content"><div class="title">'+title+'</div>'+text+'</div></div></div>');
+
+		$("#show_event .ui").transition({
+			animation : 'fade up',
+			duration  : 800
+		});
+		window.show_setTimeout=setTimeout(function(){
+			$("#show_event .ui").transition({
+				animation : 'fade down',
+				duration  : 1200
+			});
+		},2000);
+	}
 
   function parse_url(url, fn) {
     $.get("https://infometro.hopto.org/infometro.asp?url=" + url, function (html) {
@@ -364,15 +383,19 @@
 		if(t!='') return t
 	}
 $(function(){
-  return
 	 var ctrlDown = false,
-        ctrlKey = 17,
-        cmdKey = 91,
-        vKey = 86,
-        cKey = 67,
-		xKey = 88;
+	 	ctrlKey = 17,
+	 	cmdKey = 91,
+	 	vKey = 86,
+	 	cKey = 67,
+	 	xKey = 88;
+	var shiftDown = false,
+		shiftKey = 16;
+	
+	
+	
 	var copy_flocus=false
-	$( document ).on( "focus", "input,textarea", function(){
+	$(document).on( "focus", "input,textarea", function(){
 		vm.copy_info=[];
 		copy_flocus=true;
 		$(this).one("blur",function(){
@@ -380,10 +403,10 @@ $(function(){
 		})
 	})
 
-    $(document).keydown(function(e) {
+ $(document).keydown(function(e) {
 		if(copy_flocus) return;
-        if (e.keyCode == ctrlKey || e.keyCode == cmdKey) ctrlDown = true;
-				if (ctrlDown && e.keyCode == cKey){//按下ctrl+c
+	 			ctrlDown=e.metaKey || e.ctrlKey; //(跨瀏覽器的解決方案)
+				if (ctrlDown && e.keyCode == cKey){ //按下ctrl+c
 					if(getselecttext()!=undefined) return
 					if(vm.info_active){
 						if($("#"+vm.info_active).find("textarea").is(":visible")) return
@@ -392,23 +415,34 @@ $(function(){
 						vm.copy_info[1]="copy";
 						show_event_fn("複製成功","你複製了一個資訊");
 					}
-				}else if(ctrlDown && e.keyCode == xKey){//按下ctrl+x
+				}else if(ctrlDown && e.keyCode == xKey){ //按下ctrl+x
 					if(getselecttext()!=undefined) return
 					if(vm.info_active){
 						//從vm.info 複製一份資料出來, 並新增等下要刪除的資訊
 						if($("#"+vm.info_active).find("textarea").is(":visible")) return
 						vm.copy_info[0]=JSON.parse(JSON.stringify(copy_info(vm.info_active)));//傳址轉傳值
 						vm.copy_info[1]="cut";
-						vm.copy_info[2]=vm.info_active;
+						var get_line_key=vm.get_line_key();
+						var key_metro=vm.key_metro;
+						var info_active=vm.info_active;
+						vm.copy_info[2]=function(){
+							DB.ref('info/' + get_line_key + "/metro/" + key_metro).child(info_active).remove().then(function(){
+								vm.copy_info=[];
+							});
+						}
 						show_event_fn("剪下成功","你剪下了一個資訊");
 					}
-				}else if(ctrlDown && e.keyCode == vKey){//按下ctrl+v
+				}else if(ctrlDown && e.keyCode == vKey){ //按下ctrl+v
 					if(vm.copy_info.length==0)return
 					vm.paste_info(vm.copy_info[0]);
-					if(vm.copy_info[1]=="cut"){
-						vm.delete_info_direct(vm.copy_info[2]);
+					if(vm.copy_info[1]=="cut") {
+						vm.copy_info[2]();
 						show_event_fn("貼上成功","你貼上了一個資訊");
-						
+					}
+				}else if(e.keyCode==46){//按下delete
+					if(vm.info_active){
+						if($("#"+vm.info_active).find("textarea").is(":visible")) return
+						$("#"+vm.info_active).find("._info_delete").trigger("click");
 					}
 				}
     }).keyup(function(e) {
@@ -422,7 +456,6 @@ $(function(){
 		}
 	}
 })
-
 
   //導覽區程式
   function remove_start(n){
@@ -486,10 +519,12 @@ $(function(){
     return '<div class="_modal_info ui inverted dimmer">'+
           '<div class="content">'+
               '<div class="center">'+
-                  '<i class="trash outline icon" style="font-size: 1.8em;margin-bottom: 13px;color:#000;cursor: default"></i>'+
-                  '<div class="_modal_but" style="margin-bottom:20px;color:#000;">確定要刪除資料？</div>'+
-                  '<button class="send mini ui button" style="background-color:'+button_color+'">刪除</button>'+
-                  '<button class="cancel mini ui button">取消</button>'+
+									//'<div style="width:100%;height:100%;">'+
+											'<i class="trash outline icon" style="font-size: 1.8em;margin-bottom: 13px;color:#000;cursor: default"></i>'+
+											'<div class="_modal_but" style="margin-bottom:20px;color:#000;">確定要刪除資料？</div>'+
+											'<button class="send mini ui button" style="background-color:'+button_color+'">刪除</button>'+
+											'<button class="cancel mini ui button">取消</button>'+
+									//'</div>'+
              '</div>'+
          '</div>'+
        '</div>'
@@ -498,16 +533,16 @@ $(function(){
 
 	//top
 	 function move_center() {
-        $("#top_tag li.active").velocity("scroll", { 
-           axis: "x",
-           duration: 0,
-           container: $("#top_tag"),
-           complete: function(){
-             $("#top_tag").show();
-           }
-         });
-       $("#top_tag").velocity("stop").velocity("fadeIn",{ duration: 350 })
-       vm.action_move=0;
+		 $("#top_tag li.active").velocity("scroll", { 
+			 axis: "x",
+			 duration: 0,
+			 container: $("#top_tag"),
+			 complete: function(){
+				 $("#top_tag").show();
+			 }
+		 });
+		 $("#top_tag").velocity("stop").velocity("fadeIn",{ duration: 350 })
+		 vm.action_move=0;
 	 }
 	 $(function () {
 		 //http://velocityjs.org/#scroll
@@ -644,7 +679,7 @@ $(function(){
 		var _color = vm.line_color;
 		$('#import_modal').css("borderTopColor", _color);
 		$("#import_modal_button").css("backgroundColor", _color);
-				$('#import_modal').modal({
+		$('#import_modal').modal({
 			 inverted: true
 		}).modal('show');
 				$("#import_modal_button").one("click",function(){
@@ -873,25 +908,25 @@ $(function(){
 
 	//center
 	function drop(event){
-      $("#board_edit>div>i").jrumble().trigger('stopRumble');
-      var key = vm.drag_metro_key;
-      if(key)vm.delete_metro(key);
-      var line_key=vm.drag_line_key;
-      if(line_key)vm.delete_line(line_key);
+		$("#board_edit>div>i").jrumble().trigger('stopRumble');
+		var key = vm.drag_metro_key;
+		if(key)vm.delete_metro(key);
+		var line_key=vm.drag_line_key;
+		if(line_key)vm.delete_line(line_key);
 	}
 	function allowDrop(event) { //拖曳的物件移到上面
-      $("#board_edit>div>i").jrumble().trigger('startRumble');
-      event.preventDefault();//必要不能刪
+		$("#board_edit>div>i").jrumble().trigger('startRumble');
+		event.preventDefault();//必要不能刪
 	}
 	function allowDropLeave(event) { //拖曳的物件移出
 		$("#board_edit>div>i").jrumble().trigger('stopRumble');
 		event.preventDefault();//必要不能刪
-}
+	}
 
 	$(function(){
-      $("#board_textarea").keyup(function(e) {	
-        auto_height(this)
-      });
-      $("#board_textarea").on('paste', textarea_paste);
+		$("#board_textarea").keyup(function(e) {	
+			auto_height(this)
+		});
+		$("#board_textarea").on('paste', textarea_paste);
 	})
 	//center

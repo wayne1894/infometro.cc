@@ -84,7 +84,7 @@
         <button id="anonymous_button" style="box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);" class="big ui button orange fast"><i class="rocket icon"></i>快速試用</button>
 				<!-- <button id="fb_button" class="big ui facebook button"><i class="facebook f icon"></i>使用 Facebook 登入</button>-->
 <!--        <button id="google_button" style="box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12); background-color: #ffffff; color: rgba(0,0,0,.7);" class="big ui button">-->
-        <button id="google_button" style="box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12); background-color: #4285F4; color: #ffffff;" class="big ui button">
+        <button id="google_button" style="box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12); background-color: #4285F4; color: #ffffff;" class="big ui button loading">
 <!--          <img style="width:18px;height:18px;display:inline-block;position:relative;top:2px;" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg">-->
 <!--         &nbsp;&nbsp;-->
           <i class="google icon"></i><span id="google_html">使用 Google 帳號登入</span>
@@ -183,6 +183,13 @@
   </div>
 </div>
 <script>
+	
+	if($.cookie("login")=="Y"){
+				$("#google_html").html("已登入Google 直接進入");
+				$("#google_button").css("background-color","#d14836");
+					
+			}
+	
 	 $(document).ready(function() {
 			// fix menu when passed
 			$('.masthead').visibility({
@@ -197,7 +204,8 @@
 
 			// create sidebar and attach to menu open
 			$('.ui.sidebar').sidebar('attach events', '.toc.item');
-
+		 $("#google_button").removeClass("loading");
+		 	
 		});
 	 function set_button(){
 		 //$("#fb_button").click(fb_login);

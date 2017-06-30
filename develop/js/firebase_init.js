@@ -191,25 +191,6 @@ function get_other_user(other_user_uid, fn) {
     }
   });
 }
-function show_event_fn(title,text){
-  var _color=vm.line_color;
-  if(title==undefined)title="儲存成功";
-  text='<div class="description">'+text+'</div>'
-  if(text==undefined)text="";
-  clearTimeout(window.show_setTimeout);
-  $("#show_event").html('<div style="display:none" class="ui steps"><div class="completed step"><i class="payment icon" style="color:'+_color+'"></i><div class="content"><div class="title">'+title+'</div>'+text+'</div></div></div>');
-
-  $("#show_event .ui").transition({
-    animation : 'fade up',
-    duration  : 800
-  });
-  window.show_setTimeout=setTimeout(function(){
-    $("#show_event .ui").transition({
-      animation : 'fade down',
-      duration  : 1200
-    });
-  },2000);
-}
 
 function blueprint_init(blueprint_fn,load_fn) {
   DB.ref('blueprint/' + user_uid).on("value", function (data) {
