@@ -40,9 +40,9 @@
 <!-- jquery-color-pick -->
 
 
-<script src="src/build/js/public.js?v=155122611844"></script>
-<script src="src/build/js/firebase_init.js?v=155122611844"></script>
-<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=155122611844" />
+<script src="src/build/js/public.js?v=g44g4g4g"></script>
+<script src="src/build/js/firebase_init.js?v=g44g4g4g"></script>
+<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=g44g4g4g" />
 </head>
 <body>
 <div id="main">
@@ -193,10 +193,10 @@
 		  <textarea id="board_textarea" placeholder="輸入資訊"></textarea>
 		</div>
 		<!--包成vue組件1 輸入-->
-		<div id="url_info_board" v-if="url_info" class="ui items" style="background-color: whitesmoke;width: 95%; margin: .5em 0;">
+		<div id="url_info_board" v-if="url_info" :class="get_img_embed_url()" class="ui items" style="background-color: whitesmoke;width: 95%; margin: .5em 0;">
 			<div class="item">
 				<div v-if="url_info.image" class="ui small image url_img_parent" style="padding-left: 9px; padding-top: 9px; padding-bottom:9px;">
-				  <img :src="url_info.image" class="url_img">
+				  <img class="url_img">
 				  <i v-if="url_info.youtube" class="video_icon video play icon"></i>
 				</div>
 				<div class="content" style=" position: relative;padding-left: 1em;padding-right: 1.6em; padding-bottom: 8px;">
@@ -224,23 +224,23 @@
 	
 	<!--資訊送出-->
 	<div id="board_send_parent">
-		<div class="ui icon menu">
-			<div id="progress" class="ui bottom attached progress" style="position: absolute;width:100%; border-radius : 0;!important">
-				<div class="bar" style="min-width: 0%;" :style="{background:line_color}"></div>
-			</div>
-			<div class="item" :style="{color:line_color}">
-				<div id="uploadFileParent" class="ui action input" data-inverted="" data-tooltip="上傳檔案-拖曳或點擊" :style="{borderColor:line_color}">
-					<input id="uploadFileInput" type="file">
-					<div id="uploadButton" class="ui icon">
-						<i class="attach icon"></i>
-					</div>
-				</div>
-				<div id="uploadName"></div>
-			</div>
-			<div class="right item">
-				<div id="board_send" :style="{backgroundColor:line_color}" onclick="vm.new_info()" class="ui mini orange button">送出</div>
-			</div>
-		</div>
+      <div class="ui icon menu">
+          <div id="progress" class="ui bottom attached progress" style="position: absolute;width:100%; border-radius : 0;!important">
+            <div class="bar" style="min-width: 0%;" :style="{background:line_color}"></div>
+          </div>
+          <div class="item" :style="{color:line_color}">
+            <div id="uploadFileParent" class="ui action input" data-inverted="" data-tooltip="上傳檔案-拖曳或點擊" :style="{borderColor:line_color}">
+              <input id="uploadFileInput" type="file">
+              <div id="uploadButton" class="ui icon">
+                <i class="attach icon"></i>
+              </div>
+            </div>
+            <div id="uploadName"></div>
+          </div>
+          <div class="right item">
+              <div id="board_send" :style="{backgroundColor:line_color}" onclick="vm.new_info()" class="ui mini orange button">送出</div>
+          </div>
+      </div>
 	</div>
 	
 	<script>
@@ -391,21 +391,21 @@
 					<div class="item">
 						<div v-if="item.url_info && item.url_info.youtube" class="ui embed" data-source="youtube" :data-id="item.url_info.youtube"></div>
 						<div v-else-if="item.url_info.image" class="url_img_parent ui small image" >
-							<img :src="item.url_info.image" class="url_img">
+							<img class="url_img">
 <!--							<i class="video play outline icon" style="position: absolute;top: 1em;left: 1em;font-size: 4em; color:rgb(247, 247, 247);"></i>-->
 						</div>
 						<div class="content" style=" position: relative;padding-left: 1em;padding-right: 1.6em; padding-bottom: 8px;">
-								<a :href="item.url_info.url" target="_blank" class="header" style="margin-top: 8px; font-size: 1.1em;color: #676868;">{{item.url_info.title}}</a>
-								<div class="meta"><span>{{item.url_info.url_parent}}</span></div>
-								<!-- v-html有風險要改掉，推社交前要拿掉 -->
-								<div v-if="item.url_info.description" class="multiple-ellipsis">
-									<span class="multiple-ellipsis-text" v-html="item.url_info.description"></span>
-								</div>
-								<div class="url_remove">
-										<a class="ui right corner label" @click="item.url_info=''" style="border-color: transparent" >
-												<i class="remove icon" style="color: rgb(1, 1, 1);cursor: pointer;"></i>
-										</a>
-								</div>
+                          <a :href="item.url_info.url" target="_blank" class="header" style="margin-top: 8px; font-size: 1.1em;color: #676868;">{{item.url_info.title}}</a>
+                          <div class="meta"><span>{{item.url_info.url_parent}}</span></div>
+                          <!-- v-html有風險要改掉，推社交前要拿掉 -->
+                          <div v-if="item.url_info.description" class="multiple-ellipsis">
+                            <span class="multiple-ellipsis-text" v-html="item.url_info.description"></span>
+                          </div>
+                          <div class="url_remove">
+                            <a class="ui right corner label" @click="item.url_info=''" style="border-color: transparent" >
+                              <i class="remove icon" style="color: rgb(1, 1, 1);cursor: pointer;"></i>
+                            </a>
+                          </div>
 						</div>
 					</div>
 				</div>
@@ -678,8 +678,8 @@
 		</div>
 	</div>
 </div>
-<script src="src/build/js/main.js?v=155122611844"></script>
-<script src="src/build/js/vm.js?v=155122611844"></script>
+<script src="src/build/js/main.js?v=g44g4g4g"></script>
+<script src="src/build/js/vm.js?v=g44g4g4g"></script>
  <script>
 
 	 if(get_test()!="test" && $.cookie("ga")!="N"){

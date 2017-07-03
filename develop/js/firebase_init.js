@@ -340,7 +340,7 @@ function _is_login() {
       setTimeout(blueprint_set, 5);
     },function(){//這裡只要vm.load會執行
       start_set();
-			lighning_bind();
+      lighning_bind();
     });
     
   });

@@ -28,6 +28,7 @@
 	setTimeout(function(){
 		if(typeof(vm)=="undefined")location.reload();
 	},5000);
+
   var sortable = [];
 	var mode_before ; //mode before 暫放
   $(function () {

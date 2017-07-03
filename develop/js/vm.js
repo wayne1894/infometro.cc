@@ -21,7 +21,7 @@ var vm = new Vue({
     drag_line_key : "",
     drag_metro_key : "",
     lightning : [],
-		copy_info : []
+	copy_info : []
   },
   mounted: function () {
     $("#main").css("visibility", "visible");
@@ -165,7 +165,7 @@ var vm = new Vue({
         vm.index_update();
       }
       vm.leave_edit_info();
-      _ref.once("child_added", function (snapshot) { //元件載入後的動作
+      _ref.on("child_added", function (snapshot) { //元件載入後的動作
         setTimeout(function () {
           $("#board_info .dropdown").dropdown("destroy").dropdown();
         }, 5);
@@ -216,48 +216,44 @@ var vm = new Vue({
         return true;
       }
     },
-		get_img_embed_url: function(){//與下面相同
-			if(vm.url_info.image){
-				var img = new Image();
-				img.src = vm.url_info.image;
-				img.onload = function(){
-						$("#url_info_board").find(".url_img").attr("src", img.src);
-					
-						if(Math.abs(img.width / img.height -1)>0.45){//代表長寬比比較大
-							$("#url_info_board").addClass("flex_item");
-						}else{
-							$("#url_info_board").addClass("flex_item_row");
-						}
-				}
-			}
-		},
+    get_img_embed_url: function(){//與下面相同
+        if(vm.url_info.image){
+            var img = new Image();
+            img.src = vm.url_info.image;
+            img.onload = function(){
+              $("#url_info_board").find(".url_img").attr("src", img.src);
+
+              if(Math.abs(img.width / img.height -1)>0.45){//代表長寬比比較大
+                  $("#url_info_board").addClass("flex_item");
+              }else{
+                  $("#url_info_board").addClass("flex_item_row");
+              }
+            }
+        }
+    },
     get_img_embed: function (item) {//與上面相同
-			if($("#" + item['.key']).data("_load")=="Y")return
-			$("#" + item['.key']).data("_load","Y");
-			if (item.url_info){
-				if (item.url_info.youtube) {
-					setTimeout(function () {
-						//https://semantic-ui.com/modules/embed.html#/definition
-						//autoplay: true
-						$("#" + item['.key']).find(".ui.embed:not(.active)").embed();
-					}, 5);
-					return "flex_item"; //順便傳回class
-				}else if(item.url_info.image){
-					return ""
-					var img = new Image();
-					img.src = item.url_info.image;
-					img.onload = function(){
-						var $f_key=$("#" + item['.key']);
-						$f_key.find(".url_img").attr("src", img.src);
-						if(Math.abs(img.width / img.height -1)>0.45){//代表長寬比比較大
-								$f_key.find(".item_url_info").addClass("flex_item");
-						}else{
-							$f_key.find(".item_url_info").addClass("flex_item_row");
-						}
-					}
-				}
-			}
-      return "";
+      if (item.url_info){
+        if (item.url_info.youtube) {
+          setTimeout(function () {
+              //https://semantic-ui.com/modules/embed.html#/definition
+              //autoplay: true
+              $("#" + item['.key']).find(".ui.embed:not(.active)").embed();
+          }, 5);
+          return "flex_item youtube"; //順便傳回class
+        }else if(item.url_info.image){
+          var img = new Image();
+          img.src = item.url_info.image;
+          img.onload = function(){
+              var $f_key=$("#" + item['.key']);
+              $f_key.find(".url_img").attr("src", img.src);
+              if(Math.abs(img.width / img.height -1)>0.45){//代表長寬比比較大
+                $f_key.find(".item_url_info").addClass("flex_item");
+              }else{
+                $f_key.find(".item_url_info").addClass("flex_item_row");
+              }
+          }
+        }
+      }
     },
     get_favorite_style: function (favorite, color) {
       if (favorite) {
@@ -412,44 +408,44 @@ var vm = new Vue({
           $("#blueprint_delete_button").off("dblclick").on("dblclick",_delete)
       }
       function _delete(){
-				var index; //從刪除KEY找到他排在陣列的第幾個
-				for (var i = 0; i < vm.blueprint.length; i++) { //找到刪除的index
-					if (vm.blueprint[i].key == key) {
-						index = i;
-						break;
-					}
-				}
-				vm.action = "delete_blueprint";
-				if(_status=="move_delete"){
+        var index; //從刪除KEY找到他排在陣列的第幾個
+        for (var i = 0; i < vm.blueprint.length; i++) { //找到刪除的index
+            if (vm.blueprint[i].key == key) {
+                index = i;
+                break;
+            }
+        }
+        vm.action = "delete_blueprint";
+        if(_status=="move_delete"){
 
-				}else{//非移動狀態把資訊也清掉
-					var _line = vm.blueprint[index].line;
-					for (var i = 0; i < _line.length; i++){
-							vm.delete_info_line(_line[i]._key); //刪除info
-					}
-				}
-				if (vm.blueprint.length > 1) {
-					vm.index.splice(index, 1); //刪除索引
-					vm.index_update(); //更新index
-					vm.index_line = 0;
-					vm.index_blueprint = 0;
-					vm.update_index_line(vm.index[vm.index_blueprint]);
-					vm.update_index_line_check();
-					vm.update_selection_color();
-					setTimeout(function () {
-						vm.update_metro_key(vm.index[vm.index_blueprint][vm.index_line]);
-					}, 0)
+        }else{//非移動狀態把資訊也清掉
+            var _line = vm.blueprint[index].line;
+            for (var i = 0; i < _line.length; i++){
+               vm.delete_info_line(_line[i]._key); //刪除info
+            }
+        }
+        if (vm.blueprint.length > 1) {
+            vm.index.splice(index, 1); //刪除索引
+            vm.index_update(); //更新index
+            vm.index_line = 0;
+            vm.index_blueprint = 0;
+            vm.update_index_line(vm.index[vm.index_blueprint]);
+            vm.update_index_line_check();
+            vm.update_selection_color();
+            setTimeout(function () {
+                vm.update_metro_key(vm.index[vm.index_blueprint][vm.index_line]);
+            }, 0)
 
-					DB.ref('blueprint/' + user_uid + "/" + key).remove();
-				} else {
-					DB.ref('blueprint/' + user_uid + "/" + key).remove().then(function () {
-						vm.index.splice(index, 1); //刪除索引
-						vm.index_update(); //更新index
-						location.reload();
-					})
-				}
-				$("#blueprint_delete_button").off("click");
-				$("#blueprint_delete_modal").modal("hide");
+            DB.ref('blueprint/' + user_uid + "/" + key).remove();
+        } else {
+            DB.ref('blueprint/' + user_uid + "/" + key).remove().then(function () {
+                vm.index.splice(index, 1); //刪除索引
+                vm.index_update(); //更新index
+                location.reload();
+            })
+        }
+        $("#blueprint_delete_button").off("click");
+        $("#blueprint_delete_modal").modal("hide");
       }
     },
     檢查更新錯誤索引: function (index,_vm_blueprint) { //修補程式(不常發生)
@@ -741,12 +737,12 @@ var vm = new Vue({
       }
       return _line.metro[_index];
     },
-		paste_info: function(_data){
-			_data.update_timestamp = firebase.database.ServerValue.TIMESTAMP;
-			_data.timestamp = firebase.database.ServerValue.TIMESTAMP;
-			delete _data[".key"];
-			this.save_info(_data);
-		},
+    paste_info: function(_data){
+        _data.update_timestamp = firebase.database.ServerValue.TIMESTAMP;
+        _data.timestamp = firebase.database.ServerValue.TIMESTAMP;
+        delete _data[".key"];
+        this.save_info(_data);
+    },
     new_info: function () { //新增資訊
       var board_textarea = $.trim($("#board_textarea").val());
       if (board_textarea == "") return;
@@ -817,22 +813,20 @@ var vm = new Vue({
       $delete_info.find(".cancel").off("click").on("click", function () {
 				$delete_info.dimmer('hide');
 				//$(document).off("keydown.info_delete");
+      })	
+      $(document).on("keydown.info_delete",function(event){
+          if (event.which == 13 ) { //enter
+              _fn();
+              $(document).off("keydown.info_delete");
+          } else if (event.which == 27) { //esc
+              $delete_info.dimmer('hide');
+              $(document).off("keydown.info_delete");
+          }
       })
-			
-//			$(document).on("keydown.info_delete",function(event){
-//				if (event.which == 13 ) { //enter
-//					_fn();
-//					$(document).off("keydown.info_delete");
-//				} else if (event.which == 27) { //esc
-//					$delete_info.dimmer('hide');
-//					$(document).off("keydown.info_delete");
-//				}
-//			})
-			function _fn(){
-				DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).child(key).remove();//delete_info_direct相同
-        $delete_info.dimmer('hide');
-			}
-			
+      function _fn(){
+          DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).child(key).remove();//delete_info_direct相同
+          $delete_info.dimmer('hide');
+      }	
     },
     delete_info_line: function (_line_key) { //從info最上層的line刪除
       DB.ref("info/" + _line_key + "/metro").remove();
@@ -930,12 +924,12 @@ var vm = new Vue({
         $textarea.hide();
       }
     },
-		set_總站: function(edit_name,before_name){
-			var _get_metro=vm.get_line().metro;
-			if(_get_metro.length==1 && (_get_metro[0].name=="總站" || _get_metro[0].name==before_name)){
-				_get_metro[0].name=edit_name;
-			}
-		},
+    set_總站: function(edit_name,before_name){
+        var _get_metro=vm.get_line().metro;
+        if(_get_metro.length==1 && (_get_metro[0].name=="總站" || _get_metro[0].name==before_name)){
+            _get_metro[0].name=edit_name;
+        }
+    },
     re_name: function (index, _level, event) { //重新命名(共用)
       if ($(event.target).hasClass("blueprint_i")) return;
       $("html").addClass("re_name");
