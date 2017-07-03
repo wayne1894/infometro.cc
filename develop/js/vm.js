@@ -21,7 +21,7 @@ var vm = new Vue({
     drag_line_key : "",
     drag_metro_key : "",
     lightning : [],
-	copy_info : []
+		copy_info : []
   },
   mounted: function () {
     $("#main").css("visibility", "visible");
@@ -58,7 +58,7 @@ var vm = new Vue({
     metro: function () { //載入metro
       if (this.blueprint.length == 0) return "";
       var _line=this.get_line();
-      if(_line==undefined)vm.exchange_line(0);   
+      if(_line==undefined)vm.exchange_line(0);
       return _line.metro;
     },
     line_name: function(){

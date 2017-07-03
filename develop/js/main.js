@@ -277,7 +277,7 @@
 
           url_info.url = url; //這個url代表是連結的url
           url_info.url_parent = url.split("://")[1].split("/")[0];
-          print(url_info.url_parent)
+          //print(url_info.url_parent)
           if(url_info.image.indexOf("http://")==-1 && url_info.image.indexOf("https://")==-1){
             url_info.image = "//"+url_info.url_parent + url_info.image;
           }
@@ -382,7 +382,7 @@
 		else if(window.document.selection){t=window.document.selection.createRange().text;}
 		if(t!='') return t
 	}
-$(function(){
+	$(function(){
 	 var ctrlDown = false,
 	 	ctrlKey = 17,
 	 	cmdKey = 91,
