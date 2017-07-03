@@ -885,13 +885,6 @@ textarea:focus {
         top: 54%;
       }
     }
-    .flex_youtube{
-        top: -10px;
-        position: relative;
-        .item{
-            flex-direction: column;
-        }
-    }
     border-bottom: none;
     .clear {
       .clearfix();
@@ -1004,38 +997,38 @@ textarea:focus {
 		right: 3px;
 	}
   @media screen and (max-width: 991px) {
-      #board1 {
-          width: 100%;
-          position: relative;
-          border-left: 0;
-          border-right: 0;
-          margin-left: 0;
-          #board_line{
-              width: 368px;
-          }
-          #board_line_parent{
-              &::before{
-                  left: 368px;
-              }
-          }
-      }
-      #board_enter_parent{
-           border-top: 5px solid #FF6900;
-      }
-      #board_parent{
-          &.adj::before{
-              width: 0px;
-          }
-          &.adj #board2{
-              left: -20px;
-          }
-          &.adj #board3 {
-              width: 100%;
-              left: 0!important;
-              border-left: 0!important;
-              border-right: 0!important;
-          }
-      }
+		#board1 {
+			width: 100%;
+			position: relative;
+			border-left: 0;
+			border-right: 0;
+			margin-left: 0;
+			#board_line{
+				width: 368px;
+			}
+			#board_line_parent{
+				&::before{
+						left: 368px;
+				}
+			}
+		}
+		#board_enter_parent{
+			border-top: 5px solid #FF6900;
+		}
+		#board_parent{
+			&.adj::before{
+					width: 0px;
+			}
+			&.adj #board2{
+					left: -20px;
+			}
+			&.adj #board3 {
+					width: 100%;
+					left: 0!important;
+					border-left: 0!important;
+					border-right: 0!important;
+			}
+		}
   }
   .right_line_2 {
     position: absolute;
@@ -1657,4 +1650,26 @@ i.orange.icon {
 		padding: 0;
 	}
 }
-
+#board2{
+	.flex_item{
+		 position: relative;
+			.item{
+				flex-direction: column!important;
+		 }
+		.url_img_parent{
+			max-width: 100%!important;
+			width: auto!important;
+			max-height: 250px!important;
+		}
+	}
+	.flex_item_row{
+		position: relative;
+		.item{
+			flex-direction: row!important;
+		}
+		.url_img_parent{
+			max-width: inherit!important;
+			width: 150px!important;
+		}
+	}
+}

@@ -329,10 +329,6 @@ function _is_login() {
       return false;
     }
   });
-	
-	//代入即時資訊
-  var _ref=DB.ref('users_data/' + user_uid +"/lightning").limitToFirst(50);
-  vm.$bindAsArray('lightning', _ref);
   
   DB.ref('users_data/' + user_uid +"/index").once('value', function (data) { //載入user_data
     if (data.val()) vm.index = data.val();
@@ -344,6 +340,7 @@ function _is_login() {
       setTimeout(blueprint_set, 5);
     },function(){//這裡只要vm.load會執行
       start_set();
+			lighning_bind();
     });
     
   });

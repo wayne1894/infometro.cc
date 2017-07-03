@@ -25,7 +25,9 @@
           }
         }
   }).resize();
-
+	setTimeout(function(){
+		if(typeof(vm)=="undefined")location.reload();
+	},5000);
   var sortable = [];
 	var mode_before ; //mode before 暫放
   $(function () {
@@ -894,6 +896,16 @@
 			info_search_db(_key,_val);
 		}
 	}
+	function lighning_bind(){
+		var _ref=DB.ref('users_data/' + user_uid +"/lightning/"+vm.get_blueprint().key);
+				//.limitToFirst(50)
+				vm.$bindAsArray('lightning', _ref);
+		_ref.once("child_added", function (snapshot) { //元件載入後的動作
+        setTimeout(function () {
+         $("#right .r_content").perfectScrollbar('update');
+        }, 5);
+      })
+	}
 	function lightning_send(){
 		var _textarea=$.trim($("#right_lightning textarea").val());
 		if(_textarea=="")return
@@ -901,7 +913,7 @@
 			message : _textarea,
 			timestamp: firebase.database.ServerValue.TIMESTAMP
 		}
-		DB.ref('users_data/' + user_uid + "/lightning").push().set(data);
+		DB.ref('users_data/' + user_uid + "/lightning/"+vm.get_blueprint().key).push().set(data);
 		$("#right_lightning textarea").val("");
 	}
 	//right

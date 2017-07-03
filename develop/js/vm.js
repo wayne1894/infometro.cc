@@ -165,12 +165,17 @@ var vm = new Vue({
         vm.index_update();
       }
       vm.leave_edit_info();
-      _ref.on("child_added", function (snapshot) { //元件載入後的動作
+      _ref.once("child_added", function (snapshot) { //元件載入後的動作
         setTimeout(function () {
           $("#board_info .dropdown").dropdown("destroy").dropdown();
         }, 5);
       })
-    }
+    },
+		index_blueprint:function(){
+			//代入即時資訊
+			if (vm.blueprint.length == 0) return "";
+			lighning_bind();
+		}
   },
   methods: {
     lightning_create : function (timestamp){
@@ -193,7 +198,7 @@ var vm = new Vue({
         }
       }).dimmer('show');
       $delete_info.find(".send").off("click").on("click", function () {
-        DB.ref('users_data/' + user_uid +"/lightning/"+key).remove();
+        DB.ref('users_data/' + user_uid +"/lightning/"+vm.get_blueprint().key+"/"+key).remove();
         $delete_info.dimmer('hide');
       });
       $delete_info.find(".cancel").off("click").on("click", function () {
@@ -211,15 +216,47 @@ var vm = new Vue({
         return true;
       }
     },
-    get_youtube_embed: function (item) {
-      if (item.url_info && item.url_info.youtube) {
-        setTimeout(function () {
-          //https://semantic-ui.com/modules/embed.html#/definition
-          //autoplay: true
-          $("#" + item['.key']).find(".ui.embed:not(.active)").embed();
-        }, 5);
-        return "flex_youtube"; //順便傳回class
-      }
+		get_img_embed_url: function(){//與下面相同
+			if(vm.url_info.image){
+				var img = new Image();
+				img.src = vm.url_info.image;
+				img.onload = function(){
+						$("#url_info_board").find(".url_img").attr("src", img.src);
+					
+						if(Math.abs(img.width / img.height -1)>0.45){//代表長寬比比較大
+							$("#url_info_board").addClass("flex_item");
+						}else{
+							$("#url_info_board").addClass("flex_item_row");
+						}
+				}
+			}
+		},
+    get_img_embed: function (item) {//與上面相同
+			if($("#" + item['.key']).data("_load")=="Y")return
+			$("#" + item['.key']).data("_load","Y");
+			if (item.url_info){
+				if (item.url_info.youtube) {
+					setTimeout(function () {
+						//https://semantic-ui.com/modules/embed.html#/definition
+						//autoplay: true
+						$("#" + item['.key']).find(".ui.embed:not(.active)").embed();
+					}, 5);
+					return "flex_item"; //順便傳回class
+				}else if(item.url_info.image){
+					return ""
+					var img = new Image();
+					img.src = item.url_info.image;
+					img.onload = function(){
+						var $f_key=$("#" + item['.key']);
+						$f_key.find(".url_img").attr("src", img.src);
+						if(Math.abs(img.width / img.height -1)>0.45){//代表長寬比比較大
+								$f_key.find(".item_url_info").addClass("flex_item");
+						}else{
+							$f_key.find(".item_url_info").addClass("flex_item_row");
+						}
+					}
+				}
+			}
       return "";
     },
     get_favorite_style: function (favorite, color) {
