@@ -80,25 +80,40 @@
           e.preventDefault();
         });
         obj.on('drop', function (e){
-            e.preventDefault();
-            var files = e.originalEvent.dataTransfer.files;
-            $("#board_send_parent>.ui.icon").css("background-color","");
-            if(files.length==0)return;
-            upload_file(files[0])
-
+					e.preventDefault();
+					var files = e.originalEvent.dataTransfer.files;
+					$("#board_send_parent>.ui.icon").css("background-color","");
+					if(files.length==0)return;
+					upload_file(files[0]);
         });
       })
       function clear_uploadFile(){
-        $("#progress .bar").css("min-width" ,"0%" );
+        $("#progress .bar").css("min-width" ,"0%");
         $("#uploadFileParent").parent().css("background-color","");
+				
+				var file_id=$("#uploadFileParent").data("file_id");
+				var file_name=$("#uploadFileParent").data("file_name");
+				if(file_id!=undefined){//把他刪了
+					var storageRef = firebase.storage().ref();
+					var desertRef = storageRef.child("file/"+vm.get_line_key()+"/"+vm.get_metro()._key+"/"+ file_id +"/"+ file_name);
+					
+					desertRef.delete().then(function() {
+						//print("刪除原先的檔案");
+					}).catch(function(error) {
+						// Uh-oh, an error occurred!
+					});
+					
+				}
+				
         $("#uploadFileParent").data({
-              file_id : "",
-              file_url : "",
-              file_name : ""
-            });
+					file_id : "",
+					file_url : "",
+					file_name : ""
+				});
         $('#uploadFileInput').val("");
         $("#uploadName").html("");
-        $('#uploadFileParent').attr("data-tooltip","上傳檔案")
+        $('#uploadFileParent').attr("data-tooltip","上傳檔案");
+
       }
       function upload_file(file){
         var name = file.name;
@@ -109,6 +124,7 @@
           name : name,
           timestamp: firebase.database.ServerValue.TIMESTAMP
         })
+				
         //https://firebase.google.com/docs/storage/web/upload-files
         var storageRef = firebase.storage().ref();
         var uploadTask = storageRef.child("file/"+vm.get_line_key()+"/"+vm.get_metro()._key+"/"+newfile.key+"/"+name).put(file);
@@ -146,10 +162,10 @@
           $("#uploadFileInput").click();
         });
         $('#uploadFileInput').on('change', function(e) {
-            if(e.target.files.length>0){
-              var file = e.target.files[0];
-              upload_file(file);
-            }
+					if(e.target.files.length>0){
+						var file = e.target.files[0];
+						upload_file(file);
+					}
         });
       })
 	</script>
@@ -159,7 +175,7 @@
 	<!--資訊列表-->
 	<div id="board_info">
     <transition name="fade">
-		  <i v-show="is_nav && info.length" style="position: absolute; right:-5.5%; top:14px;z-index:55" class="nav_i ui orange help circle icon" data-title="資訊列表" data-content="infometro顯示資訊的地方，在編輯模式下，您可以對資訊快速按兩下，以修改資訊。"></i>
+		  <i v-show="is_nav && info.length" style="position: absolute; right:-5.5%; top:14px;z-index:55" class="nav_i ui orange help circle icon" data-title="資訊列表" data-content="infometro 資訊牆，在編輯模式下，您可以對資訊快速按兩下修改資訊，你也可以透過快速鍵ctrl+x、ctrl+c、ctrl+v ，將資訊移動到別的地方去 。"></i>
     </transition>
 		<div :id="item['.key']" v-for="(item, index) in info_sort_filter" :key="item['.key']"  @click="info_active=item['.key']" class="board_list ui vertical segment clear">
 			<div class="board_message">
@@ -209,17 +225,17 @@
 <!--							<i class="video play outline icon" style="position: absolute;top: 1em;left: 1em;font-size: 4em; color:rgb(247, 247, 247);"></i>-->
 						</div>
 						<div class="content" style=" position: relative;padding-left: 1em;padding-right: 1.6em; padding-bottom: 8px;">
-                          <a :href="item.url_info.url" target="_blank" class="header" style="margin-top: 8px; font-size: 1.1em;color: #676868;">{{item.url_info.title}}</a>
-                          <div class="meta"><span>{{item.url_info.url_parent}}</span></div>
-                          <!-- v-html有風險要改掉，推社交前要拿掉 -->
-                          <div v-if="item.url_info.description" class="multiple-ellipsis">
-                            <span class="multiple-ellipsis-text" v-html="item.url_info.description"></span>
-                          </div>
-                          <div class="url_remove">
-                            <a class="ui right corner label" @click="item.url_info=''" style="border-color: transparent" >
-                              <i class="remove icon" style="color: rgb(1, 1, 1);cursor: pointer;"></i>
-                            </a>
-                          </div>
+							<a :href="item.url_info.url" target="_blank" class="header" style="margin-top: 8px; font-size: 1.1em;color: #676868;">{{item.url_info.title}}</a>
+							<div class="meta"><span>{{item.url_info.url_parent}}</span></div>
+							<!-- v-html有風險要改掉，推社交前要拿掉 -->
+							<div v-if="item.url_info.description" class="multiple-ellipsis">
+								<span class="multiple-ellipsis-text" v-html="item.url_info.description"></span>
+							</div>
+							<div class="url_remove">
+								<a class="ui right corner label" @click="item.url_info=''" style="border-color: transparent" >
+									<i class="remove icon" style="color: rgb(1, 1, 1);cursor: pointer;"></i>
+								</a>
+							</div>
 						</div>
 					</div>
 				</div>

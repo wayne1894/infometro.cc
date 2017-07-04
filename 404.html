@@ -40,9 +40,9 @@
 <!-- jquery-color-pick -->
 
 
-<script src="src/build/js/public.js?v=g44g4g4g"></script>
-<script src="src/build/js/firebase_init.js?v=g44g4g4g"></script>
-<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=g44g4g4g" />
+<script src="src/build/js/public.js?v=346344245"></script>
+<script src="src/build/js/firebase_init.js?v=346344245"></script>
+<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=346344245" />
 </head>
 <body>
 <div id="main">
@@ -53,7 +53,7 @@
 	<div class="line_text">
        <span>所有支線：</span>
        <transition name="fade">
-       <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="一般支線" data-content="您可以點擊『新增支線』來新增一條新的支線，做為您分類資訊的依據。另外您也可以拖曳移動它的順序，或者拖曳到下方的地鐵去，藉此移動支線。"></i>
+       <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="一般支線" data-content="您可以點擊『新增支線』來新增一條新的支線，做為您分類資訊的依據。您也可以拖曳移動它的順序，或者拖曳到其他地鐵計畫裡。"></i>
       </transition>
       <transition name="fade">
         <div v-show="is_nav" style="position: absolute; top: 2px; right: -25px; z-index:55;">
@@ -77,7 +77,7 @@
 	<div id="new_line_parent">
 	  <a id="new_line" class="default_a" @click="new_line()">新增支線</a>
 	  <transition name="fade">
-       <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="新增支線" data-content="新增一條支線，在色塊的地方『點擊兩下』可以更換顏色，名字處點擊兩下也可以更換名字。"></i>
+       <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="新增支線" data-content="新增一條支線，名字處點擊兩下可以更換名字，在編輯模式下可以更換支線的顏色。"></i>
     </transition>
 	</div>
 </div>
@@ -86,7 +86,7 @@
   <a class="left_icon" data-tooltip="登出"  data-position="right center" onclick="$('.page.dimmer:first').dimmer('toggle');"><i class="power icon"></i></a>
   
     <transition name="fade">
-    <i v-show="is_nav" style=" position: absolute; bottom:9px; right:-42px" class="nav_i ui orange help circle icon" data-title="地鐵計畫" data-content="『地鐵計畫』為infometro 儲存資料的底層單位，其下可以新增無數條『支線』，每條支線下可以新增『地鐵站』。"></i>
+    <i v-show="is_nav" style=" position: absolute; bottom:9px; right:-42px" class="nav_i ui orange help circle icon" data-title="地鐵計畫" data-content="『地鐵計畫』為infometro 儲存資料的底層單位，其下可以新增『支線』和『地鐵站』。"></i>
   </transition>
   <transition name="fade">
     <i v-show="is_nav" style=" position: absolute; bottom:9px; right:-63px" class="nav_i ui orange help circle icon" data-title="新增一個地鐵計畫" data-content="點擊『+號』可以新增一個地鐵計畫，通常地鐵計畫是管理不同領域的資訊，相同領域的資訊我們可以用支線來管理。"></i>
@@ -110,7 +110,7 @@
       </li>
     </ul>
     <transition name="fade">
-    <i v-show="is_nav" v-show="is_nav" style="position: absolute; left:15px; margin-left:0px; top:6px;z-index:55" class="nav_i ui orange help circle icon" data-title="地鐵站點" data-content="地鐵站點是infometro資料儲存的節點，您可以透過適當的命名來讓資料更容易被識別，在全站搜尋也更容易被找到，在編輯模式下，您可以透過拖曳來安排位置，您也可以把站點拖曳到左邊的支線去，以移動它的位置。"></i>
+    <i v-show="is_nav" v-show="is_nav" style="position: absolute; left:15px; margin-left:0px; top:6px;z-index:55" class="nav_i ui orange help circle icon" data-title="地鐵站" data-content="地鐵站是infometro資料儲存的節點，您可以組織一系列相關聯的資訊分類。您也可以透過拖曳來安排彼此的位置、刪除或拖到其他支線裡去。"></i>
     </transition>
     <transition name="fade">
       <div v-show="is_nav" style="position: absolute; left:37px; top:6px; margin-left:0px; z-index:55" >
@@ -140,7 +140,7 @@
     </transition>
     <div id="board_edit" onclick="vm.mode_click()" @dragleave="allowDropLeave($event)" @dragover="allowDrop($event)" @drop="drop($event)"><div class="border_area" :data-tooltip="mode_txt()" data-position="right center"><i :class="mode_class()" class=" icon"></i></div></div>
     <transition name="fade">
-			<i v-show="is_nav" style="position: absolute; bottom:8px; right:0;" class="nav_i ui orange help circle icon" data-title="切換操作模式" data-content="操作模式目前有『一般模式』及『編輯模式』，在編輯模式下，可以彈性操作大部份的編輯動作，例如，您可以將『地鐵站點』拖曳到其他支線來更換位置。在文字資訊的地方，點擊兩下也可快速修改文字。"></i>
+			<i v-show="is_nav" style="position: absolute; bottom:8px; right:0;" class="nav_i ui orange help circle icon" data-title="切換操作模式" data-content="操作模式目前有『一般模式』及『編輯模式』，在編輯模式下，可以彈性操作大部份的編輯動作，例如在文字資訊的地方，點擊兩下也可快速修改文字。"></i>
     </transition>
   </div>
   <div id="board_tag_name">
@@ -266,25 +266,40 @@
           e.preventDefault();
         });
         obj.on('drop', function (e){
-            e.preventDefault();
-            var files = e.originalEvent.dataTransfer.files;
-            $("#board_send_parent>.ui.icon").css("background-color","");
-            if(files.length==0)return;
-            upload_file(files[0])
-
+					e.preventDefault();
+					var files = e.originalEvent.dataTransfer.files;
+					$("#board_send_parent>.ui.icon").css("background-color","");
+					if(files.length==0)return;
+					upload_file(files[0]);
         });
       })
       function clear_uploadFile(){
-        $("#progress .bar").css("min-width" ,"0%" );
+        $("#progress .bar").css("min-width" ,"0%");
         $("#uploadFileParent").parent().css("background-color","");
+				
+				var file_id=$("#uploadFileParent").data("file_id");
+				var file_name=$("#uploadFileParent").data("file_name");
+				if(file_id!=undefined){//把他刪了
+					var storageRef = firebase.storage().ref();
+					var desertRef = storageRef.child("file/"+vm.get_line_key()+"/"+vm.get_metro()._key+"/"+ file_id +"/"+ file_name);
+					
+					desertRef.delete().then(function() {
+						//print("刪除原先的檔案");
+					}).catch(function(error) {
+						// Uh-oh, an error occurred!
+					});
+					
+				}
+				
         $("#uploadFileParent").data({
-              file_id : "",
-              file_url : "",
-              file_name : ""
-            });
+					file_id : "",
+					file_url : "",
+					file_name : ""
+				});
         $('#uploadFileInput').val("");
         $("#uploadName").html("");
-        $('#uploadFileParent').attr("data-tooltip","上傳檔案")
+        $('#uploadFileParent').attr("data-tooltip","上傳檔案");
+
       }
       function upload_file(file){
         var name = file.name;
@@ -295,6 +310,7 @@
           name : name,
           timestamp: firebase.database.ServerValue.TIMESTAMP
         })
+				
         //https://firebase.google.com/docs/storage/web/upload-files
         var storageRef = firebase.storage().ref();
         var uploadTask = storageRef.child("file/"+vm.get_line_key()+"/"+vm.get_metro()._key+"/"+newfile.key+"/"+name).put(file);
@@ -332,10 +348,10 @@
           $("#uploadFileInput").click();
         });
         $('#uploadFileInput').on('change', function(e) {
-            if(e.target.files.length>0){
-              var file = e.target.files[0];
-              upload_file(file);
-            }
+					if(e.target.files.length>0){
+						var file = e.target.files[0];
+						upload_file(file);
+					}
         });
       })
 	</script>
@@ -345,7 +361,7 @@
 	<!--資訊列表-->
 	<div id="board_info">
     <transition name="fade">
-		  <i v-show="is_nav && info.length" style="position: absolute; right:-5.5%; top:14px;z-index:55" class="nav_i ui orange help circle icon" data-title="資訊列表" data-content="infometro顯示資訊的地方，在編輯模式下，您可以對資訊快速按兩下，以修改資訊。"></i>
+		  <i v-show="is_nav && info.length" style="position: absolute; right:-5.5%; top:14px;z-index:55" class="nav_i ui orange help circle icon" data-title="資訊列表" data-content="infometro 資訊牆，在編輯模式下，您可以對資訊快速按兩下修改資訊，你也可以透過快速鍵ctrl+x、ctrl+c、ctrl+v ，將資訊移動到別的地方去 。"></i>
     </transition>
 		<div :id="item['.key']" v-for="(item, index) in info_sort_filter" :key="item['.key']"  @click="info_active=item['.key']" class="board_list ui vertical segment clear">
 			<div class="board_message">
@@ -395,17 +411,17 @@
 <!--							<i class="video play outline icon" style="position: absolute;top: 1em;left: 1em;font-size: 4em; color:rgb(247, 247, 247);"></i>-->
 						</div>
 						<div class="content" style=" position: relative;padding-left: 1em;padding-right: 1.6em; padding-bottom: 8px;">
-                          <a :href="item.url_info.url" target="_blank" class="header" style="margin-top: 8px; font-size: 1.1em;color: #676868;">{{item.url_info.title}}</a>
-                          <div class="meta"><span>{{item.url_info.url_parent}}</span></div>
-                          <!-- v-html有風險要改掉，推社交前要拿掉 -->
-                          <div v-if="item.url_info.description" class="multiple-ellipsis">
-                            <span class="multiple-ellipsis-text" v-html="item.url_info.description"></span>
-                          </div>
-                          <div class="url_remove">
-                            <a class="ui right corner label" @click="item.url_info=''" style="border-color: transparent" >
-                              <i class="remove icon" style="color: rgb(1, 1, 1);cursor: pointer;"></i>
-                            </a>
-                          </div>
+							<a :href="item.url_info.url" target="_blank" class="header" style="margin-top: 8px; font-size: 1.1em;color: #676868;">{{item.url_info.title}}</a>
+							<div class="meta"><span>{{item.url_info.url_parent}}</span></div>
+							<!-- v-html有風險要改掉，推社交前要拿掉 -->
+							<div v-if="item.url_info.description" class="multiple-ellipsis">
+								<span class="multiple-ellipsis-text" v-html="item.url_info.description"></span>
+							</div>
+							<div class="url_remove">
+								<a class="ui right corner label" @click="item.url_info=''" style="border-color: transparent" >
+									<i class="remove icon" style="color: rgb(1, 1, 1);cursor: pointer;"></i>
+								</a>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -678,8 +694,8 @@
 		</div>
 	</div>
 </div>
-<script src="src/build/js/main.js?v=g44g4g4g"></script>
-<script src="src/build/js/vm.js?v=g44g4g4g"></script>
+<script src="src/build/js/main.js?v=346344245"></script>
+<script src="src/build/js/vm.js?v=346344245"></script>
  <script>
 
 	 if(get_test()!="test" && $.cookie("ga")!="N"){

@@ -13,7 +13,7 @@
     </transition>
     <div id="board_edit" onclick="vm.mode_click()" @dragleave="allowDropLeave($event)" @dragover="allowDrop($event)" @drop="drop($event)"><div class="border_area" :data-tooltip="mode_txt()" data-position="right center"><i :class="mode_class()" class=" icon"></i></div></div>
     <transition name="fade">
-			<i v-show="is_nav" style="position: absolute; bottom:8px; right:0;" class="nav_i ui orange help circle icon" data-title="切換操作模式" data-content="操作模式目前有『一般模式』及『編輯模式』，在編輯模式下，可以彈性操作大部份的編輯動作，例如，您可以將『地鐵站點』拖曳到其他支線來更換位置。在文字資訊的地方，點擊兩下也可快速修改文字。"></i>
+			<i v-show="is_nav" style="position: absolute; bottom:8px; right:0;" class="nav_i ui orange help circle icon" data-title="切換操作模式" data-content="操作模式目前有『一般模式』及『編輯模式』，在編輯模式下，可以彈性操作大部份的編輯動作，例如在文字資訊的地方，點擊兩下也可快速修改文字。"></i>
     </transition>
   </div>
   <div id="board_tag_name">
