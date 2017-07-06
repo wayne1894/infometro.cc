@@ -4,7 +4,7 @@ var gulpPlumber = require('gulp-plumber');// 錯誤處理
 //gulp-webserver
 var webserver = require('gulp-webserver');
 gulp.task('webserver', function() {
-  gulp.src('./')
+  gulp.src('./public')
     .pipe(webserver({
       port:1313,
       livereload: true,
@@ -21,7 +21,7 @@ gulp.task('less', function () {
   .pipe(gulpPlumber())
   .pipe(less())
   .pipe(cssmin())
-  .pipe(gulp.dest('src/build/css'));
+  .pipe(gulp.dest('./public/src/build/css'));
 });
 
 
@@ -34,7 +34,7 @@ gulp.task('fileinclude', function() {
 		prefix: '@@',
 		basepath: '@file'
 	}))
-	.pipe(gulp.dest('./'));
+	.pipe(gulp.dest('./public'));
 });
 
 // gulp-uglify
@@ -44,7 +44,7 @@ gulp.task('script', function () {
 	gulp.src('develop/js/*.js')
 	.pipe(gulpPlumber())
 	.pipe(gulpUglify()) 
-	.pipe(gulp.dest('src/build/js'));
+	.pipe(gulp.dest('./public/src/build/js'));
 });
 
 //即時監控

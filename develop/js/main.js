@@ -25,6 +25,7 @@
           }
         }
   }).resize();
+
 	setTimeout(function(){
 		if(typeof(vm)=="undefined")location.reload();
 	},5000);
