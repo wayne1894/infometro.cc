@@ -40,11 +40,57 @@
 <!-- jquery-color-pick -->
 
 
-<script src="src/build/js/public.js?v=346344245"></script>
+<script>
+	function print(a){
+		console.log(a)
+	}
+	function test(msg){//測試用
+		$("#test").remove();
+		$(document.body).append("<div id='test' style='width:50px;height:50px;position:fixed;top:0px;left:0px; z-index:10000;color:red;'>"+msg+"</div>");
+	}
+	function id(a){
+		return document.getElementById(a);
+	}
+	function get_test(){
+		if(location.href.indexOf("localhost:1313")>-1){//代表測試環境
+			return "test"
+		}
+	}
+	
+	//	if (location.protocol != 'https:'){
+	//		if(window.location.hostname!="localhost" && window.location.hostname!="127.0.0.1" ){
+	//				location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+	//		}
+	//	}  
+</script>
+
+
+
+
+ <script>
+
+	 if(get_test()!="test" && $.cookie("ga")!="N"){
+
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-100413527-1', 'auto');
+      ga('send', 'pageview');
+
+	}else{
+       print("沒載入GA")
+    }
+</script>
 <script src="src/build/js/firebase_init.js?v=346344245"></script>
 <link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=346344245" />
 <link rel="stylesheet" type="text/css" href="src/build/css/index.css?v=346344245" />
-
+<script>
+	function _firebase(){
+		console.log("346344245")
+	}
+</script>
 </head>
 <body>
 <!-- Following Menu -->
@@ -234,21 +280,6 @@
   js.src = "//connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v2.9&appId=438516566511315";
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
- <script>
 
-	 if(get_test()!="test" && $.cookie("ga")!="N"){
-
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-100413527-1', 'auto');
-      ga('send', 'pageview');
-
-	}else{
-       print("沒載入GA")
-    }
-</script>
 </body>
 </html>
