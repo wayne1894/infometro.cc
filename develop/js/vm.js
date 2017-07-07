@@ -21,7 +21,7 @@ var vm = new Vue({
     drag_line_key : "",
     drag_metro_key : "",
     lightning : [],
-		copy_info : []
+    copy_info : []
   },
   mounted: function () {
     $("#main").css("visibility", "visible");
@@ -738,10 +738,10 @@ var vm = new Vue({
       return _line.metro[_index];
     },
     paste_info: function(_data){
-        _data.update_timestamp = firebase.database.ServerValue.TIMESTAMP;
-        _data.timestamp = firebase.database.ServerValue.TIMESTAMP;
-        delete _data[".key"];
-        this.save_info(_data);
+      _data.update_timestamp = firebase.database.ServerValue.TIMESTAMP;
+      _data.timestamp = firebase.database.ServerValue.TIMESTAMP;
+      delete _data[".key"];
+      this.save_info(_data);
     },
     new_info: function () { //新增資訊
       var board_textarea = $.trim($("#board_textarea").val());
@@ -750,7 +750,7 @@ var vm = new Vue({
         message: board_textarea,
         favorite: false,
         url_info: "",
-				update_timestamp: firebase.database.ServerValue.TIMESTAMP,
+		update_timestamp: firebase.database.ServerValue.TIMESTAMP,
         timestamp: firebase.database.ServerValue.TIMESTAMP,
         users: user_uid,
         file_id : $("#uploadFileParent").data("file_id") || "",

@@ -1,6 +1,6 @@
 var DB
 var user_uid;
-var user_email
+var user_email;
 var isAnonymous;
 
 firebase.initializeApp({
@@ -18,8 +18,14 @@ firebase.auth().onAuthStateChanged(function (data) {
 		user_email = data.email;
 		if (data.isAnonymous) isAnonymous=true;
 		if(user_uid=="lVAHfyuy4gN4UmiJ7WMYtIwKDts2"){
-			$.cookie("ga","N",{ expires: 365 });
-		}
+		  $.cookie("ga","N",{ expires: 365 });
+		}else{
+          DB.ref('log/').push({
+            users : user_uid,
+            page : get_page(),
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+          });
+        }
 		//user_uid="";
 		if ( get_page()== "main")_is_login();
 		if ( get_page()== "index"){
@@ -126,7 +132,7 @@ function anonymous_login() {
 	});
 }
 
-function load_user_info(fn) {
+function set_user_info(fn) {
   var user = firebase.auth().currentUser;
   var data = {
     name: user.displayName,
@@ -139,7 +145,7 @@ function load_user_info(fn) {
     data.name = "匿名";
   }
   $.cookie("start","Y");
-  DB.ref('users/' + user.uid).set(data).then(load_blueprint_info(fn));
+  DB.ref('users/' + user_uid).set(data).then(load_blueprint_info(fn));
 }
 
 function load_blueprint_info(fn) {
@@ -297,7 +303,7 @@ function blueprint_set(){
           scroll: false,
           animation: 150,
           forceFallback: false,
-					onEnd: function (evt) {
+		  onEnd: function (evt) {
 
 //						var _init=vm.blueprint;
 //						var blueprint_list=$("#blueprint_drag>.blueprint_list");
@@ -312,7 +318,7 @@ function blueprint_set(){
 //							}
 //						}
 
-					}
+			}
         });
 
       }
@@ -325,11 +331,10 @@ function _is_login() {
     if (data.val()) {
       vm.users = data.val();
     } else {//沒有會員資料
-			load_user_info(_is_login);
+	  set_user_info(_is_login);
       return false;
     }
   });
-  
   DB.ref('users_data/' + user_uid +"/index").once('value', function (data) { //載入user_data
     if (data.val()) vm.index = data.val();
   }).then(function () {
@@ -340,7 +345,7 @@ function _is_login() {
       setTimeout(blueprint_set, 5);
     },function(){//這裡只要vm.load會執行
       start_set();
-      lighning_bind();
+      lighning_bind();      
     });
     
   });
