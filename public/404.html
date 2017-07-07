@@ -13,7 +13,7 @@
 <meta property="fb:app_id" content="438516566511315">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://infometro.cc">
-<meta property="og:image" content="https://s3-ap-northeast-1.amazonaws.com/infometro.cc/nav/fb_og.png">
+<meta property="og:image" content="https://infometro.cc/src/static/images/s3/fb_og.png">
 <meta property="og:title" content="infometro.cc 資訊地鐵站">
 <meta property="og:description" content="infometro 是一款利用地鐵圖來整理資訊的網站，用來保存創意和想法。">
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.css" />
@@ -83,8 +83,8 @@
        print("沒載入GA")
     }
 </script>
-<script src="src/build/js/firebase_init.js?v=0.0.13"></script>
-<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=0.0.13" />
+<script src="src/build/js/firebase_init.js?v=151123311"></script>
+<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=151123311" />
 </head>
 <body>
 <div id="main">
@@ -100,7 +100,7 @@
       <transition name="fade">
         <div v-show="is_nav" style="position: absolute; top: 2px; right: -25px; z-index:55;">
           <i style="height: 100%;" class="nav_i custom ui orange film icon" ></i>
-          <div class="ui custom popup hidden" data-img="https://s3-ap-northeast-1.amazonaws.com/infometro.cc/nav/NL3HirBbiz.gif" style="width:150px;min-height:200px;">
+          <div class="ui custom popup hidden" data-img="src/static/images/s3/NL3HirBbiz.gif" style="width:150px;min-height:200px;">
           </div>
         </div>
       </transition>
@@ -157,7 +157,7 @@
     <transition name="fade">
       <div v-show="is_nav" style="position: absolute; left:37px; top:6px; margin-left:0px; z-index:55" >
         <i style="height: 100%;" class="nav_i custom ui orange film icon" ></i>
-        <div class="ui custom popup hidden" data-img="https://s3-ap-northeast-1.amazonaws.com/infometro.cc/nav/LHXNGI0XjP.gif" style="width:550px;max-width:550px;min-height:200px;">
+        <div class="ui custom popup hidden" data-img="src/static/images/s3/LHXNGI0XjP.gif" style="width:550px;max-width:550px;min-height:200px;">
         </div>
      </div>
     </transition>
@@ -284,120 +284,6 @@
           </div>
       </div>
 	</div>
-	
-	<script>
-      $(function(){
-        var obj = $("#board_enter_parent,#board_send_parent");
-        obj.on('dragenter', function (e){
-          e.stopPropagation();
-          e.preventDefault();
-        });
-        obj.on('dragover', function (e){
-          var files = e.originalEvent.dataTransfer.files;
-          if(vm.drag_line_key || vm.drag_metro_key)return
-          $("#board_send_parent>.ui.icon").css("background-color","#f7f7f7");
-          e.stopPropagation();
-          e.preventDefault();
-        });
-
-        obj.on('dragleave', function (e){
-          var files = e.originalEvent.dataTransfer.files;
-          if(vm.drag_line_key || vm.drag_metro_key)return
-          $("#board_send_parent>.ui.icon").css("background-color","");
-          e.stopPropagation();
-          e.preventDefault();
-        });
-        obj.on('drop', function (e){
-					e.preventDefault();
-					var files = e.originalEvent.dataTransfer.files;
-					$("#board_send_parent>.ui.icon").css("background-color","");
-					if(files.length==0)return;
-					upload_file(files[0]);
-        });
-      })
-      function clear_uploadFile(){
-        $("#progress .bar").css("min-width" ,"0%");
-        $("#uploadFileParent").parent().css("background-color","");
-				
-				var file_id=$("#uploadFileParent").data("file_id");
-				var file_name=$("#uploadFileParent").data("file_name");
-				if(file_id!=undefined){//把他刪了
-					var storageRef = firebase.storage().ref();
-					var desertRef = storageRef.child("file/"+vm.get_line_key()+"/"+vm.get_metro()._key+"/"+ file_id +"/"+ file_name);
-					
-					desertRef.delete().then(function() {
-						//print("刪除原先的檔案");
-					}).catch(function(error) {
-						// Uh-oh, an error occurred!
-					});
-					
-				}
-				
-        $("#uploadFileParent").data({
-					file_id : "",
-					file_url : "",
-					file_name : ""
-				});
-        $('#uploadFileInput').val("");
-        $("#uploadName").html("");
-        $('#uploadFileParent').attr("data-tooltip","上傳檔案");
-
-      }
-      function upload_file(file){
-        var name = file.name;
-        //var ext= name.split(".")[1];//可以在這邊檢查不合適的副檔名
-
-        var newfile = DB.ref("file/"+ vm.get_line_key() +"/"+ vm.get_metro()._key).push();
-        newfile.set({
-          name : name,
-          timestamp: firebase.database.ServerValue.TIMESTAMP
-        })
-				
-        //https://firebase.google.com/docs/storage/web/upload-files
-        var storageRef = firebase.storage().ref();
-        var uploadTask = storageRef.child("file/"+vm.get_line_key()+"/"+vm.get_metro()._key+"/"+newfile.key+"/"+name).put(file);
-        clear_uploadFile();
-        uploadTask.on('state_changed', function(snapshot){
-        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          $("#progress .bar").css("min-width" ,progress + "%" );
-          //console.log('Upload is ' + progress + '% done');
-        },function(error) {
-          // Handle unsuccessful uploads
-        }, function() {
-          $("#uploadFileParent").parent().css("background-color","currentColor");
-          $("#progress .bar").css("min-width" ,"0%" );
-          $('#uploadFileInput').val("");
-          $('#uploadFileParent').attr("data-tooltip","重新上傳");
-          $("#uploadName").html("<span style='color:#ffffff;margin-left:5px;white-space: nowrap;'>"+name+"</span><i class='delete icon' style='position: relative;left:5px;cursor:pointer;color:#ffffff;display:inline' onclick='clear_uploadFile()'></i>");
-          var downloadURL = uploadTask.snapshot.downloadURL;
-          $('#uploadFileInput').val("");
-          $("#uploadFileParent").data({
-            file_id : newfile.key,
-            file_url : downloadURL,
-            file_name : name
-          });
-          var board_textarea=$.trim($("#board_textarea").val());
-          if(board_textarea==""){
-            $("#board_textarea").val($("#board_textarea").val()+name);
-          }else{
-            $("#board_textarea").val($("#board_textarea").val()+"\n"+name);
-          }
-        })
-      }
-      $(function(){
-        //https://firebase.google.com/docs/storage/web/upload-files
-        $("#uploadButton").click(function() {
-          $("#uploadFileInput").click();
-        });
-        $('#uploadFileInput').on('change', function(e) {
-					if(e.target.files.length>0){
-						var file = e.target.files[0];
-						upload_file(file);
-					}
-        });
-      })
-	</script>
-	
 	<!--資訊送出-->
 	
 	<!--資訊列表-->
@@ -735,8 +621,7 @@
 		</div>
 	</div>
 </div>
-<script src="src/build/js/main.js?v=0.0.13"></script>
-<script src="src/build/js/vm.js?v=0.0.13"></script>
+<script src="src/build/js/infometro.js?v=151123311"></script>
 
 </body>
 </html>

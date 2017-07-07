@@ -20,16 +20,14 @@ exports.mail = functions.https.onRequest((req, res) => {
 
 		var transporter = nodemailer.createTransport({
 			service: 'Gmail',
-			auth: {
-				user: 'infometro.cc@gmail.com',
-				pass: 'm14911491'
+			auth: { //填上你的gmail和密碼，gamil 必需設定 允許安全性較低的應用程式存取您的帳戶 方可寄信。
+				user: 'your_email@gmail.com',
+				pass: '密碼'
 			}
 		});
 
 		var mailOptions = {
 			from: 'infometro 資訊地鐵站', //收件者
-	//	cc: 'mose286778@gmail.com', //副本
-	//  bcc: 'mose286778@gmail.com',//密件副本
 			to: email, 
 			subject: subject, //主旨
 	//		text: text,
