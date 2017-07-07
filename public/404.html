@@ -444,34 +444,11 @@
   </div>
 </div>
 <div class="right_main">
-<!--
-  <div class="r_content active">
-    <div style="font-size: 1rem;">重要公告：</div>
-      <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
-      <div style="margin-top:-3px;color:#757575;font-size: .95rem;">※本平台最佳瀏覽器為 <a class="default_a" href="https://www.google.com.tw/chrome/browser/desktop/" target="_blank">Google Chrome</a></div>
-    <div style="margin-top:1px;color:#757575;font-size: .95rem;">※目前還不支援手機版</div>
-   
-    <div style="font-size: 1rem; margin-top:3rem">給我們建議：</div>
-    <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
-      <div class="clearfix" style="margin-top:5px;">
-        <a href="https://goo.gl/forms/p464Om8G1yszy0ji1" target="_blank"><div class="text_b"><i class="write icon"></i>網站使用滿意度調查</div></a>
-        <a href="https://goo.gl/forms/QYfCfG5vZF9CyNP03" target="_blank"><div class="text_b"><i class="comment icon"></i>提供建議</div></a>
-      </div>
-    
-    <div style="font-size: 1rem; margin-top:1.5rem">關注我們：</div>
-    <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
-    <div style="margin-top:5px;">
-      <a href="https://www.facebook.com/infometro.cc/" target="_blank"><button class="ui facebook button mini"><i class="facebook icon"></i> Facebook </button></a>
-    </div>
-    <div style="margin-bottom:20px;"></div>
-    
-  </div>
--->
   <div class="r_content active" style="padding:0;height: calc( 100% - 157px);">
     <div @click="lightning_click($event)" class="lightning_item" v-for="(item, index) in lightning_sort">
        <div class="lightning_active" style="position: absolute; left: 0px; top: 0px; width: 5px; height: 100%; background-image: none; background-color: rgb(255, 105, 0);"></div>
        <div style="min-height:70px;">
-         <div style=";margin-right:50px; ">{{item.message}}</div>
+         <div style=";margin-right:50px;" v-html="$options.filters.message_filter(item.message)"></div>
          <div style="position:absolute;right:11px;top:6px; width:50px;text-align:right;letter-spacing:-1px; color:#CCCCCC;">{{lightning_create(item.timestamp)}}</div>
        </div>
        <div class="lightning_a"><a class="default_a block" @click="delete_lightning(item['.key'],$event)">刪除</a></div>

@@ -9,7 +9,7 @@
 		var data = JSON.parse(JSON.stringify(vm.get_blueprint())); //將傳址改為傳值
 		data.line[index].metro.push(_metro);
 		vm.action = "drop_line";
-		vm.更新藍圖(data.key, data);
+		vm.update_blueprint(data.key, data);
 	}
 	$(function () {
 		//晃動 https://jackrugile.com/jrumble/

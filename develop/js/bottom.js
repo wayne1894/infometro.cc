@@ -15,7 +15,7 @@
 					vm.index[i].push([]);
 					vm.index[i][vm.index[i].length - 1].check = false;
 					vm.action = "drop_blueprint";
-					vm.更新藍圖(key, vm.blueprint[i]);
+					vm.update_blueprint(key, vm.blueprint[i]);
 					vm.index_update();
 					break;
 				}

@@ -126,7 +126,7 @@ function anonymous_login() {
 	});
 }
 
-function 初始化使用者資訊(fn) {
+function load_user_info(fn) {
   var user = firebase.auth().currentUser;
   var data = {
     name: user.displayName,
@@ -139,10 +139,10 @@ function 初始化使用者資訊(fn) {
     data.name = "匿名";
   }
   $.cookie("start","Y");
-  DB.ref('users/' + user.uid).set(data).then(初始化藍圖資料(fn));
+  DB.ref('users/' + user.uid).set(data).then(load_blueprint_info(fn));
 }
 
-function 初始化藍圖資料(fn) {
+function load_blueprint_info(fn) {
   var newRef = DB.ref('blueprint/' + user_uid).push();
   var newLine = [];
   newLine.push(line_json("橘線", "#FF6900", true)); //新增第一條線
@@ -202,7 +202,7 @@ function blueprint_init(blueprint_fn,load_fn) {
       _init[_init.length - 1].key = childData.key;
     });
     if(_action != "load"){
-      if (_init.length == 0) return 初始化藍圖資料();
+      if (_init.length == 0) return load_blueprint_info();
     }
     vm.blueprint = _init;
     var index_array = [];
@@ -237,7 +237,7 @@ function blueprint_init(blueprint_fn,load_fn) {
     if(vm.action==""){
       var _vm_blueprint=vm.blueprint
       for(var i=0;i<_vm_blueprint.length;i++){
-        vm.檢查更新錯誤索引(i,_vm_blueprint);
+        vm.check_error_index(i,_vm_blueprint);
       }
     }
     if (_action == "new_blueprint") { //判斷動作
@@ -325,7 +325,7 @@ function _is_login() {
     if (data.val()) {
       vm.users = data.val();
     } else {//沒有會員資料
-			初始化使用者資訊(_is_login);
+			load_user_info(_is_login);
       return false;
     }
   });

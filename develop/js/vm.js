@@ -83,15 +83,15 @@ var vm = new Vue({
       var _info = this.info.filter(function (info) {
         if (info.favorite) {
           if (info.url_info) { //有網址資訊
-            return true
+            return true;
           } else {
-            return false
+            return false;
           }
         }
         return false;
       });
-      if (_info.length == 0) return false
-      return _info
+      if (_info.length == 0) return false;
+      return _info;
     },
     info_sort_filter: function () { //資訊的排序與過濾
 		if (this.blueprint.length == 0) return "";
@@ -137,7 +137,7 @@ var vm = new Vue({
       message = message.replace(/\<a&nbsp;href=/g, "<a href=");
       setTimeout(function () {
         $("#board_info .info_message").find("a").css("color", vm.line_color).attr("target", "_blank");
-      }, 5)
+      }, 5);
       return message;
     }
   },
@@ -304,7 +304,7 @@ var vm = new Vue({
     index_update: function () {
       DB.ref("users_data/" + user_uid + "/index").set(vm.index);
     },
-    更新藍圖: function (key, data) {
+    update_blueprint: function (key, data) {
       if (key == undefined || data == undefined) {
         data = vm.get_blueprint();
         key = data.key;
@@ -448,7 +448,7 @@ var vm = new Vue({
         $("#blueprint_delete_modal").modal("hide");
       }
     },
-    檢查更新錯誤索引: function (index,_vm_blueprint) { //修補程式(不常發生)
+    check_error_index: function (index,_vm_blueprint) { //修補程式(不常發生)
       if (!_vm_blueprint[index]) return ;
       if (_vm_blueprint[index].line.length != vm.index[index].length) {
         var _line = _vm_blueprint[index].line;
@@ -473,7 +473,7 @@ var vm = new Vue({
         };
         return; //重覆就離開
       }    
-      vm.檢查更新錯誤索引(index,vm.blueprint);
+      vm.check_error_index(index,vm.blueprint);
       if (index >= vm.blueprint.length) index = 0;
       $("#top_tag").stop().fadeOut(0);
       $.cookie("index_blueprint", index);
@@ -533,7 +533,7 @@ var vm = new Vue({
       data.line.push(_j);
       get_index.push({check:false}); //新增line的index陣列
       vm.action = "new_line";
-      vm.更新藍圖(data.key, data);
+      vm.update_blueprint(data.key, data);
     },
     find_line_index: function(key, data){
         for (var i = 0; i < data.line.length; i++) {
@@ -556,7 +556,7 @@ var vm = new Vue({
             vm.index_line = new_index; //重新安排
         }
         vm.update_metro_key(vm.get_index_line());
-        vm.更新藍圖(data.key, data);
+        vm.update_blueprint(data.key, data);
       }
       return _line
     },
@@ -601,7 +601,7 @@ var vm = new Vue({
             }
             vm.update_metro_key(vm.get_index_line());
             vm.action = "delete_line";
-            vm.更新藍圖(data.key, data);
+            vm.update_blueprint(data.key, data);
             if(_status=="move_delete"){
               
             }else{
@@ -623,7 +623,7 @@ var vm = new Vue({
       data.line[vm.index_line].metro.splice(order, 0, _metro);
       vm.action = "new_metro";
       remove_start();
-      this.更新藍圖(data.key, data);
+      this.update_blueprint(data.key, data);
     },
     check_metro: function (key) {
       if (vm.key_metro == key) return "active"
@@ -700,7 +700,7 @@ var vm = new Vue({
               vm.key_metro = new_metro_key;
           }
           vm.action = "delete_metro";
-          vm.更新藍圖(data.key, data);
+          vm.update_blueprint(data.key, data);
           DB.ref("info/" + data.line[vm.index_line]._key + "/metro").child(delete_key).remove();
         }
       }	
@@ -722,7 +722,7 @@ var vm = new Vue({
       });
       data.line[this.index_line].metro = new_metro;
       vm.action = "swap_metro";
-      vm.更新藍圖(data.key, data);
+      vm.update_blueprint(data.key, data);
     },
     get_metro: function () {
       var _line = this.get_line();
@@ -785,7 +785,6 @@ var vm = new Vue({
 						print("未發現root，重新寫入root")
 						location.reload();
 					}, 0)
-
 				}
 			}
 			});
@@ -908,7 +907,7 @@ var vm = new Vue({
 					if(_name == get_level.name)return
 					if(_level == "line") vm.set_總站(get_level.name,_name);
           vm.action = "re_name";
-          vm.更新藍圖();
+          vm.update_blueprint();
           edit_set();
         } else if (event.which == 27) { //esc
           edit_set();
@@ -949,7 +948,7 @@ var vm = new Vue({
 					if(_name == get_level().name)return
 					if(_level == "line") vm.set_總站(get_level().name,_name);
           vm.action = "re_name";
-          vm.更新藍圖();
+          vm.update_blueprint();
         } else if (event.which == 27) { //esc
           edit_set();
           get_level().name = _name;
@@ -1012,7 +1011,7 @@ var vm = new Vue({
       $(".colpick_submit").off("click.op").on("click.op", function () {
         vm.get_blueprint().line[index].color = "#" + $("#left_color").val();
         vm.action = "edit_color";
-        vm.更新藍圖();
+        vm.update_blueprint();
 				$("#left_color").attr("show","");
         $(this).off("click.op");
       });
@@ -1034,7 +1033,7 @@ var vm = new Vue({
       vm.index[vm.index_blueprint] = new_index;
       vm.update_index_line(new_index);
       vm.action = "swap_line";
-      vm.更新藍圖(data.key, data);
+      vm.update_blueprint(data.key, data);
 
       function get_key(key) {
         for (var i = 0; i < data.line.length; i++) {
