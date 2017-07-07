@@ -1,7 +1,48 @@
 # infometro.cc 資訊地鐵站
 http://infometro.cc
+
+
+### Tech
+
+Dillinger uses a number of open source projects to work properly:
+
+* [AngularJS] - HTML enhanced for web apps!
+* [Ace Editor] - awesome web-based text editor
+* [markdown-it] - Markdown parser done right. Fast and easy to extend.
+* [Twitter Bootstrap] - great UI boilerplate for modern web apps
+* [node.js] - evented I/O for the backend
+* [Express] - fast node.js network app framework [@tjholowaychuk]
+* [Gulp] - the streaming build system
+* [Breakdance](http://breakdance.io) - HTML to Markdown converter
+* [jQuery] - duh
+
+| Plugin | README |
+| ------ | ------ |
+| Dropbox | [plugins/dropbox/README.md] [PlDb] |
+| Github | [plugins/github/README.md] [PlGh] |
+| Google Drive | [plugins/googledrive/README.md] [PlGd] |
+| OneDrive | [plugins/onedrive/README.md] [PlOd] |
+| Medium | [plugins/medium/README.md] [PlMe] |
+| Google Analytics | [plugins/googleanalytics/README.md] [PlGa] |
+
 ## 開發環境建置
-開發要在 develop 資料夾下開發，透過gulp的watch 將檔案重新建立在public資料夾 
+
+建議需要 [Node.js](https://nodejs.org/) v6+ to run.
+
+```sh
+$ cd infometro
+$ npm install
+$ node app
+```
+
+This will create the dillinger image and pull in the necessary dependencies. Be sure to swap out `${package.json.version}` with the actual version of Dillinger.
+
+```sh
+docker run -d -p 8000:8080 --restart="always" <youruser>/dillinger:${package.json.version}
+```
+
+See [KUBERNETES.md](https://github.com/joemccann/dillinger/blob/master/KUBERNETES.md)
+
 
 <br>
   以下列出開發所需安裝的東西：
