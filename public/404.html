@@ -84,13 +84,23 @@
     }
 </script>
 <script src="src/build/js/firebase_init.js?v=151123311"></script>
+<link rel="stylesheet" type="text/css" href="src/build/css/header.css?v=151123311" />
 <link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=151123311" />
 </head>
 <body>
+<header>
+  	<div id="header_main">
+  	<a href="/"><img class="logo" src="src/static/images/logo_200.png"></a>
+      <div class="ui mini action input" style="border-color: #FF6900;left: 69px;top: -10px;">
+        <input id="header_search" type="text" placeholder="搜尋支線、地鐵">
+        <button class="ui mini icon button"><i class="search icon"></i></button> 
+      </div>	
+  	</div>
+
+</header>
 <div id="main">
   <div id="left">
     <div id="line_parent">
-	<div id="logo"><a href="/"><img class="logo" src="src/static/images/logo_200.png"></a></div>
 	<div id="left_line">
 	<div class="line_text">
        <span>所有支線：</span>

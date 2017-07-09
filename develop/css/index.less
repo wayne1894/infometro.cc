@@ -1,4 +1,53 @@
- 		.hidden.menu {
+#top {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 400;
+  @li_width: 90px;
+  height: 65px;
+  top: 0;
+  width: inherit;
+  min-width: inherit;
+  background-color: #DEDEDE;
+  background: -webkit-gradient(linear, 0 0, 0 bottom, from(#DEDEDE), to(#F1F1F2));
+  background: -webkit-linear-gradient(#DEDEDE, #F1F1F2);
+  background: -moz-linear-gradient(#DEDEDE, #F1F1F2);
+  background: -ms-linear-gradient(#DEDEDE, #F1F1F2);
+  background: -o-linear-gradient(#DEDEDE, #F1F1F2);
+  background: linear-gradient(#DEDEDE, #F1F1F2);
+  border-bottom: 1px solid #CDCDCD;
+  position: fixed;
+  z-index: 200;
+  .navOne{
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    margin-left: -194px;
+    color: #ff6900!important;
+    border-color: #ff6900!important;
+    width: 140px;
+    z-index: 0;
+  }
+  #top_tag_parent {
+    height: 100%;
+    width: 87%;
+    margin: 0 auto;
+  }
+  .line_adj{
+    position: absolute;
+    height: 102%;
+    width: 2px;
+    right: 0px;
+    top: 0;
+    background-color: #cdcdcd;
+    border-right: 1px solid #ffffff;
+  }
+  @media screen and (max-width: 961px) {//991-30
+    .line_adj{
+     display: none; 
+    }
+  }
+} 	
+
+.hidden.menu {
       display: none;
     }
     .masthead.segment {

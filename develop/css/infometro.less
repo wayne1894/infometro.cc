@@ -70,18 +70,18 @@ textarea:focus {
   position: relative;
   height: 100%;
 	//height: calc(~"100% - 42px");
-	width: 100%;
+  width: 100%;
   //overflow-y: scroll;
+  top: 48px;
 }
 #left {
   width: @left_width;
   font-size: 13px;
   height: 100%;
-  position: absolute;
+  position: fixed;
   z-index: 1000;
   #line_parent {
     width: @left_width;
-    position: fixed;
   }
   #logo {
     margin-top: 10px;
@@ -260,7 +260,7 @@ textarea:focus {
   font-weight: 400;
   @li_width: 90px;
   height: @top_height;
-  top: 0;
+  top: 48px;
   width: inherit;
   min-width: inherit;
 //  left: @left_width+1;
@@ -273,7 +273,7 @@ textarea:focus {
   background: linear-gradient(#DEDEDE, #F1F1F2);
   border-bottom: 1px solid #CDCDCD;
   position: fixed;
-  z-index: 200;
+  z-index: 600;
   .navOne{
     position: absolute;
     top: 20px;
@@ -544,9 +544,9 @@ textarea:focus {
   min-height: 100%;
   margin-left: @left_width;
   border: 1px solid #CDCDCD;
-  padding-top: @top_height - 2;
+  padding-top: 63px;
   position: relative;
-	text-align: center;
+  text-align: center;
   #board1,
   #board2,
   #board3 {
@@ -1160,10 +1160,10 @@ textarea:focus {
   font-family: 'Noto Sans TC', sans-serif;
   font-weight: 700;
   position: fixed;
-  top: 0;
+  top: 48px;
   right: 0;
   height: 100%;
-  height: calc(~"100% - 42px");
+  height: calc(~"100% - 90px");
   padding-bottom: 10px;
   //max-width: 245px;
   width: 275px;

@@ -128,7 +128,7 @@ var vm = new Vue({
   },
   filters: {
     message_filter: function (message) {
-			if(message==undefined)return
+	 if(message==undefined)return
       message = message.replace(/\</g, "&lt;");
       message = message.replace(/\>/g, "&gt;");
       message = urlify(message); //轉成超連結
