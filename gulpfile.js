@@ -45,11 +45,13 @@ var merge= require('merge-stream');
 
 gulp.task('concat', function() { //合併與最小化檔案
 	var concat1=gulp.src(['develop/js/main.js', 'develop/js/top.js', 'develop/js/bottom.js','develop/js/left.js','develop/js/right.js','develop/js/center.js','develop/js/vm.js'])
+		.pipe(gulpPlumber())
    	.pipe(concat('infometro.js'))
     .pipe(gulp.dest('./public/src/build/js'))
 		.pipe(gulpUglify())
 		.pipe(gulp.dest('./public/src/build/js'));
 	var concat2= gulp.src(['develop/js/firebase_init.js'])
+		.pipe(gulpPlumber())
 		.pipe(gulpUglify())
 		.pipe(gulp.dest('./public/src/build/js'));
 	return merge(concat1, concat2);
