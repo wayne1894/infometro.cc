@@ -158,7 +158,7 @@ var vm = new Vue({
     }
   },
   filters: {
-    message_filter: function (message) {
+    message_filter: function (message,target) {
 	 if(message==undefined)return
       message = message.replace(/\</g, "&lt;");
       message = message.replace(/\>/g, "&gt;");
@@ -167,7 +167,11 @@ var vm = new Vue({
       message = message.replace(/ /g, "&nbsp;");
       message = message.replace(/\<a&nbsp;href=/g, "<a href=");
       setTimeout(function () {
-        $("#board_info .info_message").find("a").css("color", vm.line_color).attr("target", "_blank");
+        if(target=="right"){
+          $("#right .right_main").find("a").attr("target", "_blank");
+        }else{
+          $("#board_info .info_message").find("a").css("color", vm.line_color).attr("target", "_blank");
+        }
       }, 5);
       return message;
     }
