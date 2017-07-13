@@ -894,7 +894,7 @@ var vm = new Vue({
         var board_textarea = $.trim($textarea.val());
         vm.leave_edit_info($target_parent);
         setTimeout(function(){
-          $target_parent.velocity("scroll",{duration: 500,offset: -250});
+          $target_parent.velocity("scroll",{duration: 500,offset: -500});
         },50);
         DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).child(_key).update({
           message: board_textarea,
