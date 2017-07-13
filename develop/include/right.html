@@ -40,7 +40,7 @@
     <div @click="lightning_click($event)" class="lightning_item" v-for="(item, index) in lightning_sort">
        <div class="lightning_active" style="position: absolute; left: 0px; top: 0px; width: 5px; height: 100%; background-image: none; background-color: rgb(255, 105, 0);"></div>
        <div style="min-height:70px;">
-         <div style=";margin-right:50px;" v-html="$options.filters.message_filter(item.message)"></div>
+         <div style=";margin-right:50px;" v-html="$options.filters.message_filter(item.message,'right')"></div>
          <div style="position:absolute;right:11px;top:6px; width:50px;text-align:right;letter-spacing:-1px; color:#CCCCCC;">{{lightning_create(item.timestamp)}}</div>
        </div>
        <div class="lightning_a"><a class="default_a block" @click="delete_lightning(item['.key'],$event)">刪除</a></div>
