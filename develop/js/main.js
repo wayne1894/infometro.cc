@@ -377,6 +377,29 @@
     $(textarea).height(_height);
   }
 
+	function search_change(){
+		var _search=[];
+		var _val=$.trim(this.search_txt);
+		for(var i=0;i<vm.blueprint.length;i++){
+			_search.push([]);
+			_search[i].line=[];
+			_search[i].metro=[];
+			for(var j=0;j<vm.blueprint[i].line.length;j++){
+				var _line=vm.blueprint[i].line[j];
+				if( _line.name.indexOf(_val)>-1 || _val.indexOf( _line.name)>-1){
+					_search[i].line.push(j);
+				}
+				for(var k=0;k<_line.metro.length;k++){
+					var _metro=_line.metro[k];
+					if( _metro.name.indexOf(_val)>-1 || _val.indexOf( _metro.name)>-1){
+						_search[i].metro.push(j);
+					}
+				}
+			}
+		}
+		return [{a :1},{b :2}];
+	}
+
 
 //剪下貼上資訊的部份
 	function getselecttext(){//抓取選取文字
