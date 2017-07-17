@@ -226,7 +226,7 @@
 	}
 
   function parse_url(url, fn) {
-    $.get("https://infometro.hopto.org/infometro.asp?url=" + url, function (html) {
+    $.get("//calendar2017.me/infometro.asp?url=" + url, function (html) {
       var url_info = {}
 		try{
           var iframe = document.createElement("iframe");
