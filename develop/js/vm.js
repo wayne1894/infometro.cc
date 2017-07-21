@@ -1,3 +1,9 @@
+var vm_header=new Vue({
+	el: '#header_main',
+	data: {
+		search_txt : ""
+	}
+})
 var vm = new Vue({
   el: '#main',
   data: {
@@ -11,8 +17,7 @@ var vm = new Vue({
     action_move: 0,
     info: [],
     users: [],
-    mode: 1,
-    pick_master: undefined,
+    mode: 0,
     pick_color: undefined,
     url_info: undefined,
     filter_search: "",
@@ -20,7 +25,9 @@ var vm = new Vue({
     search_info : [],
     search_metro : [],
     drag_line_key : "",
-    drag_metro_key : ""
+    drag_metro_key : "",
+    lightning : [],
+    copy_info : []
   },
   mounted: function () {
     $("#main").css("visibility", "visible");
@@ -33,12 +40,16 @@ var vm = new Vue({
     if(vm.action_move==1)setTimeout(move_center, 0);
   },
   firebase: {
-    //watch:key_metro
+    //watch:key_metros
+    //lightning
   },
   computed: {
-    master_line_color: function () { //主線目前一律是line 0
+    loading_blueprint :function(){
+       if (this.blueprint.length >0) return true;
+    },
+    line_color: function () { //主線目前一律是line 0
       if (this.blueprint.length == 0) return "";
-      if (this.pick_color && this.pick_master) return this.pick_color;
+      if (this.pick_color) return this.pick_color;
       return this.get_blueprint().line[0].color;
     },
     line: function () { //載入line
@@ -47,13 +58,13 @@ var vm = new Vue({
     },
     line_color: function (index) {
       if (this.blueprint.length == 0) return "";
-      if (this.pick_color && !this.pick_master) return this.pick_color
+      if (this.pick_color) return this.pick_color
       return this.get_line().color;
     },
     metro: function () { //載入metro
       if (this.blueprint.length == 0) return "";
       var _line=this.get_line();
-      if(_line==undefined)vm.exchange_line(0);   
+      if(_line==undefined)vm.exchange_line(0);
       return _line.metro;
     },
     line_name: function(){
@@ -61,7 +72,6 @@ var vm = new Vue({
       return this.get_line().name;
     },
     metro_name: function () {
-      if (this.blueprint.length == 0) return "";
       return this.get_metro().name;
     },
     metro_create: function () {
@@ -79,15 +89,15 @@ var vm = new Vue({
       var _info = this.info.filter(function (info) {
         if (info.favorite) {
           if (info.url_info) { //有網址資訊
-            return true
+            return true;
           } else {
             return false;
           }
         }
         return false;
       });
-      if (_info.length == 0) return false
-      return _info
+      if (_info.length == 0) return false;
+      return _info;
     },
     info_sort_filter: function () { //資訊的排序與過濾
 		if (this.blueprint.length == 0) return "";
@@ -112,10 +122,19 @@ var vm = new Vue({
 //      });
 			return [].concat(new_sort,favorites_sort);
 
+    },
+    lightning_sort:function(){
+      var _sort=this.lightning;
+      _sort = _sort.sort(function (a, b) {
+        if (a.timestamp > b.timestamp) return -1; //照timestamp
+        return 1;
+      });
+      return _sort;
     }
   },
   filters: {
-    message_filter: function (message) {
+    message_filter: function (message,target) {
+	 if(message==undefined)return
       message = message.replace(/\</g, "&lt;");
       message = message.replace(/\>/g, "&gt;");
       message = urlify(message); //轉成超連結
@@ -123,8 +142,12 @@ var vm = new Vue({
       message = message.replace(/ /g, "&nbsp;");
       message = message.replace(/\<a&nbsp;href=/g, "<a href=");
       setTimeout(function () {
-        $("#board_info .info_message").find("a").css("color", vm.line_color).attr("target", "_blank");
-      }, 5)
+        if(target=="right"){
+          $("#right .right_main").find("a").attr("target", "_blank");
+        }else{
+          $("#board_info .info_message").find("a").css("color", vm.line_color).attr("target", "_blank");
+        }
+      }, 5);
       return message;
     }
   },
@@ -144,9 +167,9 @@ var vm = new Vue({
       if (_index.info_active) { //等下會更新到，這邊就不用更新了
         var _active = _index.info_active[this.key_metro];
         this.info_active = _active;
-        //        setTimeout(function(){
-        //          $("#"+_active).velocity("scroll",{duration: 0,offset: -250});
-        //        },50);
+        // setTimeout(function(){
+        //   $("#"+_active).velocity("scroll",{duration: 0,offset: -250});
+        // },50);
 
       } else {
         vm.index_update();
@@ -155,21 +178,92 @@ var vm = new Vue({
       _ref.on("child_added", function (snapshot) { //元件載入後的動作
         setTimeout(function () {
           $("#board_info .dropdown").dropdown("destroy").dropdown();
-        }, 5)
+        }, 5);
       })
-    }
+    },
+		index_blueprint:function(){
+			//代入即時資訊
+			if (vm.blueprint.length == 0) return "";
+			lighning_bind();
+		}
   },
   methods: {
-    get_youtube_embed: function (item) {
-      if (item.url_info && item.url_info.youtube) {
-        setTimeout(function () {
-          //https://semantic-ui.com/modules/embed.html#/definition
-          //autoplay: true
-          $("#" + item['.key']).find(".ui.embed:not(.active)").embed();
-        }, 5);
-        return "flex_youtube"; //順便傳回class
+    lightning_create : function (timestamp){
+      //http://momentjs.com/
+      return moment(timestamp).endOf('hour').fromNow();
+    },
+    delete_lightning: function (key,event) {
+      var $target_parent = $(event.target).closest(".lightning_item");
+      var $delete_info = $target_parent.find("._modal_info");
+      if(!$delete_info.length){
+        $delete_info=$target_parent.append(delete_modal_html());
       }
-      return "";
+      $target_parent.find("._modal_but").css("margin-bottom","10px");
+      //https://semantic-ui.com/modules/dimmer.html
+      //opacity : 0.7,
+      $delete_info.dimmer({
+        duration: {
+          show: 400,
+          hide: 0
+        }
+      }).dimmer('show');
+      $delete_info.find(".send").off("click").on("click", function () {
+        DB.ref('users_data/' + user_uid +"/lightning/"+vm.get_blueprint().key+"/"+key).remove();
+        $delete_info.dimmer('hide');
+      });
+      $delete_info.find(".cancel").off("click").on("click", function () {
+        $delete_info.dimmer('hide');
+      })
+    },
+    lightning_click : function(event){
+      var $target=$(event.target).closest(".lightning_item");
+      $target.addClass("active").siblings().removeClass("active");
+    },
+    img_file : function(name){
+      if(name=="" || name==undefined)return
+      name=name.toLowerCase()
+      if(name.indexOf("png")>-1 || name.indexOf("gif")>-1 || name.indexOf("jpg")>-1 || name.indexOf("jpeg")>-1){
+        return true;
+      }
+    },
+    get_img_embed_url: function(){//與下面相同
+        if(vm.url_info.image){
+            var img = new Image();
+            img.src = vm.url_info.image;
+            img.onload = function(){
+              $("#url_info_board").find(".url_img").attr("src", img.src);
+
+              if(Math.abs(img.width / img.height -1)>0.45){//代表長寬比比較大
+                  $("#url_info_board").addClass("flex_item");
+              }else{
+                  $("#url_info_board").addClass("flex_item_row");
+              }
+            }
+        }
+    },
+    get_img_embed: function (item) {//與上面相同
+      if (item.url_info){
+        if (item.url_info.youtube) {
+          setTimeout(function () {
+              //https://semantic-ui.com/modules/embed.html#/definition
+              //autoplay: true
+              $("#" + item['.key']).find(".ui.embed:not(.active)").embed();
+          }, 5);
+          return "flex_item youtube"; //順便傳回class
+        }else if(item.url_info.image){
+          var img = new Image();
+          img.src = item.url_info.image;
+          img.onload = function(){
+              var $f_key=$("#" + item['.key']);
+              $f_key.find(".url_img").attr("src", img.src);
+              if(Math.abs(img.width / img.height -1)>0.45){//代表長寬比比較大
+                $f_key.find(".item_url_info").addClass("flex_item");
+              }else{
+                $f_key.find(".item_url_info").addClass("flex_item_row");
+              }
+          }
+        }
+      }
     },
     get_favorite_style: function (favorite, color) {
       if (favorite) {
@@ -179,30 +273,22 @@ var vm = new Vue({
       }
       return {}
     },
-    is_master: function () {
-      if (this.blueprint.length == 0) return "";
-      if (vm.index_line == 0) return true;
-      return false
-    },
     color_gradient: function (color) {
       return "linear-gradient(to right, #000 50%, " + color + " 0%)";
     },
     mode_txt: function () {
-      if (!sortable['blueprint']){
-        if(this.mode==0)return "一般模式";
-        if(this.mode==1)return "編輯模式";
-      } 
+      if (this.blueprint.length == 0) return "";
       if (this.mode == 0) { //一般模式
-        setTimeout(function () {
-          sortable["metro"].option("disabled", true);
-          sortable["line"].option("disabled", true);
-        }, 5)
+//        setTimeout(function () {
+//          sortable["metro"].option("disabled", true);
+//          sortable["line"].option("disabled", true);
+//        }, 5)
         return "一般模式"
       } else if (this.mode == 1) { //編輯模式
-        setTimeout(function () {
-          sortable["metro"].option("disabled", false);
-          sortable["line"].option("disabled", false);
-        }, 5)
+//        setTimeout(function () {
+//          sortable["metro"].option("disabled", false);
+//          sortable["line"].option("disabled", false);
+//        }, 5)
         return "編輯模式"
       } else if (this.mode == 1.5) {
         return "編輯模式"
@@ -226,12 +312,9 @@ var vm = new Vue({
       }
     },
     index_update: function () {
-      var data = JSON.parse(JSON.stringify(vm.index)); //將傳址改為傳值
-      setTimeout(function(){
-        DB.ref('users_data/' + user_uid + "/index").set(data);
-      },0)
+      DB.ref("users_data/" + user_uid + "/index").set(vm.index);
     },
-    更新藍圖: function (key, data) {
+    update_blueprint: function (key, data) {
       if (key == undefined || data == undefined) {
         data = vm.get_blueprint();
         key = data.key;
@@ -252,7 +335,15 @@ var vm = new Vue({
       return this.get_blueprint().line[this.index_line]
     },
     get_index_line: function () { //得到當前支線索引資料
-      return vm.index[vm.index_blueprint][vm.index_line];
+      var _index=vm.index[vm.index_blueprint][vm.index_line];
+      if(typeof _index!="object"){
+         print("索引變字串");
+         vm.index[vm.index_blueprint][vm.index_line]={}
+         vm.index[vm.index_blueprint][vm.index_line].check=false;
+        return vm.index[vm.index_blueprint][vm.index_line]
+      }else{
+        return _index;
+      }
     },
     update_index_line: function (index_array) {
       var _index = 0;
@@ -310,57 +401,64 @@ var vm = new Vue({
       var newLine = [];
       newLine.push(line_json("橘線", "#FF6900", true)); //新增第一條線
       newLine[newLine.length - 1].metro.push(metro_json("總站")); //第一條線下面的站
-      newRef.set({ //將他存到藍圖
-        name: "我的地鐵計畫",
-        line: newLine,
-        timestamp: firebase.database.ServerValue.TIMESTAMP,
-      })
+      newRef.set(blueprint_json("我的地鐵計畫",newLine))
     },
-    delete_blueprint: function (key) { //刪除藍圖
-      $('.ui.modal').modal("refresh");
-      setTimeout(function () {
-        $("#blueprint_delete_modal").modal({
-          inverted: true,
-          closable: false
-        }).modal('show');
-      })
-      $("#blueprint_delete_name").html(vm.get_blueprint().name);
-      $("#blueprint_delete_button").off("dblclick").on("dblclick", function () {
+    delete_blueprint: function (key,_status) { //刪除藍圖
+      if(_status=="move_delete" || _status=="line_one_delete"){
+          _delete();
+      }else{
+          $('.ui.modal').modal("refresh");
+          setTimeout(function () {
+              $("#blueprint_delete_modal").modal({
+                  inverted: true,
+                  closable: false
+              }).modal('show');
+          })
+          $("#blueprint_delete_name").html(vm.get_blueprint().name);
+          $("#blueprint_delete_button").off("dblclick").on("dblclick",_delete)
+      }
+      function _delete(){
         var index; //從刪除KEY找到他排在陣列的第幾個
         for (var i = 0; i < vm.blueprint.length; i++) { //找到刪除的index
-          if (vm.blueprint[i].key == key) {
-            index = i;
-            break;
-          }
+            if (vm.blueprint[i].key == key) {
+                index = i;
+                break;
+            }
         }
         vm.action = "delete_blueprint";
-        var _line = vm.blueprint[index].line;
-        for (var i = 0; i < _line.length; i++) vm.delete_info_line(_line[i]._key); //刪除info
-        if (vm.blueprint.length > 1) {
-          vm.index.splice(index, 1); //刪除索引
-          vm.index_update(); //更新index
-          vm.index_line = 0;
-          vm.index_blueprint = 0;
-          vm.update_index_line(vm.index[vm.index_blueprint]);
-          vm.update_index_line_check();
-          vm.update_selection_color();
-          setTimeout(function () {
-            vm.update_metro_key(vm.index[vm.index_blueprint][vm.index_line]);
-          }, 0)
+        if(_status=="move_delete"){
 
-          DB.ref('blueprint/' + user_uid + "/" + key).remove();
-        } else {
-          DB.ref('blueprint/' + user_uid + "/" + key).remove().then(function () {
+        }else{//非移動狀態把資訊也清掉
+            var _line = vm.blueprint[index].line;
+            for (var i = 0; i < _line.length; i++){
+               vm.delete_info_line(_line[i]._key); //刪除info
+            }
+        }
+        if (vm.blueprint.length > 1) {
             vm.index.splice(index, 1); //刪除索引
             vm.index_update(); //更新index
-            location.reload();
-          })
+            vm.index_line = 0;
+            vm.index_blueprint = 0;
+            vm.update_index_line(vm.index[vm.index_blueprint]);
+            vm.update_index_line_check();
+            vm.update_selection_color();
+            setTimeout(function () {
+                vm.update_metro_key(vm.index[vm.index_blueprint][vm.index_line]);
+            }, 0)
+
+            DB.ref('blueprint/' + user_uid + "/" + key).remove();
+        } else {
+            DB.ref('blueprint/' + user_uid + "/" + key).remove().then(function () {
+                vm.index.splice(index, 1); //刪除索引
+                vm.index_update(); //更新index
+                location.reload();
+            })
         }
         $("#blueprint_delete_button").off("click");
         $("#blueprint_delete_modal").modal("hide");
-      })
+      }
     },
-    檢查更新錯誤索引: function (index,_vm_blueprint) { //修補程式(不常發生)
+    check_error_index: function (index,_vm_blueprint) { //修補程式(不常發生)
       if (!_vm_blueprint[index]) return ;
       if (_vm_blueprint[index].line.length != vm.index[index].length) {
         var _line = _vm_blueprint[index].line;
@@ -385,7 +483,7 @@ var vm = new Vue({
         };
         return; //重覆就離開
       }    
-      vm.檢查更新錯誤索引(index,vm.blueprint);
+      vm.check_error_index(index,vm.blueprint);
       if (index >= vm.blueprint.length) index = 0;
       $("#top_tag").stop().fadeOut(0);
       $.cookie("index_blueprint", index);
@@ -405,7 +503,6 @@ var vm = new Vue({
       }
       vm.action_move=1;
       setTimeout(move_center, 0);
-      
     },
     exchange_line: function (index) {
       if (vm.index_line == index) return; //重覆就離開
@@ -446,70 +543,86 @@ var vm = new Vue({
       data.line.push(_j);
       get_index.push({check:false}); //新增line的index陣列
       vm.action = "new_line";
-      vm.更新藍圖(data.key, data);
+      vm.update_blueprint(data.key, data);
     },
-		find_line_index: function(key, data){
-			for (var i = 0; i < data.line.length; i++) {
-					if (data.line[i]._key == key) {
-						return i;
-					}
-				}
-		},
+    find_line_index: function(key, data){
+        for (var i = 0; i < data.line.length; i++) {
+            if (data.line[i]._key == key) return i;
+        }
+    },
     move_line: function (key) {
       var data = vm.get_blueprint();
       var index= vm.find_line_index(key,data);
       if (index == undefined) return
-      var _line = data.line.splice(index, 1);
-      vm.get_index_blueprint().splice(index, 1); //移除line的index索引陣列
-      if (vm.index_line >= index) { //刪除到小於自已-就往前倒退索引(同刪除藍圖)
-        var new_index = vm.index_line - 1;
-        if (new_index < 0) new_index = 0;
-        vm.index_line = new_index; //重新安排
+      if(index==0){//代表只有一筆，刪除整個藍圖
+        var _line = data.line;
+        vm.delete_blueprint(data.key,"move_delete");
+      }else{
+        var _line = data.line.splice(index, 1);
+        vm.get_index_blueprint().splice(index, 1); //移除line的index索引陣列
+        if (vm.index_line >= index) { //刪除到小於自已-就往前倒退索引(同刪除藍圖)
+            var new_index = vm.index_line - 1;
+            if (new_index < 0) new_index = 0;
+            vm.index_line = new_index; //重新安排
+        }
+        vm.update_metro_key(vm.get_index_line());
+        vm.update_blueprint(data.key, data);
       }
-      vm.update_metro_key(vm.get_index_line());
-      vm.更新藍圖(data.key, data);
       return _line
     },
-    delete_line: function (key) {
+    delete_line: function (key,_status) {
       var data = vm.get_blueprint();
       var index= vm.find_line_index(key,data);
       if (index == undefined) return
-      $('.ui.modal').modal("refresh");
-      setTimeout(function () {
-        $('#line_delete_modal').modal({
-          inverted: true,
-          closable: false
-        }).modal('show');
-      }, 0)
-      var _color = data.line[index].color;
-      $('#line_delete_modal').css("borderTopColor", _color);
-      $("#line_delete_button").css("backgroundColor", _color);
-			$(document).on("keydown.line_delete",function(event){
-        if (event.which == 13 ) { //enter
-					_fn();
-        } else if (event.which == 27) { //esc
-          $('#line_delete_modal').modal("hide");
-					$("#line_delete_button").off("click");
-					$(document).off("keydown.line_delete");
-        }
-      })
-      $("#line_delete_button").off("click").on("click",_fn);
-			function _fn(){
-				data.line.splice(index, 1); //移除line
-        vm.get_index_blueprint().splice(index, 1); //移除line的index索引陣列
-        if (vm.index_line >= index) { //刪除到自已或小於自已-就往前倒退索引(同刪除藍圖)
-          var new_index = vm.index_line - 1;
-          if (new_index < 0) new_index = 0;
-          vm.index_line = new_index; //重新安排
-        }
-        vm.update_metro_key(vm.get_index_line());
-        vm.action = "delete_line";
-        vm.更新藍圖(data.key, data);
-        vm.delete_info_line(key);
-        $("#line_delete_button").off("click");
-        $("#line_delete_modal").modal("hide");
-				$(document).off("keydown.line_delete");
-			}
+      if(_status=="move_delete" || _status=="metro_one_delete"){
+        _fn();
+      }else{
+        $('.ui.modal').modal("refresh");
+        setTimeout(function () {
+          $('#line_delete_modal').modal({
+            inverted: true,
+            closable: false
+          }).modal('show');
+        }, 0)
+        var _color = data.line[index].color;
+        $('#line_delete_modal').css("borderTopColor", _color);
+        $("#line_delete_button").css("backgroundColor", _color);
+//        $(document).on("keydown.line_delete",function(event){
+//          if (event.which == 13 ) { //enter
+//            _fn();
+//          } else if (event.which == 27) { //esc
+//            $('#line_delete_modal').modal("hide");
+//            $("#line_delete_button").off("click");
+//            $(document).off("keydown.line_delete");
+//          }
+//        })
+        $("#line_delete_button").off("click").on("click",_fn);
+      }
+	  function _fn() {
+          if(data.line.length==1){//只勝下一筆就把藍圖也刪了
+            vm.delete_blueprint(data.key,"line_one_delete");
+          }else{
+            data.line.splice(index, 1); //移除line
+            vm.get_index_blueprint().splice(index, 1); //移除line的index索引陣列
+            if (vm.index_line >= index) { //刪除到自已或小於自已-就往前倒退索引(同刪除藍圖)
+              var new_index = vm.index_line - 1;
+              if (new_index < 0) new_index = 0;
+              vm.index_line = new_index; //重新安排
+            }
+            vm.update_metro_key(vm.get_index_line());
+            vm.action = "delete_line";
+            vm.update_blueprint(data.key, data);
+            if(_status=="move_delete"){
+              
+            }else{
+              vm.delete_info_line(key);
+            }
+            
+          }
+		  $("#line_delete_button").off("click");
+		  $("#line_delete_modal").modal("hide");
+		  $(document).off("keydown.line_delete");
+		}
     },
     get_line_key: function () {
       return vm.get_line()._key;
@@ -520,7 +633,7 @@ var vm = new Vue({
       data.line[vm.index_line].metro.splice(order, 0, _metro);
       vm.action = "new_metro";
       remove_start();
-      this.更新藍圖(data.key, data);
+      this.update_blueprint(data.key, data);
     },
     check_metro: function (key) {
       if (vm.key_metro == key) return "active"
@@ -538,28 +651,36 @@ var vm = new Vue({
     },
     move_metro: function (move_key, _line_index) {
       var data = this.get_blueprint();
-      if (data.line[this.index_line].metro.length <= 1) return
-      var index = vm.find_metro_index(move_key, data);
-      if (index == undefined) return;
-      var _metro = data.line[this.index_line].metro.splice(index, 1);
-      if (this.key_metro == move_key) { //代表刪到選取的站,要重新更換key_metro
-        var _index = index - 1;
-        if (_index < 0) _index = 0;
-        var new_metro_key = data.line[this.index_line].metro[_index]._key;
-        this.key_metro = new_metro_key;
+      var _metro = data.line[this.index_line].metro;
+			var delete_fn;
+      if (_metro.length <= 1) {
+				delete_fn=function(){
+					vm.delete_line(data.line[vm.index_line]._key, "move_delete");
+				}
+      } else {
+        var index = vm.find_metro_index(move_key, data);
+        if (index == undefined) return;
+        var _metro = _metro.splice(index, 1);
+        if (this.key_metro == move_key) { //代表刪到選取的站,要重新更換key_metro 
+          var _index = index - 1;
+          if (_index < 0) _index = 0;
+          var new_metro_key = data.line[this.index_line].metro[_index]._key;
+          this.key_metro = new_metro_key;
+        }
       }
-      DB.ref("info/" + data.line[this.index_line]._key + "/metro").child(move_key).once("value", function (old_data) {
-        DB.ref('info/' + vm.get_blueprint().line[_line_index]._key + "/metro/" + move_key).set(old_data.val());
-        DB.ref("info/" + data.line[vm.index_line]._key + "/metro").child(move_key).remove();
-      })
+			DB.ref("info/" + data.line[this.index_line]._key + "/metro").child(move_key).once("value", function (old_data) {
+
+				DB.ref('info/' + vm.get_blueprint().line[_line_index]._key + "/metro/" + move_key).set(old_data.val());//移動
+
+				DB.ref("info/" + data.line[vm.index_line]._key + "/metro").child(move_key).remove();//移除(可以進行備份)
+
+				if(delete_fn)setTimeout(delete_fn,5);//刪除支線
+
+			}) 
       return _metro
     },
     delete_metro: function (delete_key) { //與move_metro雷同
       var data = JSON.parse(JSON.stringify(this.get_blueprint())); //將傳址改為傳值
-      if (data.line[this.index_line].metro.length <= 1) {
-        //在這裡要把line也刪除
-        return;
-      }
       var index = vm.find_metro_index(delete_key, data);
       if (index == undefined) return;
       $('.ui.modal').modal("refresh");
@@ -578,6 +699,9 @@ var vm = new Vue({
           $("#metro_delete_modal").modal("hide");
       })
       function _del_metro(){
+        if (data.line[vm.index_line].metro.length <= 1) {//將整條線也刪除
+          vm.delete_line(data.line[vm.index_line]._key,"metro_one_delete");
+        }else{
           data.line[vm.index_line].metro.splice(index, 1);
           if (vm.key_metro == delete_key) { //代表刪到選取的站,要重新更換key_metro
               var _index = index - 1;
@@ -586,8 +710,9 @@ var vm = new Vue({
               vm.key_metro = new_metro_key;
           }
           vm.action = "delete_metro";
-          vm.更新藍圖(data.key, data);
+          vm.update_blueprint(data.key, data);
           DB.ref("info/" + data.line[vm.index_line]._key + "/metro").child(delete_key).remove();
+        }
       }	
     },
 		swap_metro: function (oldIndex, newIndex) {
@@ -607,7 +732,7 @@ var vm = new Vue({
       });
       data.line[this.index_line].metro = new_metro;
       vm.action = "swap_metro";
-      vm.更新藍圖(data.key, data);
+      vm.update_blueprint(data.key, data);
     },
     get_metro: function () {
       var _line = this.get_line();
@@ -621,6 +746,12 @@ var vm = new Vue({
         }
       }
       return _line.metro[_index];
+    },
+    paste_info: function(_data){
+      _data.update_timestamp = firebase.database.ServerValue.TIMESTAMP;
+      _data.timestamp = firebase.database.ServerValue.TIMESTAMP;
+      delete _data[".key"];
+      this.save_info(_data);
     },
     new_info: function () { //新增資訊
       var board_textarea = $.trim($("#board_textarea").val());
@@ -636,7 +767,7 @@ var vm = new Vue({
         file_url : $("#uploadFileParent").data("file_url") || "",
         file_name : $("#uploadFileParent").data("file_name") || ""
       }
-      clear_uploadFile();
+      clear_uploadFile("send");
       if (vm.url_info) _data.url_info = vm.url_info;
       remove_start();
       if($("#top_tag").find("[data-key='"+vm.key_metro+"']").length==0){
@@ -645,27 +776,36 @@ var vm = new Vue({
         print("目前不在任何地鐵上");
         return
       }
-      
       vm.url_info = undefined; //清掉
       $("#board_textarea").val("").keyup(); //清掉
-        DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).push(_data, function (error) {
-        if (error) { //修補程式(不常發生)
-          if (error.toString().indexOf("Permission denied") > -1) {
-            set_line_root(vm.get_line_key(), user_uid );
-            DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).push(_data)
-            setTimeout(function () {
-              print("未發現root，重新寫入root")
-              location.reload();
-            }, 0)
-
-          }
-        }
-        });
+			for(var index in _data.url_info) { 
+				if (_data.url_info.hasOwnProperty(index)) {
+					if(_data.url_info[index]==undefined)_data.url_info[index]="";
+				}
+			}
+			this.save_info(_data);
     },
+		save_info: function(_data){
+			DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).push(_data, function (error) {
+			if (error) { //修補程式(不常發生)
+				if (error.toString().indexOf("Permission denied") > -1) {
+					set_line_root(vm.get_line_key(), user_uid );
+					DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).push(_data);
+					setTimeout(function () {
+						print("未發現root，重新寫入root")
+						location.reload();
+					}, 0)
+				}
+			}
+			});
+		},
     delete_info: function (key, event) { //刪除資訊
       var $target_parent = $(event.target).closest(".board_list");
       if ($target_parent.hasClass("edit")) return;
-      $delete_info = $target_parent.find("._delete_info");
+      var $delete_info = $target_parent.find("._modal_info");
+      if(!$delete_info.length){
+        $delete_info=$target_parent.append(delete_modal_html(vm.line_color));
+      }
       //https://semantic-ui.com/modules/dimmer.html
       //opacity : 0.7,
       $delete_info.dimmer({
@@ -674,13 +814,28 @@ var vm = new Vue({
           hide: 0
         }
       }).dimmer('show');
+			//要調整
       $delete_info.find(".send").off("click").on("click", function () {
-        DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).child(key).remove();
-        $delete_info.dimmer('hide');
+         _fn();
+				//$(document).off("keydown.info_delete");
       });
       $delete_info.find(".cancel").off("click").on("click", function () {
-        $delete_info.dimmer('hide');
+				$delete_info.dimmer('hide');
+				//$(document).off("keydown.info_delete");
+      })	
+      $(document).on("keydown.info_delete",function(event){
+          if (event.which == 13 ) { //enter
+              _fn();
+              $(document).off("keydown.info_delete");
+          } else if (event.which == 27) { //esc
+              $delete_info.dimmer('hide');
+              $(document).off("keydown.info_delete");
+          }
       })
+      function _fn(){
+          DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).child(key).remove();//delete_info_direct相同
+          $delete_info.dimmer('hide');
+      }	
     },
     delete_info_line: function (_line_key) { //從info最上層的line刪除
       DB.ref("info/" + _line_key + "/metro").remove();
@@ -689,7 +844,7 @@ var vm = new Vue({
     favorite_info: function (item) {
       DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).child(item[".key"]).update({
         favorite: !item.favorite,
-		update_timestamp: firebase.database.ServerValue.TIMESTAMP
+				update_timestamp: firebase.database.ServerValue.TIMESTAMP
       });
     },
     edit_info: function (item, dbl, event) {
@@ -714,7 +869,7 @@ var vm = new Vue({
         var board_textarea = $.trim($textarea.val());
         vm.leave_edit_info($target_parent);
         setTimeout(function(){
-          $target_parent.velocity("scroll",{duration: 500,offset: -250});
+          $target_parent.velocity("scroll",{duration: 500,offset: -500});
         },50);
         DB.ref('info/' + vm.get_line_key() + "/metro/" + vm.key_metro).child(_key).update({
           message: board_textarea,
@@ -751,15 +906,18 @@ var vm = new Vue({
       }else if(_level=="metro"){
         var get_level=vm.get_metro();
       }
+			var _name=get_level.name;
       $textarea.val(get_level.name);
       auto_height2($textarea[0]);
       $textarea.on("keydown",function(event){
         auto_height2($textarea[0]);
         if (event.which == 13 || (event.shiftKey && event.which == 13)) { //enter
-		  event.preventDefault();
-          get_level.name=$.trim($textarea.val().replace(/  +/g, ' ')); 
+		  		event.preventDefault();
+          get_level.name=$.trim($textarea.val().replace(/  +/g, ' '));
+					if(_name == get_level.name)return
+					if(_level == "line") vm.set_總站(get_level.name,_name);
           vm.action = "re_name";
-          vm.更新藍圖();
+          vm.update_blueprint();
           edit_set();
         } else if (event.which == 27) { //esc
           edit_set();
@@ -775,13 +933,18 @@ var vm = new Vue({
         $textarea.hide();
       }
     },
-    re_name: function (index, _level, event ,other) { //重新命名(共用)
+    set_總站: function(edit_name,before_name){
+        var _get_metro=vm.get_line().metro;
+        if(_get_metro.length==1 && (_get_metro[0].name=="總站" || _get_metro[0].name==before_name)){
+            _get_metro[0].name=edit_name;
+        }
+    },
+    re_name: function (index, _level, event) { //重新命名(共用)
       if ($(event.target).hasClass("blueprint_i")) return;
       $("html").addClass("re_name");
       var $level_list = $(event.target).closest("." + _level + "_list");
       $level_list.addClass("edit");
 			var sort_level=_level;
-			if(other=="master")sort_level="line_master";
       if (sortable[sort_level]) sortable[sort_level].option("disabled", true);
       var _name = get_level().name;
       var $level_list_input = $level_list.find("." + _level + "_input");
@@ -792,8 +955,10 @@ var vm = new Vue({
             get_level().name = _name;
             return
           }
-          vm.action = "re_name"
-          vm.更新藍圖();
+					if(_name == get_level().name)return
+					if(_level == "line") vm.set_總站(get_level().name,_name);
+          vm.action = "re_name";
+          vm.update_blueprint();
         } else if (event.which == 27) { //esc
           edit_set();
           get_level().name = _name;
@@ -833,20 +998,31 @@ var vm = new Vue({
       if (!c) return "#000000";
       return c;
     },
-    open_color: function (index, color, master) { //打開色票選擇器(line)
+    open_color: function (index, color) { //打開色票選擇器(line)
+			if(vm.mode==0){
+				vm.exchange_line(index)
+				return
+			}
+			if($("#left_color").attr("show")=="Y"){
+				$(".colpick_submit").off("click.op");
+				$("#left_color").attr("show","");
+				return;
+			}
+
       color = color.split("#")[1];
       var $et = $(event.target);
       var _left = $et.offset().left;
       var _top = $et.offset().top + $et.height() + 2;
-      vm.pick_master = master;
       $("#left_color").css({
         "left": _left,
         "top": _top
       }).colpickSetColor(color).colpickShow();
+			$("#left_color").attr("show","Y")
       $(".colpick_submit").off("click.op").on("click.op", function () {
         vm.get_blueprint().line[index].color = "#" + $("#left_color").val();
         vm.action = "edit_color";
-        vm.更新藍圖();
+        vm.update_blueprint();
+				$("#left_color").attr("show","");
         $(this).off("click.op");
       });
     },
@@ -867,7 +1043,7 @@ var vm = new Vue({
       vm.index[vm.index_blueprint] = new_index;
       vm.update_index_line(new_index);
       vm.action = "swap_line";
-      vm.更新藍圖(data.key, data);
+      vm.update_blueprint(data.key, data);
 
       function get_key(key) {
         for (var i = 0; i < data.line.length; i++) {

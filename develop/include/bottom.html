@@ -1,5 +1,5 @@
 <div id="blueprint">
- <div class="bottom_line" :style="{background:color_gradient(master_line_color)}"></div>
+ <div class="bottom_line"></div>
   <div id="blueprint_drag">
     <div v-for="(item, index) in blueprint" class="blueprint_list ui top left pointing dropdown icon" @drop="drop_blueprint($event,item.key)" @dragleave="allowDropLeave_blueprint($event)" @dragover="allowDrop_blueprint($event)" @click="exchange_blueprint(index,undefined,$event)" @dblclick="re_name(index,'blueprint',$event)" :data-key="item.key" >
       <a class="blueprint_a" :class="{check:index_blueprint==index}"> {{item.name}}
@@ -7,16 +7,30 @@
       <input class="blueprint_input" type="text" v-model="item.name">
       <i class="blueprint_i dropdown icon"></i>
       <div class="menu">
-          <div class="item" @click="re_name(index,'blueprint',$event)"><i class="edit icon"></i>重新命名</div>
-           <div v-show="index_blueprint!=index" class="item" @click="exchange_blueprint(index,true,$event)"><i class="exchange icon"></i>切換</div>
-          <div v-if="index_blueprint==index" class="item" @click="delete_blueprint(item.key)"><i class="delete icon"></i>移除</div>
-<!--          <div class="item" @click="匯出藍圖(item.key)"><i class="external icon"></i>匯出(備份)</div>-->
-          
+				<div class="item" @click="re_name(index,'blueprint',$event)"><i class="edit icon"></i>重新命名</div>
+				 <div v-show="index_blueprint!=index" class="item" @click="exchange_blueprint(index,true,$event)"><i class="exchange icon"></i>切換</div>
+				<div v-if="index_blueprint==index" class="item" @click="delete_blueprint(item.key)"><i class="delete icon"></i>移除</div>
+				<div class="item" @click="匯出藍圖(item.key)"><i class="external icon"></i>匯出</div>
       </div>
     </div>
   </div>
     <div id="blueprint_new" class="ui icon button" data-tooltip="新增一個地鐵計畫" data-inverted="" @click="new_blueprint()">
       <i class="add icon"></i>
     </div>
+     <div id="blueprint_import" class="ui icon button" data-tooltip="匯入地鐵計畫" data-inverted="" @click="匯入藍圖()">
+      <i class="reply icon"></i>
+    </div>
 </div>
-<div id="copyright">© 2017 資訊地鐵站 版權所有</div>
+<div id="copyright">
+  <div style="display:inline-block;">
+  © 2017 資訊地鐵站 版權所有
+  </div>
+  <span class="ui top right pointing dropdown">
+    <i class="blueprint_i dropdown icon"></i>
+    <div class="menu" style="bottom: 68%;">
+      <div class="item"><i class="write icon"></i><a style="color:#000000" href="https://goo.gl/forms/p464Om8G1yszy0ji1" target="_blank">網站使用滿意度調查</a></div>
+      <div class="item"><i class="comment icon"></i><a style="color:#000000" href="https://goo.gl/forms/QYfCfG5vZF9CyNP03" target="_blank">提供建議</a></div>
+      <div class="item"><i class="facebook f icon"></i><a style="color:#000000" href="https://www.facebook.com/infometro.cc/" target="_blank">關注我們</a></div>
+    </div>
+  </span>
+</div>

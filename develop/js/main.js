@@ -13,25 +13,27 @@
          $("#board_parent").css("min-height",(getViewportSize().h)+"px");
        }
     
-        if(window_width<650){
-          $("#center").css("width","650px");
+        if(window_width<700){
+          $("#center").css("width","700px");
           $("#top").css("width", $("#center").width());
         }else{
           $("#center").css("width","87%");
-          if(window_width<(961-30)){
+          if(window_width<(991-30)){
               $("#top").css("width", window_width-$("#left").width());
           }else{
-              $("#top").css("width", $("#center").width());
+              $("#top").css("width", "inherit");
           }
         }
   }).resize();
 
- var sortable = [];
+	setTimeout(function(){
+		if(typeof(vm)=="undefined")location.reload();
+	},5000);
+
+  var sortable = [];
+	var mode_before ; //mode before 暫放
   $(function () {
     //拖亦的部份 https://github.com/RubaXa/Sortable
-    sortable["line_master"] = new Sortable(id("line_drag_master"), {
-      animation: 0
-    });
     sortable["line"] = new Sortable(id("line_drag"), {
       animation: 150,
       forceFallback: false,
@@ -39,17 +41,18 @@
         vm.drag_line_key=$(dragEl).data("key"); //正在脫亦的line key
         if(navigator.userAgent.match("Firefox")){
           dataTransfer.setData('line_key', $(dragEl).data("key")); //設定要傳送的資料
-         }
+        }
       },
       onStart: function(evt){
+				mode_before =vm.mode;
         vm.mode = 1.5;
       },
       onEnd: function (evt) {
         setTimeout(function(){
           vm.swap_line(evt.oldIndex, evt.newIndex);
-		  		vm.mode = 1;
+		  		vm.mode = mode_before;
           vm.drag_line_key="";
-        },5)
+        },5);
       }
     });
     sortable["metro"] = new Sortable(id("top_tag"), {
@@ -72,6 +75,7 @@
         } else if (evt.oldIndex == $("#top_tag li").length - 2) {
           $top_tag.addClass("last_drag");
         }
+				mode_before =vm.mode;
         vm.mode = 1.5;
       },
       onEnd: function (evt) {
@@ -83,7 +87,7 @@
         $top_tag.removeClass("first_drag").removeClass("last_drag");
         setTimeout(function(){
           vm.swap_metro(evt.oldIndex, evt.newIndex);
-          vm.mode = 1;
+          vm.mode = mode_before;
           vm.drag_metro_key="";
         },5)
       }
@@ -201,101 +205,167 @@
     }, 0);
   }
 
+	function show_event_fn(title,text){
+		var _color=vm.line_color;
+		if(title==undefined)title="儲存成功";
+		text='<div class="description">'+text+'</div>'
+		if(text==undefined)text="";
+		clearTimeout(window.show_setTimeout);
+		$("#show_event").html('<div style="display:none" class="ui steps"><div class="completed step"><i class="payment icon" style="color:'+_color+'"></i><div class="content"><div class="title">'+title+'</div>'+text+'</div></div></div>');
+
+		$("#show_event .ui").transition({
+			animation : 'fade up',
+			duration  : 800
+		});
+		window.show_setTimeout=setTimeout(function(){
+			$("#show_event .ui").transition({
+				animation : 'fade down',
+				duration  : 1200
+			});
+		},2000);
+	}
+
   function parse_url(url, fn) {
-    $.get("https://infometro.hopto.org/infometro.asp?url=" + url, function (html) {
+    $.get("//calendar2017.me/infometro.asp?url=" + url, function (html) {
+      var url_info = {}
 		try{
-				var iframe = document.createElement("iframe");
-				iframe.id = "iframe";
-				iframe.style.display = "none";
-				$(document.body).append(iframe);
-				var ifrm = document.getElementById('iframe');
-				ifrm = ifrm.contentWindow || ifrm.contentDocument.document || ifrm.contentDocument;
-				ifrm.document.open();
-				ifrm.document.write(html);
-				ifrm.document.close();
-				var url_info = {}
-				var metas = $("#iframe")[0].contentWindow.document.getElementsByTagName('meta');
-				for (var i = 0; i < metas.length; i++) {
-					if (metas[i].getAttribute("name") == "description") {
-						url_info.description = metas[i].getAttribute("content");
-					} else if (metas[i].getAttribute("property") == "og:description") {
-						url_info.og_description = metas[i].getAttribute("content");
-					} else if (metas[i].getAttribute("property") == "og:image") {
-						url_info.og_image = metas[i].getAttribute("content").split(",")[0];
-					} else if (metas[i].getAttribute("property") == "og:title") {
-						url_info.og_title = metas[i].getAttribute("content");
-					}
-				}
+          var iframe = document.createElement("iframe");
+          iframe.id = "iframe";
+          iframe.style.display = "none";
+          $(document.body).append(iframe);
+          var ifrm = document.getElementById('iframe');
+          ifrm = ifrm.contentWindow || ifrm.contentDocument.document || ifrm.contentDocument;
+          ifrm.document.open();
+          ifrm.document.write(html);
+          ifrm.document.close();
 
-				//字串手動劫取
-				if (url_info.og_image == undefined) { //取fb images
-					if (html.indexOf("og:image") > -1) {
-						var og_html = html.split("og:image")[1].split(">")[0];
-						og_html = og_html.replace(/\'/gi, "\"");
-						og_html = og_html.split("content=\"")[1].split('"')[0]
-						url_info.og_image = og_html;
-					}
-				}
-				if (url_info.og_description == undefined) {
-					if (html.indexOf("og:description") > -1) {
-						var og_html = html.split("og:description")[1].split(">")[0];
-						og_html = og_html.replace(/\'/gi, "\"");
-						og_html = og_html.split("content=\"")[1].split('"')[0]
-						url_info.og_description = og_html;
-					}
-				}
-				if (url_info.og_title == undefined) {
-					if (html.indexOf("og:title") > -1) {
-						var og_html = html.split("og:title")[1].split(">")[0];
-						og_html = og_html.replace(/\'/gi, "\"");
-						og_html = og_html.split("content=\"")[1].split('"')[0]
-						url_info.og_title = og_html;
-					}
-				}
+          var metas = $("#iframe")[0].contentWindow.document.getElementsByTagName('meta');
+          for (var i = 0; i < metas.length; i++) {
+              if (metas[i].getAttribute("name") == "description") {
+                  url_info.description = metas[i].getAttribute("content");
+              } else if (metas[i].getAttribute("property") == "og:description") {
+                  url_info.og_description = metas[i].getAttribute("content");
+              } else if (metas[i].getAttribute("property") == "og:image") {
+                  url_info.og_image = metas[i].getAttribute("content").split(",")[0];
+              } else if (metas[i].getAttribute("property") == "og:title") {
+                  url_info.og_title = metas[i].getAttribute("content");
+              }
+          }
+          //字串手動劫取
+          if (url_info.og_image == undefined){
+            url_info.og_image = capture_image(html); 
+          }
+          if (url_info.og_description == undefined && url_info.description==undefined) {
+            url_info.og_description=capture_description(html);
+          }
+        
+          if (url_info.og_title == undefined){
+            url_info.og_title=capture_title(html);
+          }
+          if (url_info.og_title) {
+              url_info.title = url_info.og_title;
+          } else {
+              url_info.title = $(document.getElementById('iframe').contentWindow.document).find("title").html();
+              if (url_info.title == undefined) url_info.title = "";
+          }
+          if (url_info.og_description) {
+              url_info.description = url_info.og_description;
+          }
+          if (url_info.og_image) {
+              url_info.image = url_info.og_image;
+          }
 
+          delete url_info.og_title
+          delete url_info.og_description
+          delete url_info.og_image
 
-				//var $iframe_body=$(document.getElementById('iframe').contentWindow.document.body);
+          url_info.url = url; //這個url代表是連結的url
+          url_info.url_parent = url.split("://")[1].split("/")[0];
+          //print(url_info.url_parent)
+          if(url_info.image.indexOf("http://")==-1 && url_info.image.indexOf("https://")==-1){
+            url_info.image = "//"+url_info.url_parent + url_info.image;
+          }
+          
+          //判斷是不是youtube
+          if (url.indexOf(".youtube.") > -1) {
+              url_info.youtube = url.split("?v=")[1].split("&")[0];
+          } else if (url.indexOf("youtu.be/") > -1) {
+              url_info.youtube = url.split("be/")[1];
+          }
+          $("#iframe").remove();
+        if (typeof fn === "function") fn(url_info);
+          
+      }catch(err) {
+        url_info.image = capture_image(html); 
+        url_info.description=capture_description(html)
+        url_info.title=capture_title(html);
+        
+        url_info.url = url; //這個url代表是連結的url
+        url_info.url_parent = url.split("://")[1].split("/")[0];
 
-				if (url_info.og_title) {
-					url_info.title = url_info.og_title;
-				} else {
-					url_info.title = $(document.getElementById('iframe').contentWindow.document).find("title").html();
-					if (url_info.title == undefined) url_info.title = "";
-				}
-				if (url_info.og_description) {
-					url_info.description = url_info.og_description;
-				}
-				if (url_info.og_image) {
-					url_info.image = url_info.og_image;
-				}
-
-				delete url_info.og_title
-				delete url_info.og_description
-				delete url_info.og_image
-
-				url_info.url = url; //這個url代表是連結的url
-				url_info.url_parent = url.split("://")[1].split("/")[0];
-
-				//判斷是不是youtube
-				if (url.indexOf(".youtube.") > -1) {
-					url_info.youtube = url.split("?v=")[1].split("&")[0];
-				} else if (url.indexOf("youtu.be/") > -1) {
-					url_info.youtube = url.split("be/")[1];
-				}
-	//      url_info.ico = "https://www.google.com/s2/favicons?domain_url=" + url; 減少流量這個不存了
-
-
-				$("#iframe").remove();
-			  if (typeof fn === "function") fn(url_info);
-			}catch(err) {
-				print("網址解析有錯")
-				if (typeof fn === "function") fn();
-			}
-
-      //console.log(url_info);
+        if (typeof fn === "function") fn(url_info);
+      }
     }).fail(function(){
+      print("請求錯誤");
       if (typeof fn === "function") fn();
-		})
+	})
+    
+    function capture_image(html){
+       if (html.indexOf("og:image") > -1) {
+          var og_html = html.split("og:image")[1].split(">")[0];
+          if(og_html.indexOf("content=")==-1){
+            var _meta = html.split("og:image")[0].split("<meta");
+            og_html=_meta[_meta.length-1];
+          }
+         if(og_html.indexOf("content=")>-1){
+            og_html = og_html.replace(/\'/gi, "\"");
+            og_html = og_html.split("content=\"")[1].split('"')[0];
+            return og_html;
+         }
+       }
+      
+      if(html.indexOf("<link rel=\"image_src") > -1){
+         var og_html=html.split("<link rel=")[1].split(">")[0];
+         og_html = og_html.replace(/\'/gi, "\"");
+         og_html= og_html.split("href=\"")[1].split('"')[0];
+         return og_html;
+       }
+    }
+    
+    function capture_description(html){
+      try{
+        if (html.indexOf("og:description") > -1) { 
+          var og_html = html.split("og:description")[1].split(">")[0];
+          if(og_html.indexOf("content=")==-1){
+            var _meta = html.split("og:description")[0].split("<meta");
+            og_html=_meta[_meta.length-1];
+          }
+          og_html = og_html.replace(/\'/gi, "\"");
+          og_html = og_html.split("content=\"")[1].split('"')[0]
+          return og_html;
+        }
+      }catch(err) {
+        
+      }
+    }
+    
+    function capture_title(html){
+      if (html.indexOf("og:title") > -1) {
+        var og_html = html.split("og:title")[1].split(">")[0];
+        if(og_html.indexOf("content=")==-1){
+          var _meta = html.split("og:title")[0].split("<meta");
+          og_html=_meta[_meta.length-1];
+        }
+        og_html = og_html.replace(/\'/gi, "\"");
+        og_html = og_html.split("content=\"")[1].split('"')[0];
+        return og_html;
+       }
+      if(html.indexOf("<title") > -1){
+        var _title=html.split("<title")[1].split("</title>")[0].split(">")[1];
+        return _title
+      }
+     
+    }
   }
   function auto_height(textarea){
     $(textarea).height(70);
@@ -306,6 +376,113 @@
     var _height=textarea.scrollHeight + parseFloat($(textarea).css("borderTopWidth")) + parseFloat($(textarea).css("borderBottomWidth"));
     $(textarea).height(_height);
   }
+
+	function search_change(){
+		var _search=[];
+		var _val=$.trim(this.search_txt);
+		for(var i=0;i<vm.blueprint.length;i++){
+			_search.push([]);
+			_search[i].line=[];
+			_search[i].metro=[];
+			for(var j=0;j<vm.blueprint[i].line.length;j++){
+				var _line=vm.blueprint[i].line[j];
+				if( _line.name.indexOf(_val)>-1 || _val.indexOf( _line.name)>-1){
+					_search[i].line.push(j);
+				}
+				for(var k=0;k<_line.metro.length;k++){
+					var _metro=_line.metro[k];
+					if( _metro.name.indexOf(_val)>-1 || _val.indexOf( _metro.name)>-1){
+						_search[i].metro.push(j);
+					}
+				}
+			}
+		}
+		return [{a :1},{b :2}];
+	}
+
+
+//剪下貼上資訊的部份
+	function getselecttext(){//抓取選取文字
+		var t='';
+		if(window.getSelection){t=window.getSelection();}
+		else if(document.getSelection){t=document.getSelection();}
+		else if(window.document.selection){t=window.document.selection.createRange().text;}
+		if(t!='') return t
+	}
+	$(function(){
+	 var ctrlDown = false,
+	 	ctrlKey = 17,
+	 	cmdKey = 91,
+	 	vKey = 86,
+	 	cKey = 67,
+	 	xKey = 88;
+	var shiftDown = false,
+		shiftKey = 16;
+	
+	
+	
+	var copy_flocus=false
+	$(document).on( "focus", "input,textarea", function(){
+		vm.copy_info=[];
+		copy_flocus=true;
+		$(this).one("blur",function(){
+			copy_flocus=false;
+		})
+	})
+
+ $(document).keydown(function(e) {
+		if(copy_flocus) return;
+	 			ctrlDown=e.metaKey || e.ctrlKey; //(跨瀏覽器的解決方案)
+				if (ctrlDown && e.keyCode == cKey){ //按下ctrl+c
+					if(getselecttext()!=undefined) return
+					if(vm.info_active){
+						if($("#"+vm.info_active).find("textarea").is(":visible")) return
+						//從vm.info 複製一份資料出來
+						vm.copy_info[0]=JSON.parse(JSON.stringify(copy_info(vm.info_active)));//傳址轉傳值
+						vm.copy_info[1]="copy";
+						show_event_fn("複製成功","你複製了一個資訊");
+					}
+				}else if(ctrlDown && e.keyCode == xKey){ //按下ctrl+x
+					if(getselecttext()!=undefined) return
+					if(vm.info_active){
+						//從vm.info 複製一份資料出來, 並新增等下要刪除的資訊
+						if($("#"+vm.info_active).find("textarea").is(":visible")) return
+						vm.copy_info[0]=JSON.parse(JSON.stringify(copy_info(vm.info_active)));//傳址轉傳值
+						vm.copy_info[1]="cut";
+						var get_line_key=vm.get_line_key();
+						var key_metro=vm.key_metro;
+						var info_active=vm.info_active;
+						vm.copy_info[2]=function(){
+							DB.ref('info/' + get_line_key + "/metro/" + key_metro).child(info_active).remove().then(function(){
+								vm.copy_info=[];
+							});
+						}
+						show_event_fn("剪下成功","你剪下了一個資訊");
+					}
+				}else if(ctrlDown && e.keyCode == vKey){ //按下ctrl+v
+					if(vm.copy_info.length==0)return
+					vm.paste_info(vm.copy_info[0]);
+					if(vm.copy_info[1]=="cut") {
+						vm.copy_info[2]();
+						show_event_fn("貼上成功","你貼上了一個資訊");
+					}
+				}else if(e.keyCode==46){//按下delete
+					if(vm.info_active){
+						if($("#"+vm.info_active).find("textarea").is(":visible")) return
+						$("#"+vm.info_active).find("._info_delete").trigger("click");
+					}
+				}
+    }).keyup(function(e) {
+      if (e.keyCode == ctrlKey || e.keyCode == cmdKey) ctrlDown = false;
+    });
+	function copy_info(_key){
+		for(var i=0;i<vm.info.length;i++){
+			if(vm.info[i][".key"]==_key){
+				return vm.info[i];
+			}
+		}
+	}
+})
 
   //導覽區程式
   function remove_start(n){
@@ -326,11 +503,11 @@
     if($.cookie("start")=="Y" || 1==2){//代表第一次進來
           $("#edit_parent").append("<div class='navOne ui left pointing basic label'>第一次進來嗎？點擊這裡開始導覽。<i class='delete icon' style='float:right'></i></div>");
 
-          $("#board_send_parent").append("<div class='navOne ui top pointing basic label'>這個區塊可以新增資訊<i class='delete icon' style='float:right'></i></div>");
-
-          $("#new_line_parent").append("<div class='navOne ui top pointing basic label'>這裡是支線區<i class='delete icon' style='float:right'></i></div>");
-
-          $("#top").append("<div class='navOne ui right pointing basic label'>這個區塊是地鐵站<i class='delete icon' style='float:right'></i></div>");
+//          $("#board_send_parent").append("<div class='navOne ui top pointing basic label'>這個區塊可以新增資訊<i class='delete icon' style='float:right'></i></div>");
+//
+//          $("#new_line_parent").append("<div class='navOne ui top pointing basic label'>這裡是支線區<i class='delete icon' style='float:right'></i></div>");
+//
+//          $("#top").append("<div class='navOne ui right pointing basic label'>這個區塊是地鐵站<i class='delete icon' style='float:right'></i></div>");
 
           $("#edit_parent .navigation").one("click",remove_start);
 
@@ -340,328 +517,42 @@
            setTimeout(function(){
                $("#edit_parent .navOne").transition("flash");
            },600);
-
-           $("#board_send_parent .navOne i").one("click",function(){
-               remove_start(2);
-           });
-           setTimeout(function(){
-               $("#board_send_parent .navOne").transition("flash");
-           },1400);
-
-           $("#new_line_parent .navOne i").one("click",function(){
-               remove_start(3);
-           });
-           setTimeout(function(){
-               $("#new_line_parent .navOne").transition("flash");
-           },2200);
-
-          $("#top .navOne i").one("click",function(){
-               remove_start(4);
-           });
-           setTimeout(function(){
-               $("#top .navOne").transition("flash");
-           },3000);
+//
+//           $("#board_send_parent .navOne i").one("click",function(){
+//               remove_start(2);
+//           });
+//           setTimeout(function(){
+//               $("#board_send_parent .navOne").transition("flash");
+//           },1400);
+//
+//           $("#new_line_parent .navOne i").one("click",function(){
+//               remove_start(3);
+//           });
+//           setTimeout(function(){
+//               $("#new_line_parent .navOne").transition("flash");
+//           },2200);
+//          $("#top .navOne i").one("click",function(){
+//               remove_start(4);
+//           });
+//           setTimeout(function(){
+//               $("#top .navOne").transition("flash");
+//           },3000);
       }
 
   }
-
-//----------------------分塊程式碼------------------
-
-	//top
-	 function move_center() {
-        $("#top_tag li.active").velocity("scroll", { 
-           axis: "x",
-           duration: 0,
-           container: $("#top_tag"),
-           complete: function(){
-             $("#top_tag").show();
-           }
-         });
-       $("#top_tag").velocity("stop").velocity("fadeIn",{ duration: 350 })
-       vm.action_move=0;
-	 }
-	 $(function () {
-		 //http://velocityjs.org/#scroll
-		 $(".triangle.left").click(function(){
-            $("#top_tag").velocity("stop").velocity('scroll', {
-                container: $("#top_tag"),
-                offset: -200,
-                duration: 250,
-                axis: 'x'
-            });
-         });
-       	 $(".triangle.right").click(function(){
-            $("#top_tag").velocity("stop").velocity('scroll', {
-                container: $("#top_tag"),
-                offset: 70,
-                duration: 250,
-                axis: 'x'
-            });
-         });
-	 })
-	//top
-
-	//bottom
-	function drop_blueprint(event,key){
-      $(event.target).closest(".blueprint_list").jrumble().trigger('stopRumble');
-		var line_key = vm.drag_line_key;
-		if(line_key=="")return;
-		if(key==vm.blueprint[vm.index_blueprint].key){
-			print("相同的blueprint");
-			return;
-		}
-		var _line=vm.move_line(line_key);
-		_line=_line[0];
-		for(var i=0;i<vm.blueprint.length;i++){
-			if(vm.blueprint[i].key==key){
-				vm.blueprint[i].line.push(_line);
-				vm.index[i].push([]);
-				vm.index[i][vm.index[i].length - 1].check = false;
-				vm.action="drop_blueprint";
-				vm.更新藍圖(key,vm.blueprint[i]);
-				vm.index_update();
-				break;
-			}
-		}
-
-	}
-
-    function allowDrop_blueprint(event) { //拖曳的物件移到上面
-      if(vm.drag_line_key){
-        $(event.target).closest(".blueprint_list").jrumble().trigger('startRumble');
-      }
-      
-      event.preventDefault();//必要不能刪
-	}
-    function allowDropLeave_blueprint(event) { //拖曳的物件移出
-      if(vm.drag_line_key){
-        $(event.target).closest(".blueprint_list").jrumble().trigger('stopRumble');
-      }
-      event.preventDefault();//必要不能刪
-	}
-
-
-	//var export_json={};
-	//function load_info(key){
-	//  DB.ref("info/"+key+"/metro").once("value",function(data){
-	//    export_json.info[key]=data.val();
-	//  })
-	//}
-	//function 匯出藍圖(key){
-	//  for(var i=0;i<vm.blueprint.length;i++){
-	//    if(vm.blueprint[i].key==key){
-	//      export_json.name=vm.blueprint[i].name;
-	//      export_json.line=vm.blueprint[i].line;
-	//      export_json.info={};
-	//      for(var j=0;j<export_json.line.length;j++){
-	//         var key=export_json.line[j]._key;
-	//         export_json.info[key]="";
-	//         load_info(key);
-	//      }
-	//      return
-	//    }
-	//  }
-	//}
-
-	//bottom
-
-	//left
-	 function drop_line(event,index){
-        $(event.target).closest("li").jrumble().trigger('stopRumble');
-		if(vm.index_line==index)return;
-		var metro_key = vm.drag_metro_key;
-		if(metro_key=="")return;
-		var _metro=vm.move_metro(metro_key,index);
-		if(_metro==undefined)return
-		_metro=_metro[0];
-		var data = JSON.parse(JSON.stringify(vm.get_blueprint())); //將傳址改為傳值
-		data.line[index].metro.push(_metro);
-		vm.action="drop_line";
-		vm.更新藍圖(data.key,data);
-	}
-	$(function(){
-		//晃動 https://jackrugile.com/jrumble/
-		$(".logo").jrumble({
-			x: 2,
-			y: 2,
-			opacity: true,
-			opacityMin: .5
-		}).hover(function () {
-			$(this).trigger('startRumble');
-		}, function () {
-			$(this).trigger('stopRumble');
-		});
-
-		$(document.body).append("<div id='left_color' style='position: absolute;left:0;top:0'></div>");
-		$('#left_color').colpick({
-			layout:'hex',
-			onHide:function(){
-				vm.pick_master=undefined;
-				vm.pick_color=undefined;
-			},
-			onChange:function(hsb,hex,rgb,el,bySetColor){
-				vm.pick_color="#"+hex;
-			},
-			onSubmit:function(hsb,hex,rgb,el,bySetColor){
-				$(el).val(hex);
-				$(el).colpickHide();
-			}
-		}).colpickHide();
-      
-       $("#left .left_line").on('mousedown',function(event){
-          $(document).on('selectstart',function(){return false;})
-          $(document).on('dragstart',function(){return false;})
-             // var max_width=$(window).width()-120;
-              var gX=($("#left").width()-event.pageX);
-              var b_left=event.pageX-parseInt($("#board1").css("left"));
-              $(document).on('mousemove.line',function(event){
-                  var _w=(event.pageX) -gX;
-                  if(_w<=120)_w=120;//最小寬度
-                  //if(_w>max_width)_w=max_width;
-                  $("#left").css("width",_w);
-                  $("#line_parent").css("width",_w)
-                  $("#center").css("margin-left",_w);
-                  $("#top").css("width", $("#center").width());
-                	$("#edit_parent a").css("width",_w)
-              });
-              $(document).on('mouseup.line',function(event){
-                  $(document).off('mouseup.line');
-                  $(document).off('mousemove.line');
-                  $(document).off('selectstart');
-                  $(document).off('dragstart');
-                  $("#show_event").css("left",$("#left").width() + 20);
-              });
-          })
-
-	})
-    function allowDrop_line(event) { //拖曳的物件移到上面
-      if(vm.drag_metro_key){
-        $(event.target).closest("li").jrumble().trigger('startRumble');
-      }
-      
-      event.preventDefault();//必要不能刪
-	}
-    function allowDropLeave_line(event) { //拖曳的物件移出
-      if(vm.drag_metro_key){
-        $(event.target).closest("li").jrumble().trigger('stopRumble');
-      }
-      event.preventDefault();//必要不能刪
-	}
-
-	//left
-
-	//right
-	$(function(){
-		 //perfectScrollbar
-		 $("#right .r_content").perfectScrollbar();
-		 $("#right .r_button").on("click",function(){
-			var _index=$(this).index()-1;
-			$(this).addClass("active").siblings().removeClass("active");
-			$("#right .r_content:eq("+_index+")").addClass("active").siblings().removeClass("active");
-		})
-
-		$("#right .right_tool").on("click",function(event){
-			if($("#right").height()<400){
-				if($(event.target).closest(".r_button").length==0){
-					$("#right").toggleClass("down");
-					$.cookie('right_tool',$("#right").attr('class'));
-				}
-			}
-		})
-		if($.cookie('right_tool')){
-			if($.cookie('right_tool').indexOf("down")>-1){
-				$(".right_tool").click();
-			}
-		}
-
-		//拖動拉Bar
-	 $("#right .right_line").on('mousedown',function(event){
-			$(document).on('selectstart',function(){return false;})
-			$(document).on('dragstart',function(){return false;})
-				var max_width=$(window).width()-120;
-				var gX=($("#right").width()-($(window).width()-event.pageX));
-				$(document).on('mousemove.line',function(event){
-					var _w=($(window).width()-event.pageX) -gX;
-					//if(_w<270)_w=270;//最小寬度
-					if(_w>max_width)_w=max_width;
-					$("#right").css("width",_w)
-				});
-				$(document).on('mouseup.line',function(event){
-					$(document).off('mouseup.line');
-					$(document).off('mousemove.line');
-					$(document).off('selectstart');
-					$(document).off('dragstart');
-				});
-			})
-
-		// https://semantic-ui.com/modules/accordion.html#/definition
-		$('#right .ui.accordion').accordion();//折疊菜單
-	})
-	function info_search_db(line_key,_val){
-		DB.ref("info/"+line_key+"/metro/").once("value",function(data){
-			data.forEach(function (childData) {
-				for(var info_key in childData.val()) {
-					if(childData.val()[info_key].message.indexOf(_val)>-1){
-						 vm.search_info.push({
-							 line_key : line_key ,
-							 metro_key: childData.key,
-							 message : childData.val()[info_key].message
-						 })
-					}
-				}
-			});
-		})
-	}
-	function info_search(){//搜尋地鐵功能
-		//先從藍圖資訊找到
-		return false
-		var _val=$.trim($("#right_search input").val());
-		vm.search_metro=[];
-		vm.search_info=[];
-		if(_val=="")return
-
-		var _blueprint=vm.get_blueprint();
-		for(var i=0;i<_blueprint.line.length;i++){
-			var _key=_blueprint.line[i]._key;
-			var _name=_blueprint.line[i].name;
-			var _m=_blueprint.line[i].metro;
-			for(var j=0;j<_m.length;j++){
-				if(_m[j].name.indexOf(_val)>-1){
-					vm.search_metro.push({
-						line_name: _name,
-						line_id:i ,
-						metro_name:_m[j].name ,
-						metro_id : j
-					});
-				}
-			}
-			info_search_db(_key,_val);
-		}
-	}
-	//right
-
-	//center
-	function drop(event){
-      $("#board_edit>div>i").jrumble().trigger('stopRumble');
-      var key = vm.drag_metro_key;
-      if(key)vm.delete_metro(key);
-      var line_key=vm.drag_line_key;
-      if(line_key)vm.delete_line(line_key);
-	}
-	function allowDrop(event) { //拖曳的物件移到上面
-      $("#board_edit>div>i").jrumble().trigger('startRumble');
-      event.preventDefault();//必要不能刪
-	}
-    function allowDropLeave(event) { //拖曳的物件移出
-      $("#board_edit>div>i").jrumble().trigger('stopRumble');
-      event.preventDefault();//必要不能刪
-	}
-
-
-	$(function(){
-      $("#board_textarea").keyup(function(e) {	
-          auto_height(this)
-      });
-      $("#board_textarea").on('paste', textarea_paste);
-	})
-	//center
+  
+  function delete_modal_html(button_color){
+    if(button_color==undefined)button_color="#FF6900";
+    return '<div class="_modal_info ui inverted dimmer">'+
+          '<div class="content">'+
+              '<div class="center">'+
+									//'<div style="width:100%;height:100%;">'+
+											'<i class="trash outline icon" style="font-size: 1.8em;margin-bottom: 13px;color:#000;cursor: default"></i>'+
+											'<div class="_modal_but" style="margin-bottom:20px;color:#000;">確定要刪除資料？</div>'+
+											'<button class="send mini ui button" style="background-color:'+button_color+'">刪除</button>'+
+											'<button class="cancel mini ui button">取消</button>'+
+									//'</div>'+
+             '</div>'+
+         '</div>'+
+       '</div>'
+  }

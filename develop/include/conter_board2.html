@@ -1,5 +1,5 @@
 	<!--資訊輸入-->
-	<div id="board_enter_parent" :style="{borderTopColor:master_line_color}">
+	<div id="board_enter_parent">
 		<div id="board_img"><img v-if="users.photo" :src="users.photo"></div>
 		<div id="board_enter">
 		  <i style="display:none;" class="idea icon"></i>
@@ -7,14 +7,19 @@
 		  <textarea id="board_textarea" placeholder="輸入資訊"></textarea>
 		</div>
 		<!--包成vue組件1 輸入-->
-		<div v-if="url_info" class="ui items" style="background-color: whitesmoke;width: 95%; margin: .5em 0;">
+		<div id="url_info_board" v-if="url_info" :class="get_img_embed_url()" class="ui items" style="background-color: whitesmoke;width: 95%; margin: .5em 0;">
 			<div class="item">
-				<div v-if="url_info.image" class="ui small image" style="padding-left: 9px; padding-top: 9px;"><img :src="url_info.image"></div>
+				<div v-if="url_info.image" class="ui small image url_img_parent" style="padding-left: 9px; padding-top: 9px; padding-bottom:9px;">
+				  <img class="url_img">
+				  <i v-if="url_info.youtube" class="video_icon video play icon"></i>
+				</div>
 				<div class="content" style=" position: relative;padding-left: 1em;padding-right: 1.6em; padding-bottom: 8px;">
 					<a :href="url_info.url" target="_blank" class="header" style="margin-top: 6px;color: #676868; font-size: 1.1em;">{{url_info.title}}</a>
 					<div class="meta"><span>{{url_info.url_parent}}</span></div>
 					<!-- v-html有風險要改掉，推社交前要拿掉 -->
-					<div v-if="url_info.description" class="extra" v-html="url_info.description"></div>
+					<div v-if="url_info.description" class="multiple-ellipsis" >
+					  <span class="multiple-ellipsis-text" v-html="url_info.description"></span>
+					</div>
 					<div>
 						<a class="ui right corner label" @click="vm.url_info=''" style="border-color: transparent" >
 							<i class="remove icon" style="color: rgb(1, 1, 1);cursor: pointer;"></i>
@@ -38,7 +43,7 @@
             <div class="bar" style="min-width: 0%;" :style="{background:line_color}"></div>
           </div>
           <div class="item" :style="{color:line_color}">
-            <div id="uploadFileParent" class="ui action input" data-inverted="" data-tooltip="上傳檔案" :style="{borderColor:line_color}">
+            <div id="uploadFileParent" class="ui action input" data-inverted="" data-tooltip="上傳檔案-拖曳或點擊" :style="{borderColor:line_color}">
               <input id="uploadFileInput" type="file">
               <div id="uploadButton" class="ui icon">
                 <i class="attach icon"></i>
@@ -51,87 +56,32 @@
           </div>
       </div>
 	</div>
-	
-	<script>
-      function clear_uploadFile(){
-        $("#progress .bar").css("min-width" ,"0%" );
-        $("#uploadFileParent").parent().css("background-color","");
-        $("#uploadFileParent").data({
-              file_id : "",
-              file_url : "",
-              file_name : ""
-            });
-        $('#uploadFileInput').val("");
-        $("#uploadName").html("");
-        $('#uploadFileParent').attr("data-tooltip","上傳檔案")
-      }
-      $(function(){
-        //https://firebase.google.com/docs/storage/web/upload-files
-        $("#uploadButton").click(function() {
-          $("#uploadFileInput").click();
-        });
-        $('#uploadFileInput').on('change', function(e) {
-            if(e.target.files.length>0){
-              var file = e.target.files[0]
-              var name = file.name;
-              //var ext= name.split(".")[1];//可以在這邊檢查不合適的副檔名
-              
-              var newfile = DB.ref("file/"+ vm.get_line_key() +"/"+ vm.get_metro()._key).push();
-              newfile.set({
-                name : name,
-                timestamp: firebase.database.ServerValue.TIMESTAMP
-              })
-              //https://firebase.google.com/docs/storage/web/upload-files
-              var storageRef = firebase.storage().ref();
-              var uploadTask = storageRef.child("file/"+vm.get_line_key()+"/"+vm.get_metro()._key+"/"+newfile.key+"/"+name).put(file);
-              clear_uploadFile()
-              uploadTask.on('state_changed', function(snapshot){
-              var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                $("#progress .bar").css("min-width" ,progress + "%" );
-                //console.log('Upload is ' + progress + '% done');
-              },function(error) {
-                // Handle unsuccessful uploads
-              }, function() {
-                $("#uploadFileParent").parent().css("background-color","currentColor");
-                $("#progress .bar").css("min-width" ,"0%" );
-                $('#uploadFileInput').val("");
-                $('#uploadFileParent').attr("data-tooltip","重新上傳");
-                $("#uploadName").html("<span style='color:#ffffff;margin-left:5px;white-space: nowrap;'>"+name+"</span><i class='delete icon' style='position: relative;left:5px;cursor:pointer;color:#ffffff' onclick='clear_uploadFile()'></i>");
-                var downloadURL = uploadTask.snapshot.downloadURL;
-                $('#uploadFileInput').val("");
-                $("#uploadFileParent").data({
-                  file_id : newfile.key,
-                  file_url : downloadURL,
-                  file_name : name
-                });
-              })
-
-            }
-        });
-      })
-	</script>
-	
 	<!--資訊送出-->
 	
 	<!--資訊列表-->
 	<div id="board_info">
     <transition name="fade">
-	  <i v-show="is_nav && info.length" style="position: absolute; right:-5.5%; top:14px;z-index:55" class="nav_i ui orange help circle icon" data-title="資訊列表" data-content="infometro顯示資訊的地方，在編輯模式下，您可以對資訊快速按兩下，以修改資訊。"></i>
-      </transition>
-		<div :id="item['.key']" v-for="(item, index) in info_sort_filter" :key="item['.key']"  @click="info_active=item['.key']" class="board_list ui vertical segment  clear">
+		  <i v-show="is_nav && info.length" style="position: absolute; right:-5.5%; top:14px;z-index:55" class="nav_i ui orange help circle icon" data-title="資訊列表" data-content="infometro 資訊牆，在編輯模式下，您可以對資訊快速按兩下修改資訊，你也可以透過快速鍵ctrl+x、ctrl+c、ctrl+v ，將資訊移動到別的地方去 。"></i>
+    </transition>
+		<div :id="item['.key']" v-for="(item, index) in info_sort_filter" :key="item['.key']"  @click="info_active=item['.key']" class="board_list ui vertical segment clear">
 			<div class="board_message">
-			    <div :style="{color : line_color}" class="active_left" v-show="info_active==item['.key']"></div>
+			  <div :style="{color : line_color}" class="active_left" v-show="info_active==item['.key']"></div>
 				<img v-if="users.photo" class="ui left floated image transition mini" :src="users.photo">
-				<div class="info_message" @dblclick="edit_info(item,'dbl',$event)">
+				<div :class="{mh_40 : item.url_info }" class="info_message" @dblclick="edit_info(item,'dbl',$event)">
+					<p v-if="img_file(item.file_name)">
+						<a :href="item.file_url" target="_blank"><img style="width:100%;" :src="item.file_url" ></a>
+					</p>
 					<p class="content" v-html="$options.filters.message_filter(item.message)"></p>
 					<p class="content textarea ui form" :style="{borderColor:line_color}">
 						<textarea></textarea>
-						<span class="textarea_prompt" >
-								<span class="esc">
-								<i class="ui info circle icon" ></i>按Esc離開編輯
-								</span>
-								<button class="send mini ui button" :style="{backgroundColor:line_color}">送出</button>
-								<button class="cancel mini ui button">取消</button>
+						<span class="textarea_prompt">
+							<span class="esc">
+								<!--	<i class="ui attach icon" ></i>-->
+								<i class="ui info circle icon" ></i>
+								<span>按Esc離開編輯</span>
+							</span>
+							<button class="send mini ui button" style="color:#ffffff; padding: .6em 1.2em;font-size: .8rem;" :style="{backgroundColor:line_color}">送出</button>
+							<button style="padding: .6em 1.2em;font-size: .8rem;" class="cancel mini ui button">取消</button>
 						</span>
 					</p>
 				</div>
@@ -141,49 +91,41 @@
 						<i class="setting icon"></i>
 						<div class="menu">
 							<div @click="edit_info(item,undefined,$event)" class="item"><i class="write icon"></i>編輯</div>
-							<div @click="delete_info(item['.key'],$event)"  class="item"><i class="trash icon"></i>刪除</div>
+							<div @click="delete_info(item['.key'],$event)"  class="item _info_delete"><i class="trash icon"></i>刪除</div>
 							<a v-if="item.url_info" target="_black" :href="'https://www.facebook.com/sharer/sharer.php?u='+item.url_info.url" class="item" style="text-decoration: none;"><i class="facebook square icon"></i>分享</a>
 						</div>
 					</span>
-					<a v-if="item.file_id" :href="item.file_url" target="_blank" style="    position: absolute; bottom: 5px;right: 9px;">
-                      <span class="ui pointing" data-inverted="" :data-tooltip="item.file_name">
-                         <i class="attach icon"></i>
+					<a v-if="item.file_id" :href="item.file_url" target="_blank" style="position: absolute; top:15px; right: -25px;">
+					  <span class="ui pointing" data-position="left center" data-inverted="" :data-tooltip="item.file_name">
+						 <i class="attach icon"></i>
 					  </span>
 					</a>
 				</span>
 
 				<!--包成vue組件2 顯示-->
-				<div v-if="item.url_info" class="ui items" :class="get_youtube_embed(item)" style="background-color: whitesmoke;width: 98%;padding: 0; display:inline-block; margin:0;border: 1px solid #cdcdcd;border-radius: 4px;">
+				<div v-if="item.url_info" class="ui items item_url_info" :class="get_img_embed(item)" style="background-color: whitesmoke;width: 98%;padding: 0; display:inline-block; margin:0;border: 1px solid #cdcdcd;border-radius: 3px;">
 					<div class="item">
 						<div v-if="item.url_info && item.url_info.youtube" class="ui embed" data-source="youtube" :data-id="item.url_info.youtube"></div>
-						<div v-else-if="item.url_info.image" class="ui small image" style="padding-left: 9px; padding-top: 9px;padding-bottom: 9px;">
-							<img :src="item.url_info.image">
+						<div v-else-if="item.url_info.image" class="url_img_parent ui small image" >
+							<img class="url_img">
 <!--							<i class="video play outline icon" style="position: absolute;top: 1em;left: 1em;font-size: 4em; color:rgb(247, 247, 247);"></i>-->
 						</div>
 						<div class="content" style=" position: relative;padding-left: 1em;padding-right: 1.6em; padding-bottom: 8px;">
-								<a :href="item.url_info.url" target="_blank" class="header" style="margin-top: 6px; font-size: 1.1em;color: #676868;">{{item.url_info.title}}</a>
-								<div class="meta"><span>{{item.url_info.url_parent}}</span></div>
-								<!-- v-html有風險要改掉，推社交前要拿掉 -->
-								<div v-if="item.url_info.description" class="extra" v-html="item.url_info.description"></div>
-								<div class="url_remove">
-										<a class="ui right corner label" @click="item.url_info=''" style="border-color: transparent" >
-												<i class="remove icon" style="color: rgb(1, 1, 1);cursor: pointer;"></i>
-										</a>
-								</div>
+							<a :href="item.url_info.url" target="_blank" class="header" style="margin-top: 8px; font-size: 1.1em;color: #676868;">{{item.url_info.title}}</a>
+							<div class="meta"><span>{{item.url_info.url_parent}}</span></div>
+							<!-- v-html有風險要改掉，推社交前要拿掉 -->
+							<div v-if="item.url_info.description" class="multiple-ellipsis">
+								<span class="multiple-ellipsis-text" v-html="item.url_info.description"></span>
+							</div>
+							<div class="url_remove">
+								<a class="ui right corner label" @click="item.url_info=''" style="border-color: transparent" >
+									<i class="remove icon" style="color: rgb(1, 1, 1);cursor: pointer;"></i>
+								</a>
+							</div>
 						</div>
 					</div>
 				</div>
 				<!--包成vue組件2 顯示-->
-			</div>
-			<div class="_delete_info ui inverted dimmer">
-				<div class="content">
-					<div class="center">
-						<i class="trash outline icon" style="font-size: 1.8em;margin-bottom: 13px;color:#000;cursor: default"></i>
-						<div style="margin-bottom:20px;color:#000;">確定要刪除資料？</div>
-						<button class="send mini ui button" :style="{backgroundColor:line_color}">刪除</button>
-						<button class="cancel mini ui button">取消</button>
-					</div>
-				</div>
 			</div>
 		</div>
 	</div>

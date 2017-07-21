@@ -1,16 +1,11 @@
-<div id="board1" :style="{borderTopColor:master_line_color}">
+<div id="board1">
   <div id="board_line_parent">
     <div id="board_line">
-      <i v-show="!is_master()" :style="{backgroundColor:line_color}"></i>
-      <div v-if="is_master()" >
-         <div v-if="mode==1" id="border_line_name" class="board_name master_big" @mousedown="edit_name($event,'line')">{{ line_name }}</div>
-         <div v-else class="board_name master_big">{{ line_name }}</div>
-         <textarea id="board_line_textarea" class="edit_textarea board_master">{{ line_name }}</textarea>
-      </div>
-      <div v-else class="board_name">
+      <i :style="{backgroundColor:line_color}"></i>
+      <div class="board_name">
         <div v-if="mode==1" id="border_line_name" @mousedown="edit_name($event,'line')">{{ line_name }}</div>
         <div v-else>{{ line_name }}</div>
-        <textarea id="board_line_textarea" class="edit_textarea">{{ line_name }}</textarea>
+        <textarea id="board_line_textarea">{{ line_name }}</textarea>
       </div>
     </div>
     <transition name="fade">
@@ -18,27 +13,26 @@
     </transition>
     <div id="board_edit" onclick="vm.mode_click()" @dragleave="allowDropLeave($event)" @dragover="allowDrop($event)" @drop="drop($event)"><div class="border_area" :data-tooltip="mode_txt()" data-position="right center"><i :class="mode_class()" class=" icon"></i></div></div>
     <transition name="fade">
-        <i v-show="is_nav" style="position: absolute; bottom:8px; right:0;" class="nav_i ui orange help circle icon" data-title="切換操作模式" data-content="操作模式目前有『一般模式』及『編輯模式』，在編輯模式下，可以彈性操作大部份的編輯動作，例如，您可以將『地鐵站點』拖曳到其他支線來更換位置。在文字資訊的地方，點擊兩下也可快速修改文字。"></i>
+			<i v-show="is_nav" style="position: absolute; bottom:8px; right:0;" class="nav_i ui orange help circle icon" data-title="切換操作模式" data-content="操作模式目前有『一般模式』及『編輯模式』，在編輯模式下，可以彈性操作大部份的編輯動作，例如在文字資訊的地方，點擊兩下也可快速修改文字。"></i>
     </transition>
-
   </div>
   <div id="board_tag_name">
-    <div id="tag_name" v-if="metro_name">
+    <div id="tag_name" v-if="loading_blueprint">
       <i :style="{backgroundColor:line_color}"></i>
       <div id="tag_name_info">
         <div v-if="mode==1" id="border_metro_name" @mousedown="edit_name($event,'metro')">{{metro_name}}</div>
         <div v-else>{{metro_name}}</div>
-        <textarea class="edit_textarea" id="board_metro_textarea">{{ metro_name }}</textarea>
+        <textarea id="board_metro_textarea">{{ metro_name }}</textarea>
         <div>資訊共 {{info_count}} 筆</div>
         <div>建立時間：<span>{{metro_create}}</span></div>
       </div>
-      <div id="tag_delete_metro"><a @click="delete_metro(key_metro)" class="default_a">刪除</a></div>
+      <div v-if="vm.mode==1" id="tag_delete_metro"><a @click="delete_metro(key_metro)" class="default_a">刪除</a></div>
     </div>
     <transition name="fade">
       <i v-show="is_nav && mode==1" style="position: absolute; bottom:7px; right:0;" class="nav_i ui orange help circle icon" data-title="修改站名" data-content="目前在編輯模式下，點擊文字兩下可以修改名稱。"></i>
     </transition>
   </div>
-	<div id="board3" style="color:#FF6900" :style="{borderTopColor:master_line_color}">
+	<div id="board3" style="color:#FF6900;border-right: 1px solid #CDCDCD;">
 	<div id="board3_header" :style="{color:line_color}"><i class="heart icon"></i><span class="text">最愛連結</span>
 	</div>
 	<div id="board_favorites">

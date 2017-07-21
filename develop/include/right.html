@@ -1,60 +1,51 @@
-<div class="right_header_line" :style="{borderTopColor:master_line_color}"></div>
-<div class="right_tool">
-  <div class="over"></div>
-  
-  <div class="r_button active" :style="{backgroundColor:master_line_color}">
-    <i class="svg home"><img src="src/static/images/home.svg"></i>
-  </div>
-<!--
-  <div class="r_button" :style="{backgroundColor:master_line_color}">
-    <i class="youtube play icon"></i>
-  </div>
--->
-  <div class="r_button" :style="{backgroundColor:master_line_color}">
-    <i class="svg search"><img src="src/static/images/search.svg"></i>
-  </div>
-<!--
-  <div class="r_button" :style="{backgroundColor:master_line_color}">
-    <i class="comment icon"></i>
-  </div>
--->
-  <div class="r_button" :style="{backgroundColor:master_line_color}">
-    <i class="svg question"><img src="src/static/images/question.svg"></i>
-  </div>
+<div class="right_header_line" ></div>
+<div class="right_tool_parent">
+  <div class="right_tool">
+    <div class="over"></div>
 
-</div>
-
-<div class="right_main">
-  <div class="r_content active">
-    <div style="font-size: 1rem;">重要公告：</div>
-      <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
-      <div style="margin-top:-3px;color:#757575;font-size: .95rem;">※本平台最佳瀏覽器為 <a class="default_a" href="https://www.google.com.tw/chrome/browser/desktop/" target="_blank">Google Chrome</a></div>
-    <div style="margin-top:1px;color:#757575;font-size: .95rem;">※目前還不支援手機版</div>
-   
-    <div style="font-size: 1rem; margin-top:3rem">給我們建議：</div>
-    <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
-      <div class="clearfix" style="margin-top:5px;">
-        <a href="https://goo.gl/forms/p464Om8G1yszy0ji1" target="_blank"><div class="text_b"><i class="write icon"></i>網站使用滿意度調查</div></a>
-        <a href="https://goo.gl/forms/QYfCfG5vZF9CyNP03" target="_blank"><div class="text_b"><i class="comment icon"></i>提供建議</div></a>
+<!--
+    <div class="r_button active" >
+      <i class="svg home"><img src="src/static/images/home.svg"></i>
+    </div>
+-->
+    <div class="r_button active">
+      <i class="lightning icon"></i>
+    </div>
+    <div class="r_button" >
+      <i class="svg search"><img src="src/static/images/search.svg"></i>
+    </div>
+  <!--
+    <div class="r_button" :style="{backgroundColor:line_color}">
+      <i class="comment icon"></i>
+    </div>
+  -->
+    <div class="r_button">
+      <i class="svg question"><img src="src/static/images/question.svg"></i>
+    </div>
+  </div>
+  <div id="right_lightning">
+    <div class="ui from">
+      <div class="field">
+        <textarea rows="5" placeholder="即時資訊"></textarea>
       </div>
-    
-    <div style="font-size: 1rem; margin-top:1.5rem">關注我們：</div>
-    <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
-    <div style="margin-top:5px;">
-      <a href="https://www.facebook.com/infometro.cc/" target="_blank"><button class="ui facebook button mini"><i class="facebook icon"></i> Facebook </button></a>
+      <div class="clearfix">
+        <img style="float:right;position: relative; top: -3px; left: 3px; cursor:pointer;" src="src/static/images/send.png" onclick="lightning_send()" >
+      </div>
     </div>
-    <div style="margin-bottom:20px;"></div>
-    
+    <div class="right_info_line"></div>
   </div>
-<!--
-  <div class="r_content">
-    <div style="font-size: 1rem;">youtube播放列表：</div>
-    <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
-    <div style="color:#757575;font-size: 1rem;">
-      即將推出的功能，您可將youtube影片置放於此。
+</div>
+<div class="right_main">
+  <div class="r_content active" style="padding:0;height: calc( 100% - 157px);">
+    <div @click="lightning_click($event)" class="lightning_item" v-for="(item, index) in lightning_sort">
+       <div class="lightning_active" style="position: absolute; left: 0px; top: 0px; width: 5px; height: 100%; background-image: none; background-color: rgb(255, 105, 0);"></div>
+       <div style="min-height:70px;">
+         <div style=";margin-right:50px;" v-html="$options.filters.message_filter(item.message,'right')"></div>
+         <div style="position:absolute;right:11px;top:6px; width:50px;text-align:right;letter-spacing:-1px; color:#CCCCCC;">{{lightning_create(item.timestamp)}}</div>
+       </div>
+       <div class="lightning_a"><a class="default_a block" @click="delete_lightning(item['.key'],$event)">刪除</a></div>
     </div>
   </div>
--->
   <div class="r_content">
     <div style="font-size: 1rem;">搜尋結果：</div>
     <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
@@ -88,20 +79,13 @@
       <div class="content active">
         <p class="transition visible">目前infometro 的操作說明，位在左邊的導覽功能上(點擊<i class="help circle icon"></i>切換)，若還有疑問，歡迎<a class="default_a" href="https://goo.gl/forms/IcgpVR6znGZQEDls2" target="_blank">留言</a>詢問讓我們知道。</p>
       </div>
-      <div class="title"><i class="dropdown icon"></i> 如何刪除我的帳號 </div>
-      <div class="content">
-        <p class="transition hidden">infometro 目前登入的方式使用facebook帳號進行綁定，您可以在facebook上解除與我們的關係。</p>
-        <p class="transition visible">
-          如果您想完全刪除帳號不留下任何記錄，請<a class="default_a" href="https://goo.gl/forms/IcgpVR6znGZQEDls2" target="_blank">留言</a>給我們，我們將手動為您刪除。
-        </p>
-      </div>
       <div class="title"><i class="dropdown icon"></i> 目前支援的平台/瀏覽器 </div>
       <div class="content">
         <p class="transition hidden">因為infometro正值初步發展期，所以僅針對電腦螢幕的使用者做設計、手機或平版只能用目前的電腦版本下去瀏覽，瀏覽器方面以google 的chrome 會得到較好的速度與體驗。</p>
       </div>
       <div class="title"><i class="dropdown icon"></i> infometro裡的資料安全嗎？</div>
       <div class="content">
-        <p class="transition hidden">安全議題在資訊服務永遠是一項重要的課題，我們雖然正在初始上線階段，但也非常注重用戶的隱私與安全，避免資料遭到入侵與外洩。在登入方面，目前我們只使用facebook帳號做登入，也就是說您不會有密碼被外洩的疑慮，不過請您確保facebook的帳號的安全性，例如：設定兩階段驗證是非常重要的。</p>
+        <p class="transition hidden">安全議題在資訊服務永遠是一項重要的課題，我們雖然正在初始上線階段，但也非常注重用戶的隱私與安全，避免資料遭到入侵與外洩。在登入方面，目前我們只使用google帳號做登入，也就是說您不會有密碼被外洩的疑慮，不過請您確保這些帳號的安全性，例如：設定兩階段驗證。</p>
          <p class="transition hidden">另外，我們採用google的firebase做為核心資料庫，比起將資料架在伺服器上，增加了google技術的保帳性，並在權限方面設定了妥善的控管，讓資料僅限制給本人能夠讀取，也就是目前使用者只能存取自己地鐵裡的資料，別人無法透過其他方式讀取您的資料。</p>
 		  <p class="transition hidden">未來平台升級或開放分享社交功能後，我們也會特別注重資料的延續性，所以請放心使用。不過建議，敏感性的資料，還是不宜放在網路上。</p>
       </div>

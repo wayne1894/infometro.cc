@@ -1,0 +1,33 @@
+header{
+  height: 48px;
+  border-bottom: 1px solid #B6B4B6;
+  position: fixed;
+  width: 100%;
+  background-color: #ffffff;
+  z-index: 500;
+}
+.logo{
+  cursor: pointer;
+}
+  #header_main {
+    margin-top: 8px;
+    margin-left: 10px;
+    padding-left: 17px;
+    img {
+      width: 30px;
+      box-shadow: 0 0 0 1px rgba(0,0,0,.3) inset,0 .1em 0.4em -0.05em rgba(0,0,0,.5);
+    }
+  }
+
+#header_search{
+  width: 480px;
+  border-radius: 0;
+  &:focus{
+    border-color: inherit!important;
+  }
+}
+@media screen and (max-width:700px) {
+  #header_search{
+    width: 300px;
+  }
+}

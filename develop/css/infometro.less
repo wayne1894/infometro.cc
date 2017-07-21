@@ -1,4 +1,4 @@
-@left_width: 120px;
+@left_width: 130px;
 @left_pl : 17px;
 @top_height: 65px;
 @bottom_height: 42px;
@@ -42,7 +42,7 @@ html.re_name{
 body {
   font-family: Microsoft JhengHei;
 }
-@media screen and (max-width:650px) {
+@media screen and (max-width:700px) {
 	body{
 		overflow-x: visible;
 	}
@@ -70,18 +70,19 @@ textarea:focus {
   position: relative;
   height: 100%;
 	//height: calc(~"100% - 42px");
-	width: 100%;
+  width: 100%;
   //overflow-y: scroll;
+  top: 48px;
 }
 #left {
   width: @left_width;
   font-size: 13px;
   height: 100%;
-  position: absolute;
+  top: 46px;
+  position: fixed;
   z-index: 1000;
   #line_parent {
     width: @left_width;
-    position: fixed;
   }
   #logo {
     margin-top: 10px;
@@ -94,10 +95,10 @@ textarea:focus {
   }
   .line_text {
     margin-top: 10px;
-    margin-bottom: 7px;
+    margin-bottom: 2px;
     font-weight: bold;
-    font-size: 14px;
-    color: black;
+    font-size: 12px;
+    color: #898989;
     padding-left: @left_pl;
     position: relative;
     .clearfix();
@@ -119,13 +120,13 @@ textarea:focus {
       position: relative;
       color: black;
       font-weight: bold;
-      height: 20px;
+      height: 22px;
       cursor: pointer;
       padding-left: @left_pl;
       .line_i {
         width: 17px;
         height: 6px;
-        top: 7px;
+        top: 8px;
         position: absolute;
         z-index: 5;
         box-shadow: 0 0 0 1px rgba(0,0,0,.3) inset,0 .1em .1em -.05em rgba(0,0,0,.5);
@@ -139,15 +140,14 @@ textarea:focus {
         }
       }
       .line_a {
-        margin-left: 26px;
-        width: 75%;
+        margin-left: 23px;
+        width: 80%;
         display: block;
-        line-height: 20px;
+        line-height: 22px;
         position: relative;
         z-index: 5;
         color: black;
         padding-right: 8px;
-        height: 20px;
         overflow: hidden;
         white-space: nowrap;
         overflow: hidden !important;
@@ -157,7 +157,7 @@ textarea:focus {
         position: absolute;
         width: 10px;
         height: 10px;
-        top: 0px;
+        top: 1px;
         z-index: 6;
         left: 1px;
         display: none;
@@ -165,9 +165,9 @@ textarea:focus {
       &:hover .tool {
         display: block;
       }
-			.tool.t_check{
-				display: block;
-			}
+      .tool.t_check{
+          display: block;
+      }
 			
       &:hover::after,
       &.check::after {
@@ -261,7 +261,7 @@ textarea:focus {
   font-weight: 400;
   @li_width: 90px;
   height: @top_height;
-  top: 0;
+  top: 48px;
   width: inherit;
   min-width: inherit;
 //  left: @left_width+1;
@@ -274,7 +274,7 @@ textarea:focus {
   background: linear-gradient(#DEDEDE, #F1F1F2);
   border-bottom: 1px solid #CDCDCD;
   position: fixed;
-  z-index: 200;
+  z-index: 600;
   .navOne{
     position: absolute;
     top: 20px;
@@ -356,11 +356,11 @@ textarea:focus {
   			left: -6px;
   			&.a_first {
   				top: 1px;
-  				left: -29px;
+  				left: -39px;
   			}
   			&.a_last {
   				top: 1px;
-  				left: 30px;
+  				left: 40px;
   			}
   			background-color: #DEDEDE;
   			cursor: pointer;
@@ -523,6 +523,20 @@ textarea:focus {
       position: absolute;
     }
   }
+  .line_adj{
+    position: absolute;
+    height: 102%;
+    width: 2px;
+    right: 0px;
+    top: 0;
+    background-color: #cdcdcd;
+    border-right: 1px solid #ffffff;
+  }
+  @media screen and (max-width: 961px) {//991-30
+    .line_adj{
+     display: none; 
+    }
+  }
 }
 #center {
   background-color: #F7F7F7;
@@ -531,9 +545,9 @@ textarea:focus {
   min-height: 100%;
   margin-left: @left_width;
   border: 1px solid #CDCDCD;
-  padding-top: @top_height - 2;
+  padding-top: 63px;
   position: relative;
-	text-align: center;
+  text-align: center;
   #board1,
   #board2,
   #board3 {
@@ -570,17 +584,14 @@ textarea:focus {
       overflow: hidden;
       background-color: #f7f7f7;
       letter-spacing: 1px;
-      &.board_master{
-        font-size: 37px;
-        line-height: 42px;
-        font-weight: bold;
-        width: 99%;
-      }
+    }
+    #border_metro_name{
+      min-height: 19px;
     }
     #board_metro_textarea{
       display: none;
       resize: none;
-      width: 100%;
+      width: 90%;
       border: 0;
       overflow: hidden;
       background-color: #f7f7f7;
@@ -610,13 +621,6 @@ textarea:focus {
         padding-right: 10px;
         letter-spacing: 1px
       }
-      .master_big{
-        font-size: 37px;
-        line-height: 42px;
-        margin-left: -3px;
-        margin-top: -2px;
-        margin-bottom: 13px;
-      }
     }
     #board_edit {
       position: absolute;
@@ -642,19 +646,21 @@ textarea:focus {
       }
     }
     #board_tag_name {
-      height: 100px;
       padding-top: 20px;
       padding-left: 22px;
+			padding-bottom: 10px;
       position: relative;
       #tag_name {
         #tag_name_info {
           display: inline-block;
           vertical-align: top;
           margin-left: 5px;
+          width: 75%;
           >div:first-child {
             margin-bottom: 5px;
             font-size: 18px;
             font-weight: bold;
+						min-height: 18px;
           }
           >div:not(:first-child) {
             line-height: 17px;
@@ -665,7 +671,7 @@ textarea:focus {
         >i {
           width: 18px;
           height: 18px;
-          display: block;
+          display: inline-block;
           background-color: #B3B3B3;
           border-radius: 99em;
           display: inline-block;
@@ -685,6 +691,18 @@ textarea:focus {
       padding-left: 27px;
       padding-bottom: 25px;
       position: relative;
+      
+//      transition: background-color 0.2s ease-out;
+//      textarea{
+//        transition: background-color 0.2s ease-out;
+//      }
+//      &:hover {
+//        background-color: #f7f7f7;
+//        textarea{
+//          background-color: #f7f7f7;
+//        }
+//      }
+
       a:not(.ui):hover{
         text-decoration: underline;
       }
@@ -712,6 +730,7 @@ textarea:focus {
     #board_send_parent {
       padding: 0;
       position: relative;
+      z-index: 56;  
       height: 42px;
       border-bottom: 1px solid #CDCDCD;
       a.item{
@@ -746,6 +765,7 @@ textarea:focus {
       -webkit-flex-direction: column-reverse; /* Safari 6.1+ */
       display: flex;
       flex-direction: column-reverse;
+	  z-index: 5;
       a:not(.ui):hover{
         text-decoration: underline;
       }
@@ -776,9 +796,12 @@ textarea:focus {
         }
         .info_message {
           width: 80%;
-          min-height: 40px;
+          min-height: 110px;
           float: left;
           padding-right: 20px;
+        }
+        .mh_40{
+          min-height: 40px;
         }
         .icon {
           color: #B3B3B3;
@@ -819,7 +842,7 @@ textarea:focus {
           .clearfix();
           display: block;
           padding-top: 5px;
-		  		padding-bottom: 12px;
+		  padding-bottom: 12px;
           button{
             float: right;
             position: relative;
@@ -828,21 +851,9 @@ textarea:focus {
           .esc{
             float: left;
             position: relative;
-            top: -3px;
-            i{
-              color:rgba(34,36,38,.15);
-              cursor: default;
-            }
+            color: #d1d1d1;
           }
         }
-        button{
-            padding: .6em 1.2em;
-            font-size: .8rem;
-            font-weight: normal;
-            &.send{
-              color: white;
-            }
-         }
         .url_remove{
             display: none;
         }
@@ -968,7 +979,7 @@ textarea:focus {
           top: 0;
       }
       &.adj #board2{
-          left: 10px;
+          left: 13px;
       }
       &.adj #board3{
           border-top: 1px dashed #cdcdcd!important;
@@ -978,9 +989,9 @@ textarea:focus {
           width: 280px;
           top: 0;
           #board_favorites {
-              >div {
-                  margin-left: 13px;
-              }
+            >div {
+                margin-left: 13px;
+            }
           }
           #board_search {
               padding-left: 13px;
@@ -988,46 +999,44 @@ textarea:focus {
       }
   }
   #tag_delete_metro{
-    display:none;
-  }
-  @media screen and (max-width:961px) {
-      #board1 {
-          width: 100%;
-          position: relative;
-          border-left: 0;
-          border-right: 0;
-          margin-left: 0;
-          #board_line{
-              width: 368px;
-          }
-          #board_line_parent{
-              &::before{
-                  left: 368px;
-              }
-          }
-      }
-      #board_enter_parent{
-           border-top: 5px solid;
-      }
-      #board_parent{
-          &.adj::before{
-              width: 0px;
-          }
-          &.adj #board2{
-              left: 0;
-          }
-          &.adj #board3 {
-              width: 100%;
-              left: 0!important;
-              border-left: 0;
-              border-right: 0;
-          }
-      }
-      #tag_delete_metro{
-        display: inline-block;
-        float: right;
-        margin-right: 15px;
-      }
+		display: inline-block;
+		position: absolute;
+    width: 33px;
+		right: 3px;
+	}
+  @media screen and (max-width: 991px) {
+		#board1 {
+			width: 100%;
+			position: relative;
+			border-left: 0;
+			border-right: 0;
+			margin-left: 0;
+			#board_line{
+				width: 368px;
+			}
+			#board_line_parent{
+				&::before{
+						left: 368px;
+				}
+			}
+		}
+		#board_enter_parent{
+			border-top: 5px solid #FF6900;
+		}
+		#board_parent{
+			&.adj::before{
+					width: 0px;
+			}
+			&.adj #board2{
+					left: -20px;
+			}
+			&.adj #board3 {
+					width: 100%;
+					left: 0!important;
+					border-left: 0!important;
+					border-right: 0!important;
+			}
+		}
   }
   .right_line_2 {
     position: absolute;
@@ -1042,11 +1051,13 @@ textarea:focus {
   }
   .clearfix();
 }
-@media screen and (min-width:1375px) {
+@media screen and (min-width:1400px) {
   #center {
     width: 72%!important;
   }
 }
+
+
 #bottom {
   background-color: #b2b2b2;
   width: 100%;
@@ -1062,73 +1073,72 @@ textarea:focus {
   #blueprint {
     position: relative;
     padding-left: 15px;
+		padding-top: 1px;
     #blueprint_drag {
       display: inline-block;
     }
-    #blueprint_new {
+    #blueprint_new , #blueprint_import {
       margin-left: 1px;
       padding: 6px;
       position: relative;
       top: 1px;
     }
-    .blueprint_a {
-      color: black;
-      &.check {
-        border-bottom: 1px solid black;
-      }
-      &::before{
-        content: '';
-        position: absolute;
-        top: -10px;
-        right: -10px;
-        bottom: -10px;
-        left: -10px;
-      }
-    }
-    .blueprint_i{
-      &:hover{
-          color: rgba(0, 0, 0, 0.5);
-      }
-       &::after{
-          content: '';
-          position: absolute;
-          top: -10px;
-          right: -10px;
-          bottom: -10px;
-          left: -10px;
-        }
-    }
-    .blueprint_i,
-    .blueprint_input {
-      margin-left: 2px;
-      margin-right: 10px;
-    }
-    .blueprint_input {
-      display: none;
-      width: 98px;
-      .public_input();
-    }
-    .blueprint_list {
-      display: inline-block;
-			margin-right: 3px;
-      &.edit {
-        .blueprint_a,
-        .blueprint_i {
-          display: none;
-        }
-        .blueprint_input {
-          display: block;
-        }
-      }
-      .menu {
-        bottom: 68%;
-//          &::after{
-//            left: 50%;
-//            margin-left: -3px;
-//          }
-      }
-    }
     .clearfix();
+  }
+  .blueprint_a {
+    color: black;
+    &.check {
+      border-bottom: 1px solid black;
+    }
+    &::before{
+      content: '';
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      bottom: -10px;
+      left: -10px;
+    }
+  }
+  .blueprint_i {
+    position: relative;
+    &:hover {
+      color: rgba(0, 0, 0, 0.5);
+    }
+    &::after {
+      content: '';
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      bottom: -10px;
+      left: -10px;
+    }
+  }
+  .blueprint_i,
+  .blueprint_input {
+    margin-left: 2px;
+    margin-right: 10px;
+  }
+  .blueprint_input {
+    display: none;
+    width: 98px;
+    .public_input();
+  }
+  .blueprint_list {
+    display: inline-block;
+    margin-right: 3px;
+    
+    &.edit {
+      .blueprint_a,
+      .blueprint_i {
+        display: none;
+      }
+      .blueprint_input {
+        display: block;
+      }
+    }
+    .menu {
+      bottom: 68%;
+    }
   }
   #copyright {
     position: absolute;
@@ -1151,10 +1161,10 @@ textarea:focus {
   font-family: 'Noto Sans TC', sans-serif;
   font-weight: 700;
   position: fixed;
-  top: 0;
+  top: 48px;
   right: 0;
   height: 100%;
-  height: calc(~"100% - 42px");
+  height: calc(~"100% - 90px");
   padding-bottom: 10px;
   //max-width: 245px;
   width: 275px;
@@ -1179,8 +1189,10 @@ textarea:focus {
     position: relative;
     top: -8px;
   }
-  .right_tool {
+  .right_tool_parent{
     background-color: #CCCCCC;
+  }
+  .right_tool {
     cursor: pointer;
     .r_button {
       float: left;
@@ -1205,7 +1217,7 @@ textarea:focus {
         left: 2px;
       }
     }
-    i.icon.youtube{
+    i.icon.lightning{
       &:before {
         top: 9px;
       }
@@ -1231,6 +1243,9 @@ textarea:focus {
     position: relative;
     height: 100%;
     letter-spacing: 0.5px;
+    a:hover{
+      text-decoration: underline;
+    }
     .r_content{
       display: none;
       padding: 10px;
@@ -1269,11 +1284,64 @@ textarea:focus {
 			height : inherit;
 		}
   }
-  .text_b:hover{
+  .text_b:hover{f
       background-position:0px 36px;
       color:#FFFFFF;
   }
-  
+  #right_lightning{
+    padding: 10px;
+    padding-bottom: 3px;
+//    display: none;
+    position: relative;
+    textarea {
+      border-width: 1px;
+      border-style: solid;
+      border-color: #ccc;
+      height: 90px;
+      width: 100%;
+      font-weight: bold;
+      border-bottom: 1px solid #d0d0d1;
+      border-radius: 0;
+      padding: 5px;
+      font-family: Microsoft JhengHei;
+      font-size: 10px;
+    }
+    textarea:focus{
+      border-color: #ff6900;
+    }
+    .right_info_line{
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width:100%;
+      height:5px;
+      background-image:url(../../static/images/right_1.png);
+    }
+  }
+  .lightning_item{
+    background-color: #eeefef;
+    padding: 5px 10px;
+		word-wrap: break-word;
+		word-break: break-all;
+    position: relative;
+//    border-bottom: 1px solid #d6d6d6;
+    font-size: 10px;
+    font-family: Microsoft JhengHei;
+    &:nth-of-type(odd){
+      background-color: #ffffff;
+    }
+    .lightning_a{
+      text-align: right;
+    }
+    .lightning_active{
+      display: none;
+    }
+    &.active{
+      .lightning_active{
+        display: block;
+      }
+    }
+  }
 }
 #right_search{
   height: 30px;
@@ -1318,7 +1386,7 @@ textarea:focus {
     top: 1px;
   }
 }
-@media screen and (max-width:1375px) {
+@media screen and (max-width:1400px) {
   #right {
     top: auto;
     bottom: 0px;
@@ -1434,6 +1502,26 @@ i.orange.icon {
     width: 100%;
   }
 }
+.default_a.block{
+  color: #000000;
+  &:hover{
+    color: #000000;
+    &::after {
+      border-bottom: 1px solid #000000;
+    }
+  }
+}
+._modal_info{
+  button{
+    padding: .6em 1.2em!important;
+    font-size: .8rem!important;
+    font-weight: normal!important;
+    &.send{
+      color: white!important;
+    }
+ }
+}
+
 .left_inherit{
   left: inherit!important
 }
@@ -1442,14 +1530,72 @@ i.orange.icon {
   font-size: 1.1em!important;
 }
 
+.video_icon{
+  position: absolute;
+  top: 50%;
+	margin-top: -5px!important;
+  left: 0;
+  width: 106%!important;
+  z-index: 2;
+  &::before{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 4;
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    color: #fff;
+    font-size: 2.8rem;
+    text-shadow: 0 2px 10px rgba(34,36,38,.2);
+    -webkit-transition: opacity .5s ease,color .5s ease;
+    transition: opacity .5s ease,color .5s ease;
+    z-index: 10;
+  }
+}
+
 #board2 .ui.items>.item>.content>a.header:hover{
   color: black;
 }
-.extra{
-  word-wrap: break-word;
-  word-break: break-all;
+/* multiple ellipsis */
+.multiple-ellipsis {
+  height: 2.8em;
+  line-height: 1.4;
+  overflow: hidden;
+  box-sizing: content-box;
 }
-
+ 
+.multiple-ellipsis::before {
+  content: "";
+  float: left;
+  height: 2.8em;
+  width: 5px;
+}
+.multiple-ellipsis::after {
+  background: -webkit-linear-gradient(left, rgba(255,255,255,0) 0, #f5f5f5 50%);
+  background: -moz-linear-gradient(left, rgba(255,255,255,0) 0, #f5f5f5 50%);
+  background: -o-linear-gradient(left, rgba(255,255,255,0) 0, #f5f5f5 50%);
+  background: -ms-linear-gradient(left, rgba(255,255,255,0) 0, #f5f5f5 50%);
+  background: linear-gradient(to right, rgba(255,255,255,0) 0, #f5f5f5 50%);
+  content: "...";
+  float: right;
+  left: 100%;
+  margin-left: -3em;
+  padding-right: 5px;
+  position: relative;
+  text-align: right;
+  top: -1.4em;
+  width: 3em;
+}
+ 
+.multiple-ellipsis-text {
+  float: right;
+  margin-left: -5px;
+  width: 100%;
+}
+ 
+.ps-scrollbar-y-rail{
+  z-index: 5;
+}
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s!important;
 }
@@ -1476,6 +1622,9 @@ i.orange.icon {
 //#board_send_parent input:focus{
 //   border-color: inherit!important;
 // }
+.modal .description{
+	width: 100%;
+}
 #show_event{
   position: fixed;
   bottom: 61px;
@@ -1492,4 +1641,52 @@ i.orange.icon {
       bottom: -1px;
     }
   }
+	.payment.icon{
+		margin: 0 1rem 0 0!important;
+	}
+	.title{
+		text-align: left;
+	}
 }
+
+@media only screen and (max-width: 767px){
+	#show_event{
+		.ui.steps .step {
+			flex-direction: initial!important	
+		}
+	}
+	.ui.items:not(.unstackable)>.item {
+		margin: 0;
+//		flex-direction: inherit;
+	}
+	.ui.items:not(.unstackable)>.item>.image+.content {
+		padding: 0;
+	}
+}
+#board2{
+	.flex_item{
+		 position: relative;
+			.item{
+				flex-direction: column!important;
+		 }
+		.url_img_parent{
+			max-width: 100%!important;
+			width: auto!important;
+			max-height: auto!important;
+		}
+      &.youtube{
+        top: -10px;
+      }
+	}
+	.flex_item_row{
+		position: relative;
+		.item{
+			flex-direction: row!important;
+		}
+		.url_img_parent{
+			max-width: inherit!important;
+			width: 150px!important;
+		}
+	}
+}
+

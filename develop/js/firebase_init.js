@@ -1,64 +1,50 @@
-// Firebase 管理使用者資訊
-//https://firebase.google.com/docs/auth/web/manage-users
-//http://sj82516-blog.logdown.com/posts/1050619
-//https://firebase.google.com/docs/auth/web/manage-users  管理使用者帳戶
-
-//https://phpwolf.blogspot.tw/2017/01/firebase-facebook.html   FB	login教學
-
-//重新驗証用戶 (參考：http://sj82516-blog.logdown.com/posts/1050619)
-
-//firebase CRUD 操作 
-//http://sj82516-blog.logdown.com/posts/1061094
-//https://howtofirebase.com/firebase-data-structures-pagination-96c16ffdb5ca#.2aiv4i4pd   分頁
-
-//http://sj82516-blog.logdown.com/posts/1064788/teaching-firebase-page-four-rest-and-storage  firebase 檔案
-
-//https://firebase.google.com/docs/database/web/offline-capabilities#server-timestamps  firebase 離線功能
-
-//https://firebase.google.com/docs/reference/security/database/    rules進階
-
 var DB
 var user_uid;
-var provider;
+var user_email;
 var isAnonymous;
 
-$(function(){
-	// Initialize Firebase 初始化
-	var config = {
-		apiKey: "AIzaSyAalJEx21SpnVU5q5lW0eTSVPTz18s2Hy8",
-		authDomain: "infometro-cc.firebaseapp.com",
-		databaseURL: "https://infometro-cc.firebaseio.com",
-		storageBucket: "infometro-cc.appspot.com",
-		messagingSenderId: "358423331162"
-	};
-	firebase.initializeApp(config);
+firebase.initializeApp({
+	apiKey: "AIzaSyAalJEx21SpnVU5q5lW0eTSVPTz18s2Hy8",
+	authDomain: "infometro-cc.firebaseapp.com",
+	databaseURL: "https://infometro-cc.firebaseio.com",
+	storageBucket: "infometro-cc.appspot.com",
+	messagingSenderId: "358423331162"
+});
+firebase.auth().onAuthStateChanged(function (data) {
 	DB = firebase.database();
-	//[全域]監聽狀態改變
-	firebase.auth().onAuthStateChanged(function (data) {
-		var page=get_page();
-		if (data) { //使用者已登入
-			user_uid = data.uid;
-			if (data.isAnonymous) { //匿名使用者
-				isAnonymous=true;
-				DB.ref('users/' + data.uid).once('value', function (data) {
-					if (!data.val()) {
-						var fn = _is_login;
-						if (page == "index") fn = location_fn;
-						初始化使用者資訊(fn);
-					} else {
-						if ( page == "main") _is_login();
-					}
-				})
-			} else {
-				if ( page== "main") _is_login();
+	if (data) { //使用者已登入
+		print("User is logined.");
+		user_uid = data.uid;
+		user_email = data.email;
+		if (data.isAnonymous) isAnonymous=true;
+		if(user_uid=="lVAHfyuy4gN4UmiJ7WMYtIwKDts2"){
+		  $.cookie("ga","N",{ expires: 365 });
+		}else{
+          DB.ref('log/').push({
+            users : user_uid,
+            page : get_page(),
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+          });
+        }
+		//user_uid="";
+		if ( get_page()== "main")_is_login();
+		if ( get_page()== "index"){
+			set_location_button();
+			if($.cookie("login")=="Y"){
+					remove_login_button();
+					$.removeCookie("login");
+					location_fn();
+			}else{
+              if(!isAnonymous){
+                $("#google_html").html("已登入Google 直接進入");
+				$("#google_button").css("background-color","#d14836").removeClass("loading");
+              }
 			}
-		} else {
-			print("User is not logined yet.");
-			if ( page == "main") location.replace("/"); //登出
 		}
-	});
-
-})	
+	} else {
+		if ( get_page()== "main") location.replace("/"); //登出
+	}
+});
 
 
 function logout() {
@@ -85,36 +71,68 @@ function location_fn(){
 		location.href = "/:-D";
 	}
 }
+function check_login_button(){
+	if($("#fb_button").hasClass("loading") || $("#google_button").hasClass("loading") || $("#anonymous_button").hasClass("loading"))return true;
+}
+function remove_login_button(){
+	$("#fb_button").removeClass("loading")
+	$("#google_button").removeClass("loading")
+	$("#anonymous_button").removeClass("loading")
+}
 
-function fb_login() {
-	if(DB==undefined) return setTimeout(fb_login,500);
+function google_login(fb_login_before) {
+	if (user_uid != undefined)return location_fn();
+	if(DB==undefined) return setTimeout(google_login,200);
+	if(fb_login_before=="fb_login_before"){
+		
+	}else{
+		if(check_login_button())return
+		$("#google_button").addClass("loading");
+	}
+  var provider = new firebase.auth.GoogleAuthProvider();
+//signInWithPopup signInWithRedirect
+  $.cookie("login", "Y");
+  firebase.auth().signInWithRedirect(provider).then(function(result){
+		location_fn();
+	}).catch(function(error) {
+		remove_login_button();
+	});
+}
+function fb_login() {//已棄用
+	if (user_uid != undefined)return location_fn();
+	if(DB==undefined) return setTimeout(fb_login,200);
+	if(check_login_button())return 
+	$("#fb_button").addClass("loading");
   if (user_uid != undefined && !isAnonymous) return location_fn();
-	if(login_wait)return;
-	login_wait=true
 	//firebase to fb login
-	provider = new firebase.auth.FacebookAuthProvider()
-
+	var provider = new firebase.auth.FacebookAuthProvider();
   //signInWithPopup signInWithRedirect
-  firebase.auth().signInWithPopup(provider).then(function (result) {
-    var user = result.user;
-    DB.ref('users/' + user.uid).once('value', function (data) {
-      if (!data.val()) {
-        初始化使用者資訊(location_fn);
-      } else {
-        location_fn();
-      }
-    })
-  })
+  firebase.auth().signInWithPopup(provider).then(function(result){
+		location_fn();
+	}).catch(function(error) {
+    // Handle Errors here.
+    if(error.code=="auth/account-exists-with-different-credential"){
+			setTimeout(function(){
+				google_login("fb_login_before");
+			},0)
+    }else{
+			remove_login_button();
+		}
+  });
 }
 function anonymous_login() {
-	if(login_wait)return;
-	login_wait=true
-  if(DB==undefined) return setTimeout(anonymous_login,500);
-  if (user_uid != undefined) location_fn();
-  firebase.auth().signInAnonymously();
+	if (user_uid != undefined)return  location_fn();
+	if(DB==undefined) return setTimeout(anonymous_login,200);
+	if(check_login_button())return
+	$("#anonymous_button").addClass("loading");
+  firebase.auth().signInAnonymously().then(function(result){
+		location_fn();
+	}).catch(function(error) {
+		remove_login_button();
+	});
 }
 
-function 初始化使用者資訊(fn) {
+function set_user_info(fn) {
   var user = firebase.auth().currentUser;
   var data = {
     name: user.displayName,
@@ -127,26 +145,24 @@ function 初始化使用者資訊(fn) {
     data.name = "匿名";
   }
   $.cookie("start","Y");
-  DB.ref('users/' + user.uid).set(data).then(初始化藍圖資料(fn));
+  DB.ref('users/' + user_uid).set(data).then(load_blueprint_info(fn));
 }
 
-function 初始化藍圖資料(fn) {
+function load_blueprint_info(fn) {
   var newRef = DB.ref('blueprint/' + user_uid).push();
   var newLine = [];
   newLine.push(line_json("橘線", "#FF6900", true)); //新增第一條線
   newLine[newLine.length - 1].metro.push(metro_json("總站")); //第一條線下面的站
-  newRef.set({ //將他存到藍圖
-    name: "我的地鐵計畫",
-    line: newLine
-  },function(error){
+  newRef.set(blueprint_json("我的地鐵計畫",newLine),function(error){
 	if (typeof fn == "function") fn()
   })
 }
 
-function blueprint_json(name) {
+function blueprint_json(name,line) {
   return {
     name: name,
-    line: []
+    line: line,
+		timestamp: firebase.database.ServerValue.TIMESTAMP
   }
 }
 
@@ -154,14 +170,12 @@ function set_line_root(_line_key, user_uid) { //設定支線擁有者
   DB.ref('info/' + _line_key + "/root").set(user_uid);
 }
 
-function line_json(name, color, master) {
+function line_json(name, color) {
   var _line_key = DB.ref('blueprint/' + user_uid).push().key;
   set_line_root(_line_key, user_uid );
-  if (!master) master = false
   return {
     _key: _line_key,
     name: name,
-    master: master,
     color: color,
     metro: [],
     timestamp: firebase.database.ServerValue.TIMESTAMP
@@ -183,25 +197,6 @@ function get_other_user(other_user_uid, fn) {
     }
   });
 }
-function show_event_fn(title,text){
-  var _color=vm.line_color;
-  if(title==undefined)title="儲存成功";
-  text='<div class="description">'+text+'</div>'
-  if(text==undefined)text="";
-  clearTimeout(window.show_setTimeout);
-  $("#show_event").html('<div style="display:none" class="ui steps"><div class="completed step"><i class="payment icon" style="color:'+_color+'"></i><div class="content"><div class="title">'+title+'</div>'+text+'</div></div></div>');
-
-  $("#show_event .ui").transition({
-    animation : 'fade up',
-    duration  : 800
-  });
-  window.show_setTimeout=setTimeout(function(){
-    $("#show_event .ui").transition({
-      animation : 'fade down',
-      duration  : 1200
-    });
-  },2000);
-}
 
 function blueprint_init(blueprint_fn,load_fn) {
   DB.ref('blueprint/' + user_uid).on("value", function (data) {
@@ -213,7 +208,7 @@ function blueprint_init(blueprint_fn,load_fn) {
       _init[_init.length - 1].key = childData.key;
     });
     if(_action != "load"){
-      if (_init.length == 0) return 初始化藍圖資料();
+      if (_init.length == 0) return load_blueprint_info();
     }
     vm.blueprint = _init;
     var index_array = [];
@@ -248,10 +243,9 @@ function blueprint_init(blueprint_fn,load_fn) {
     if(vm.action==""){
       var _vm_blueprint=vm.blueprint
       for(var i=0;i<_vm_blueprint.length;i++){
-        vm.檢查更新錯誤索引(i,_vm_blueprint);
+        vm.check_error_index(i,_vm_blueprint);
       }
     }
-		//print(_action)
     if (_action == "new_blueprint") { //判斷動作
       var _index = vm.index.length - 1; //移到最後一個
       vm.exchange_blueprint(_index, true); //切換藍圖
@@ -274,7 +268,7 @@ function blueprint_init(blueprint_fn,load_fn) {
     } else if (_action == "new_line") {
       vm.index_update();
       show_event_fn("新增成功","你新增了一條支線");
-      vm.exchange_line(vm.index[vm.index_blueprint].length - 1);
+     vm.exchange_line(vm.index[vm.index_blueprint].length - 1);
     } else if(_action=="delete_line"){
       show_event_fn("刪除成功","你刪除了一條支線");
     } else if (_action == "swap_line") {
@@ -308,36 +302,50 @@ function blueprint_set(){
         sortable["blueprint"] = new Sortable(id("blueprint_drag"), {
           scroll: false,
           animation: 150,
-          forceFallback: false
+          forceFallback: false,
+		  onEnd: function (evt) {
+
+//						var _init=vm.blueprint;
+//						var blueprint_list=$("#blueprint_drag>.blueprint_list");
+//						for(var i=0;i<blueprint_list.length;i++){
+//							var _key=blueprint_list.eq(i).data("key");
+//							for(var j=0;j<_init.length;j++){
+//								if(_key==_init[j].key){
+//									vm.blueprint[j].sort=i;
+//									//DB.ref('blueprint/' + user_uid)
+//									break;
+//								}
+//							}
+//						}
+
+			}
         });
 
       }
 
 }
 
-function _is_login() { //程式進入點
+//程式進入點
+function _is_login() {
   DB.ref('users/' + user_uid).once('value', function (data) { //載入使用者基本資料
     if (data.val()) {
       vm.users = data.val();
-    } else {//沒有會員資料 
-      初始化使用者資訊();
+    } else {//沒有會員資料
+	  set_user_info(_is_login);
+      return false;
     }
   });
-  DB.ref('users_data/' + user_uid).once('value', function (data) { //載入user_data
-    if (data.val()) {
-      if (data.val().index) { //初始化vm.index
-        vm.index = data.val().index;
-        delete data.val().index;
-      }
-    }
+  DB.ref('users_data/' + user_uid +"/index").once('value', function (data) { //載入user_data
+    if (data.val()) vm.index = data.val();
   }).then(function () {
     if ($.cookie('index_blueprint') != undefined) { //預設要載入的藍圖索引
       vm.index_blueprint = $.cookie('index_blueprint');
     }
-    blueprint_init(function () {//這裡是變動藍圖資訊都會執行 
+    blueprint_init(function () {//這裡是變動藍圖資訊都會常態執行的fn
       setTimeout(blueprint_set, 5);
     },function(){//這裡只要vm.load會執行
       start_set();
+      lighning_bind();      
     });
     
   });

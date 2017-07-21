@@ -1,48 +1,34 @@
 <div id="line_parent">
-	<div id="logo"><a href="/"><img class="logo" src="src/static/images/logo_200.png"></a></div>
 	<div id="left_line">
-  <div class="line_text ">
-    <span>主線：</span>
-    <transition name="fade">
-      <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="主線" data-content="主線在一個『地鐵計畫』裡只有一條，它能夠『串聯支線』(此功能尚未推出)，做為您主要分類資訊的依據。"></i>
-    </transition>
-  </div>
-    <ul id="line_drag_master">
-      <li v-for="(item, index) in line" v-if="item.master" :class="{check:index_line==index}" class="line_list" @drop="drop_line($event,index)" @dragleave="allowDropLeave_line($event)" @dragover="allowDrop_line($event)">
-       <input class="line_input" type="text" v-model="item.name">
-         <i class="line_i" :style="{backgroundColor:item.color}"  @click="open_color(index,item.color,'master')" ></i>
-         <a class="line_a" @dblclick="re_name(index,'line',$event,'master')"  @click="exchange_line(index)">{{item.name}}</a>
-      </li>
-    </ul>
 	<div class="line_text">
-       <span>一般支線：</span>
+       <span>所有支線：</span>
        <transition name="fade">
-       <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="一般支線" data-content="一般支線可以有無數條，您可以點擊『新增支線』來新增一條新的支線，做為您分類資訊的依據。另外您也可以拖曳移動它的順序，或者拖曳到下方的地鐵去，藉此移動支線。"></i>
+       <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="一般支線" data-content="您可以點擊『新增支線』來新增一條新的支線，做為您分類資訊的依據。您也可以拖曳移動它的順序，或者拖曳到其他地鐵計畫裡。"></i>
       </transition>
       <transition name="fade">
-        <div v-show="is_nav" style="position: absolute; top: 2px; right: -25px; z-index:55;">
+        <div v-show="is_nav" style="position: absolute; top: 2px; right: 25px; z-index:55;">
           <i style="height: 100%;" class="nav_i custom ui orange film icon" ></i>
-          <div class="ui custom popup hidden" data-img="https://s3-ap-northeast-1.amazonaws.com/infometro.cc/nav/NL3HirBbiz.gif" style="width:150px;min-height:200px;">
+          <div class="ui custom popup hidden" data-img="src/static/images/s3/NL3HirBbiz.gif" style="width:150px;min-height:200px;">
           </div>
         </div>
       </transition>
     </div>
       <ul id="line_drag">
-        <li v-for="(item, index) in line" v-show="!item.master" :class="{check:index_line==index}" class="line_list" @drop="drop_line($event,index)" @dragleave="allowDropLeave_line($event)" @dragover="allowDrop_line($event)" :data-key="item._key" :key="item._key">
-          <div v-if="!item.master" class="tool" @click="delete_line(item._key)">
+        <li v-for="(item, index) in line" :class="{check:index_line==index}" class="line_list" @drop="drop_line($event,index)" @dragleave="allowDropLeave_line($event)" @dragover="allowDrop_line($event)" :data-key="item._key" :key="item._key">
+          <div class="tool" @click="delete_line(item._key)">
             <i class="trash outline mini small icon"></i>
           </div>
-          <input v-if="!item.master" class="line_input" type="text" v-model="item.name">
-          <i v-if="!item.master" class="line_i" @click="open_color(index,item.color)" :style="{backgroundColor:item.color}" ></i>
-          <a v-if="!item.master" class="line_a" @dblclick="re_name(index,'line',$event)" @click="exchange_line(index)">{{item.name}}</a>
+          <input class="line_input" type="text" v-model="item.name">
+          <i class="line_i" @click="open_color(index,item.color)" :style="{backgroundColor:item.color}" ></i>
+          <a class="line_a" @dblclick="re_name(index,'line',$event)" @click="exchange_line(index)">{{item.name}}</a>
         </li>
       </ul>
 	</div>
 	<div id="new_line_parent">
 	  <a id="new_line" class="default_a" @click="new_line()">新增支線</a>
 	  <transition name="fade">
-       <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="新增支線" data-content="新增一條支線，在色塊的地方『點擊兩下』可以更換顏色，名字處點擊兩下也可以更換名字。"></i>
-      </transition>
+       <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="新增支線" data-content="新增一條支線，名字處點擊兩下可以更換名字，在編輯模式下可以更換支線的顏色。"></i>
+    </transition>
 	</div>
 </div>
 <div id="edit_parent">
@@ -50,7 +36,7 @@
   <a class="left_icon" data-tooltip="登出"  data-position="right center" onclick="$('.page.dimmer:first').dimmer('toggle');"><i class="power icon"></i></a>
   
     <transition name="fade">
-    <i v-show="is_nav" style=" position: absolute; bottom:9px; right:-42px" class="nav_i ui orange help circle icon" data-title="地鐵計畫" data-content="『地鐵計畫』為infometro 儲存資料最底層單位，其下可以新增無數條『支線』(在左邊新增支線的地方)，每條支線下有『地鐵站點』，站點下則可以新增資訊。按滑鼠右鍵可以有細節的選項(刪除)。"></i>
+    <i v-show="is_nav" style=" position: absolute; bottom:9px; right:-42px" class="nav_i ui orange help circle icon" data-title="地鐵計畫" data-content="『地鐵計畫』為infometro 儲存資料的底層單位，其下可以新增『支線』和『地鐵站』。"></i>
   </transition>
   <transition name="fade">
     <i v-show="is_nav" style=" position: absolute; bottom:9px; right:-63px" class="nav_i ui orange help circle icon" data-title="新增一個地鐵計畫" data-content="點擊『+號』可以新增一個地鐵計畫，通常地鐵計畫是管理不同領域的資訊，相同領域的資訊我們可以用支線來管理。"></i>

@@ -1,6 +1,6 @@
 {
   "name": "infometro.cc",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "資訊地鐵站",
   "main": "index.html",
   "repository": {
@@ -9,13 +9,15 @@
   },
   "author": "",
   "homepage": "http://infometro.cc",
-  "devDependencies": {
+  "dependencies": {
     "gulp": "^3.9.1",
-    "gulp-file-include": "^1.0.0",
+		"gulp-file-include": "^1.0.0",
     "gulp-less": "^3.3.0",
     "gulp-minify-css": "^1.2.4",
     "gulp-plumber": "^1.1.0",
     "gulp-uglify": "^2.0.1",
-    "gulp-webserver": "^0.9.1"
+    "gulp-webserver": "^0.9.1",
+    "gulp-concat": "^2.6.1",
+    "merge-stream": "^1.0.1"
   }
 }

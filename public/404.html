@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<title>infometro.cc | 資訊地鐵站</title>
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+<meta charset="UTF-8">
+<!--<meta http-equiv="X-UA-Compatible" content="IE=edge">-->
+<meta name="viewport" content="width=800, initial-scale=1">
+<meta name="description" content="infometro 是一款利用地鐵圖來組織資訊的網站，用來保存創意和想法。">
+<meta name="keywords" content="線上記事本,網路記事本,資訊收藏,雲端記事本,雲端筆記">
+
+<meta property="fb:app_id" content="438516566511315">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://infometro.cc">
+<meta property="og:image" content="https://infometro.cc/src/static/images/s3/fb_og.png">
+<meta property="og:title" content="infometro.cc 資訊地鐵站">
+<meta property="og:description" content="infometro 是一款利用地鐵圖來整理資訊的網站，用來保存創意和想法。">
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.16/css/perfect-scrollbar.min.css" type="text/css" />
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.16/js/perfect-scrollbar.jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.3/vue.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vuefire/1.3.1/vuefire.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/Sortable/1.5.1/Sortable.min.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/4.1.3/firebase.js"></script>
+<script src="src/static/js/jquery.jrumble.1.3.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.5.0/velocity.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/locale/zh-tw.js"></script>
+
+<!-- jquery-color-pick -->
+<link rel="stylesheet" type="text/css" href="src/static/css/colpick.css" />
+<script src="src/static/js/colpick.js"></script>
+<!-- jquery-color-pick -->
+
+
+<script>
+	function print(a){
+		console.log(a)
+	}
+	function test(msg){//測試用
+		$("#test").remove();
+		$(document.body).append("<div id='test' style='width:50px;height:50px;position:fixed;top:0px;left:0px; z-index:10000;color:red;'>"+msg+"</div>");
+	}
+	function id(a){
+		return document.getElementById(a);
+	}
+	function get_test(){
+		if(location.href.indexOf("localhost:1313")>-1){//代表測試環境
+			return "test"
+		}
+	}
+	
+	//	if (location.protocol != 'https:'){
+	//		if(window.location.hostname!="localhost" && window.location.hostname!="127.0.0.1" ){
+	//				location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+	//		}
+	//	}  
+</script>
+
+
+
+
+ <script>
+
+	 if(get_test()!="test" && $.cookie("ga")!="N"){
+
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-100413527-1', 'auto');
+      ga('send', 'pageview');
+
+	}else{
+       print("沒載入GA")
+    }
+</script>
+<script src="src/build/js/firebase_init.js?v=v3ewfewf"></script>
+<link rel="stylesheet" type="text/css" href="src/build/css/header.css?v=v3ewfewf" />
+<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=v3ewfewf" />
+</head>
+<body>
+<header>
+  	<div id="header_main">
+  		<a href="/"><img class="logo" src="src/static/images/logo_200.png"></a>
+      <div class="ui mini action input" style="border-color: #FF6900;left: 69px;top: -10px;">
+        <input id="header_search" type="text" placeholder="搜尋支線、地鐵">
+        <button class="ui mini icon button"><i class="search icon"></i></button> 
+      </div>
+			<div id="header_area">
+			</div>
+  	</div>
+</header>
+<div id="main">
+  <div id="left">
+    <div id="line_parent">
+	<div id="left_line">
+	<div class="line_text">
+       <span>所有支線：</span>
+       <transition name="fade">
+       <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="一般支線" data-content="您可以點擊『新增支線』來新增一條新的支線，做為您分類資訊的依據。您也可以拖曳移動它的順序，或者拖曳到其他地鐵計畫裡。"></i>
+      </transition>
+      <transition name="fade">
+        <div v-show="is_nav" style="position: absolute; top: 2px; right: 25px; z-index:55;">
+          <i style="height: 100%;" class="nav_i custom ui orange film icon" ></i>
+          <div class="ui custom popup hidden" data-img="src/static/images/s3/NL3HirBbiz.gif" style="width:150px;min-height:200px;">
+          </div>
+        </div>
+      </transition>
+    </div>
+      <ul id="line_drag">
+        <li v-for="(item, index) in line" :class="{check:index_line==index}" class="line_list" @drop="drop_line($event,index)" @dragleave="allowDropLeave_line($event)" @dragover="allowDrop_line($event)" :data-key="item._key" :key="item._key">
+          <div class="tool" @click="delete_line(item._key)">
+            <i class="trash outline mini small icon"></i>
+          </div>
+          <input class="line_input" type="text" v-model="item.name">
+          <i class="line_i" @click="open_color(index,item.color)" :style="{backgroundColor:item.color}" ></i>
+          <a class="line_a" @dblclick="re_name(index,'line',$event)" @click="exchange_line(index)">{{item.name}}</a>
+        </li>
+      </ul>
+	</div>
+	<div id="new_line_parent">
+	  <a id="new_line" class="default_a" @click="new_line()">新增支線</a>
+	  <transition name="fade">
+       <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="新增支線" data-content="新增一條支線，名字處點擊兩下可以更換名字，在編輯模式下可以更換支線的顏色。"></i>
+    </transition>
+	</div>
+</div>
+<div id="edit_parent">
+  <a :class="{ active: is_nav }" onclick="vm.is_nav=!vm.is_nav" class="left_icon navigation" data-tooltip="切換導覽" data-position="right center"><i class="help circle icon"></i></a>
+  <a class="left_icon" data-tooltip="登出"  data-position="right center" onclick="$('.page.dimmer:first').dimmer('toggle');"><i class="power icon"></i></a>
+  
+    <transition name="fade">
+    <i v-show="is_nav" style=" position: absolute; bottom:9px; right:-42px" class="nav_i ui orange help circle icon" data-title="地鐵計畫" data-content="『地鐵計畫』為infometro 儲存資料的底層單位，其下可以新增『支線』和『地鐵站』。"></i>
+  </transition>
+  <transition name="fade">
+    <i v-show="is_nav" style=" position: absolute; bottom:9px; right:-63px" class="nav_i ui orange help circle icon" data-title="新增一個地鐵計畫" data-content="點擊『+號』可以新增一個地鐵計畫，通常地鐵計畫是管理不同領域的資訊，相同領域的資訊我們可以用支線來管理。"></i>
+  </transition>
+</div>
+<div class="left_line"></div>
+  </div>
+  <div id="center">
+    <div id="top">
+      <div class="triangle left"></div>
+  <div id="top_tag_parent">
+    <ul id="top_tag" :class="{eqonly2 : metro.length<=2 }">
+      <li v-for="(item, index) in metro" :class="{ active: key_metro == item._key }" class="metro_list" :data-key="item._key" :data-index="index" :key="item._key">
+        <span v-if="index==0" class="add a_first" @click="new_metro(0)"><img src="src/static/images/+.png"></span>
+        <span v-if="metro.length>1" :class="{eqfirst : index==0}"  class="top_join"><span v-if="mode == 1 && index>0" class="add" @click="new_metro(index)"><img src="src/static/images/+.png"></span></span>
+        <i class="top_metro" :style="{color:line_color}" @click="exchange_metro(item._key)"></i>
+        <span class="top_name" @dblclick="re_name(index,'metro',$event)">{{item.name}}</span>
+        <input class="metro_input" type="text" v-model="item.name">
+
+        <span v-if="metro.length==index+1" class="add a_last" @click="new_metro(metro.length)"><img src="src/static/images/+.png"></span>
+      </li>
+    </ul>
+    <transition name="fade">
+    <i v-show="is_nav" v-show="is_nav" style="position: absolute; left:15px; margin-left:0px; top:6px;z-index:55" class="nav_i ui orange help circle icon" data-title="地鐵站" data-content="地鐵站是infometro資料儲存的節點，您可以組織一系列相關聯的資訊分類。您也可以透過拖曳來安排彼此的位置、刪除或拖到其他支線裡去。"></i>
+    </transition>
+    <transition name="fade">
+      <div v-show="is_nav" style="position: absolute; left:37px; top:6px; margin-left:0px; z-index:55" >
+        <i style="height: 100%;" class="nav_i custom ui orange film icon" ></i>
+        <div class="ui custom popup hidden" data-img="src/static/images/s3/LHXNGI0XjP.gif" style="width:550px;max-width:550px;min-height:200px;">
+        </div>
+     </div>
+    </transition>
+  </div>
+<div class="triangle right"></div>
+<div class="line_adj"></div>
+    </div>
+    <div id="board_parent" v-show="action!='load'">
+    	<div id="board2">
+          <div id="board1">
+  <div id="board_line_parent">
+    <div id="board_line">
+      <i :style="{backgroundColor:line_color}"></i>
+      <div class="board_name">
+        <div v-if="mode==1" id="border_line_name" @mousedown="edit_name($event,'line')">{{ line_name }}</div>
+        <div v-else>{{ line_name }}</div>
+        <textarea id="board_line_textarea">{{ line_name }}</textarea>
+      </div>
+    </div>
+    <transition name="fade">
+      <i v-show="is_nav && mode==1" style="position: absolute; bottom:7px; left:4px;" class="nav_i ui orange help circle icon" data-title="修改支線名" data-content="目前在編輯模式下，點擊文字兩下可以修改名稱。"></i>
+    </transition>
+    <div id="board_edit" onclick="vm.mode_click()" @dragleave="allowDropLeave($event)" @dragover="allowDrop($event)" @drop="drop($event)"><div class="border_area" :data-tooltip="mode_txt()" data-position="right center"><i :class="mode_class()" class=" icon"></i></div></div>
+    <transition name="fade">
+			<i v-show="is_nav" style="position: absolute; bottom:8px; right:0;" class="nav_i ui orange help circle icon" data-title="切換操作模式" data-content="操作模式目前有『一般模式』及『編輯模式』，在編輯模式下，可以彈性操作大部份的編輯動作，例如在文字資訊的地方，點擊兩下也可快速修改文字。"></i>
+    </transition>
+  </div>
+  <div id="board_tag_name">
+    <div id="tag_name" v-if="loading_blueprint">
+      <i :style="{backgroundColor:line_color}"></i>
+      <div id="tag_name_info">
+        <div v-if="mode==1" id="border_metro_name" @mousedown="edit_name($event,'metro')">{{metro_name}}</div>
+        <div v-else>{{metro_name}}</div>
+        <textarea id="board_metro_textarea">{{ metro_name }}</textarea>
+        <div>資訊共 {{info_count}} 筆</div>
+        <div>建立時間：<span>{{metro_create}}</span></div>
+      </div>
+      <div v-if="vm.mode==1" id="tag_delete_metro"><a @click="delete_metro(key_metro)" class="default_a">刪除</a></div>
+    </div>
+    <transition name="fade">
+      <i v-show="is_nav && mode==1" style="position: absolute; bottom:7px; right:0;" class="nav_i ui orange help circle icon" data-title="修改站名" data-content="目前在編輯模式下，點擊文字兩下可以修改名稱。"></i>
+    </transition>
+  </div>
+	<div id="board3" style="color:#FF6900;border-right: 1px solid #CDCDCD;">
+	<div id="board3_header" :style="{color:line_color}"><i class="heart icon"></i><span class="text">最愛連結</span>
+	</div>
+	<div id="board_favorites">
+		<div class="favorites_list" v-for="(item, index) in info_favorites">
+			<a :href="item.url_info.url" :title="item.url_info.title" target="_blank"  v-once>
+				<span><img :src="'https://www.google.com/s2/favicons?domain_url='+item.url_info.url"  v-once></span>
+				<span v-once>{{item.url_info.title}}</span> 
+				<div class="os card" os-tooltip="some text that hover to be seen" options="ctrl.topPosition" style="padding: 10px">top</div>
+			</a>
+		</div>
+	</div>
+	<div id="board_search">
+		<div class="ui mini action input" :style="{borderColor:line_color}">
+			<input v-model.trim="filter_search" type="text" placeholder="Filter...">
+			<button v-if="filter_search" class="ui mini icon button" :style="{backgroundColor:line_color}" >
+				<i class="filter icon"></i>
+			</button>
+			<button v-else class="ui mini icon button" >
+				<i class="filter icon"></i>
+			</button>
+		</div>
+	</div>
+</div>
+</div>
+          	<!--資訊輸入-->
+	<div id="board_enter_parent">
+		<div id="board_img"><img v-if="users.photo" :src="users.photo"></div>
+		<div id="board_enter">
+		  <i style="display:none;" class="idea icon"></i>
+		  <i style="display:none;" class="world loading icon"></i> 
+		  <textarea id="board_textarea" placeholder="輸入資訊"></textarea>
+		</div>
+		<!--包成vue組件1 輸入-->
+		<div id="url_info_board" v-if="url_info" :class="get_img_embed_url()" class="ui items" style="background-color: whitesmoke;width: 95%; margin: .5em 0;">
+			<div class="item">
+				<div v-if="url_info.image" class="ui small image url_img_parent" style="padding-left: 9px; padding-top: 9px; padding-bottom:9px;">
+				  <img class="url_img">
+				  <i v-if="url_info.youtube" class="video_icon video play icon"></i>
+				</div>
+				<div class="content" style=" position: relative;padding-left: 1em;padding-right: 1.6em; padding-bottom: 8px;">
+					<a :href="url_info.url" target="_blank" class="header" style="margin-top: 6px;color: #676868; font-size: 1.1em;">{{url_info.title}}</a>
+					<div class="meta"><span>{{url_info.url_parent}}</span></div>
+					<!-- v-html有風險要改掉，推社交前要拿掉 -->
+					<div v-if="url_info.description" class="multiple-ellipsis" >
+					  <span class="multiple-ellipsis-text" v-html="url_info.description"></span>
+					</div>
+					<div>
+						<a class="ui right corner label" @click="vm.url_info=''" style="border-color: transparent" >
+							<i class="remove icon" style="color: rgb(1, 1, 1);cursor: pointer;"></i>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--包成vue組件1 輸入-->
+		<transition name="fade">
+  		<i v-show="is_nav" style="position: absolute; right:0%; top:6px;z-index:55" class="nav_i ui orange help circle icon" data-title="新增資訊" data-content="在任何一個地鐵站點底下，你可以在這裡新增資訊。貼上網址後，會為您擷取網站的文字資料，請稍待片刻。"></i>
+    </transition>
+
+	</div>
+	<!--資訊輸入-->
+	
+	<!--資訊送出-->
+	<div id="board_send_parent">
+      <div class="ui icon menu">
+          <div id="progress" class="ui bottom attached progress" style="position: absolute;width:100%; border-radius : 0;!important">
+            <div class="bar" style="min-width: 0%;" :style="{background:line_color}"></div>
+          </div>
+          <div class="item" :style="{color:line_color}">
+            <div id="uploadFileParent" class="ui action input" data-inverted="" data-tooltip="上傳檔案-拖曳或點擊" :style="{borderColor:line_color}">
+              <input id="uploadFileInput" type="file">
+              <div id="uploadButton" class="ui icon">
+                <i class="attach icon"></i>
+              </div>
+            </div>
+            <div id="uploadName"></div>
+          </div>
+          <div class="right item">
+              <div id="board_send" :style="{backgroundColor:line_color}" onclick="vm.new_info()" class="ui mini orange button">送出</div>
+          </div>
+      </div>
+	</div>
+	<!--資訊送出-->
+	
+	<!--資訊列表-->
+	<div id="board_info">
+    <transition name="fade">
+		  <i v-show="is_nav && info.length" style="position: absolute; right:-5.5%; top:14px;z-index:55" class="nav_i ui orange help circle icon" data-title="資訊列表" data-content="infometro 資訊牆，在編輯模式下，您可以對資訊快速按兩下修改資訊，你也可以透過快速鍵ctrl+x、ctrl+c、ctrl+v ，將資訊移動到別的地方去 。"></i>
+    </transition>
+		<div :id="item['.key']" v-for="(item, index) in info_sort_filter" :key="item['.key']"  @click="info_active=item['.key']" class="board_list ui vertical segment clear">
+			<div class="board_message">
+			  <div :style="{color : line_color}" class="active_left" v-show="info_active==item['.key']"></div>
+				<img v-if="users.photo" class="ui left floated image transition mini" :src="users.photo">
+				<div :class="{mh_40 : item.url_info }" class="info_message" @dblclick="edit_info(item,'dbl',$event)">
+					<p v-if="img_file(item.file_name)">
+						<a :href="item.file_url" target="_blank"><img style="width:100%;" :src="item.file_url" ></a>
+					</p>
+					<p class="content" v-html="$options.filters.message_filter(item.message)"></p>
+					<p class="content textarea ui form" :style="{borderColor:line_color}">
+						<textarea></textarea>
+						<span class="textarea_prompt">
+							<span class="esc">
+								<!--	<i class="ui attach icon" ></i>-->
+								<i class="ui info circle icon" ></i>
+								<span>按Esc離開編輯</span>
+							</span>
+							<button class="send mini ui button" style="color:#ffffff; padding: .6em 1.2em;font-size: .8rem;" :style="{backgroundColor:line_color}">送出</button>
+							<button style="padding: .6em 1.2em;font-size: .8rem;" class="cancel mini ui button">取消</button>
+						</span>
+					</p>
+				</div>
+				<span class="right_icon">
+					<span :style="{color : line_color}"><i @click="favorite_info(item)" :class="{active : item.favorite }" class="like icon" :style="{color : line_color}"></i></span>
+					<span class="ui top right pointing dropdown">
+						<i class="setting icon"></i>
+						<div class="menu">
+							<div @click="edit_info(item,undefined,$event)" class="item"><i class="write icon"></i>編輯</div>
+							<div @click="delete_info(item['.key'],$event)"  class="item _info_delete"><i class="trash icon"></i>刪除</div>
+							<a v-if="item.url_info" target="_black" :href="'https://www.facebook.com/sharer/sharer.php?u='+item.url_info.url" class="item" style="text-decoration: none;"><i class="facebook square icon"></i>分享</a>
+						</div>
+					</span>
+					<a v-if="item.file_id" :href="item.file_url" target="_blank" style="position: absolute; top:15px; right: -25px;">
+					  <span class="ui pointing" data-position="left center" data-inverted="" :data-tooltip="item.file_name">
+						 <i class="attach icon"></i>
+					  </span>
+					</a>
+				</span>
+
+				<!--包成vue組件2 顯示-->
+				<div v-if="item.url_info" class="ui items item_url_info" :class="get_img_embed(item)" style="background-color: whitesmoke;width: 98%;padding: 0; display:inline-block; margin:0;border: 1px solid #cdcdcd;border-radius: 3px;">
+					<div class="item">
+						<div v-if="item.url_info && item.url_info.youtube" class="ui embed" data-source="youtube" :data-id="item.url_info.youtube"></div>
+						<div v-else-if="item.url_info.image" class="url_img_parent ui small image" >
+							<img class="url_img">
+<!--							<i class="video play outline icon" style="position: absolute;top: 1em;left: 1em;font-size: 4em; color:rgb(247, 247, 247);"></i>-->
+						</div>
+						<div class="content" style=" position: relative;padding-left: 1em;padding-right: 1.6em; padding-bottom: 8px;">
+							<a :href="item.url_info.url" target="_blank" class="header" style="margin-top: 8px; font-size: 1.1em;color: #676868;">{{item.url_info.title}}</a>
+							<div class="meta"><span>{{item.url_info.url_parent}}</span></div>
+							<!-- v-html有風險要改掉，推社交前要拿掉 -->
+							<div v-if="item.url_info.description" class="multiple-ellipsis">
+								<span class="multiple-ellipsis-text" v-html="item.url_info.description"></span>
+							</div>
+							<div class="url_remove">
+								<a class="ui right corner label" @click="item.url_info=''" style="border-color: transparent" >
+									<i class="remove icon" style="color: rgb(1, 1, 1);cursor: pointer;"></i>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--包成vue組件2 顯示-->
+			</div>
+		</div>
+	</div>
+	<!--資訊列表-->
+			</div>
+    </div>
+    <div v-show="action=='load'" style="position: absolute;top: 50%;left: 50%;margin-left:-25%;
+    margin-top: -6%; width: 50%;">
+      <img style="width:100%;" src="src/static/images/logo_big.svg" alt="">
+    </div>
+    <div id="show_event"></div>
+  </div>
+  <div id="bottom">
+    <div id="blueprint">
+ <div class="bottom_line"></div>
+  <div id="blueprint_drag">
+    <div v-for="(item, index) in blueprint" class="blueprint_list ui top left pointing dropdown icon" @drop="drop_blueprint($event,item.key)" @dragleave="allowDropLeave_blueprint($event)" @dragover="allowDrop_blueprint($event)" @click="exchange_blueprint(index,undefined,$event)" @dblclick="re_name(index,'blueprint',$event)" :data-key="item.key" >
+      <a class="blueprint_a" :class="{check:index_blueprint==index}"> {{item.name}}
+      </a>
+      <input class="blueprint_input" type="text" v-model="item.name">
+      <i class="blueprint_i dropdown icon"></i>
+      <div class="menu">
+				<div class="item" @click="re_name(index,'blueprint',$event)"><i class="edit icon"></i>重新命名</div>
+				 <div v-show="index_blueprint!=index" class="item" @click="exchange_blueprint(index,true,$event)"><i class="exchange icon"></i>切換</div>
+				<div v-if="index_blueprint==index" class="item" @click="delete_blueprint(item.key)"><i class="delete icon"></i>移除</div>
+				<div class="item" @click="匯出藍圖(item.key)"><i class="external icon"></i>匯出</div>
+      </div>
+    </div>
+  </div>
+    <div id="blueprint_new" class="ui icon button" data-tooltip="新增一個地鐵計畫" data-inverted="" @click="new_blueprint()">
+      <i class="add icon"></i>
+    </div>
+     <div id="blueprint_import" class="ui icon button" data-tooltip="匯入地鐵計畫" data-inverted="" @click="匯入藍圖()">
+      <i class="reply icon"></i>
+    </div>
+</div>
+<div id="copyright">
+  <div style="display:inline-block;">
+  © 2017 資訊地鐵站 版權所有
+  </div>
+  <span class="ui top right pointing dropdown">
+    <i class="blueprint_i dropdown icon"></i>
+    <div class="menu" style="bottom: 68%;">
+      <div class="item"><i class="write icon"></i><a style="color:#000000" href="https://goo.gl/forms/p464Om8G1yszy0ji1" target="_blank">網站使用滿意度調查</a></div>
+      <div class="item"><i class="comment icon"></i><a style="color:#000000" href="https://goo.gl/forms/QYfCfG5vZF9CyNP03" target="_blank">提供建議</a></div>
+      <div class="item"><i class="facebook f icon"></i><a style="color:#000000" href="https://www.facebook.com/infometro.cc/" target="_blank">關注我們</a></div>
+    </div>
+  </span>
+</div>
+
+  </div>
+  <div id="right">
+    <div class="right_header_line" ></div>
+<div class="right_tool_parent">
+  <div class="right_tool">
+    <div class="over"></div>
+
+<!--
+    <div class="r_button active" >
+      <i class="svg home"><img src="src/static/images/home.svg"></i>
+    </div>
+-->
+    <div class="r_button active">
+      <i class="lightning icon"></i>
+    </div>
+    <div class="r_button" >
+      <i class="svg search"><img src="src/static/images/search.svg"></i>
+    </div>
+  <!--
+    <div class="r_button" :style="{backgroundColor:line_color}">
+      <i class="comment icon"></i>
+    </div>
+  -->
+    <div class="r_button">
+      <i class="svg question"><img src="src/static/images/question.svg"></i>
+    </div>
+  </div>
+  <div id="right_lightning">
+    <div class="ui from">
+      <div class="field">
+        <textarea rows="5" placeholder="即時資訊"></textarea>
+      </div>
+      <div class="clearfix">
+        <img style="float:right;position: relative; top: -3px; left: 3px; cursor:pointer;" src="src/static/images/send.png" onclick="lightning_send()" >
+      </div>
+    </div>
+    <div class="right_info_line"></div>
+  </div>
+</div>
+<div class="right_main">
+  <div class="r_content active" style="padding:0;height: calc( 100% - 157px);">
+    <div @click="lightning_click($event)" class="lightning_item" v-for="(item, index) in lightning_sort">
+       <div class="lightning_active" style="position: absolute; left: 0px; top: 0px; width: 5px; height: 100%; background-image: none; background-color: rgb(255, 105, 0);"></div>
+       <div style="min-height:70px;">
+         <div style=";margin-right:50px;" v-html="$options.filters.message_filter(item.message,'right')"></div>
+         <div style="position:absolute;right:11px;top:6px; width:50px;text-align:right;letter-spacing:-1px; color:#CCCCCC;">{{lightning_create(item.timestamp)}}</div>
+       </div>
+       <div class="lightning_a"><a class="default_a block" @click="delete_lightning(item['.key'],$event)">刪除</a></div>
+    </div>
+  </div>
+  <div class="r_content">
+    <div style="font-size: 1rem;">搜尋結果：</div>
+    <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
+    <div style="color:#757575;font-size: 1rem;">
+      即將推出的功能。
+       <div v-if="search_metro.length>0">
+          <div v-for="(item, index) in search_metro">
+            <div>{{item.line_name}}-->{{item.metro_name}}</div>
+          </div>
+          <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
+       </div>
+      <div v-if="search_info.length>0">
+        <div v-for="(item, index) in search_info">
+          <div>{{item.message}}</div>
+        </div>
+      </div>
+       
+    </div>
+    <div id="right_search">
+      <input type="text" placeholder="搜尋此地鐵" onkeyup="info_search()">
+      <img src="src/static/images/search.svg">
+    </div>
+    
+  </div>
+  <div class="r_content">
+    <div style="font-size: 1rem;">常見問題：</div>
+    <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
+    <div class="ui accordion" style="margin-bottom:60px;">
+<!--     https://semantic-ui.com/modules/accordion.html#/definition-->
+      <div class="title active"><i class="dropdown icon"></i> 如何使用？</div>
+      <div class="content active">
+        <p class="transition visible">目前infometro 的操作說明，位在左邊的導覽功能上(點擊<i class="help circle icon"></i>切換)，若還有疑問，歡迎<a class="default_a" href="https://goo.gl/forms/IcgpVR6znGZQEDls2" target="_blank">留言</a>詢問讓我們知道。</p>
+      </div>
+      <div class="title"><i class="dropdown icon"></i> 目前支援的平台/瀏覽器 </div>
+      <div class="content">
+        <p class="transition hidden">因為infometro正值初步發展期，所以僅針對電腦螢幕的使用者做設計、手機或平版只能用目前的電腦版本下去瀏覽，瀏覽器方面以google 的chrome 會得到較好的速度與體驗。</p>
+      </div>
+      <div class="title"><i class="dropdown icon"></i> infometro裡的資料安全嗎？</div>
+      <div class="content">
+        <p class="transition hidden">安全議題在資訊服務永遠是一項重要的課題，我們雖然正在初始上線階段，但也非常注重用戶的隱私與安全，避免資料遭到入侵與外洩。在登入方面，目前我們只使用google帳號做登入，也就是說您不會有密碼被外洩的疑慮，不過請您確保這些帳號的安全性，例如：設定兩階段驗證。</p>
+         <p class="transition hidden">另外，我們採用google的firebase做為核心資料庫，比起將資料架在伺服器上，增加了google技術的保帳性，並在權限方面設定了妥善的控管，讓資料僅限制給本人能夠讀取，也就是目前使用者只能存取自己地鐵裡的資料，別人無法透過其他方式讀取您的資料。</p>
+		  <p class="transition hidden">未來平台升級或開放分享社交功能後，我們也會特別注重資料的延續性，所以請放心使用。不過建議，敏感性的資料，還是不宜放在網路上。</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div class="right_line"></div>
+  </div>
+     <div id="blueprint_delete_modal" style="padding: 0;" :style="{borderTopColor:line_color}" class="ui small modal orange segment">
+    <div class="header">
+<!--      <img id="blueprint_delete_button" class="logo" src="src/static/images/logo.svg" style="width: 29px;float: right;letter-spacing: 1px;">-->
+      刪除 <span :style="{color:line_color}" id="blueprint_delete_name"></span>
+    </div>
+    <div class="image content">
+
+      <div class="description">
+        <p style="line-height: 1em;font-size: 15px;letter-spacing: 1px;">這個動作將會刪除整個地鐵的資料，且無法復原。(建議先透過匯出功能來備份)</p>
+        <p style="line-height: 1em;font-size: 15px;letter-spacing: 1px;">連續『點擊按鈕兩下』刪除。</p>
+      </div>
+    </div>
+    <div class="actions">
+      <div id="blueprint_delete_button" class="ui button" :style="{backgroundColor:line_color}" style="color:#ffffff;margin-right: -5px;">確定</div>
+      <div class="ui cancel button">取消</div>
+    </div>
+  </div>
+  <div id="line_delete_modal" style="padding: 0;" class="ui small modal orange segment">
+    <div class="header">
+      刪除支線
+    </div>
+    <div class="image content">
+      <div class="description">
+        <p style="line-height: 1em;font-size: 15px;letter-spacing: 1px;">確定刪除支線，也會刪除支線裡的所有資料？</p>
+      </div>
+    </div>
+    <div class="actions">
+    <div id="line_delete_button" class="ui button" style="color:#ffffff;margin-right: -5px;">確定</div>
+    <div class="ui cancel button">取消</div>
+    </div>
+  </div>
+  <div id="metro_delete_modal" style="padding: 0;" class="ui small modal orange segment">
+    <div class="header">
+      刪除地鐵站
+    </div>
+    <div class="image content">
+      <div class="description">
+        <p style="line-height: 1em;font-size: 15px;letter-spacing: 1px;">確定刪除地鐵站，也會刪除裡面的所有資料？</p>
+      </div>
+    </div>
+    <div class="actions">
+    <div id="metro_delete_button" class="ui button" style="color:#ffffff;margin-right: -5px;">確定</div>
+    <div class="ui cancel button">取消</div>
+    </div>
+  </div>
+  
+    <div id="export_modal" style="padding: 0;" class="ui small modal orange segment">
+    <div class="image content">
+      <div class="description">
+        <p style="line-height: 1em;font-size: 15px;letter-spacing: 1px;">將文字儲存起來，日後你可以透過這一串文字來回復你的地鐵計畫。</p>
+        <p id="export_modal_name" style="line-height: 1em;font-size: 15px;letter-spacing: 1px;"></p>
+        <div>
+        <textarea id="modal_textarea" style="width:100%; height:130px; border: 1px solid #e2e2e2;color:#5a5a5a;padding: 5px 10px;"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="actions clearfix">
+      <div id="export_modal_button" style="color:#ffffff;float:right"  class="ui cancel button">關閉</div>
+      <div id="send_modal_button" style="color:#ffffff;float:right" class="ui button">寄給自已</div>
+    	<div class="ui small form" style="float:right">
+    		<input id="modal_send" type="text" placeholder="example@gmail.com , example2@gmail.com" style="border:1px solid rgb(226, 226, 226);">
+    	</div>
+    	
+
+    </div>
+  </div>
+  
+  <div id="import_modal" style="padding: 0;" class="ui small modal orange segment">
+    <div class="image content">
+      <div class="description">
+        <p style="line-height: 1em;font-size: 15px;letter-spacing: 1px;">請貼上你之前匯出的文字資料</p>
+        <div>
+        <textarea style="width:100%; height:130px; border: 1px solid #e2e2e2;color:#5a5a5a;padding: 5px 10px;"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+			<div id="import_modal_button" class="ui button" style="color:#ffffff;margin-right: -5px;">確定</div>
+			<div class="ui cancel button">取消</div>
+    </div>
+  </div>
+  
+
+	<div class="ui page dimmer">
+		<div class="content">
+			<div class="center">
+				<h2 class="ui inverted icon header">
+					<i class="power icon" style="cursor: pointer;font-size: 4em;" onclick="logout()"></i>
+					<div style="margin-bottom:13px;font-size: 2.2rem;letter-spacing: 1px;">感謝您使用 infometro </div>
+					<div class="sub header" style="letter-spacing: 1px;">再次按下power鈕登出</div>
+				</h2>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="src/build/js/infometro.js?v=v3ewfewf"></script>
+
+</body>
+</html>
