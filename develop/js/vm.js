@@ -81,7 +81,7 @@ var vm = new Vue({
           if (info.url_info) { //有網址資訊
             return true
           } else {
-            return false
+            return false;
           }
         }
         return false;
