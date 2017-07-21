@@ -9,17 +9,17 @@
 
 ```sh
  1、安裝node.js、npm
- 2、clone https://github.com/wayne1894/infometro.cc.git
- 3、開啟終端機，cd 到infometro 根目錄，輸入`npm install`，進行package.json套件安裝 (這裡會一併安裝gulp.js)
- 4、輸入 `gulp`，會自動跳出網頁(監聽1313 port)，日後你修改 `develop` 裡的檔案，網頁會重新整理，並將檔案build 到 public
+ 2、clone [https://github.com/wayne1894/infometro.cc.git](https://github.com/wayne1894/infometro.cc.git)
+ 3、cd 到infometro 目錄，輸入`npm install`，進行package.json套件安裝 (這裡會一併安裝gulp.js)
+ 4、輸入 `gulp`，會自動跳出網頁(監聽1313 port)，日後修改 `develop` 裡的檔案，網頁會重新整理，並將檔案build 到 public
 ```
 
 ### 資料庫環境
-* 請去 [google firebase](https://firebase.google.com/) 建立一個空專案
+* 到 [google firebase](https://firebase.google.com/) 建立一個空專案
 * 進入控制台後，找到 `將Firebase 加入您的網路應用程式` 裡的代碼，並更新 infometro `firebase_init.js` firebase.initializeApp 的部份
-* Authentication 登入方式，請把 登入供應商 `google 帳號`和 `匿名` 打開，本版本目前採用這兩個
-* 設定資料庫 rules規則 ，直接把下面 Realtime Database 和 Storage 覆概firebase 的rules
-* 這樣你的本機就可以註冊使用，若要提供連結給人使用，就必需透過 firebase 的 hosting (請參考下面 將程式發佈到fireabse上去)
+* Authentication 登入方式，請把 登入供應商 `google 帳號`和 `匿名` 打開，infometro目前採用這兩個
+* 設定資料庫 rules規則 ，請將下面 Realtime Database 和 Storage 的部份，覆蓋掉firebase 的rules
+* 這樣你的本機就可以讀取你的個人資料庫，若要提供給人使用，就必需透過 firebase 的 hosting (請參考下面 將程式發佈到fireabse上去)
 
 ### 資料庫 rules 設定
 
@@ -39,7 +39,7 @@ service firebase.storage{match /b/{bucket}/o{match /{allPaths=**}{allow read,wri
 
 ### 網站擷取程式
 
-目前放在aws上的一隻後端擷取程式，可以在輸入網址時爬出網頁資訊，這隻程式是架設在aws上，目前暫時可以提供，但不保證是免費提供的。
+目前放在aws上的一隻後端擷取程式，可以在輸入網址時爬出網頁資訊，這隻程式是架設在aws上，目前暫時提供，但不保證是免費提供的。
 
 ### firebase functions
 
