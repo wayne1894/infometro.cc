@@ -73,10 +73,10 @@ $ firebase deploy --only functions
 
 ## Licence
 
-原始碼可在[github](https://github.com/georgeOsdDev/markdown-edit)上找到, 使用 [MPL-2.0](https://opensource.org/licenses/MPL-2.0)授權。
+原始碼可在[github](https://github.com/wayne1894/infometro.cc/)上找到, 使用 [MPL-2.0](https://opensource.org/licenses/MPL-2.0)授權。
 
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
 
-Developed by [wayne1894](http://github.com/wayne1894)
+開發者 [wayne1894](http://github.com/wayne1894)
 
     
