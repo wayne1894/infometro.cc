@@ -9,7 +9,7 @@
 
 ```sh
  1、安裝node.js、npm
- 2、clone [https://github.com/wayne1894/infometro.cc.git](https://github.com/wayne1894/infometro.cc.git)
+ 2、clone https://github.com/wayne1894/infometro.cc.git
  3、cd 到infometro 目錄，輸入`npm install`，進行package.json套件安裝 (這裡會一併安裝gulp.js)
  4、輸入 `gulp`，會自動跳出網頁(監聽1313 port)，日後修改 `develop` 裡的檔案，網頁會重新整理，並將檔案build 到 public
 ```
