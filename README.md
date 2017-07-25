@@ -65,11 +65,6 @@ $ firebase deploy --only functions
 
 參考：https://www.facebook.com/infometro.cc
 
-## 正在進行中的功能
-
-待補
-
-
 
 ## Licence
 
