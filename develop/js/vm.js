@@ -184,7 +184,7 @@ var vm = new Vue({
 		index_blueprint:function(){
 			//代入即時資訊
 			if (vm.blueprint.length == 0) return "";
-			lighning_bind();
+//			lighning_bind();
 		}
   },
   methods: {
@@ -1022,7 +1022,7 @@ var vm = new Vue({
         vm.get_blueprint().line[index].color = "#" + $("#left_color").val();
         vm.action = "edit_color";
         vm.update_blueprint();
-				$("#left_color").attr("show","");
+		$("#left_color").attr("show","");
         $(this).off("click.op");
       });
     },

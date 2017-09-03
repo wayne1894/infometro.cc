@@ -56,7 +56,7 @@
 				$("#left").css("width", _w);
 				$("#line_parent").css("width", _w)
 				$("#center").css("margin-left", _w);
-				$("#edit_parent a").css("width", _w)
+//				$("#edit_parent a").css("width", _w)
 			});
 			$(document).on('mouseup.line', function (event) {
 				$(document).off('mouseup.line');

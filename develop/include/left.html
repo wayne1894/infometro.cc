@@ -1,7 +1,7 @@
 <div id="line_parent">
 	<div id="left_line">
 	<div class="line_text">
-       <span>所有支線：</span>
+       <span style="font-size: 14px;">所有支線：</span>
        <transition name="fade">
        <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="一般支線" data-content="您可以點擊『新增支線』來新增一條新的支線，做為您分類資訊的依據。您也可以拖曳移動它的順序，或者拖曳到其他地鐵計畫裡。"></i>
       </transition>
@@ -31,15 +31,5 @@
     </transition>
 	</div>
 </div>
-<div id="edit_parent">
-  <a :class="{ active: is_nav }" onclick="vm.is_nav=!vm.is_nav" class="left_icon navigation" data-tooltip="切換導覽" data-position="right center"><i class="help circle icon"></i></a>
-  <a class="left_icon" data-tooltip="登出"  data-position="right center" onclick="$('.page.dimmer:first').dimmer('toggle');"><i class="power icon"></i></a>
-  
-    <transition name="fade">
-    <i v-show="is_nav" style=" position: absolute; bottom:9px; right:-42px" class="nav_i ui orange help circle icon" data-title="地鐵計畫" data-content="『地鐵計畫』為infometro 儲存資料的底層單位，其下可以新增『支線』和『地鐵站』。"></i>
-  </transition>
-  <transition name="fade">
-    <i v-show="is_nav" style=" position: absolute; bottom:9px; right:-63px" class="nav_i ui orange help circle icon" data-title="新增一個地鐵計畫" data-content="點擊『+號』可以新增一個地鐵計畫，通常地鐵計畫是管理不同領域的資訊，相同領域的資訊我們可以用支線來管理。"></i>
-  </transition>
-</div>
+
 <div class="left_line"></div>

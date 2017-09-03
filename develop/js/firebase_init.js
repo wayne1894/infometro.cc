@@ -338,14 +338,14 @@ function _is_login() {
   DB.ref('users_data/' + user_uid +"/index").once('value', function (data) { //載入user_data
     if (data.val()) vm.index = data.val();
   }).then(function () {
-    if ($.cookie('index_blueprint') != undefined) { //預設要載入的藍圖索引
-      vm.index_blueprint = $.cookie('index_blueprint');
-    }
+//    if ($.cookie('index_blueprint') != undefined) { //預設要載入的藍圖索引
+//      vm.index_blueprint = $.cookie('index_blueprint');
+//    }
     blueprint_init(function () {//這裡是變動藍圖資訊都會常態執行的fn
-      setTimeout(blueprint_set, 5);
+      //setTimeout(blueprint_set, 5);
     },function(){//這裡只要vm.load會執行
       start_set();
-      lighning_bind();      
+//      lighning_bind();      
     });
     
   });

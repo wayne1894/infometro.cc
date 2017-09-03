@@ -17,7 +17,7 @@
           $("#center").css("width","700px");
           $("#top").css("width", $("#center").width());
         }else{
-          $("#center").css("width","87%");
+          $("#center").css("width","89%");
           if(window_width<(991-30)){
               $("#top").css("width", window_width-$("#left").width());
           }else{
@@ -31,7 +31,7 @@
 	},5000);
 
   var sortable = [];
-	var mode_before ; //mode before 暫放
+  var mode_before ; //mode before 暫放
   $(function () {
     //拖亦的部份 https://github.com/RubaXa/Sortable
     sortable["line"] = new Sortable(id("line_drag"), {
@@ -377,28 +377,28 @@
     $(textarea).height(_height);
   }
 
-	function search_change(){
-		var _search=[];
-		var _val=$.trim(this.search_txt);
-		for(var i=0;i<vm.blueprint.length;i++){
-			_search.push([]);
-			_search[i].line=[];
-			_search[i].metro=[];
-			for(var j=0;j<vm.blueprint[i].line.length;j++){
-				var _line=vm.blueprint[i].line[j];
-				if( _line.name.indexOf(_val)>-1 || _val.indexOf( _line.name)>-1){
-					_search[i].line.push(j);
-				}
-				for(var k=0;k<_line.metro.length;k++){
-					var _metro=_line.metro[k];
-					if( _metro.name.indexOf(_val)>-1 || _val.indexOf( _metro.name)>-1){
-						_search[i].metro.push(j);
-					}
-				}
-			}
-		}
-		return [{a :1},{b :2}];
-	}
+//	function search_change(){
+//		var _search=[];
+//		var _val=$.trim(this.search_txt);
+//		for(var i=0;i<vm.blueprint.length;i++){
+//			_search.push([]);
+//			_search[i].line=[];
+//			_search[i].metro=[];
+//			for(var j=0;j<vm.blueprint[i].line.length;j++){
+//				var _line=vm.blueprint[i].line[j];
+//				if( _line.name.indexOf(_val)>-1 || _val.indexOf( _line.name)>-1){
+//					_search[i].line.push(j);
+//				}
+//				for(var k=0;k<_line.metro.length;k++){
+//					var _metro=_line.metro[k];
+//					if( _metro.name.indexOf(_val)>-1 || _val.indexOf( _metro.name)>-1){
+//						_search[i].metro.push(j);
+//					}
+//				}
+//			}
+//		}
+//		return [{a :1},{b :2}];
+//	}
 
 
 //剪下貼上資訊的部份

@@ -83,9 +83,9 @@
        print("沒載入GA")
     }
 </script>
-<script src="src/build/js/firebase_init.js?v=v3ewfewf"></script>
-<link rel="stylesheet" type="text/css" href="src/build/css/header.css?v=v3ewfewf" />
-<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=v3ewfewf" />
+<script src="src/build/js/firebase_init.js?v=132515236"></script>
+<link rel="stylesheet" type="text/css" href="src/build/css/header.css?v=132515236" />
+<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=132515236" />
 </head>
 <body>
 <header>
@@ -104,7 +104,7 @@
     <div id="line_parent">
 	<div id="left_line">
 	<div class="line_text">
-       <span>所有支線：</span>
+       <span style="font-size: 14px;">所有支線：</span>
        <transition name="fade">
        <i v-show="is_nav" style="float:right; position: relative; top:2px; margin-right:5px;" class="nav_i ui orange help circle icon" data-title="一般支線" data-content="您可以點擊『新增支線』來新增一條新的支線，做為您分類資訊的依據。您也可以拖曳移動它的順序，或者拖曳到其他地鐵計畫裡。"></i>
       </transition>
@@ -134,17 +134,7 @@
     </transition>
 	</div>
 </div>
-<div id="edit_parent">
-  <a :class="{ active: is_nav }" onclick="vm.is_nav=!vm.is_nav" class="left_icon navigation" data-tooltip="切換導覽" data-position="right center"><i class="help circle icon"></i></a>
-  <a class="left_icon" data-tooltip="登出"  data-position="right center" onclick="$('.page.dimmer:first').dimmer('toggle');"><i class="power icon"></i></a>
-  
-    <transition name="fade">
-    <i v-show="is_nav" style=" position: absolute; bottom:9px; right:-42px" class="nav_i ui orange help circle icon" data-title="地鐵計畫" data-content="『地鐵計畫』為infometro 儲存資料的底層單位，其下可以新增『支線』和『地鐵站』。"></i>
-  </transition>
-  <transition name="fade">
-    <i v-show="is_nav" style=" position: absolute; bottom:9px; right:-63px" class="nav_i ui orange help circle icon" data-title="新增一個地鐵計畫" data-content="點擊『+號』可以新增一個地鐵計畫，通常地鐵計畫是管理不同領域的資訊，相同領域的資訊我們可以用支線來管理。"></i>
-  </transition>
-</div>
+
 <div class="left_line"></div>
   </div>
   <div id="center">
@@ -380,6 +370,7 @@
   <div id="bottom">
     <div id="blueprint">
  <div class="bottom_line"></div>
+<!--
   <div id="blueprint_drag">
     <div v-for="(item, index) in blueprint" class="blueprint_list ui top left pointing dropdown icon" @drop="drop_blueprint($event,item.key)" @dragleave="allowDropLeave_blueprint($event)" @dragover="allowDrop_blueprint($event)" @click="exchange_blueprint(index,undefined,$event)" @dblclick="re_name(index,'blueprint',$event)" :data-key="item.key" >
       <a class="blueprint_a" :class="{check:index_blueprint==index}"> {{item.name}}
@@ -400,8 +391,14 @@
      <div id="blueprint_import" class="ui icon button" data-tooltip="匯入地鐵計畫" data-inverted="" @click="匯入藍圖()">
       <i class="reply icon"></i>
     </div>
+-->
+  <div id="edit_parent">
+    <a :class="{ active: is_nav }" onclick="vm.is_nav=!vm.is_nav" class="left_icon navigation" data-tooltip="導覽" data-position="top center"><i class="help circle icon"></i></a>
+    <a class="left_icon" data-tooltip="登出" data-position="top center" onclick="$('.page.dimmer:first').dimmer('toggle');"><i class="power icon"></i></a>
+  </div>
 </div>
-<div id="copyright">
+
+  <div id="copyright">
   <div style="display:inline-block;">
   © 2017 資訊地鐵站 版權所有
   </div>
@@ -415,104 +412,6 @@
   </span>
 </div>
 
-  </div>
-  <div id="right">
-    <div class="right_header_line" ></div>
-<div class="right_tool_parent">
-  <div class="right_tool">
-    <div class="over"></div>
-
-<!--
-    <div class="r_button active" >
-      <i class="svg home"><img src="src/static/images/home.svg"></i>
-    </div>
--->
-    <div class="r_button active">
-      <i class="lightning icon"></i>
-    </div>
-    <div class="r_button" >
-      <i class="svg search"><img src="src/static/images/search.svg"></i>
-    </div>
-  <!--
-    <div class="r_button" :style="{backgroundColor:line_color}">
-      <i class="comment icon"></i>
-    </div>
-  -->
-    <div class="r_button">
-      <i class="svg question"><img src="src/static/images/question.svg"></i>
-    </div>
-  </div>
-  <div id="right_lightning">
-    <div class="ui from">
-      <div class="field">
-        <textarea rows="5" placeholder="即時資訊"></textarea>
-      </div>
-      <div class="clearfix">
-        <img style="float:right;position: relative; top: -3px; left: 3px; cursor:pointer;" src="src/static/images/send.png" onclick="lightning_send()" >
-      </div>
-    </div>
-    <div class="right_info_line"></div>
-  </div>
-</div>
-<div class="right_main">
-  <div class="r_content active" style="padding:0;height: calc( 100% - 157px);">
-    <div @click="lightning_click($event)" class="lightning_item" v-for="(item, index) in lightning_sort">
-       <div class="lightning_active" style="position: absolute; left: 0px; top: 0px; width: 5px; height: 100%; background-image: none; background-color: rgb(255, 105, 0);"></div>
-       <div style="min-height:70px;">
-         <div style=";margin-right:50px;" v-html="$options.filters.message_filter(item.message,'right')"></div>
-         <div style="position:absolute;right:11px;top:6px; width:50px;text-align:right;letter-spacing:-1px; color:#CCCCCC;">{{lightning_create(item.timestamp)}}</div>
-       </div>
-       <div class="lightning_a"><a class="default_a block" @click="delete_lightning(item['.key'],$event)">刪除</a></div>
-    </div>
-  </div>
-  <div class="r_content">
-    <div style="font-size: 1rem;">搜尋結果：</div>
-    <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
-    <div style="color:#757575;font-size: 1rem;">
-      即將推出的功能。
-       <div v-if="search_metro.length>0">
-          <div v-for="(item, index) in search_metro">
-            <div>{{item.line_name}}-->{{item.metro_name}}</div>
-          </div>
-          <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
-       </div>
-      <div v-if="search_info.length>0">
-        <div v-for="(item, index) in search_info">
-          <div>{{item.message}}</div>
-        </div>
-      </div>
-       
-    </div>
-    <div id="right_search">
-      <input type="text" placeholder="搜尋此地鐵" onkeyup="info_search()">
-      <img src="src/static/images/search.svg">
-    </div>
-    
-  </div>
-  <div class="r_content">
-    <div style="font-size: 1rem;">常見問題：</div>
-    <div class="ui section divider" style=" margin-top: .3rem;margin-bottom: .3rem;"></div>
-    <div class="ui accordion" style="margin-bottom:60px;">
-<!--     https://semantic-ui.com/modules/accordion.html#/definition-->
-      <div class="title active"><i class="dropdown icon"></i> 如何使用？</div>
-      <div class="content active">
-        <p class="transition visible">目前infometro 的操作說明，位在左邊的導覽功能上(點擊<i class="help circle icon"></i>切換)，若還有疑問，歡迎<a class="default_a" href="https://goo.gl/forms/IcgpVR6znGZQEDls2" target="_blank">留言</a>詢問讓我們知道。</p>
-      </div>
-      <div class="title"><i class="dropdown icon"></i> 目前支援的平台/瀏覽器 </div>
-      <div class="content">
-        <p class="transition hidden">因為infometro正值初步發展期，所以僅針對電腦螢幕的使用者做設計、手機或平版只能用目前的電腦版本下去瀏覽，瀏覽器方面以google 的chrome 會得到較好的速度與體驗。</p>
-      </div>
-      <div class="title"><i class="dropdown icon"></i> infometro裡的資料安全嗎？</div>
-      <div class="content">
-        <p class="transition hidden">安全議題在資訊服務永遠是一項重要的課題，我們雖然正在初始上線階段，但也非常注重用戶的隱私與安全，避免資料遭到入侵與外洩。在登入方面，目前我們只使用google帳號做登入，也就是說您不會有密碼被外洩的疑慮，不過請您確保這些帳號的安全性，例如：設定兩階段驗證。</p>
-         <p class="transition hidden">另外，我們採用google的firebase做為核心資料庫，比起將資料架在伺服器上，增加了google技術的保帳性，並在權限方面設定了妥善的控管，讓資料僅限制給本人能夠讀取，也就是目前使用者只能存取自己地鐵裡的資料，別人無法透過其他方式讀取您的資料。</p>
-		  <p class="transition hidden">未來平台升級或開放分享社交功能後，我們也會特別注重資料的延續性，所以請放心使用。不過建議，敏感性的資料，還是不宜放在網路上。</p>
-      </div>
-    </div>
-  </div>
-
-</div>
-<div class="right_line"></div>
   </div>
      <div id="blueprint_delete_modal" style="padding: 0;" :style="{borderTopColor:line_color}" class="ui small modal orange segment">
     <div class="header">
@@ -602,14 +501,14 @@
 			<div class="center">
 				<h2 class="ui inverted icon header">
 					<i class="power icon" style="cursor: pointer;font-size: 4em;" onclick="logout()"></i>
-					<div style="margin-bottom:13px;font-size: 2.2rem;letter-spacing: 1px;">感謝您使用 infometro </div>
+					<div style="margin-bottom:13px;font-size: 2.2rem;letter-spacing: 1px;">喔，您確定要關機了嗎？ </div>
 					<div class="sub header" style="letter-spacing: 1px;">再次按下power鈕登出</div>
 				</h2>
 			</div>
 		</div>
 	</div>
 </div>
-<script src="src/build/js/infometro.js?v=v3ewfewf"></script>
+<script src="src/build/js/infometro.js?v=132515236"></script>
 
 </body>
 </html>
