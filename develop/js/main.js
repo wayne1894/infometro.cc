@@ -26,9 +26,9 @@
         }
   }).resize();
 
-	setTimeout(function(){
-		if(typeof(vm)=="undefined")location.reload();
-	},5000);
+  setTimeout(function(){
+      if(typeof(vm)=="undefined")location.reload();
+  },5000);
 
   var sortable = [];
   var mode_before ; //mode before 暫放
@@ -205,7 +205,7 @@
     }, 0);
   }
 
-	function show_event_fn(title,text){
+  function show_event_fn(title,text){
 		var _color=vm.line_color;
 		if(title==undefined)title="儲存成功";
 		text='<div class="description">'+text+'</div>'
@@ -376,30 +376,6 @@
     var _height=textarea.scrollHeight + parseFloat($(textarea).css("borderTopWidth")) + parseFloat($(textarea).css("borderBottomWidth"));
     $(textarea).height(_height);
   }
-
-//	function search_change(){
-//		var _search=[];
-//		var _val=$.trim(this.search_txt);
-//		for(var i=0;i<vm.blueprint.length;i++){
-//			_search.push([]);
-//			_search[i].line=[];
-//			_search[i].metro=[];
-//			for(var j=0;j<vm.blueprint[i].line.length;j++){
-//				var _line=vm.blueprint[i].line[j];
-//				if( _line.name.indexOf(_val)>-1 || _val.indexOf( _line.name)>-1){
-//					_search[i].line.push(j);
-//				}
-//				for(var k=0;k<_line.metro.length;k++){
-//					var _metro=_line.metro[k];
-//					if( _metro.name.indexOf(_val)>-1 || _val.indexOf( _metro.name)>-1){
-//						_search[i].metro.push(j);
-//					}
-//				}
-//			}
-//		}
-//		return [{a :1},{b :2}];
-//	}
-
 
 //剪下貼上資訊的部份
 	function getselecttext(){//抓取選取文字

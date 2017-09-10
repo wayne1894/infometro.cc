@@ -52,36 +52,43 @@
 		return document.getElementById(a);
 	}
 	function get_test(){
-		if(location.href.indexOf("localhost:1313")>-1){//代表測試環境
-			return "test"
-		}
+	  if(location.href.indexOf("localhost:1313")>-1)return "test"
 	}
 	
 	//	if (location.protocol != 'https:'){
 	//		if(window.location.hostname!="localhost" && window.location.hostname!="127.0.0.1" ){
 	//				location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
 	//		}
-	//	}  
+	//	} 
+  function get_page() {
+    if(location.pathname=="/" || location.pathname=="/index.html"){  //代表首頁
+      return "index";
+    } else if(location.href.indexOf("/dashboard")>-1){
+      return "dashboard";
+    } else{
+      return "main";
+    }
+  }
+  function location_main(){
+    location.href = "main.html"
+  }
 </script>
 
 
-
-
  <script>
+   if(get_test()!="test" && $.cookie("ga")!="N"){
 
-	 if(get_test()!="test" && $.cookie("ga")!="N"){
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-100413527-1', 'auto');
+    ga('send', 'pageview');
 
-      ga('create', 'UA-100413527-1', 'auto');
-      ga('send', 'pageview');
-
-	}else{
-       print("沒載入GA")
-    }
+  }else{
+     print("沒載入GA")
+  }
 </script>
 <script src="src/build/js/firebase_init.js?v=132515236"></script>
 <link rel="stylesheet" type="text/css" href="src/build/css/index.css?v=132515236" />
@@ -252,14 +259,12 @@ function _firebase(){
 		 	
 		});
 	 function set_button(){
-		 //$("#fb_button").click(fb_login);
 		 $("#google_button").click(google_login);
 		 $("#anonymous_button").click(anonymous_login);
 	 }
 	 function set_location_button(){
-		 //$("#fb_button").off("click").click(location_fn);
-		 $("#google_button").off("click").click(location_fn);
-		 $("#anonymous_button").off("click").click(location_fn);
+		 $("#google_button").off("click").click(location_main);
+		 $("#anonymous_button").off("click").click(location_main);
 	 }
 	 set_button();
 

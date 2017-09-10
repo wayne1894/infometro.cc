@@ -9,7 +9,7 @@ gulp.task('webserver', function() {
       port:1313,
       livereload: true,
       directoryListing: false,
-      open: "404.html"
+      open: "main.html"
     }));
 });
 
@@ -45,9 +45,8 @@ var merge= require('merge-stream');
 
 gulp.task('concat', function() { //合併與最小化檔案
 	var concat1=gulp.src(['develop/js/main.js', 'develop/js/top.js', 'develop/js/bottom.js','develop/js/left.js','develop/js/right.js','develop/js/center.js','develop/js/vm.js'])
-		.pipe(gulpPlumber())
-   	.pipe(concat('infometro.js'))
-    .pipe(gulp.dest('./public/src/build/js'))
+        .pipe(gulpPlumber())
+        .pipe(concat('main.js'))
 		.pipe(gulpUglify())
 		.pipe(gulp.dest('./public/src/build/js'));
 	var concat2= gulp.src(['develop/js/firebase_init.js'])

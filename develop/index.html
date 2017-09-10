@@ -171,14 +171,12 @@ function _firebase(){
 		 	
 		});
 	 function set_button(){
-		 //$("#fb_button").click(fb_login);
 		 $("#google_button").click(google_login);
 		 $("#anonymous_button").click(anonymous_login);
 	 }
 	 function set_location_button(){
-		 //$("#fb_button").off("click").click(location_fn);
-		 $("#google_button").off("click").click(location_fn);
-		 $("#anonymous_button").off("click").click(location_fn);
+		 $("#google_button").off("click").click(location_main);
+		 $("#anonymous_button").off("click").click(location_main);
 	 }
 	 set_button();
 

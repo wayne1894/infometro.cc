@@ -1,29 +1,9 @@
 <div id="blueprint">
  <div class="bottom_line"></div>
-<!--
-  <div id="blueprint_drag">
-    <div v-for="(item, index) in blueprint" class="blueprint_list ui top left pointing dropdown icon" @drop="drop_blueprint($event,item.key)" @dragleave="allowDropLeave_blueprint($event)" @dragover="allowDrop_blueprint($event)" @click="exchange_blueprint(index,undefined,$event)" @dblclick="re_name(index,'blueprint',$event)" :data-key="item.key" >
-      <a class="blueprint_a" :class="{check:index_blueprint==index}"> {{item.name}}
-      </a>
-      <input class="blueprint_input" type="text" v-model="item.name">
-      <i class="blueprint_i dropdown icon"></i>
-      <div class="menu">
-				<div class="item" @click="re_name(index,'blueprint',$event)"><i class="edit icon"></i>重新命名</div>
-				 <div v-show="index_blueprint!=index" class="item" @click="exchange_blueprint(index,true,$event)"><i class="exchange icon"></i>切換</div>
-				<div v-if="index_blueprint==index" class="item" @click="delete_blueprint(item.key)"><i class="delete icon"></i>移除</div>
-				<div class="item" @click="匯出藍圖(item.key)"><i class="external icon"></i>匯出</div>
-      </div>
-    </div>
-  </div>
-    <div id="blueprint_new" class="ui icon button" data-tooltip="新增一個地鐵計畫" data-inverted="" @click="new_blueprint()">
-      <i class="add icon"></i>
-    </div>
-     <div id="blueprint_import" class="ui icon button" data-tooltip="匯入地鐵計畫" data-inverted="" @click="匯入藍圖()">
-      <i class="reply icon"></i>
-    </div>
--->
   <div id="edit_parent">
     <a :class="{ active: is_nav }" onclick="vm.is_nav=!vm.is_nav" class="left_icon navigation" data-tooltip="導覽" data-position="top center"><i class="help circle icon"></i></a>
+    <a onclick="匯出藍圖()" style="position: relative;top: 1px;" class="left_icon navigation" data-tooltip="備份" data-position="top center"><i class="external icon"></i></a>
+    <a onclick="匯入藍圖()" style="position: relative;top: 1px;" class="left_icon navigation" data-tooltip="匯入" data-position="top center"><i class="reply icon"></i></a>
     <a class="left_icon" data-tooltip="登出" data-position="top center" onclick="$('.page.dimmer:first').dimmer('toggle');"><i class="power icon"></i></a>
   </div>
 </div>

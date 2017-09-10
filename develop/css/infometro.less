@@ -252,7 +252,7 @@ textarea:focus {
   }
   #top_tag_parent {
     height: 100%;
-//    width: 87%;
+    width: 87%;
     margin: 0 auto;
   }
   #top_tag {
@@ -505,8 +505,8 @@ textarea:focus {
 }
 #center {
   background-color: #F7F7F7;
-//  width: 87%;
-//  max-width: 1500px;
+  width: 87%;
+  max-width: 1500px;
   min-height: 100%;
   margin-left: @left_width;
   border: 1px solid #CDCDCD;
@@ -1016,11 +1016,11 @@ textarea:focus {
   }
   .clearfix();
 }
-//@media screen and (min-width:1400px) {
-//  #center {
-//    width: 72%!important;
-//  }
-//}
+@media screen and (min-width:1400px) {
+  #center {
+    width: 72%!important;
+  }
+}
 
 
 #bottom {
@@ -1040,15 +1040,6 @@ textarea:focus {
     position: relative;
     padding-left: 23px;
 	padding-top: 1px;
-    #blueprint_drag {
-      display: inline-block;
-    }
-    #blueprint_new , #blueprint_import {
-      margin-left: 1px;
-      padding: 6px;
-      position: relative;
-      top: 1px;
-    }
     .clearfix();
   }
   .blueprint_a {
@@ -1079,8 +1070,7 @@ textarea:focus {
       left: -10px;
     }
   }
-  .blueprint_i,
-  .blueprint_input {
+  .blueprint_i{
     margin-left: 2px;
     margin-right: 10px;
   }
@@ -1088,23 +1078,6 @@ textarea:focus {
     display: none;
     width: 98px;
     .public_input();
-  }
-  .blueprint_list {
-    display: inline-block;
-    margin-right: 3px;
-    
-    &.edit {
-      .blueprint_a,
-      .blueprint_i {
-        display: none;
-      }
-      .blueprint_input {
-        display: block;
-      }
-    }
-    .menu {
-      bottom: 68%;
-    }
   }
   #copyright {
     position: absolute;

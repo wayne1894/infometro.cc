@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+@@include('include/head.html')
+<script src="src/build/js/firebase_init.js?v=@@include('include/_r.html')"></script>
+<link rel="stylesheet" type="text/css" href="src/build/css/header.css?v=@@include('include/_r.html')" />
+<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=@@include('include/_r.html')" />
+</head>
+<body>
+@@include('include/header.html')
+<div id="main">
+  <div id="left">
+    @@include('include/left.html')
+  </div>
+  <div id="center">
+    <div id="top">
+      @@include('include/top.html')
+    </div>
+    <div id="board_parent" v-show="action!='load'">
+    	<div id="board2">
+          @@include('include/conter_board1.html')
+          @@include('include/conter_board2.html')
+			</div>
+    </div>
+    <div v-show="action=='load'" style="position: absolute;top: 50%;left: 50%;margin-left:-25%;
+    margin-top: -6%; width: 50%;">
+      <img style="width:100%;" src="src/static/images/logo_big.svg" alt="">
+    </div>
+    <div id="show_event"></div>
+  </div>
+  <div id="bottom">
+    @@include('include/bottom.html')
+  </div>
+  <div id="right">
+     @@include('include/right.html')
+  </div>
+   @@include('include/modal.html')
+</div>
+<script src="src/build/js/main.js?v=@@include('include/_r.html')"></script>
+@@include('include/footer.html')
+</body>
+</html>

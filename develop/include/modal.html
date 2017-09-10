@@ -1,20 +1,3 @@
-  <div id="blueprint_delete_modal" style="padding: 0;" :style="{borderTopColor:line_color}" class="ui small modal orange segment">
-    <div class="header">
-<!--      <img id="blueprint_delete_button" class="logo" src="src/static/images/logo.svg" style="width: 29px;float: right;letter-spacing: 1px;">-->
-      刪除 <span :style="{color:line_color}" id="blueprint_delete_name"></span>
-    </div>
-    <div class="image content">
-
-      <div class="description">
-        <p style="line-height: 1em;font-size: 15px;letter-spacing: 1px;">這個動作將會刪除整個地鐵的資料，且無法復原。(建議先透過匯出功能來備份)</p>
-        <p style="line-height: 1em;font-size: 15px;letter-spacing: 1px;">連續『點擊按鈕兩下』刪除。</p>
-      </div>
-    </div>
-    <div class="actions">
-      <div id="blueprint_delete_button" class="ui button" :style="{backgroundColor:line_color}" style="color:#ffffff;margin-right: -5px;">確定</div>
-      <div class="ui cancel button">取消</div>
-    </div>
-  </div>
   <div id="line_delete_modal" style="padding: 0;" class="ui small modal orange segment">
     <div class="header">
       刪除支線
@@ -47,7 +30,7 @@
     <div id="export_modal" style="padding: 0;" class="ui small modal orange segment">
     <div class="image content">
       <div class="description">
-        <p style="line-height: 1em;font-size: 15px;letter-spacing: 1px;">將文字儲存起來，日後你可以透過這一串文字來回復你的地鐵計畫。</p>
+        <p style="line-height: 1em;font-size: 15px;letter-spacing: 1px;">將文字儲存起來，日後你可以透過這一串文字來回復到你現在的狀態。</p>
         <p id="export_modal_name" style="line-height: 1em;font-size: 15px;letter-spacing: 1px;"></p>
         <div>
         <textarea id="modal_textarea" style="width:100%; height:130px; border: 1px solid #e2e2e2;color:#5a5a5a;padding: 5px 10px;"></textarea>

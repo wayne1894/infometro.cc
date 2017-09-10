@@ -5,7 +5,9 @@
         <input id="header_search" type="text" placeholder="搜尋支線、地鐵">
         <button class="ui mini icon button"><i class="search icon"></i></button> 
       </div>
-			<div id="header_area">
-			</div>
+      <div id="header_area">
+        <img class="ui right avatar image" v-if="users.photo" :src="users.photo">
+        <span class="header_name">{{users.name}}</span>
+      </div>
   	</div>
 </header>

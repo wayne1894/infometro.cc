@@ -13,7 +13,7 @@ header{
     margin-top: 8px;
     margin-left: 10px;
     padding-left: 17px;
-    img {
+    img.logo {
       width: 30px;
       box-shadow: 0 0 0 1px rgba(0,0,0,.3) inset,0 .1em 0.4em -0.05em rgba(0,0,0,.5);
     }
@@ -26,6 +26,22 @@ header{
     border-color: inherit!important;
   }
 }
+#header_area{
+  position: absolute;
+  right:32px;
+  top: 11px;
+  img{
+    border: 1px solid #cdcdcd;
+    margin-right: 7px;
+  }
+  .header_name{
+    font-size: 12px;
+    font-weight: 400;
+    font-family: 'Noto Sans TC', sans-serif;
+    
+  }
+}
+
 @media screen and (max-width:700px) {
   #header_search{
     width: 300px;
