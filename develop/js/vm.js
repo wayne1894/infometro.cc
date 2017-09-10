@@ -9,7 +9,7 @@ var vm = new Vue({
   data: {
     blueprint: [],
     index: [],
-    location_main: 0,
+    index_blueprint: 0,
     index_line: 0,
     info_active: "",
     key_metro: "",
@@ -181,11 +181,11 @@ var vm = new Vue({
         }, 5);
       })
     },
-		location_main:function(){
-			//代入即時資訊
-			if (vm.blueprint.length == 0) return "";
+    index_blueprint:function(){
+        //代入即時資訊
+        if (vm.blueprint.length == 0) return "";
 //			lighning_bind();
-		}
+    }
   },
   methods: {
     lightning_create : function (timestamp){
@@ -326,21 +326,21 @@ var vm = new Vue({
     },
     get_blueprint: function (index) { //得到藍圖(傳入index為其他藍圖)
       if (index != undefined) return this.blueprint[index];
-      return this.blueprint[this.location_main];
+      return this.blueprint[this.index_blueprint];
     },
-    get_location_main: function () { //得到當前藍圖索引資料
-      return vm.index[vm.location_main];
+    get_index_blueprint: function () { //得到當前藍圖索引資料
+      return vm.index[vm.index_blueprint];
     },
     get_line: function () {
       return this.get_blueprint().line[this.index_line]
     },
     get_index_line: function () { //得到當前支線索引資料
-      var _index=vm.index[vm.location_main][vm.index_line];
+      var _index=vm.index[vm.index_blueprint][vm.index_line];
       if(typeof _index!="object"){
          print("索引變字串");
-         vm.index[vm.location_main][vm.index_line]={}
-         vm.index[vm.location_main][vm.index_line].check=false;
-        return vm.index[vm.location_main][vm.index_line]
+         vm.index[vm.index_blueprint][vm.index_line]={}
+         vm.index[vm.index_blueprint][vm.index_line].check=false;
+        return vm.index[vm.index_blueprint][vm.index_line]
       }else{
         return _index;
       }
@@ -360,7 +360,7 @@ var vm = new Vue({
       vm.index_line = _index;
     },
     update_index_line_check: function () {
-      var index_array = vm.get_location_main();
+      var index_array = vm.get_index_blueprint();
       for (var i = 0; i < index_array.length; i++) {
         if (!index_array[i]) index_array[i] = [];
         index_array[i].check = false;
@@ -413,7 +413,7 @@ var vm = new Vue({
       }
     },
     exchange_blueprint: function (index, target, event) { //切換藍圖
-      if (vm.action != "load" && vm.location_main == index) {
+      if (vm.action != "load" && vm.index_blueprint == index) {
         if (event && $(event.target).hasClass("blueprint_i")) {
           $(event.target).trigger("customClick");
         };
@@ -422,7 +422,7 @@ var vm = new Vue({
       vm.check_error_index(index,vm.blueprint);
       if (index >= vm.blueprint.length) index = 0;
       $("#top_tag").stop().fadeOut(0);
-      $.cookie("location_main", index);
+      $.cookie("index_blueprint", index);
       if (event && event.target) {
         if (event.target.className != undefined) {
           if (event.target.className.indexOf("blueprint_a") > -1 || event.target.className.indexOf("blueprint_i") > -1) {
@@ -431,7 +431,7 @@ var vm = new Vue({
         }
       }
       if (target) {
-        vm.location_main = index; //重新安排
+        vm.index_blueprint = index; //重新安排
         vm.update_index_line(vm.index[index]);
         vm.update_index_line_check();
         vm.update_selection_color();
@@ -452,10 +452,10 @@ var vm = new Vue({
 
       function _el() {
         vm.index_line = index;
-        if (!vm.get_location_main()[index]) vm.replace_index(); //重新設定index
+        if (!vm.get_index_blueprint()[index]) vm.replace_index(); //重新設定index
         vm.update_index_line_check();
         vm.update_selection_color();
-        vm.update_metro_key(vm.get_location_main()[index]);
+        vm.update_metro_key(vm.get_index_blueprint()[index]);
         vm.action_move=1;
         setTimeout(move_center,0);
         $(document.body).scrollTop(0);
@@ -463,15 +463,15 @@ var vm = new Vue({
     },
     replace_index: function () { //修補程式(不常發生)
       var _line = vm.get_blueprint().line;
-      var _location_main = vm.get_location_main();
-      var j = _line.length - _location_main.length;
-      for (var i = 0; i < j; i++) _location_main.push([]); //新增line的index陣列
+      var _index_blueprint = vm.get_index_blueprint();
+      var j = _line.length - _index_blueprint.length;
+      for (var i = 0; i < j; i++) _index_blueprint.push([]); //新增line的index陣列
       print("重新設定了index");
     },
     new_line: function () {
       if(vm.action=="load")return;
       var data = this.get_blueprint();
-      var get_index = vm.get_location_main();
+      var get_index = vm.get_index_blueprint();
 			remove_start();
       if (!data.line) data.line = []; //如果沒有line就新增一個空陣列
       var get_color = vm.get_default_color(data.line.length);
@@ -496,7 +496,7 @@ var vm = new Vue({
         vm.delete_blueprint(data.key,"move_delete");
       }else{
         var _line = data.line.splice(index, 1);
-        vm.get_location_main().splice(index, 1); //移除line的index索引陣列
+        vm.get_index_blueprint().splice(index, 1); //移除line的index索引陣列
         if (vm.index_line >= index) { //刪除到小於自已-就往前倒退索引(同刪除藍圖)
             var new_index = vm.index_line - 1;
             if (new_index < 0) new_index = 0;
@@ -540,7 +540,7 @@ var vm = new Vue({
             vm.delete_blueprint(data.key,"line_one_delete");
           }else{
             data.line.splice(index, 1); //移除line
-            vm.get_location_main().splice(index, 1); //移除line的index索引陣列
+            vm.get_index_blueprint().splice(index, 1); //移除line的index索引陣列
             if (vm.index_line >= index) { //刪除到自已或小於自已-就往前倒退索引(同刪除藍圖)
               var new_index = vm.index_line - 1;
               if (new_index < 0) new_index = 0;
@@ -971,10 +971,10 @@ var vm = new Vue({
       $("#line_drag li").each(function () {
         var index_key = get_key($(this).data("key"));
         new_line.push(data.line[index_key]);
-        new_index.push(vm.index[vm.location_main][index_key]);
+        new_index.push(vm.index[vm.index_blueprint][index_key]);
       })
       data.line = new_line;
-      vm.index[vm.location_main] = new_index;
+      vm.index[vm.index_blueprint] = new_index;
       vm.update_index_line(new_index);
       vm.action = "swap_line";
       vm.update_blueprint(data.key, data);

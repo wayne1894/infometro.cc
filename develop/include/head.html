@@ -60,14 +60,16 @@
   function get_page() {
     if(location.pathname=="/" || location.pathname=="/index.html"){  //代表首頁
       return "index";
-    } else if(location.href.indexOf("/dashboard")>-1){
-      return "dashboard";
     } else{
       return "main";
     }
   }
   function location_main(){
-    location.href = "main.html"
+    if(get_test()=="test"){
+      location.href = "main.html"
+    }else{
+      location.href = "/main"
+    }
   }
 </script>
 
