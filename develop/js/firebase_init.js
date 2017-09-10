@@ -167,7 +167,7 @@ function blueprint_init(blueprint_fn,load_fn) {
           }
         }
       }
-      vm.location_main=0;
+      vm.index_blueprint=0;
       vm.index = _array;
       print("重新設定index[載入-全部重設]");
     }
@@ -192,14 +192,14 @@ function blueprint_init(blueprint_fn,load_fn) {
     } else if (_action == "new_line") {
       vm.index_update();
       show_event_fn("新增成功","你新增了一條支線");
-     vm.exchange_line(vm.index[vm.location_main].length - 1);
+     vm.exchange_line(vm.index[vm.index_blueprint].length - 1);
     } else if(_action=="delete_line"){
       show_event_fn("刪除成功","你刪除了一條支線");
     } else if (_action == "swap_line") {
       vm.index_update();
       show_event_fn(undefined,"你交換了支線的位置");
     } else if (_action == "load") {
-      vm.exchange_blueprint(vm.location_main, true); //切換藍圖
+      vm.exchange_blueprint(vm.index_blueprint, true); //切換藍圖
       blueprint_fn();
       load_fn();
     }
@@ -225,7 +225,7 @@ function _is_login() {
       
     },function(){//這裡只要vm.load會執行
       start_set();
-//      lighning_bind();      
+      lighning_bind();      
     });
     
   });

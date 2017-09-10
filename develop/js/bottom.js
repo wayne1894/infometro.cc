@@ -105,7 +105,7 @@
 				timestamp: firebase.database.ServerValue.TIMESTAMP
 			})
 			$('#import_modal').modal('hide');
-			$.cookie('location_main', vm.blueprint.length - 1);
+			$.cookie('index_blueprint', vm.blueprint.length - 1);
 			setTimeout(function () {
 				location.reload();
 			}, 1000)
