@@ -92,13 +92,13 @@ function set_user_info(){ //使用者初始化資訊
   $.cookie("start","Y");
   DB.ref('users/' + user_uid).set(data).then(load_blueprint_info());
 }
-function load_blueprint_info(){ //藍圖初始化資訊
+function load_blueprint_info(fn){ //藍圖初始化資訊
   var newRef = DB.ref('blueprint/' + user_uid).push();
   var newLine = [];
   newLine.push(line_json("橘線", "#FF6900", true)); //新增第一條線
   newLine[newLine.length - 1].metro.push(metro_json("總站")); //第一條線下面的站
   newRef.set(blueprint_json("我的地鐵計畫",newLine)).then(function(){
-    location_main();
+    if (typeof fn == "function") fn();
   })
 }
 function blueprint_json(name,line) {
