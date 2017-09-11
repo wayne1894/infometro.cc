@@ -77,7 +77,7 @@ function anonymous_login() {
 		remove_login_button();
 	});
 }
-function set_user_info(){ //使用者初始化資訊
+function set_user_info(fn){ //使用者初始化資訊
   var user = firebase.auth().currentUser;
   var data = {
     name: user.displayName,
@@ -90,7 +90,7 @@ function set_user_info(){ //使用者初始化資訊
     data.name = "匿名";
   }
   $.cookie("start","Y");
-  DB.ref('users/' + user_uid).set(data).then(load_blueprint_info());
+  DB.ref('users/' + user_uid).set(data).then(load_blueprint_info(fn));
 }
 function load_blueprint_info(fn){ //藍圖初始化資訊
   var newRef = DB.ref('blueprint/' + user_uid).push();
@@ -213,7 +213,7 @@ function _is_login() {
       vm.users = data.val();
       vm_header.users=data.val();
     } else { //沒有會員資料
-	  set_user_info();
+	  set_user_info(_is_login);
       return false;
     }
   });
