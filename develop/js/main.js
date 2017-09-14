@@ -12,17 +12,6 @@
        if(is_mobile()){
          $("#board_parent").css("min-height",(getViewportSize().h)+"px");
        }
-        if(window_width<700){
-          $("#center").css("width","700px");
-          $("#top").css("width", $("#center").width());
-        }else{
-          $("#center").css("width","89%");
-          if(window_width<(991-30)){
-              $("#top").css("width", window_width-$("#left").width());
-          }else{
-              $("#top").css("width", "inherit");
-          }
-        }
   }).resize();
 
   setTimeout(function(){

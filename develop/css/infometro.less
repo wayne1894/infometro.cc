@@ -42,11 +42,6 @@ html.re_name{
 body {
   font-family: Microsoft JhengHei;
 }
-@media screen and (max-width:700px) {
-	body{
-		overflow-x: visible;
-	}
-}
 
 .ui.page{
   font-family: 'Noto Sans TC', sans-serif;
@@ -157,7 +152,7 @@ textarea:focus {
         position: absolute;
         width: 10px;
         height: 10px;
-        top: 1px;
+        top: 2px;
         z-index: 6;
         left: 1px;
         display: none;
@@ -497,15 +492,11 @@ textarea:focus {
     background-color: #cdcdcd;
     border-right: 1px solid #ffffff;
   }
-  @media screen and (max-width: 961px) {//991-30
-    .line_adj{
-     display: none; 
-    }
-  }
+
 }
 #center {
   background-color: #F7F7F7;
-  width: 87%;
+  width: 84%;
   max-width: 1500px;
   min-height: 100%;
   margin-left: @left_width;
@@ -625,7 +616,7 @@ textarea:focus {
             margin-bottom: 5px;
             font-size: 18px;
             font-weight: bold;
-						min-height: 18px;
+			min-height: 18px;
           }
           >div:not(:first-child) {
             line-height: 17px;
@@ -943,9 +934,6 @@ textarea:focus {
           margin-top: -7px;
           top: 0;
       }
-      &.adj #board2{
-          left: 13px;
-      }
       &.adj #board3{
           border-top: 1px dashed #cdcdcd!important;
           border-bottom: 0;
@@ -966,10 +954,10 @@ textarea:focus {
   #tag_delete_metro{
 		display: inline-block;
 		position: absolute;
-    width: 33px;
+        width: 33px;
 		right: 3px;
 	}
-  @media screen and (max-width: 991px) {
+  @media screen and (max-width: 1130px) {
 		#board1 {
 			width: 100%;
 			position: relative;
@@ -992,9 +980,6 @@ textarea:focus {
 			&.adj::before{
 					width: 0px;
 			}
-			&.adj #board2{
-					left: -20px;
-			}
 			&.adj #board3 {
 					width: 100%;
 					left: 0!important;
@@ -1016,9 +1001,48 @@ textarea:focus {
   }
   .clearfix();
 }
-@media screen and (min-width:1400px) {
+@media screen and (min-width:1401px) and (max-width:1700px)  {
+  #center {
+    width: 67%!important;
+  }
+}
+@media screen and (min-width:1700px)  {
   #center {
     width: 72%!important;
+  }
+}
+@media screen and (max-width:1130px)  {
+  #center {
+    width: 79%!important;
+  }
+}
+@media screen and (max-width:900px)  {
+  #center {
+    width: 75%!important;
+  }
+}
+
+
+//手機版
+@media screen and (max-width:800px)  {
+  #left{
+    display: none;
+  }
+  #center {
+    margin-left: 0;
+    width: 100%!important;
+    #board2{
+      width: 100%;
+      margin: 0;
+    }
+    #board1,#board2,#board3{
+      border: 0;
+    }
+    
+    #board1 #board_line_parent::before{
+      left: 50%;
+    }
+    
   }
 }
 
