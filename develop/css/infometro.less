@@ -645,6 +645,7 @@ textarea:focus {
       border-bottom: 1px solid #CDCDCD;
       padding-top: 18px;
       padding-left: 27px;
+      padding-right: 27px;
       padding-bottom: 25px;
       position: relative;
       
@@ -664,20 +665,19 @@ textarea:focus {
       }
       #board_img {
         width: 70px;
-        display: inline-block;
-        margin-right: 10px;
+        position: absolute;
         vertical-align: top;
         img{
           width: 100%;
         }
       }
       #board_enter {
-        display: inline-block;
+        margin-left: 83px;
         textarea {
           border: 0;
           resize: none;
           height: 70px;
-          width: 360px;
+          width: 100%;
           font-weight: bold;
           overflow: hidden;
         }
@@ -915,6 +915,7 @@ textarea:focus {
     }
   }
   #board_parent{
+    padding-bottom: 40px;
       &.adj::before{
           content: "";
           position: relative;
@@ -1036,13 +1037,20 @@ textarea:focus {
       margin: 0;
     }
     #board1,#board2,#board3{
-      border: 0;
+      border-left: 0;
+      border-right: 0;
+      border-bottom: 0;
     }
     
     #board1 #board_line_parent::before{
       left: 50%;
     }
-    
+    #board_line{
+      width: 100%!important;
+    }
+    #top .triangle.right{
+      right: 6%;
+    }
   }
 }
 
