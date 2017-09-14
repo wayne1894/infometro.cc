@@ -6,7 +6,7 @@
 		var _metro = vm.move_metro(metro_key, index);
 		if (_metro == undefined) return
 		_metro = _metro[0];
-		var data = JSON.parse(JSON.stringify(vm.get_blueprint())); //將傳址改為傳值
+		var data = JSON.parse(JSON.stringify(vm.blueprint[0])); //將傳址改為傳值
 		data.line[index].metro.push(_metro);
 		vm.action = "drop_line";
 		vm.update_blueprint(data.key, data);

@@ -23,7 +23,7 @@
 	}
 
 	function 匯出藍圖() {
-      var key=vm.get_blueprint().key;
+    var key=vm.blueprint[0].key;
 		export_num = 0;
 		export_num_use = 0;
 		var _color = vm.line_color;
@@ -105,7 +105,6 @@
 				timestamp: firebase.database.ServerValue.TIMESTAMP
 			})
 			$('#import_modal').modal('hide');
-			$.cookie('index_blueprint', vm.blueprint.length - 1);
 			setTimeout(function () {
 				location.reload();
 			}, 1000)

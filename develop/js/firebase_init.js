@@ -24,14 +24,14 @@ firebase.auth().onAuthStateChanged(function (data) {
 		if ( get_page()== "index"){
 			set_location_button();
 			if($.cookie("login")=="Y"){
-              remove_login_button();
-              $.removeCookie("login");
-              location_main();
+				remove_login_button();
+				$.removeCookie("login");
+				location_main();
 			}else{
-              if(!isAnonymous){
-                $("#google_html").html("已登入Google 直接進入");
-				$("#google_button").css("background-color","#d14836").removeClass("loading");
-              }
+				if(!isAnonymous){
+					$("#google_html").html("已登入Google 直接進入");
+					$("#google_button").css("background-color","#d14836").removeClass("loading");
+				}
 			}
 		}
 	} else {
@@ -130,10 +130,11 @@ function metro_json(name) {
     timestamp: firebase.database.ServerValue.TIMESTAMP
   }
 }
-function blueprint_init(blueprint_fn,load_fn) {
+
+function blueprint_init(load_fn) { //載入地鐵初始化
   DB.ref('blueprint/' + user_uid).on("value", function (data) {
     var _action = vm.action; //操作動作執行  
-    var _init = []; 
+    var _init = [];
     data.forEach(function (childData) {
       _init.push(childData.val());
       _init[_init.length - 1].key = childData.key;
@@ -142,41 +143,32 @@ function blueprint_init(blueprint_fn,load_fn) {
       if (_init.length == 0) return load_blueprint_info();
     }
     vm.blueprint = _init;
-    var index_array = [];
-    for (var i = 0; i < _init.length; i++) {
-      index_array.push([]);
-      if (_init[i].line) {
-        for (var j = 0; j < _init[i].line.length; j++) {
-          index_array[i].push([]);
-          index_array[i][index_array[i].length - 1].check = false;//必要，這樣至少才有一個初始資料
-        }
-      }
+		var index_array = [];
+		if (_init[0].line) {
+			for (var j = 0; j < _init[0].line.length; j++) {
+				index_array.push([]);
+				index_array[index_array.length - 1].check = false; //必要，這樣至少才有一個初始資料
+			}
     }
+		$.extend(index_array, vm.index[0]);
+    vm.index[0] = index_array; //更新索引
+ 
+		if (vm.blueprint[0].line.length != vm.index[0].length) {//修補程式(不常發生)
+			var _line = vm.blueprint[0].line;
+			var _index = vm.index[0];
+			var index_array = []
+			for (var i = 0; i < _line.length; i++) {
+				if (vm.index[0][i]!=undefined) {
+					index_array.push(vm.index[0][i]);
+				} else {
+					index_array.push({check:false});
+					index_array[index_array.length - 1].check = false;
+				}
+			}
+			print("重新更新索引");
+			vm.index[0] = index_array;//更新索引
+		}
 
-    $.extend(index_array, vm.index);
-    vm.index = index_array;
-
-    if (vm.blueprint.length != vm.index.length) { //修補程式(不常發生)
-      var _array = [];
-      for (var i = 0; i < _init.length; i++) {
-        _array.push([]);
-        if (_init[i].line) {
-          for (var j = 0; j < _init[i].line.length; j++) {
-            _array[i].push([]);
-            _array[i][_array[i].length - 1].check = false;
-          }
-        }
-      }
-      vm.index_blueprint=0;
-      vm.index = _array;
-      print("重新設定index[載入-全部重設]");
-    }
-    if(vm.action==""){
-      var _vm_blueprint=vm.blueprint;
-      for(var i=0;i<_vm_blueprint.length;i++){
-        vm.check_error_index(i,_vm_blueprint);
-      }
-    }
     if(_action=="swap_metro"){
       show_event_fn(undefined,"你交換了地鐵站的位置");
     } else if(_action=="delete_metro"){
@@ -192,15 +184,20 @@ function blueprint_init(blueprint_fn,load_fn) {
     } else if (_action == "new_line") {
       vm.index_update();
       show_event_fn("新增成功","你新增了一條支線");
-     vm.exchange_line(vm.index[vm.index_blueprint].length - 1);
+      vm.exchange_line(vm.index[0].length - 1);
     } else if(_action=="delete_line"){
       show_event_fn("刪除成功","你刪除了一條支線");
     } else if (_action == "swap_line") {
       vm.index_update();
       show_event_fn(undefined,"你交換了支線的位置");
     } else if (_action == "load") {
-      vm.exchange_blueprint(vm.index_blueprint, true); //切換藍圖
-      blueprint_fn();
+      $("#top_tag").stop().fadeOut(0);
+			vm.update_index_line(vm.index[0]);
+			vm.update_index_line_check();
+			vm.update_selection_color();
+			vm.update_metro_key(vm.index[0][vm.index_line]);
+      vm.action_move=1;
+      setTimeout(move_center, 0);
       load_fn();
     }
     vm.action = "";
@@ -220,13 +217,9 @@ function _is_login() {
   DB.ref('users_data/' + user_uid +"/index").once('value', function (data) { //載入user_data
     if (data.val()) vm.index = data.val();
   }).then(function () {
-    blueprint_init(function () {
-     //這裡是變動藍圖資訊都會常態執行的fn
-      
-    },function(){//這裡只要vm.load會執行
+    blueprint_init(function(){//這裡只要vm.load會執行
       start_set();
       lighning_bind();      
     });
-    
   });
 }

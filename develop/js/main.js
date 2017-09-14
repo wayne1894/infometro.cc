@@ -12,7 +12,6 @@
        if(is_mobile()){
          $("#board_parent").css("min-height",(getViewportSize().h)+"px");
        }
-    
         if(window_width<700){
           $("#center").css("width","700px");
           $("#top").css("width", $("#center").width());

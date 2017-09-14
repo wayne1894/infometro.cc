@@ -9,7 +9,6 @@ var vm = new Vue({
   data: {
     blueprint: [],
     index: [],
-    index_blueprint: 0,
     index_line: 0,
     info_active: "",
     key_metro: "",
@@ -45,16 +44,16 @@ var vm = new Vue({
   },
   computed: {
     loading_blueprint :function(){
-       if (this.blueprint.length >0) return true;
+      if (this.blueprint.length >0) return true;
     },
     line_color: function () { //主線目前一律是line 0
       if (this.blueprint.length == 0) return "";
       if (this.pick_color) return this.pick_color;
-      return this.get_blueprint().line[0].color;
+      return this.blueprint[0].line[0].color;
     },
     line: function () { //載入line
       if (this.blueprint.length == 0) return "";
-      return this.get_blueprint().line;
+      return this.blueprint[0].line;
     },
     line_color: function (index) {
       if (this.blueprint.length == 0) return "";
@@ -180,11 +179,6 @@ var vm = new Vue({
           $("#board_info .dropdown").dropdown("destroy").dropdown();
         }, 5);
       })
-    },
-    index_blueprint:function(){
-        //代入即時資訊
-        if (vm.blueprint.length == 0) return "";
-//			lighning_bind();
     }
   },
   methods: {
@@ -208,7 +202,7 @@ var vm = new Vue({
         }
       }).dimmer('show');
       $delete_info.find(".send").off("click").on("click", function () {
-        DB.ref('users_data/' + user_uid +"/lightning/"+vm.get_blueprint().key+"/"+key).remove();
+        DB.ref('users_data/' + user_uid +"/lightning/"+vm.blueprint[0].key+"/"+key).remove();
         $delete_info.dimmer('hide');
       });
       $delete_info.find(".cancel").off("click").on("click", function () {
@@ -316,31 +310,26 @@ var vm = new Vue({
     },
     update_blueprint: function (key, data) {
       if (key == undefined || data == undefined) {
-        data = vm.get_blueprint();
+        data = vm.blueprint[0];
         key = data.key;
       }
       setTimeout(function () {
         DB.ref('blueprint/' + user_uid + "/" + key).set(data);
       }, 0)
-
-    },
-    get_blueprint: function (index) { //得到藍圖(傳入index為其他藍圖)
-      if (index != undefined) return this.blueprint[index];
-      return this.blueprint[this.index_blueprint];
     },
     get_index_blueprint: function () { //得到當前藍圖索引資料
-      return vm.index[vm.index_blueprint];
+      return vm.index[0];
     },
     get_line: function () {
-      return this.get_blueprint().line[this.index_line]
+      return this.blueprint[0].line[this.index_line]
     },
     get_index_line: function () { //得到當前支線索引資料
-      var _index=vm.index[vm.index_blueprint][vm.index_line];
+      var _index=vm.index[0][vm.index_line];
       if(typeof _index!="object"){
          print("索引變字串");
-         vm.index[vm.index_blueprint][vm.index_line]={}
-         vm.index[vm.index_blueprint][vm.index_line].check=false;
-        return vm.index[vm.index_blueprint][vm.index_line]
+         vm.index[0][vm.index_line]={}
+         vm.index[0][vm.index_line].check=false;
+        return vm.index[0][vm.index_line]
       }else{
         return _index;
       }
@@ -394,52 +383,6 @@ var vm = new Vue({
       }
 
     },
-    check_error_index: function (index,_vm_blueprint) { //修補程式(不常發生)
-      if (!_vm_blueprint[index]) return ;
-      if (_vm_blueprint[index].line.length != vm.index[index].length) {
-        var _line = _vm_blueprint[index].line;
-        var _index = vm.index[index];
-        var index_array = []
-        for (var i = 0; i < _line.length; i++) {
-          if (vm.index[index][i]!=undefined) {
-            index_array.push(vm.index[index][i]);
-          } else {
-            index_array.push({check:false});
-            index_array[index_array.length - 1].check = false;
-          }
-        }
-        print("重新更新索引");
-        vm.index[index] = index_array;
-      }
-    },
-    exchange_blueprint: function (index, target, event) { //切換藍圖
-      if (vm.action != "load" && vm.index_blueprint == index) {
-        if (event && $(event.target).hasClass("blueprint_i")) {
-          $(event.target).trigger("customClick");
-        };
-        return; //重覆就離開
-      }    
-      vm.check_error_index(index,vm.blueprint);
-      if (index >= vm.blueprint.length) index = 0;
-      $("#top_tag").stop().fadeOut(0);
-      $.cookie("index_blueprint", index);
-      if (event && event.target) {
-        if (event.target.className != undefined) {
-          if (event.target.className.indexOf("blueprint_a") > -1 || event.target.className.indexOf("blueprint_i") > -1) {
-            target = true;
-          }
-        }
-      }
-      if (target) {
-        vm.index_blueprint = index; //重新安排
-        vm.update_index_line(vm.index[index]);
-        vm.update_index_line_check();
-        vm.update_selection_color();
-        vm.update_metro_key(vm.index[index][vm.index_line]);
-      }
-      vm.action_move=1;
-      setTimeout(move_center, 0);
-    },
     exchange_line: function (index) {
       if (vm.index_line == index) return; //重覆就離開
       $("#top_tag").stop().fadeOut(0);
@@ -462,7 +405,7 @@ var vm = new Vue({
       }
     },
     replace_index: function () { //修補程式(不常發生)
-      var _line = vm.get_blueprint().line;
+      var _line = this.blueprint[0].line;
       var _index_blueprint = vm.get_index_blueprint();
       var j = _line.length - _index_blueprint.length;
       for (var i = 0; i < j; i++) _index_blueprint.push([]); //新增line的index陣列
@@ -470,7 +413,7 @@ var vm = new Vue({
     },
     new_line: function () {
       if(vm.action=="load")return;
-      var data = this.get_blueprint();
+      var data = this.blueprint[0];
       var get_index = vm.get_index_blueprint();
 			remove_start();
       if (!data.line) data.line = []; //如果沒有line就新增一個空陣列
@@ -488,7 +431,7 @@ var vm = new Vue({
         }
     },
     move_line: function (key) {
-      var data = vm.get_blueprint();
+      var data = vm.blueprint[0];
       var index= vm.find_line_index(key,data);
       if (index == undefined) return
       if(index==0){//代表只有一筆，刪除整個藍圖
@@ -508,7 +451,7 @@ var vm = new Vue({
       return _line
     },
     delete_line: function (key,_status) {
-      var data = vm.get_blueprint();
+      var data = vm.blueprint[0];
       var index= vm.find_line_index(key,data);
       if (index == undefined) return
       if(_status=="move_delete" || _status=="metro_one_delete"){
@@ -566,7 +509,7 @@ var vm = new Vue({
     },
     new_metro: function (order) {
       var _metro = metro_json("未命名");
-      var data = JSON.parse(JSON.stringify(this.get_blueprint())); //將傳址改為傳值
+      var data = JSON.parse(JSON.stringify(this.blueprint[0])); //將傳址改為傳值
       data.line[vm.index_line].metro.splice(order, 0, _metro);
       vm.action = "new_metro";
       remove_start();
@@ -587,7 +530,7 @@ var vm = new Vue({
       }
     },
     move_metro: function (move_key, _line_index) {
-      var data = this.get_blueprint();
+      var data = this.blueprint[0];
       var _metro = data.line[this.index_line].metro;
 			var delete_fn;
       if (_metro.length <= 1) {
@@ -607,7 +550,7 @@ var vm = new Vue({
       }
 			DB.ref("info/" + data.line[this.index_line]._key + "/metro").child(move_key).once("value", function (old_data) {
 
-				DB.ref('info/' + vm.get_blueprint().line[_line_index]._key + "/metro/" + move_key).set(old_data.val());//移動
+				DB.ref('info/' + vm.blueprint[0].line[_line_index]._key + "/metro/" + move_key).set(old_data.val());//移動
 
 				DB.ref("info/" + data.line[vm.index_line]._key + "/metro").child(move_key).remove();//移除(可以進行備份)
 
@@ -617,7 +560,7 @@ var vm = new Vue({
       return _metro
     },
     delete_metro: function (delete_key) { //與move_metro雷同
-      var data = JSON.parse(JSON.stringify(this.get_blueprint())); //將傳址改為傳值
+      var data = JSON.parse(JSON.stringify(this.blueprint[0])); //將傳址改為傳值
       var index = vm.find_metro_index(delete_key, data);
       if (index == undefined) return;
       $('.ui.modal').modal("refresh");
@@ -654,7 +597,7 @@ var vm = new Vue({
     },
 		swap_metro: function (oldIndex, newIndex) {
       if (oldIndex == newIndex) return;
-      var data = JSON.parse(JSON.stringify(this.get_blueprint())); //將傳址改為傳值
+      var data = JSON.parse(JSON.stringify(this.blueprint[0])); //將傳址改為傳值
       var data_metro = data.line[this.index_line].metro
 
       function get_key(key) {
@@ -697,7 +640,7 @@ var vm = new Vue({
         message: board_textarea,
         favorite: false,
         url_info: "",
-		update_timestamp: firebase.database.ServerValue.TIMESTAMP,
+				update_timestamp: firebase.database.ServerValue.TIMESTAMP,
         timestamp: firebase.database.ServerValue.TIMESTAMP,
         users: user_uid,
         file_id : $("#uploadFileParent").data("file_id") || "",
@@ -912,9 +855,9 @@ var vm = new Vue({
 
       function get_level() {
         if (_level == "blueprint") {
-          return vm.blueprint[index];
+          return this.blueprint[0];
         } else if (_level == "line") {
-          return vm.get_blueprint().line[index];
+          return this.blueprint[0].line[index];
         } else if (_level == "metro") {
           return vm.get_line().metro[index];
         }
@@ -956,7 +899,7 @@ var vm = new Vue({
       }).colpickSetColor(color).colpickShow();
 			$("#left_color").attr("show","Y")
       $(".colpick_submit").off("click.op").on("click.op", function () {
-        vm.get_blueprint().line[index].color = "#" + $("#left_color").val();
+        vm.blueprint[0].line[index].color = "#" + $("#left_color").val();
         vm.action = "edit_color";
         vm.update_blueprint();
 		$("#left_color").attr("show","");
@@ -965,16 +908,16 @@ var vm = new Vue({
     },
     swap_line: function (oldIndex, newIndex) {
       if (oldIndex == newIndex) return;
-      var data = JSON.parse(JSON.stringify(this.get_blueprint())); //將傳址改為傳值
+      var data = JSON.parse(JSON.stringify(this.blueprint[0])); //將傳址改為傳值
       var new_line = [];
       var new_index = [];
       $("#line_drag li").each(function () {
         var index_key = get_key($(this).data("key"));
         new_line.push(data.line[index_key]);
-        new_index.push(vm.index[vm.index_blueprint][index_key]);
+        new_index.push(vm.index[0][index_key]);
       })
       data.line = new_line;
-      vm.index[vm.index_blueprint] = new_index;
+      vm.index[0] = new_index;
       vm.update_index_line(new_index);
       vm.action = "swap_line";
       vm.update_blueprint(data.key, data);

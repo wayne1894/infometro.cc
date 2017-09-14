@@ -77,8 +77,7 @@
 		vm.search_metro = [];
 		vm.search_info = [];
 		if (_val == "") return
-
-		var _blueprint = vm.get_blueprint();
+		var _blueprint = vm.blueprint[0];
 		for (var i = 0; i < _blueprint.line.length; i++) {
 			var _key = _blueprint.line[i]._key;
 			var _name = _blueprint.line[i].name;
@@ -98,7 +97,7 @@
 	}
 
 	function lighning_bind() {
-		var _ref = DB.ref('users_data/' + user_uid + "/lightning/" + vm.get_blueprint().key);
+		var _ref = DB.ref('users_data/' + user_uid + "/lightning/" + vm.blueprint[0].key);
 		//.limitToFirst(50)
 		vm.$bindAsArray('lightning', _ref);
 		_ref.once("child_added", function (snapshot) { //元件載入後的動作
@@ -115,6 +114,6 @@
 			message: _textarea,
 			timestamp: firebase.database.ServerValue.TIMESTAMP
 		}
-		DB.ref('users_data/' + user_uid + "/lightning/" + vm.get_blueprint().key).push().set(data);
+		DB.ref('users_data/' + user_uid + "/lightning/" + vm.blueprint[0].key).push().set(data);
 		$("#right_lightning textarea").val("");
 	}
