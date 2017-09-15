@@ -854,10 +854,8 @@ var vm = new Vue({
       }, 5);
 
       function get_level() {
-        if (_level == "blueprint") {
-          return this.blueprint[0];
-        } else if (_level == "line") {
-          return this.blueprint[0].line[index];
+        if (_level == "line") {
+          return vm.blueprint[0].line[index];
         } else if (_level == "metro") {
           return vm.get_line().metro[index];
         }

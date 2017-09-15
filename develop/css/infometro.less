@@ -1,4 +1,4 @@
-@left_width: 175px;
+@left_width: 165px;
 @left_pl : 17px;
 @top_height: 65px;
 @bottom_height: 42px;
@@ -110,6 +110,7 @@ textarea:focus {
       position: absolute;
       z-index: 10;
       margin-left: 26px;
+			top: 2px;
     }
     li.line_list {
       position: relative;
@@ -152,7 +153,7 @@ textarea:focus {
         position: absolute;
         width: 10px;
         height: 10px;
-        top: 2px;
+        top: 3px;
         z-index: 6;
         left: 1px;
         display: none;
@@ -721,7 +722,7 @@ textarea:focus {
       -webkit-flex-direction: column-reverse; /* Safari 6.1+ */
       display: flex;
       flex-direction: column-reverse;
-	  z-index: 5;
+	  	z-index: 5;
       a:not(.ui):hover{
         text-decoration: underline;
       }
@@ -746,24 +747,31 @@ textarea:focus {
           padding-left: 17px;
           padding-right: 8px;
           color: rgba(0,0,0,.87);
+					position: relative;
         }
         &:first-of-type{
           border-bottom: 1px solid #cdcdcd;
         }
+				.photo{
+					position: absolute;
+					
+				}
         .info_message {
-          width: 80%;
-          min-height: 110px;
-          float: left;
-          padding-right: 20px;
+          margin-left: 47px;
+   				margin-right: 55px;
         }
-        .mh_40{
-          min-height: 40px;
+        .mh_35{
+          min-height: 35px;
         }
         .icon {
           color: #B3B3B3;
           cursor: pointer;
         }
         .right_icon{
+					width: 46px;
+					position: absolute;
+					right: 12px;
+					top: 0;
           a{
             color: inherit;
           }
@@ -798,7 +806,7 @@ textarea:focus {
           .clearfix();
           display: block;
           padding-top: 5px;
-		  padding-bottom: 12px;
+		  		padding-bottom: 12px;
           button{
             float: right;
             position: relative;
@@ -1633,6 +1641,9 @@ i.orange.icon {
 	}
 	.ui.items:not(.unstackable)>.item>.image+.content {
 		padding: 0;
+	}
+	#board2 .image,#board2 .url_img{
+		max-height: none!important;
 	}
 }
 #board2{

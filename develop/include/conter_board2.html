@@ -66,8 +66,8 @@
 		<div :id="item['.key']" v-for="(item, index) in info_sort_filter" :key="item['.key']"  @click="info_active=item['.key']" class="board_list ui vertical segment clear">
 			<div class="board_message">
 			  <div :style="{color : line_color}" class="active_left" v-show="info_active==item['.key']"></div>
-				<img v-if="users.photo" class="ui left floated image transition mini" :src="users.photo">
-				<div :class="{mh_40 : item.url_info }" class="info_message" @dblclick="edit_info(item,'dbl',$event)">
+				<img v-if="users.photo" class="ui image transition mini photo" :src="users.photo">
+				<div :class="{mh_35 : item.url_info }" class="info_message" @dblclick="edit_info(item,'dbl',$event)">
 					<p v-if="img_file(item.file_name)">
 						<a :href="item.file_url" target="_blank"><img style="width:100%;" :src="item.file_url" ></a>
 					</p>
