@@ -21,6 +21,15 @@
 			}
 		})
 	}
+	function download(text, name, type) {
+			var a = document.createElement("a");
+			var file = new Blob([text], {type: type});
+			a.href = URL.createObjectURL(file);
+			a.download = name;
+			a.click();
+	}
+
+//download(JSON.stringify(jsonData), 'test.txt', 'text/plain');
 
 	function export_line() {
     var key=vm.blueprint[0].key;
@@ -29,34 +38,34 @@
 		var _color = vm.line_color;
 		$('#export_modal').css("borderTopColor", _color);
 		$('#export_modal').modal('hide');
-		//$("#export_modal_button").css("backgroundColor", _color);
+
 		$("#send_modal_button").css("backgroundColor", _color);
+		$("#download_modal_button").css("backgroundColor", _color);
 		$("#send_modal_button").removeClass("loading");
-		$("#send_modal_button").off("click").one("click", function () {
-			$(this).addClass("loading");
-			var email = $.trim($("#modal_send").val());
-			if (email == "") return;
-			var subject = $("#export_modal_name").html();
-			var attachments = $("#modal_textarea").val();
-
-			$.post("https://us-central1-infometro-cc.cloudfunctions.net/mail", {
-				"email": email,
-				"subject": subject,
-				"html": "檔案存於附件",
-				"attachments": attachments
-			}).done(function () {
-				$("#send_modal_button").removeClass("loading");
-				$('#export_modal').modal('hide');
-				show_event_fn("寄送成功", "檔案已寄到您指定的信箱");
-			})
-
-		})
+//		$("#send_modal_button").off("click").one("click", function () {
+//			$(this).addClass("loading");
+//			var email = $.trim($("#modal_send").val());
+//			if (email == "") return;
+//			var subject = "";
+//			var attachments = $("#modal_textarea").val();
+//
+//			$.post("https://us-central1-infometro-cc.cloudfunctions.net/mail", {
+//				"email": email,
+//				"subject": subject,
+//				"html": "檔案存於附件",
+//				"attachments": attachments
+//			}).done(function () {
+//				$("#send_modal_button").removeClass("loading");
+//				$('#export_modal').modal('hide');
+//				show_event_fn("寄送成功", "檔案已寄到您指定的信箱");
+//			})
+//
+//		})
 
 		for (var i = 0; i < vm.blueprint.length; i++) {
 			if (vm.blueprint[i].key == key) {
 				export_json.name = vm.blueprint[i].name;
 
-				//$("#export_modal_name").html(export_json.name);
 				$("#export_modal_name").css("color", _color);
 
 				export_json.line = vm.blueprint[i].line;
