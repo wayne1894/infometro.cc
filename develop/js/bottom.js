@@ -22,7 +22,7 @@
 		})
 	}
 
-	function 匯出藍圖() {
+	function export_line() {
     var key=vm.blueprint[0].key;
 		export_num = 0;
 		export_num_use = 0;
@@ -72,7 +72,7 @@
 		}
 	}
 
-	function 匯入藍圖() {
+	function import_line() {
 		var _color = vm.line_color;
 		$('#import_modal').css("borderTopColor", _color);
 		$("#import_modal_button").css("backgroundColor", _color);
