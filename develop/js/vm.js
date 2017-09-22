@@ -226,8 +226,7 @@ var vm = new Vue({
             img.src = vm.url_info.image;
             img.onload = function(){
               $("#url_info_board").find(".url_img").attr("src", img.src);
-
-              if(Math.abs(img.width / img.height -1)>0.45){//代表長寬比比較大
+              if(Math.abs(img.width / img.height -1)>0.5){//代表長寬比比較大
                   $("#url_info_board").addClass("flex_item");
               }else{
                   $("#url_info_board").addClass("flex_item_row");
@@ -250,7 +249,7 @@ var vm = new Vue({
           img.onload = function(){
               var $f_key=$("#" + item['.key']);
               $f_key.find(".url_img").attr("src", img.src);
-              if(Math.abs(img.width / img.height -1)>0.45){//代表長寬比比較大
+              if(Math.abs(img.width / img.height -1)>0.5){//代表長寬比比較大
                 $f_key.find(".item_url_info").addClass("flex_item");
               }else{
                 $f_key.find(".item_url_info").addClass("flex_item_row");
