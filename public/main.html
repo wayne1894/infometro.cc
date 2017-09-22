@@ -337,7 +337,7 @@
 							<a v-if="item.url_info" target="_black" :href="'https://www.facebook.com/sharer/sharer.php?u='+item.url_info.url" class="item" style="text-decoration: none;"><i class="facebook square icon"></i>分享</a>
 						</div>
 					</span>
-					<a v-if="item.file_id" :href="item.file_url" target="_blank" style="position: absolute; top:15px; right: -25px;">
+					<a v-if="item.file_id" :href="item.file_url" target="_blank" style="position: absolute; top:24px; right: 0px;">
 					  <span class="ui pointing" data-position="left center" data-inverted="" :data-tooltip="item.file_name">
 						 <i class="attach icon"></i>
 					  </span>
@@ -385,8 +385,8 @@
  <div class="bottom_line"></div>
   <div id="edit_parent">
     <a :class="{ active: is_nav }" onclick="vm.is_nav=!vm.is_nav" class="left_icon navigation" data-tooltip="導覽" data-position="top center"><i class="help circle icon"></i></a>
-    <a onclick="匯出藍圖()" style="position: relative;top: 1px;" class="left_icon navigation" data-tooltip="備份" data-position="top center"><i class="external icon"></i></a>
-    <a onclick="匯入藍圖()" style="position: relative;top: 1px;" class="left_icon navigation" data-tooltip="匯入" data-position="top center"><i class="reply icon"></i></a>
+    <a onclick="export_line()" style="position: relative;top: 1px;" class="left_icon navigation" data-tooltip="匯出" data-position="top center"><i class="external icon"></i></a>
+    <a onclick="import_line()" style="position: relative;top: 1px;" class="left_icon navigation" data-tooltip="匯入" data-position="top center"><i class="reply icon"></i></a>
     <a class="left_icon" data-tooltip="登出" data-position="top center" onclick="$('.page.dimmer:first').dimmer('toggle');"><i class="power icon"></i></a>
   </div>
 </div>
@@ -528,32 +528,50 @@
   </div>
   
     <div id="export_modal" style="padding: 0;" class="ui small modal orange segment">
+    <div class="header">
+       匯出支線
+    </div>
     <div class="image content">
       <div class="description">
-        <p style="line-height: 1em;font-size: 15px;letter-spacing: 1px;">將文字儲存起來，日後你可以透過這一串文字來回復到你現在的狀態。</p>
-        <p id="export_modal_name" style="line-height: 1em;font-size: 15px;letter-spacing: 1px;"></p>
+        <p style="line-height: 1em;font-size: 15px;letter-spacing: 1px;">請選擇要匯出的支線：</p>
         <div>
-        <textarea id="modal_textarea" style="width:100%; height:130px; border: 1px solid #e2e2e2;color:#5a5a5a;padding: 5px 10px;"></textarea>
+        	<div class="modal_line ui checkbox">
+        		<div v-for="(item, index) in line" style="margin-bottom: 5px;color: red;">
+							<input :id="'export---' + index" type="checkbox" class="hidden">
+							<label :for="'export---' + index" :style="{color:item.color}" style="cursor: pointer;"><div style="color: #000">{{item.name}}</div></label>
+						</div>
+					</div>
         </div>
       </div>
     </div>
     <div class="actions clearfix">
-      <div id="export_modal_button" style="color:#ffffff;float:right"  class="ui cancel button">關閉</div>
-      <div id="send_modal_button" style="color:#ffffff;float:right" class="ui button">寄給自已</div>
-    	<div class="ui small form" style="float:right">
-    		<input id="modal_send" type="text" placeholder="example@gmail.com , example2@gmail.com" style="border:1px solid rgb(226, 226, 226);">
-    	</div>
-    	
+      <div id="export_modal_button" style="color:#000000;float:right"  class="ui cancel button">關閉</div>
+      <div id="download_modal_button" style="color:#ffffff;float:right" class="ui button">下載</div>
+      <div id="send_modal_button" style="color:#ffffff;float:right" class="ui button">寄到信箱</div>
 
+    	<div class="ui form small" style="float:right">
+    		<input id="modal_send" type="text" placeholder="請輸入email，超過一個用,格開" style="border:1px solid rgb(226, 226, 226);width: 230px;">
+    	</div>
     </div>
   </div>
   
   <div id="import_modal" style="padding: 0;" class="ui small modal orange segment">
+    <div class="header">
+       匯入支線
+    </div>
     <div class="image content">
       <div class="description">
-        <p style="line-height: 1em;font-size: 15px;letter-spacing: 1px;">請貼上你之前匯出的文字資料</p>
+        <p style="line-height: 1em;font-size: 15px;letter-spacing: 1px;margin-right:5px;">請上傳支線檔案：</p>
         <div>
-        <textarea style="width:100%; height:130px; border: 1px solid #e2e2e2;color:#5a5a5a;padding: 5px 10px;"></textarea>
+					<input id="uploadtxt" type="file">
+        </div>
+        <div>
+        	<div class="modal_line ui checkbox">
+        		<div v-for="(item, index) in line_import" style="margin-bottom: 5px;color: red;">
+							<input :id="'import---' + index" type="checkbox" class="hidden">
+							<label :for="'import---' + index" :style="{color:item.color}" style="cursor: pointer;"><div style="color: #000">{{item.name}}</div></label>
+						</div>
+					</div>
         </div>
       </div>
     </div>
