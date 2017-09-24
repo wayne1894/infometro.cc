@@ -45,7 +45,7 @@
       </div>
     </div>
     <div class="actions clearfix">
-      <div id="export_modal_button" style="color:#000000;float:right"  class="ui cancel button">關閉</div>
+      <div id="export_modal_button" style="color:#000000;float:right"  class="ui cancel button">取消</div>
       <div id="download_modal_button" style="color:#ffffff;float:right" class="ui button">下載</div>
       <div id="send_modal_button" style="color:#ffffff;float:right" class="ui button">寄到信箱</div>
 
@@ -61,17 +61,17 @@
     </div>
     <div class="image content">
       <div class="description">
-        <p style="line-height: 1em;font-size: 15px;letter-spacing: 1px;margin-right:5px;">請上傳支線檔案：</p>
+<!--        <p style="line-height: 1em;font-size: 15px;letter-spacing: 1px;margin-right:5px;">請上傳支線檔案：</p>-->
         <div>
-					<input id="uploadtxt" type="file">
+		  <input id="uploadtxt" type="file">
         </div>
-        <div>
+        <div style="margin-top: 15px;">
         	<div class="modal_line ui checkbox">
         		<div v-for="(item, index) in line_import" style="margin-bottom: 5px;color: red;">
-							<input :id="'import---' + index" type="checkbox" class="hidden">
-							<label :for="'import---' + index" :style="{color:item.color}" style="cursor: pointer;"><div style="color: #000">{{item.name}}</div></label>
-						</div>
-					</div>
+                  <input :id="'import---' + index" type="checkbox" class="hidden">
+                  <label :for="'import---' + index" :style="{color:item.color}" style="cursor: pointer;"><div style="color: #000">{{item.name}}</div></label>
+				</div>
+			</div>
         </div>
       </div>
     </div>

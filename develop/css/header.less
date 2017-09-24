@@ -4,7 +4,7 @@ header{
   position: fixed;
   width: 100%;
   background-color: #ffffff;
-  z-index: 500;
+  z-index: 2000;
 }
 .logo{
   cursor: pointer;
@@ -28,21 +28,75 @@ header{
 }
 #header_area{
   position: absolute;
-  right:32px;
+  right: 22px;
   top: 11px;
+  line-height: 2em;
   img{
     border: 1px solid #cdcdcd;
     margin-right: 7px;
+  }
+  .menu{
+    width: 220px;
   }
   .header_name{
     font-size: 12px;
     font-weight: 400;
     font-family: 'Noto Sans TC', sans-serif;
-    
+  }
+  @media screen and (max-width:800px)  {
+    .header_name{
+      display: none;
+    }
   }
 }
 .header_input{
   border-color: #FF6900;left: 69px;top: -10px;
+}
+
+.header_list{
+  position: absolute;
+  width: calc(~"100% - 33px");
+  top: 32px;
+  box-shadow: 1px 2px 2px 0 rgba(34,36,38,.15);
+  border: 1px solid #d4d4d5;
+  border-top: none;
+  border-bottom: none;
+  .ui{
+    border: none;
+    padding: .8em .8em;
+    margin-top: 0!important;
+    &:hover{
+      background-color: #f7f7f7;
+      cursor: pointer;
+    }
+  }
+  .ui:last-child{
+    border-radius: 0 0 .28571429rem .28571429rem;
+  }
+  .ui.top{
+    border-radius: inherit;
+    border-top: none;
+  }
+}
+
+.header_metro{
+  content: "";
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  background-color: #B3B3B3;
+  border-radius: 99em;
+  z-index: 5;
+  cursor: pointer;
+  position: relative;
+  top: 2px;
+}
+.header_metro_name{
+  display: inline-block;
+  margin-left: 7px;
+  position: relative;
+  top: -1px;
+  letter-spacing: 1px;
 }
 
 @media screen and (max-width:800px)  {

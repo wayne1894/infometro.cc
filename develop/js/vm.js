@@ -1,8 +1,45 @@
 var vm_header=new Vue({
 	el: '#header_main',
 	data: {
-	  users: []
-	}
+	  users: [],
+      header_search : []
+	},
+    mounted: function () {
+      $("#header_area").css("visibility", "visible");
+    },
+    methods: {
+      header_keyup : function(){
+        vm_header.header_search=[];
+        var _name=$.trim($("#header_search").val()).toLowerCase();//要查詢的name
+        if(_name=="")return;
+        var _line=vm.blueprint[0].line;
+        for(var i=0;i<_line.length;i++){
+          for(var j=0;j<_line[i].metro.length;j++){
+            var _name2=_line[i].metro[j].name.toLowerCase();
+            if(_name2.indexOf(_name)>-1 || _name.indexOf(_name2)>-1){
+              var myRegExp=new RegExp(_name,"g");
+              var replaceText 	= "<b style='color:"+_line[i].color+"'>"+_name+"</b>"; //準備替換成的文字
+              var new_string=_name2.replace(myRegExp, replaceText);
+              this.header_search.push({
+                name : new_string,
+                _key : _line[i].metro[j]._key,
+                color : _line[i].color,
+                index: i
+              })
+            }
+          }
+        }
+        
+      },
+      header_search_click : function(index,key){
+        vm.exchange_line(index,"header_search_click");
+        setTimeout(function(){
+          vm.key_metro=key;
+        },5)
+        vm_header.header_search=[];
+        $("#header_search").val("");
+      }
+    }
 })
 var vm = new Vue({
   el: '#main',
@@ -27,7 +64,7 @@ var vm = new Vue({
     drag_metro_key : "",
     lightning : [],
     copy_info : [],
-		line_import :[]
+	line_import :[]
   },
   mounted: function () {
     $("#main").css("visibility", "visible");
@@ -383,7 +420,7 @@ var vm = new Vue({
       }
 
     },
-    exchange_line: function (index) {
+    exchange_line: function (index,source) {
       if (vm.index_line == index) return; //重覆就離開
       $("#top_tag").stop().fadeOut(0);
       if ($("html").hasClass("re_name")) { //解決編輯按兩下的BUG
@@ -392,13 +429,14 @@ var vm = new Vue({
         }, 0)
       }
       _el();
-
       function _el() {
         vm.index_line = index;
         if (!vm.get_index_blueprint()[index]) vm.replace_index(); //重新設定index
         vm.update_index_line_check();
         vm.update_selection_color();
-        vm.update_metro_key(vm.get_index_blueprint()[index]);
+        if(source==undefined){
+          vm.update_metro_key(vm.get_index_blueprint()[index]);
+        }
         vm.action_move=1;
         setTimeout(move_center,0);
         $(document.body).scrollTop(0);
@@ -415,7 +453,7 @@ var vm = new Vue({
       if(vm.action=="load")return;
       var data = this.blueprint[0];
       var get_index = vm.get_index_blueprint();
-			remove_start();
+      remove_start();
       if (!data.line) data.line = []; //如果沒有line就新增一個空陣列
       var get_color = vm.get_default_color(data.line.length);
       var _j = line_json("未命名", get_color);

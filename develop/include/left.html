@@ -19,7 +19,7 @@
             <i class="trash outline mini small icon"></i>
           </div>
           <input class="line_input" type="text" v-model="item.name">
-          <i class="line_i" @click="open_color(index,item.color)" :style="{backgroundColor:item.color}" ></i>
+          <i class="line_i" @click="open_color(index,item.color)" :style="{backgroundColor:item.color}"></i>
           <a class="line_a" @dblclick="re_name(index,'line',$event)" @click="exchange_line(index)">{{item.name}}</a>
         </li>
       </ul>

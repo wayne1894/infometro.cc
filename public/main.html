@@ -103,15 +103,35 @@
   	<div id="header_main">
   		<a href="/"><img class="logo" src="src/static/images/logo_200.png"></a>
       <div class="header_input ui mini action input">
-        <input id="header_search" type="text" placeholder="搜尋支線、地鐵">
-        <button class="ui mini icon button"><i class="search icon"></i></button> 
+        <input id="header_search" @keyup="header_keyup()" type="text" placeholder="搜尋地鐵">
+        <button class="ui mini icon button"><i class="search icon"></i></button>
+        <div class="header_list">
+          <div v-for="(item, index) in header_search" class="ui mini top attached segment" @click="header_search_click(item.index,item._key)">
+            <div :style="{backgroundColor:item.color}" class="header_metro"></div>
+            <div class="header_metro_name" v-html="item.name"></div>
+          </div>
+        </div>
+        
       </div>
-      <div id="header_area">
+      <div id="header_area" style="visibility: hidden">
         <img class="ui right avatar image" v-if="users.photo" :src="users.photo">
         <span class="header_name">{{users.name}}</span>
+        <span class="ui top right pointing dropdown" style="margin-left: -6px;">
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item">{{users.name}}</div>
+            <div class="item" onclick="$('.page.dimmer:first').dimmer('toggle');">登出</div>
+          </div>
+        </span>
       </div>
   	</div>
 </header>
+<script>
+	$(function () {
+		$('#header_area .ui.dropdown').dropdown();
+	})
+
+</script>
 <div id="main">
   <div id="left">
     <div id="line_parent">
@@ -135,7 +155,7 @@
             <i class="trash outline mini small icon"></i>
           </div>
           <input class="line_input" type="text" v-model="item.name">
-          <i class="line_i" @click="open_color(index,item.color)" :style="{backgroundColor:item.color}" ></i>
+          <i class="line_i" @click="open_color(index,item.color)" :style="{backgroundColor:item.color}"></i>
           <a class="line_a" @dblclick="re_name(index,'line',$event)" @click="exchange_line(index)">{{item.name}}</a>
         </li>
       </ul>
@@ -392,7 +412,7 @@
 </div>
 
   <div id="copyright">
-  <div style="display:inline-block;">
+  <div style="display:inline-block;position: relative;right: -6px;">
   © 2017 資訊地鐵站 版權所有
   </div>
   <span class="ui top right pointing dropdown">
@@ -545,7 +565,7 @@
       </div>
     </div>
     <div class="actions clearfix">
-      <div id="export_modal_button" style="color:#000000;float:right"  class="ui cancel button">關閉</div>
+      <div id="export_modal_button" style="color:#000000;float:right"  class="ui cancel button">取消</div>
       <div id="download_modal_button" style="color:#ffffff;float:right" class="ui button">下載</div>
       <div id="send_modal_button" style="color:#ffffff;float:right" class="ui button">寄到信箱</div>
 
@@ -561,17 +581,17 @@
     </div>
     <div class="image content">
       <div class="description">
-        <p style="line-height: 1em;font-size: 15px;letter-spacing: 1px;margin-right:5px;">請上傳支線檔案：</p>
+<!--        <p style="line-height: 1em;font-size: 15px;letter-spacing: 1px;margin-right:5px;">請上傳支線檔案：</p>-->
         <div>
-					<input id="uploadtxt" type="file">
+		  <input id="uploadtxt" type="file">
         </div>
-        <div>
+        <div style="margin-top: 15px;">
         	<div class="modal_line ui checkbox">
         		<div v-for="(item, index) in line_import" style="margin-bottom: 5px;color: red;">
-							<input :id="'import---' + index" type="checkbox" class="hidden">
-							<label :for="'import---' + index" :style="{color:item.color}" style="cursor: pointer;"><div style="color: #000">{{item.name}}</div></label>
-						</div>
-					</div>
+                  <input :id="'import---' + index" type="checkbox" class="hidden">
+                  <label :for="'import---' + index" :style="{color:item.color}" style="cursor: pointer;"><div style="color: #000">{{item.name}}</div></label>
+				</div>
+			</div>
         </div>
       </div>
     </div>
