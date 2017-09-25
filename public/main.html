@@ -236,15 +236,14 @@
     </transition>
   </div>
 	<div id="board3" style="color:#FF6900;border-right: 1px solid #CDCDCD;">
-	<div id="board3_header" :style="{color:line_color}"><i class="heart icon"></i><span class="text">最愛連結</span>
+	<div id="board3_header" :style="{color:line_color}"><i class="fork icon"></i><span class="text">關聯支線</span>
 	</div>
 	<div id="board_favorites">
-		<div class="favorites_list" v-for="(item, index) in info_favorites">
-			<a :href="item.url_info.url" :title="item.url_info.title" target="_blank"  v-once>
-				<span><img :src="'https://www.google.com/s2/favicons?domain_url='+item.url_info.url"  v-once></span>
-				<span v-once>{{item.url_info.title}}</span> 
-				<div class="os card" os-tooltip="some text that hover to be seen" options="ctrl.topPosition" style="padding: 10px">top</div>
-			</a>
+		<div class="favorites_list">
+			 <div class="favorites_metro" style="background-color: black;border-color: #ff6900;">
+			 	 <div class="favorites_line" style="background-color: #ff6900;"></div>
+			 </div>
+			 <div class="favorites_txt">地鐵名稱</div>
 		</div>
 	</div>
 	<div id="board_search">

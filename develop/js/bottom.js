@@ -85,8 +85,8 @@
 	}
 
 	function import_line() {
-        var import_json ="";
-        var _check
+		var import_json ="";
+		var _check
 		var _color = vm.line_color;
 		$('#import_modal').css("borderTopColor", _color);
 		$("#import_modal_button").css("backgroundColor", _color);

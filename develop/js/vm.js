@@ -122,20 +122,20 @@ var vm = new Vue({
       if (this.blueprint.length == 0) return "";
       return this.info.length;
     },
-    info_favorites: function () {
-      var _info = this.info.filter(function (info) {
-        if (info.favorite) {
-          if (info.url_info) { //有網址資訊
-            return true;
-          } else {
-            return false;
-          }
-        }
-        return false;
-      });
-      if (_info.length == 0) return false;
-      return _info;
-    },
+//    info_favorites: function () {
+//      var _info = this.info.filter(function (info) {
+//        if (info.favorite) {
+//          if (info.url_info) { //有網址資訊
+//            return true;
+//          } else {
+//            return false;
+//          }
+//        }
+//        return false;
+//      });
+//      if (_info.length == 0) return false;
+//      return _info;
+//    },
     info_sort_filter: function () { //資訊的排序與過濾
 		if (this.blueprint.length == 0) return "";
 	  	var _sort=this.info;
