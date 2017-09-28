@@ -382,9 +382,7 @@
 	 	xKey = 88;
 	var shiftDown = false,
 		shiftKey = 16;
-	
-	
-	
+
 	var copy_flocus=false
 	$(document).on( "focus", "input,textarea", function(){
 		vm.copy_info=[];
@@ -520,3 +518,7 @@
          '</div>'+
        '</div>'
   }
+
+	function get_tag(text){//得到tag
+		//https://stackoverflow.com/questions/21421526/javascript-jquery-parse-hashtags-in-a-string-using-regex-except-for-anchors-i
+	}

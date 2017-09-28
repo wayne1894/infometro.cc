@@ -64,7 +64,7 @@ var vm = new Vue({
     drag_metro_key : "",
     lightning : [],
     copy_info : [],
-	line_import :[]
+		line_import :[]
   },
   mounted: function () {
     $("#main").css("visibility", "visible");
@@ -167,7 +167,19 @@ var vm = new Vue({
         return 1;
       });
       return _sort;
-    }
+    },
+		get_linked:function(){
+				var _line=vm.blueprint[0].line;
+        for(var i=0;i<_line.length;i++){
+          for(var j=0;j<_line[i].metro.length;j++){
+            var _name2=_line[i].metro[j].name.toLowerCase();
+            if(_name2.indexOf(_name)>-1 || _name.indexOf(_name2)>-1){
+              //有筆對到
+             
+            }
+          }
+        }
+		}
   },
   filters: {
     message_filter: function (message,target) {

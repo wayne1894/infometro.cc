@@ -236,15 +236,14 @@
     </transition>
   </div>
 	<div id="board3" style="color:#FF6900;border-right: 1px solid #CDCDCD;">
-	<div id="board3_header" :style="{color:line_color}"><i class="fork icon"></i><span class="text">關聯支線</span>
+	<div id="board3_header" :style="{color:line_color}"><i class="share alternate icon"></i><span class="text">關聯</span>
 	</div>
 	<div id="board_favorites">
-		<div class="favorites_list">
-			 <div class="favorites_metro" style="background-color: black;border-color: #ff6900;">
-			 	 <div class="favorites_line" style="background-color: #ff6900;"></div>
-			 </div>
-			 <div class="favorites_txt">地鐵名稱</div>
+<!--
+		<div class="favorites_list" >
+			<a target="_blank" >test</a>
 		</div>
+-->
 	</div>
 	<div id="board_search">
 		<div class="ui mini action input" :style="{borderColor:line_color}">
@@ -274,7 +273,7 @@
 				  <img class="url_img">
 				  <i v-if="url_info.youtube" class="video_icon video play icon"></i>
 				</div>
-				<div class="content" style=" position: relative;padding-left: 1em;padding-right: 1.6em; padding-bottom: 8px;">
+				<div class="content" style=" position: relative;padding-left: 1em;padding-right: 1.6em; padding-bottom: 8px;word-break: break-all;">
 					<a :href="url_info.url" target="_blank" class="header" style="margin-top: 6px;color: #676868; font-size: 1.1em;">{{url_info.title}}</a>
 					<div class="meta"><span>{{url_info.url_parent}}</span></div>
 					<!-- v-html有風險要改掉，推社交前要拿掉 -->

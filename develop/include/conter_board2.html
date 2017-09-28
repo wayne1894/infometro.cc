@@ -13,7 +13,7 @@
 				  <img class="url_img">
 				  <i v-if="url_info.youtube" class="video_icon video play icon"></i>
 				</div>
-				<div class="content" style=" position: relative;padding-left: 1em;padding-right: 1.6em; padding-bottom: 8px;">
+				<div class="content" style=" position: relative;padding-left: 1em;padding-right: 1.6em; padding-bottom: 8px;word-break: break-all;">
 					<a :href="url_info.url" target="_blank" class="header" style="margin-top: 6px;color: #676868; font-size: 1.1em;">{{url_info.title}}</a>
 					<div class="meta"><span>{{url_info.url_parent}}</span></div>
 					<!-- v-html有風險要改掉，推社交前要拿掉 -->

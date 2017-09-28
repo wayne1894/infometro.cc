@@ -92,11 +92,11 @@
 		$("#import_modal_button").css("backgroundColor", _color);
 		$('#import_modal').modal({
 			inverted: true,
-            closable: false,
-            onHide: function(){
-              vm.line_import = [];
-              $("#uploadtxt").val("");
-            }
+			closable: false,
+			onHide: function(){
+				vm.line_import = [];
+				$("#uploadtxt").val("");
+			}
 		}).modal('show');
 
 		$('#uploadtxt').off("change").on('change', function (e) {
