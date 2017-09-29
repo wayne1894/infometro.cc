@@ -4,7 +4,7 @@
       <div class="header_input ui mini action input">
         <input id="header_search" @keyup="header_keyup()" type="text" placeholder="搜尋地鐵">
         <button class="ui mini icon button"><i class="search icon"></i></button>
-        <div class="header_list">
+        <div class="header_list" style="display: none;">
           <div v-for="(item, index) in header_search" class="ui mini top attached segment" @click="header_search_click(item.index,item._key)">
             <div :style="{backgroundColor:item.color}" class="header_metro"></div>
             <div class="header_metro_name" v-html="item.name"></div>
@@ -12,7 +12,7 @@
         </div>
         
       </div>
-      <div id="header_area" style="visibility: hidden">
+      <div id="header_area" style="visibility: hidden;">
         <img class="ui right avatar image" v-if="users.photo" :src="users.photo">
         <span class="header_name">{{users.name}}</span>
         <span class="ui top right pointing dropdown" style="margin-left: -6px;">
@@ -28,6 +28,7 @@
 <script>
 	$(function () {
 		$('#header_area .ui.dropdown').dropdown();
+		$("#header_main .header_list").show()
 	})
 
 </script>

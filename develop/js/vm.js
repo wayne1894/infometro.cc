@@ -322,16 +322,16 @@ var vm = new Vue({
     mode_txt: function () {
       if (this.blueprint.length == 0) return "";
       if (this.mode == 0) { //一般模式
-//        setTimeout(function () {
-//          sortable["metro"].option("disabled", true);
-//          sortable["line"].option("disabled", true);
-//        }, 5)
+        setTimeout(function () {
+          sortable["metro"].option("disabled", true);
+         // sortable["line"].option("disabled", true);
+        }, 5)
         return "一般模式"
       } else if (this.mode == 1) { //編輯模式
-//        setTimeout(function () {
-//          sortable["metro"].option("disabled", false);
-//          sortable["line"].option("disabled", false);
-//        }, 5)
+        setTimeout(function () {
+          sortable["metro"].option("disabled", false);
+        //  sortable["line"].option("disabled", false);
+        }, 5)
         return "編輯模式"
       } else if (this.mode == 1.5) {
         return "編輯模式"
@@ -831,16 +831,24 @@ var vm = new Vue({
       var $textarea=$("#board_"+_level+"_textarea");
       $textarea.show();
       $textarea.focus();
-      if(_level=="line"){
+     if(_level=="metro"){
+			  var get_level=vm.get_metro();
+      }else{//line
         var get_level=vm.get_line();
-      }else if(_level=="metro"){
-        var get_level=vm.get_metro();
       }
-	  var _name=get_level.name;
+			var _name=get_level.name;
       $textarea.val(get_level.name);
-      auto_height2($textarea[0]);
+			if(_level=="metro"){
+				auto_height3($textarea[0]);
+			}else{//line
+				auto_height2($textarea[0]);
+			} 
       $textarea.on("keydown",function(event){
-        auto_height2($textarea[0]);
+				if(_level=="metro"){
+					auto_height3($textarea[0]);
+				}else{//line
+					auto_height2($textarea[0]);
+				}
         if (event.which == 13 || (event.shiftKey && event.which == 13)) { //enter
 		  		event.preventDefault();
           get_level.name=$.trim($textarea.val().replace(/  +/g, ' '));

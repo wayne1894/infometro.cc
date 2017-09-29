@@ -539,8 +539,10 @@ textarea:focus {
       width: 100%;
       border: 0;
       overflow: hidden;
-      background-color: #f7f7f7;
+      background-color: white;
       letter-spacing: 1px;
+			border:1px solid rgb(255, 105, 0);
+			padding: 0 5px;
     }
     #border_metro_name{
       min-height: 19px;
@@ -551,9 +553,11 @@ textarea:focus {
       width: 90%;
       border: 0;
       overflow: hidden;
-      background-color: #f7f7f7;
+      background-color: white;
+			border:1px solid rgb(255, 105, 0);
       font-size: 18px;
       font-weight: 700;
+			padding: 0 5px;
     }
     #board_line {
       width: 165px;
@@ -617,7 +621,9 @@ textarea:focus {
             margin-bottom: 5px;
             font-size: 18px;
             font-weight: bold;
-			min-height: 18px;
+						min-height: 18px;
+						word-break: break-all;
+						padding-right: 5px;
           }
           >div:not(:first-child) {
             line-height: 17px;
@@ -633,6 +639,9 @@ textarea:focus {
           border-radius: 99em;
           display: inline-block;
         }
+				&:hover #tag_delete_metro{
+					visibility: visible;
+				}
       }
     }
   }
@@ -955,8 +964,9 @@ textarea:focus {
   #tag_delete_metro{
 		display: inline-block;
 		position: absolute;
-        width: 33px;
+    width: 33px;
 		right: 3px;
+		visibility: hidden;
 	}
   @media screen and (max-width: 1130px) {
 		#board1 {

@@ -357,12 +357,22 @@
   }
   function auto_height(textarea){
     $(textarea).height(70);
-    $(textarea).height(textarea.scrollHeight + parseFloat($(textarea).css("borderTopWidth")) + parseFloat($(textarea).css("borderBottomWidth")));
+		var _height = textarea.scrollHeight + parseFloat($(textarea).css("borderTopWidth")) + parseFloat($(textarea).css("borderBottomWidth"))
+    $(textarea).height(_height);
   }
-  function auto_height2(textarea){
+	function auto_height2(textarea){
     $(textarea).height(0);
     var _height=textarea.scrollHeight + parseFloat($(textarea).css("borderTopWidth")) + parseFloat($(textarea).css("borderBottomWidth"));
     $(textarea).height(_height);
+  }
+  function auto_height3(textarea){
+    $(textarea).height(0);
+		$(textarea).css("padding-top",0).css("padding-bottom",0);
+    var _height=textarea.scrollHeight + parseFloat($(textarea).css("borderTopWidth")) + parseFloat($(textarea).css("borderBottomWidth"));
+    $(textarea).height(_height);
+		setTimeout(function(){
+			$(textarea).css("padding-top","3px").css("padding-bottom","3px");
+		},5);
   }
 
 //剪下貼上資訊的部份
