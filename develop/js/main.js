@@ -1,17 +1,27 @@
-  var b1_left = parseInt($("#board1").css("left"));
-  var b2_left = parseInt($("#board2").css("left"));
-  var b3_left = parseInt($("#board3").css("left"));
+  var resizeTime=0
   $(window).resize(function () {
-		var center_width=$("#center").width();
+     
+    if(resizeTime)return
+   
+    resizeTime=setTimeout(function(){
+        var center_width=$("#center").width();
 		var window_width = $(window).width();
-		if(center_width<=1165){
+        if(center_width<=1165){
 			$("#board_parent").addClass("adj");
 		}else{
 			$("#board_parent").removeClass("adj");
 		}
-       if(is_mobile()){
-         $("#board_parent").css("min-height",(getViewportSize().h)+"px");
-       }
+        if(window.matchMedia('(max-width: 800px)').matches){
+          $("#board_edit .border_area").attr("data-position","bottom center")
+        }else{
+          $("#board_edit .border_area").attr("data-position","right center")
+        }
+        //       if(is_mobile()){
+        //         $("#board_parent").css("min-height",(getViewportSize().h)+"px");
+        //       }
+        clearTimeout(resizeTime);
+        resizeTime=0
+    },300);
   }).resize();
 
   setTimeout(function(){

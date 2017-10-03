@@ -1012,14 +1012,29 @@ textarea:focus {
   }
   .clearfix();
 }
-@media screen and (min-width:1401px) and (max-width:1700px)  {
+@media screen and (min-width:1780px)  {
   #center {
-    width: 67%!important;
+    width: 73%!important;
   }
 }
-@media screen and (min-width:1700px)  {
+@media screen and (min-width:1685px)  {
   #center {
-    width: 72%!important;
+    width: 71%!important;
+  }
+}
+@media screen and (min-width:1630px) and (max-width:1685px)  {
+  #center {
+    width: 70%!important;
+  }
+}
+@media screen and (min-width:1501px) and (max-width:1630px)  {
+  #center {
+    width: 68%!important;
+  }
+}
+@media screen and (min-width:1401px) and (max-width:1501px)  {
+  #center {
+    width: 66%!important;
   }
 }
 @media screen and (max-width:1130px)  {
@@ -1032,8 +1047,6 @@ textarea:focus {
     width: 75%!important;
   }
 }
-
-
 //手機版
 @media screen and (max-width:800px)  {
   #left{
@@ -1051,12 +1064,17 @@ textarea:focus {
       border-right: 0;
       border-bottom: 0;
     }
-    
     #board1 #board_line_parent::before{
       left: 50%;
     }
     #board_line{
       width: 100%!important;
+    }
+    #board_line .board_name{
+      width: 40%;
+    }
+    #board1 #board_edit{
+      width: 50%;
     }
     #top .triangle.right{
       right: 6%;
