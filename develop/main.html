@@ -2,9 +2,9 @@
 <html>
 <head>
 @@include('include/head.html')
-<script src="src/build/js/firebase_init.js?v=@@include('include/_r.html')"></script>
-<link rel="stylesheet" type="text/css" href="src/build/css/header.css?v=@@include('include/_r.html')" />
-<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css?v=@@include('include/_r.html')" />
+<script src="src/build/js/firebase_init.js"></script>
+<link rel="stylesheet" type="text/css" href="src/build/css/header.css" />
+<link rel="stylesheet" type="text/css" href="src/build/css/infometro.css" />
 </head>
 <body>
 @@include('include/header.html')
@@ -24,7 +24,7 @@
     </div>
     <div v-show="action=='load'" style="position: absolute;top: 50%;left: 50%;margin-left:-25%;
     margin-top: -6%; width: 50%;">
-      <img style="width:100%;" src="src/static/images/logo_big.svg" alt="">
+      <img style="width:100%;" src="src/build/images/logo_big.svg" alt="">
     </div>
     <div id="show_event"></div>
   </div>
@@ -36,7 +36,7 @@
   </div>
    @@include('include/modal.html')
 </div>
-<script src="src/build/js/main.js?v=@@include('include/_r.html')"></script>
+<script src="src/build/js/main.js"></script>
 @@include('include/footer.html')
 </body>
 </html>
