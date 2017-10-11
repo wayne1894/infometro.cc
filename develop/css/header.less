@@ -9,18 +9,30 @@ header{
 .logo{
   cursor: pointer;
 }
-  #header_main {
-    margin-top: 8px;
-    margin-left: 10px;
-    padding-left: 17px;
-    img.logo {
-      width: 30px;
-      box-shadow: 0 0 0 1px rgba(0,0,0,.3) inset,0 .1em 0.4em -0.05em rgba(0,0,0,.5);
-    }
-  }
+#header_main {
+	padding-top: 8px;
+	padding-left: 10px;
+	padding-left: 17px;
+	position: relative;
+	img.logo {
+		width: 30px;
+		box-shadow: 0 0 0 1px rgba(0,0,0,.3) inset,0 .1em 0.4em -0.05em rgba(0,0,0,.5);
+	}
+}
+
+#hamburgers{
+	display: none;
+	color: #9e9898;
+	position: relative;
+	top: -6px;
+	cursor: pointer;
+	i{
+		font-size: 1.8em;
+	}
+}
 
 #header_search{
-  width: 480px;
+  max-width: 480px;
   border-radius: 0;
   &:focus{
     border-color: inherit!important;
@@ -43,16 +55,39 @@ header{
     font-weight: 400;
     font-family: 'Noto Sans TC', sans-serif;
   }
-  @media screen and (max-width:800px)  {
-    .header_name{
-      display: none;
-    }
-  }
 }
 .header_input{
-  border-color: #FF6900;left: 69px;top: -10px;
+  border-color: #FF6900;
+  left: 69px;
+  top: -10px;
+	width: 59%;
 }
-
+@media screen and (max-width:800px)  {
+	#header_area {
+		right: 8px;
+		img{
+			margin-right: -2px;
+		}
+	}
+	#header_area .header_name{
+		display: none;
+	}
+  .header_input{
+		position: absolute!important;
+    width: 100%;
+		left: auto;
+		top: 7px;
+		padding-right: 150px;
+  }
+	#hamburgers{
+	  display: inline-block;
+	}
+}
+@media screen and (max-width:500px)  {
+	#header_main {
+		padding-left: 7px;	
+	}
+}
 .header_list{
   position: absolute;
   width: calc(~"100% - 33px");
@@ -97,13 +132,4 @@ header{
   position: relative;
   top: -1px;
   letter-spacing: 1px;
-}
-
-@media screen and (max-width:800px)  {
-  #header_search{
-    width: 30%;
-  }
-  .header_input{
-    left: 39px
-  }
 }

@@ -1,6 +1,9 @@
 <header>
   	<div id="header_main">
-  		<a href="/"><img class="logo" src="src/build/images/logo_200.png"></a>
+  	<a style="display: inline-block" href="/"><img class="logo" src="src/build/images/logo_200.png"></a>
+			<div id="hamburgers" class="launch icon item">
+				<i class="content icon"></i>
+			</div>
       <div class="header_input ui mini action input">
         <input id="header_search" @keyup="header_keyup()" type="text" placeholder="搜尋地鐵">
         <button class="ui mini icon button"><i class="search icon"></i></button>
@@ -30,5 +33,4 @@
 		$('#header_area .ui.dropdown').dropdown();
 		$("#header_main .header_list").show()
 	})
-
 </script>

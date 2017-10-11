@@ -12,13 +12,11 @@
 			$("#right .r_content:eq(" + _index + ")").addClass("active").siblings().removeClass("active");
 		})
 
-		$("#right .right_tool").on("click", function (event) {
-			if ($("#right").height() < 400) {
+		$("#right .down_img").on("click", function (event) {
 				if ($(event.target).closest(".r_button").length == 0) {
 					$("#right").toggleClass("down");
 					$.cookie('right_tool', $("#right").attr('class'));
 				}
-			}
 		})
 		if ($.cookie('right_tool')) {
 			if ($.cookie('right_tool').indexOf("down") > -1) {
