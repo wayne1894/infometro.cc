@@ -929,7 +929,7 @@ textarea:focus {
     }
   }
   #board_parent{
-    padding-bottom: 80px;
+    padding-bottom: 40px;
       &.adj::before{
           content: "";
           position: relative;
@@ -1081,8 +1081,6 @@ textarea:focus {
     }
   }
 }
-
-
 #bottom {
 //  background-color: #b2b2b2;
   background-color: #b6b4b6; 
@@ -1391,6 +1389,14 @@ textarea:focus {
     top: 1px;
   }
 }
+#bottom_expand{
+   position: relative;
+   top: 1px;
+   display: none!important;
+   float: right
+}
+
+
 
 @media screen and (max-width:1400px) {
   #right {
@@ -1431,7 +1437,7 @@ textarea:focus {
 	#right{
 		width: 100%;
 		top: 48px;
-    height: 100%;
+        height: 100%;
 		bottom: auto;
 		border-left:none;
 		.right_line{
@@ -1441,8 +1447,17 @@ textarea:focus {
 	#right.down{
 		height: 42px;
 		top: auto;
-		bottom: 42px;
+		bottom: 0;
 	}
+    #bottom #blueprint {
+        padding-left: 9px!important;
+    }
+    #bottom_expand{
+        display: inline-block!important;
+    }
+    #copyright{
+        display: none;
+    }
 }
 
 .clearfix{

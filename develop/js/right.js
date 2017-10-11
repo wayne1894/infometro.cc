@@ -2,7 +2,7 @@
 		//perfectScrollbar
 		$("#right .r_content").perfectScrollbar();
 		$("#right .r_button").on("click", function () {
-			var _index = $(this).index() - 1;
+			var _index = $(this).index() - 2;
 			if (_index == 0) {
 				$("#right_lightning").show();
 			} else {
@@ -12,18 +12,15 @@
 			$("#right .r_content:eq(" + _index + ")").addClass("active").siblings().removeClass("active");
 		})
 
-		$("#right .down_img").on("click", function (event) {
-				if ($(event.target).closest(".r_button").length == 0) {
-					$("#right").toggleClass("down");
-					$.cookie('right_tool', $("#right").attr('class'));
-				}
+		$("#right .down_img ,#bottom_expand").on("click", function (event) {
+            $("#right").toggleClass("down");
+            var _val="";
+            if($("#right").hasClass("down")==false) _val="up";
+            $.cookie('right_tool', _val);
 		})
-		if ($.cookie('right_tool')) {
-			if ($.cookie('right_tool').indexOf("down") > -1) {
-				$(".right_tool").click();
-			}
-		}
-
+        if ($.cookie('right_tool')== "up") {
+            $("#right .down_img").click();
+        }
 		//拖動拉Bar
 		$("#right .right_line").on('mousedown', function (event) {
 			$(document).on('selectstart', function () {

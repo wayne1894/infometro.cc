@@ -1,49 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<title>infometro.cc | 資訊地鐵站</title>
-<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-<meta charset="UTF-8">
-<!--<meta name="viewport" content="width=800, initial-scale=1">-->
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<meta name="description" content="infometro 是一款利用地鐵圖來組織資訊的網站，用來保存創意和想法。">
-<meta name="keywords" content="線上記事本,網路記事本,資訊收藏,雲端記事本,雲端筆記">
-
-<meta property="fb:app_id" content="438516566511315">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://infometro.cc">
-<meta property="og:image" content="https://infometro.cc/src/build/images/s3/fb_og.png">
-<meta property="og:title" content="infometro.cc 資訊地鐵站">
-<meta property="og:description" content="infometro 是一款利用地鐵圖來整理資訊的網站，用來保存創意和想法。">
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.16/css/perfect-scrollbar.min.css" type="text/css" />
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.16/js/perfect-scrollbar.jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.3/vue.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vuefire/1.3.1/vuefire.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/Sortable/1.5.1/Sortable.min.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/4.1.3/firebase.js"></script>
-<script src="src/static/js/jquery.jrumble.1.3.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.5.0/velocity.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/locale/zh-tw.js"></script>
-
-<!-- jquery-color-pick -->
-<link rel="stylesheet" type="text/css" href="src/static/css/colpick.css" />
-<script src="src/static/js/colpick.js"></script>
-<!-- jquery-color-pick -->
-
-
-<script>
-	function print(a){
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>infometro.cc | 資訊地鐵站</title><link rel="shortcut icon" href="favicon.ico" type="image/x-icon"><meta charset="UTF-8"><!--<meta name="viewport" content="width=800, initial-scale=1">--><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="infometro 是一款利用地鐵圖來組織資訊的網站，用來保存創意和想法。"><meta name="keywords" content="線上記事本,網路記事本,資訊收藏,雲端記事本,雲端筆記"><meta property="fb:app_id" content="438516566511315"><meta property="og:type" content="website"><meta property="og:url" content="https://infometro.cc"><meta property="og:image" content="https://infometro.cc/src/build/images/s3/fb_og.png"><meta property="og:title" content="infometro.cc 資訊地鐵站"><meta property="og:description" content="infometro 是一款利用地鐵圖來整理資訊的網站，用來保存創意和想法。"><link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.16/css/perfect-scrollbar.min.css" type="text/css"><script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.16/js/perfect-scrollbar.jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.3/vue.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/vuefire/1.3.1/vuefire.min.js"></script><script src="//cdnjs.cloudflare.com/ajax/libs/Sortable/1.5.1/Sortable.min.js"></script><script src="https://www.gstatic.com/firebasejs/4.1.3/firebase.js"></script><script src="src/static/js/jquery.jrumble.1.3.min.js?v=186e412"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.5.0/velocity.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/locale/zh-tw.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hammer-time/1.1.0/hammer-time.js"></script><!-- jquery-color-pick --><link rel="stylesheet" type="text/css" href="src/static/css/colpick.css?v=30735c8"><script src="src/static/js/colpick.js?v=897cbc0"></script><!-- jquery-color-pick --><script>function print(a){
 		console.log(a)
 	}
 	function test(msg){//測試用
@@ -75,12 +30,7 @@
     }else{
       location.href = "/main"
     }
-  }
-</script>
-
-
- <script>
-   if(get_test()!="test" && $.cookie("ga")!="N"){
+  }</script><script>if(get_test()!="test" && $.cookie("ga")!="N"){
 
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -92,93 +42,13 @@
 
   }else{
      print("沒載入GA")
-  }
-</script>
-<script src="src/build/js/firebase_init.js"></script>
-<link rel="stylesheet" type="text/css" href="src/build/css/index.css" />
-</head>
-<body>
-<!-- Following Menu -->
-<div id="top" style="width: 100%;left: 0;">
-  <div class="ui vertical st/ripe segment">
-    <div class="ui middle aligned stackable grid container">
-      <div class="row">
-       <div class="column">
-        <img style="float:left" class="logo" src="src/build/images/logo_200.png">
-        <div style="float:right;top: 17px;  left: 271px;" class="fb-like" data-href="https://www.facebook.com/infometro.cc/" data-layout="standard" data-action="like" data-size="small" data-show-faces="false" data-share="false"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Page Contents -->
-<div class="pusher">
-  <div id="a2" class="ui inverted vertical masthead center aligned segment">
-    <div id="a1" class="ui container">
-      <div id="a1_child" class="ui large secondary inverted pointing menu"></div>
-    </div>
-
-    <div class="ui text container">
-      <h1 id="logo2_parent" class="ui inverted header">
-        <div class="ui" style="background-color: transparent;  display: inline-block;">
-<!--          <div class="fb-like" data-href="https://www.facebook.com/infometro.cc" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="false"></div>-->
-      
-       <a class="ui black version label" href="https://www.facebook.com/infometro.cc" target="_blank">
-        Beta 版
-      </a>
-        </div>
-        <img class="logo2" src="src/build/images/logo_big.svg">
-      </h1>
-      <h2 id="a3">收藏、記事、清單 一應俱全</h2>
-      <h3 id="a4">infometro 是一款利用地鐵圖來整理資訊的網站，用來保存創意和想法。</h3>
-      <div style="margin-bottom:25px;">
-        <button id="anonymous_button" style="box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);" class="big ui button orange fast"><i class="rocket icon"></i>快速試用</button>
-				<!-- <button id="fb_button" class="big ui facebook button"><i class="facebook f icon"></i>使用 Facebook 登入</button>-->
-<!--        <button id="google_button" style="box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12); background-color: #ffffff; color: rgba(0,0,0,.7);" class="big ui button">-->
-        <button id="google_button" style="box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12); background-color: #4285F4; color: #ffffff;" class="big ui button loading">
-<!--          <img style="width:18px;height:18px;display:inline-block;position:relative;top:2px;" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg">-->
-<!--         &nbsp;&nbsp;-->
-          <i class="google icon"></i><span id="google_html">使用 Google 帳號登入</span>
-         </button>
-<!--         <div id="logout_link"><a onclick="logout()">登出</a></div>-->
-      </div>
-    </div>
-<!--   <div class="bottom_line"></div>-->
-  </div>
-
-  <div class="ui vertical stripe segment">
-    <div class="ui middle aligned stackable grid container">
-      <div class="row">
-        <div class="eight wide column">
-          <h3 class="ui header">彈性直覺的操作介面</h3>
-          <p>infometro 大量的採用拖曳動作來編輯地鐵，編輯的動作不需在額外存檔，讓您能夠靈活的將資訊存放在不同的地方。</p>
-          <h3 class="ui header">資訊地鐵站，是您大腦記憶的延伸工具</h3>
-          <p>把你容易忘記得事情先記在地鐵站上，透過有效的分類與管理，就能從容不迫的去處理其他更重要的事。</p>
-        </div>
-        <div id="left_img" class="six wide right floated column">
-          <img style="width:100%!important;" src="src/build/images/s3/LHXNGI0XjP.gif" class="ui large bordered rounded image">
-        </div>
-      </div>
-<!--
+  }</script><script src="src/build/js/firebase_init.js?v=663d21b"></script><link rel="stylesheet" type="text/css" href="src/build/css/index.css?v=9ecce0a"></head><body><!-- Following Menu --><div id="top" style="width: 100%;left: 0"><div class="ui vertical st/ripe segment"><div class="ui middle aligned stackable grid container"><div class="row"><div class="column"><img style="float:left" class="logo" src="src/build/images/logo_200.png?v=4ddb886"><div style="float:right;top: 17px;  left: 271px" class="fb-like" data-href="https://www.facebook.com/infometro.cc/" data-layout="standard" data-action="like" data-size="small" data-show-faces="false" data-share="false"></div></div></div></div></div></div><!-- Page Contents --><div class="pusher"><div id="a2" class="ui inverted vertical masthead center aligned segment"><div id="a1" class="ui container"><div id="a1_child" class="ui large secondary inverted pointing menu"></div></div><div class="ui text container"><h1 id="logo2_parent" class="ui inverted header"><div class="ui" style="background-color: transparent;  display: inline-block"><!--          <div class="fb-like" data-href="https://www.facebook.com/infometro.cc" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="false"></div>--> <a class="ui black version label" href="https://www.facebook.com/infometro.cc" target="_blank">Beta 版</a></div><img class="logo2" src="src/build/images/logo_big.svg"></h1><h2 id="a3">收藏、記事、清單 一應俱全</h2><h3 id="a4">infometro 是一款利用地鐵圖來整理資訊的網站，用來保存創意和想法。</h3><div style="margin-bottom:25px"><button id="anonymous_button" style="box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12)" class="big ui button orange fast"><i class="rocket icon"></i>快速試用</button><!-- <button id="fb_button" class="big ui facebook button"><i class="facebook f icon"></i>使用 Facebook 登入</button>--><!--        <button id="google_button" style="box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12); background-color: #ffffff; color: rgba(0,0,0,.7);" class="big ui button">--> <button id="google_button" style="box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12); background-color: #4285F4; color: #ffffff" class="big ui button loading"><!--          <img style="width:18px;height:18px;display:inline-block;position:relative;top:2px;" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg">--><!--         &nbsp;&nbsp;--> <i class="google icon"></i><span id="google_html">使用 Google 帳號登入</span></button><!--         <div id="logout_link"><a onclick="logout()">登出</a></div>--></div></div><!--   <div class="bottom_line"></div>--></div><div class="ui vertical stripe segment"><div class="ui middle aligned stackable grid container"><div class="row"><div class="eight wide column"><h3 class="ui header">彈性直覺的操作介面</h3><p>infometro 大量的採用拖曳動作來編輯地鐵，編輯的動作不需在額外存檔，讓您能夠靈活的將資訊存放在不同的地方。</p><h3 class="ui header">資訊地鐵站，是您大腦記憶的延伸工具</h3><p>把你容易忘記得事情先記在地鐵站上，透過有效的分類與管理，就能從容不迫的去處理其他更重要的事。</p></div><div id="left_img" class="six wide right floated column"><img style="width:100%!important" src="src/build/images/s3/LHXNGI0XjP.gif?v=51a5925" class="ui large bordered rounded image"></div></div><!--
       <div class="row">
         <div class="center aligned column">
           <a class="ui huge button">Check Them Out</a>
         </div>
       </div>
--->
-    </div>
-  </div>
- <div class="ui middle container">
-  <div class="ui vertical stripe segment" style="padding-top:0!important;">
-    <div class="ui text container">
-      <h3 class="ui horizontal header divider" style="margin: 2em 0em;">infometro 介面展示</h3>
-      <iframe id="youtube" width="100%" src="https://www.youtube.com/embed/R2Hkp2GV3tQ" frameborder="0" allowfullscreen></iframe>
-    </div>
-  </div>
-  
- </div>
- 
-<!--
+--></div></div><div class="ui middle container"><div class="ui vertical stripe segment" style="padding-top:0!important"><div class="ui text container"><h3 class="ui horizontal header divider" style="margin: 2em 0em">infometro 介面展示</h3><iframe id="youtube" width="100%" src="https://www.youtube.com/embed/R2Hkp2GV3tQ" frameborder="0" allowfullscreen></iframe></div></div></div><!--
    <div class="ui vertical stripe quote segment">
     <div class="ui equal width stackable internally celled grid">
       <div class="center aligned row">
@@ -195,47 +65,7 @@
       </div>
     </div>
   </div>
--->
-
-  <div id="bottom_bbb" class="ui inverted vertical footer segment">
-   <div class="bottom_line" style="top:0px;"></div>
-    <div class="ui container">
-      <div class="ui stackable inverted divided equal height stackable grid">
-        <div id="space_column_two" class="three wide column"></div>
-        <div id="space_column_one" class="one wide column"></div>
-        <div class="three wide column">
-          <h4 class="ui inverted header">聯絡我們</h4>
-          <div class="ui inverted link list">
-            <a id="mail" href="mailto:mose286778@gmail.com">
-              <i class="circular large mail icon"></i>
-            </a>
-          </div>
-        </div>
-        
-        <div class="three wide column">
-          <h4 class="ui inverted header">給我們建議</h4>
-          <div class="ui inverted link list">
-            <a href="https://goo.gl/forms/p464Om8G1yszy0ji1" target="_blank" class="item">網站使用滿意度調查</a>
-            <a href="https://goo.gl/forms/QYfCfG5vZF9CyNP03" target="_blank" class="item">提供建議</a>
-          </div>
-        </div>
-        <div class="seven wide column">
-          <h4 class="ui inverted header">facebook粉絲專頁</h4>
-          <div class="fb-page" 
-            data-href="https://www.facebook.com/infometro.cc"
-            data-width="380" 
-            data-hide-cover="false"
-            data-show-facepile="false" 
-            data-show-posts="false"></div>
-            <h4 class="ui inverted header">© 2017 infometro 資訊地鐵站</h4>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<script>
-	
-	if($.cookie("login")=="Y"){
+--><div id="bottom_bbb" class="ui inverted vertical footer segment"><div class="bottom_line" style="top:0px"></div><div class="ui container"><div class="ui stackable inverted divided equal height stackable grid"><div id="space_column_two" class="three wide column"></div><div id="space_column_one" class="one wide column"></div><div class="three wide column"><h4 class="ui inverted header">聯絡我們</h4><div class="ui inverted link list"><a id="mail" href="mailto:mose286778@gmail.com"><i class="circular large mail icon"></i></a></div></div><div class="three wide column"><h4 class="ui inverted header">給我們建議</h4><div class="ui inverted link list"><a href="https://goo.gl/forms/p464Om8G1yszy0ji1" target="_blank" class="item">網站使用滿意度調查</a> <a href="https://goo.gl/forms/QYfCfG5vZF9CyNP03" target="_blank" class="item">提供建議</a></div></div><div class="seven wide column"><h4 class="ui inverted header">facebook粉絲專頁</h4><div class="fb-page" data-href="https://www.facebook.com/infometro.cc" data-width="380" data-hide-cover="false" data-show-facepile="false" data-show-posts="false"></div><h4 class="ui inverted header">© 2017 infometro 資訊地鐵站</h4></div></div></div></div></div><script>if($.cookie("login")=="Y"){
 				$("#google_html").html("已登入Google 直接進入");
 				$("#google_button").css("background-color","#d14836");
 					
@@ -272,17 +102,10 @@
 	 })
 	 $(window).resize(function(){
 		 $("#youtube").attr("height",parseInt($("#youtube").width()*0.55));
-	 })
-</script>
-
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
+	 })</script><div id="fb-root"></div><script>(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
   if (d.getElementById(id)) return;
   js = d.createElement(s); js.id = id;
   js.src = "//connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v2.9&appId=438516566511315";
   fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
-</body>
-</html>
+}(document, 'script', 'facebook-jssdk'));</script></body></html>

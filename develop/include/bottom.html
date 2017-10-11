@@ -1,10 +1,11 @@
 <div id="blueprint">
  <div class="bottom_line"></div>
   <div id="edit_parent">
-    <a :class="{ active: is_nav }" onclick="vm.is_nav=!vm.is_nav" class="left_icon navigation" data-tooltip="導覽" data-position="top center"><i class="help circle icon"></i></a>
+    <a :class="{ active: is_nav }" onclick="vm.is_nav=!vm.is_nav" class="left_icon navigation" data-tooltip="導覽" data-position="top left"><i class="help circle icon"></i></a>
     <a onclick="export_line()" style="position: relative;top: 1px;" class="left_icon navigation" data-tooltip="匯出" data-position="top center"><i class="external icon"></i></a>
     <a onclick="import_line()" style="position: relative;top: 1px;" class="left_icon navigation" data-tooltip="匯入" data-position="top center"><i class="reply icon"></i></a>
     <a class="left_icon" data-tooltip="登出" data-position="top center" onclick="$('.page.dimmer:first').dimmer('toggle');"><i class="power icon"></i></a>
+    <a id="bottom_expand" class="left_icon navigation" data-tooltip="切換" data-position="top right"><i class="expand icon"></i></a>
   </div>
 </div>
 

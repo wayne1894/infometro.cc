@@ -24,10 +24,10 @@ header{
 	display: none;
 	color: #9e9898;
 	position: relative;
-	top: -6px;
 	cursor: pointer;
+    top: 5px;
 	i{
-		font-size: 1.8em;
+		font-size: 2em;
 	}
 }
 
@@ -62,29 +62,35 @@ header{
   top: -10px;
 	width: 59%;
 }
+.logo_a{
+    display: inline-block;
+}
 @media screen and (max-width:800px)  {
 	#header_area {
-		right: 8px;
-		img{
-			margin-right: -2px;
-		}
+        right: 8px;
+        img{
+            margin-right: -2px;
+        }
 	}
+
 	#header_area .header_name{
 		display: none;
 	}
-  .header_input{
-		position: absolute!important;
+    .header_input{
+    position: absolute!important;
     width: 100%;
-		left: auto;
-		top: 7px;
-		padding-right: 150px;
+    left: auto;
+    top: 7px;
+    padding-right: 125px;
   }
 	#hamburgers{
 	  display: inline-block;
+        margin-right:5px;
 	}
-}
-@media screen and (max-width:500px)  {
-	#header_main {
+    .logo_a{
+      display: none;
+    }
+    #header_main {
 		padding-left: 7px;	
 	}
 }
