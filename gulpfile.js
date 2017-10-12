@@ -1,6 +1,7 @@
 var gulp = require('gulp')
 var gulpPlumber = require('gulp-plumber');// 錯誤處理
 var merge= require('merge-stream');// merge-stream
+var _del = require('del');
 
 //gulp-webserver
 var webserver = require('gulp-webserver');
@@ -53,9 +54,9 @@ gulp.task('concat', function() { //合併檔案
 
 var imagemin = require('gulp-imagemin');
 gulp.task('imagemin',function(){
-    gulp.src(['develop/images/*','develop/images/*/*'])
+    gulp.src(['public/src/static/images/*','public/src/static/images/*/*'])
 		.pipe(imagemin())
-		.pipe(gulp.dest('./public/src/build/images'));
+		.pipe(gulp.dest('./public/src/static/images'));
 });
 
 
@@ -80,8 +81,12 @@ gulp.task('gulpUglify', function () {
 		.pipe(gulp.dest('./public/src/build/js'));
 });
 
-
-
+gulp.task('copy', function() { //複製靜態檔案
+	var copy1=gulp.src(['develop/static/*/*','develop/static/*/*/*'])
+	  .pipe(gulp.dest('./public/src/static/'));
+	var copy2=gulp.src(['./favicon.ico'])
+		.pipe(gulp.dest('./public/'));
+});
 
 
 //即時監控
@@ -91,9 +96,20 @@ gulp.task('watch', function () {
 	gulp.watch(['develop/include/*.html'], ['fileinclude']);
 	gulp.watch(['develop/css/*.less'], ['less']);
 	gulp.watch(['develop/js/*.js'], ['concat']);
-	gulp.watch(['develop/images'], ['imagemin']);
+	gulp.watch(['develop/static'], ['copy']);
 })
 
 
-//預設執行
-gulp.task('default', ['watch','fileinclude','imagemin', 'less', 'webserver','concat']);
+//清除public資料夾檔案
+gulp.task('clear', function(){ 
+  return _del('./public', {force:true});
+});
+
+//預設執行 
+gulp.task('default', ['watch','fileinclude','less','webserver','concat','copy']);
+
+//初始化建專案
+gulp.task('build', ['fileinclude','less','concat','copy']);
+
+//deploy 前執行的最小化檔案
+gulp.task('deploy', ['imagemin','html','cssmin','gulpUglify']);
