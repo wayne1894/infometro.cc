@@ -31,13 +31,13 @@
      
      
      
-   var hammertime = new Hammer(document.getElementById("top_tag_parent"))
-   hammertime.on('panleft panright', function(ev) {
-       print(ev.type)
-     if(ev.type=="panleft"){
-         $(".triangle.right").click()
-     }else{
-         $(".triangle.left").click()
-     }
-   });
+//   var hammertime = new Hammer(document.getElementById("top_tag_parent"))
+//   hammertime.on('panleft panright', function(ev) {
+//       print(ev.type)
+//     if(ev.type=="panleft"){
+//         $(".triangle.right").click()
+//     }else{
+//         $(".triangle.left").click()
+//     }
+//   });
  })
