@@ -13,7 +13,6 @@
             <div class="header_metro_name" v-html="item.name"></div>
           </div>
         </div>
-        
       </div>
       <div id="header_area" style="visibility: hidden;">
         <img class="ui right avatar image" v-if="users.photo" :src="users.photo">
@@ -28,9 +27,20 @@
       </div>
   	</div>
 </header>
+
 <script>
 	$(function () {
 		$('#header_area .ui.dropdown').dropdown();
-		$("#header_main .header_list").show()
+		$("#header_main .header_list").show();
+	
+		$("#hamburgers").click(function(){
+		
+			$("#line_drag").sidebar({
+				onHide: function() {
+					console.log('on hidden');
+				}
+			}).sidebar('toggle');
+		})
+		
 	})
 </script>

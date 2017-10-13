@@ -40,7 +40,6 @@ gulp.task('fileinclude', function() {
 // gulp-concatnpm 
 var concat= require('gulp-concat');
 
-
 gulp.task('concat', function() { //合併檔案
 	var concat1=gulp.src(['develop/js/main.js', 'develop/js/top.js', 'develop/js/bottom.js','develop/js/left.js','develop/js/right.js','develop/js/center.js','develop/js/vm.js'])
 		.pipe(gulpPlumber())
