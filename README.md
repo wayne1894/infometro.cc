@@ -50,24 +50,24 @@ index.js 提供infometro 站內備份資料功能的寄信程式，請將 `your_
 firebase node 版本必需大於6.X，不然無法操作以下指令 <br>
 請先參考 [fireabse deploy](https://firebase.google.com/docs/hosting/deploying) 教學。
 
-基本的firebase init安裝
+基本的firebase init安裝 
 ```sh
 $ cd infometro
 $ firebase init
 $ firebase use infometro-cc
-$ firebase deploy --only hosting
 ```
 
-以下為上functions的語法
+
+佈署 functions的方法
 ```sh
 $ firebase deploy --only functions
 ```
 
-以上為標準的佈置流程，但我們還需要最小化檔案，所以請直接透過npm 命令佈置
+佈署 hosting 的方法：因為還要執行gulp最小化檔案，所以請直接透過npm命令佈署。
 ```sh
 npm run deploy
 ```
-這個命令最後會執行：firebase deploy --only hosting
+這個命令最後會執行：firebase deploy --only hosting ，也就是佈署 hosting。
 
 ## 目前版本說明
 
