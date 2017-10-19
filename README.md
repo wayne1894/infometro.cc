@@ -10,8 +10,9 @@
 ```sh
  1、安裝node.js、npm
  2、clone https://github.com/wayne1894/infometro.cc.git
- 3、cd 到infometro 目錄，輸入`npm install`，進行package.json套件安裝 (這裡會一併安裝gulp.js)
- 4、輸入 `gulp`，會自動跳出網頁(監聽1313 port)，日後修改 `develop` 裡的檔案，網頁會重新整理，並將檔案build 到 public
+ 3、cd 到infometro 目錄，輸入`npm install`，進行package.json套件安裝 (這裡會安裝gulp.js)
+ 4、第一次執行，請先下 `gulp build` ，進行專案 public 初始化建置 。(public 是上線後的最小化檔案)
+ 5、日後直接輸入 `gulp`，會自動跳出網頁(監聽1313 port)，修改 `develop` 裡的檔案，網頁會重新整理，並將檔案建置到 public
 ```
 
 ### 資料庫環境
@@ -39,16 +40,17 @@ service firebase.storage{match /b/{bucket}/o{match /{allPaths=**}{allow read,wri
 
 ### 網站擷取程式
 
-目前放在aws上的一隻後端擷取程式，可以在輸入網址時爬出網頁資訊，這隻程式是架設在aws上，目前暫時提供，但不保證是免費提供的。
+目前放在根目錄上的infometro.asp，可以在輸入網址時爬出網頁資訊，這隻程式必需架設在iis上。
 
 ### firebase functions
 
 index.js 提供infometro 站內備份資料功能的寄信程式，請將 `your_email@gmail.com` 改成你自己使用的email，`pass` 為密碼。
 
-### 將程式發佈到 firebase 上去
-firebase node 版本必需大於6.X的樣子 ，不然無法操作以下指令 <br>
+### 將程式發佈到 firebase 上線
+firebase node 版本必需大於6.X，不然無法操作以下指令 <br>
 請先參考 [fireabse deploy](https://firebase.google.com/docs/hosting/deploying) 教學。
 
+基本的firebase init安裝
 ```sh
 $ cd infometro
 $ firebase init
@@ -60,6 +62,12 @@ $ firebase deploy --only hosting
 ```sh
 $ firebase deploy --only functions
 ```
+
+以上為標準的佈置流程，但我們還需要最小化檔案，所以請直接透過npm 命令佈置
+```sh
+npm run deploy
+```
+這個命令最後會執行：firebase deploy --only hosting
 
 ## 目前版本說明
 
