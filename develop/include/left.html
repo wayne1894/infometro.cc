@@ -13,7 +13,7 @@
 					</div>
 				</transition>
 			</div>
-      <ul id="line_drag" class="ui sidebar vertical menu">
+      <ul id="line_drag">
         <li v-for="(item, index) in line" :class="{check:index_line==index}" class="line_list" @drop="drop_line($event,index)" @dragleave="allowDropLeave_line($event)" @dragover="allowDrop_line($event)" :data-key="item._key" :key="item._key">
           <div class="tool" @click="delete_line(item._key)">
             <i class="trash outline mini small icon"></i>

@@ -100,94 +100,6 @@ textarea:focus {
   }
   #left_line {
     margin-bottom: 10px;
-    #line_drag{
-      position: relative;
-    }
-    .line_input {
-      display: none;
-      .public_input();
-      width: 68px;
-      position: absolute;
-      z-index: 10;
-      margin-left: 26px;
-			top: 2px;
-    }
-    li.line_list {
-      position: relative;
-      color: black;
-      font-weight: bold;
-      height: 25px;
-      cursor: pointer;
-      padding-left: @left_pl;
-      .line_i {
-        width: 17px;
-        height: 6px;
-        top: 10px;
-        position: absolute;
-        z-index: 5;
-        box-shadow: 0 0 0 1px rgba(0,0,0,.3) inset,0 .1em .1em -.05em rgba(0,0,0,.5);
-        &::before{
-          content: '';
-          position: absolute;
-          top: -10px;
-          right: -10px;
-          bottom: -10px;
-          left: -10px;
-        }
-      }
-      .line_a {
-        margin-left: 23px;
-        width: 80%;
-        display: block;
-        line-height: 25px;
-        position: relative;
-        z-index: 5;
-        color: black;
-        padding-right: 8px;
-        overflow: hidden;
-        white-space: nowrap;
-        overflow: hidden !important;
-        text-overflow: ellipsis;
-      }
-      .tool {
-        position: absolute;
-        width: 10px;
-        height: 10px;
-        top: 3px;
-        z-index: 6;
-        left: 1px;
-        display: none;
-      }
-      &:hover .tool {
-        display: block;
-      }
-      .tool.t_check{
-          display: block;
-      }
-			
-      &:hover::after,
-      &.check::after {
-        content: "";
-        width: 100%;
-        width: calc(100% - 4px);
-        height: 100%;
-        background-color: #F5F5F5;
-        position: absolute;
-        z-index: 3;
-        left: 2px;
-        border-radius: 1px;
-        top: 0px;
-      }
-      &.edit {
-//          min-height: 21px;
-        .line_a{
-          display: none;
-        }
-        .line_input {
-          display: block;
-        }
-      }
-    }
   }
 	#new_line_parent{
 		position: relative;
@@ -217,6 +129,97 @@ textarea:focus {
     }
   }
 }
+
+#line_drag{
+//	position: relative;
+	.line_input {
+		display: none;
+		.public_input();
+		width: 68px;
+		position: absolute;
+		z-index: 10;
+		margin-left: 26px;
+		top: 2px;
+	}
+	li.line_list {
+		position: relative;
+		color: black;
+		font-weight: bold;
+		height: 25px;
+		cursor: pointer;
+		padding-left: @left_pl;
+		.line_i {
+			width: 17px;
+			height: 6px;
+			top: 10px;
+			position: absolute;
+			z-index: 5;
+			box-shadow: 0 0 0 1px rgba(0,0,0,.3) inset,0 .1em .1em -.05em rgba(0,0,0,.5);
+			&::before{
+				content: '';
+				position: absolute;
+				top: -10px;
+				right: -10px;
+				bottom: -10px;
+				left: -10px;
+			}
+		}
+		.line_a {
+			margin-left: 23px;
+			width: 80%;
+			display: block;
+			line-height: 25px;
+			position: relative;
+			z-index: 5;
+			color: black;
+			padding-right: 8px;
+			overflow: hidden;
+			white-space: nowrap;
+			overflow: hidden !important;
+			text-overflow: ellipsis;
+		}
+		.tool {
+			position: absolute;
+			width: 10px;
+			height: 10px;
+			top: 3px;
+			z-index: 6;
+			left: 1px;
+			display: none;
+		}
+		&:hover .tool {
+			display: block;
+		}
+		.tool.t_check{
+				display: block;
+		}
+
+		&:hover::after,
+		&.check::after {
+			content: "";
+			width: 100%;
+			width: calc(100% - 4px);
+			height: 100%;
+			background-color: #F5F5F5;
+			position: absolute;
+			z-index: 3;
+			left: 2px;
+			border-radius: 1px;
+			top: 0px;
+		}
+		&.edit {
+//          min-height: 21px;
+			.line_a{
+				display: none;
+			}
+			.line_input {
+				display: block;
+			}
+		}
+	}
+}
+
+
 #top {
   font-family: 'Noto Sans TC', sans-serif;
   font-weight: 400;

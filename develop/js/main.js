@@ -1,4 +1,5 @@
-  var resizeTime=0
+  var resizeTime=0;
+ 	var resizeBoard
   $(window).resize(function () {
      
     if(resizeTime)return
@@ -12,9 +13,21 @@
 			$("#board_parent").removeClass("adj");
 		}
         if(window.matchMedia('(max-width: 800px)').matches){
-          $("#board_edit .border_area").attr("data-position","bottom center")
+					if(resizeBoard!==true){
+						$("#board_edit .border_area").attr("data-position","bottom center");
+						$(document.body).prepend($("#line_drag").remove())
+						$("#line_drag").addClass("ui sidebar vertical menu");
+						resizeBoard=true;
+					}
         }else{
-          $("#board_edit .border_area").attr("data-position","right center")
+          $("#board_edit .border_area").attr("data-position","right center");
+					if(resizeBoard){
+						resizeBoard=false;
+						$("#line_drag").sidebar('hide');
+						$("#left_line").append($("#line_drag").remove())
+						$("#line_drag").removeClass("ui sidebar vertical menu");
+					}
+					
         }
         //       if(is_mobile()){
         //         $("#board_parent").css("min-height",(getViewportSize().h)+"px");
