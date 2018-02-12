@@ -47,7 +47,7 @@
     //拖亦的部份 https://github.com/RubaXa/Sortable
     sortable["line"] = new Sortable(id("line_drag"), {
       animation: 150,
-      forceFallback: false,
+      forceFallback: true,
       setData: function (dataTransfer, dragEl) {
         vm.drag_line_key=$(dragEl).data("key"); //正在脫亦的line key
         if(navigator.userAgent.match("Firefox")){
@@ -55,20 +55,20 @@
         }
       },
       onStart: function(evt){
-				mode_before =vm.mode;
+		mode_before =vm.mode;
         vm.mode = 1.5;
       },
       onEnd: function (evt) {
         setTimeout(function(){
           vm.swap_line(evt.oldIndex, evt.newIndex);
-		  		vm.mode = mode_before;
+		  vm.mode = mode_before;
           vm.drag_line_key="";
         },5);
       }
     });
     sortable["metro"] = new Sortable(id("top_tag"), {
       animation: 50,
-      forceFallback: false,
+      forceFallback: true,
       filter: ".add",
       setData: function (dataTransfer, dragEl) {
         vm.drag_metro_key=$(dragEl).data("key"); //正在脫亦的metro key
