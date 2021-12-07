@@ -1,5 +1,5 @@
 # infometro.cc 資訊地鐵站
-### [https://infometro.cc](https://infometro.cc)
+### [https://infometro-cc.web.app/](https://infometro-cc.web.app/)
 ## 概念介紹
 #### infometro 是一款利用地鐵圖來整理資訊的網站，用來保存創意和想法。
 [![Screen Shot](https://infometro.cc/src/static/images/s3/LHXNGI0XjP.gif)](https://infometro.cc)
